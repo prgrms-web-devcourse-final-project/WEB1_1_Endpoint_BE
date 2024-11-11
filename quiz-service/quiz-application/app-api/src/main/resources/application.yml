@@ -3,3 +3,5 @@ management:
     web:
       exposure:
         include: health
+server:
+  port: 8081

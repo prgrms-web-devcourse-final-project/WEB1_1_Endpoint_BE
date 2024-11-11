@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Quiz Image Build
 
 env:
   BUILD_ID: ${{ github.sha }}

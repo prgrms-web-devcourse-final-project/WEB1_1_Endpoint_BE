@@ -11,3 +11,5 @@ include("user-service:user-infra")
 include("user-service:user-domain")
 include("user-service:user-application")
 include("user-service:user-application:app-api")
+
+include("gateway-service")

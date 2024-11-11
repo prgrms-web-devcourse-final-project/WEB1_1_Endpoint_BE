@@ -1,0 +1,39 @@
+server:
+  shutdown: graceful
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  cloud:
+    gateway:
+      routes:
+        - id: member
+          uri: http://localhost:8081
+          predicates:
+            - Path=/member/**
+          filters:
+            - StripPrefix=1
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  cloud:
+    gateway:
+      routes:
+        - id: member
+          uri: lb://dev-quiz-service
+          predicates:
+            - Path=/quiz/**
+          filters:
+            - StripPrefix=1
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: true
