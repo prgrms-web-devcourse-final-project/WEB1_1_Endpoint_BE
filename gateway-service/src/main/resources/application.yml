@@ -4,7 +4,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health, gateway, info
 ---
 spring:
   config:
@@ -13,10 +13,10 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: member
+        - id: quiz
           uri: http://localhost:8081
           predicates:
-            - Path=/member/**
+            - Path=/quiz/**
           filters:
             - StripPrefix=1
 ---
@@ -27,8 +27,8 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: member
-          uri: lb://dev-quiz-service
+        - id: quiz
+          uri: http://dev-quiz-service:8080
           predicates:
             - Path=/quiz/**
           filters:
@@ -37,3 +37,7 @@ spring:
       discovery:
         enabled: true
         all-namespaces: true
+        primary-port-name: http
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
