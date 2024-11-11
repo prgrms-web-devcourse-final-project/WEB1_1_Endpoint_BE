@@ -1,4 +1,4 @@
-name: Gateway Image Build
+name: Game Image Build
 
 env:
   BUILD_ID: ${{ github.sha }}-${{ github.run_id }}
