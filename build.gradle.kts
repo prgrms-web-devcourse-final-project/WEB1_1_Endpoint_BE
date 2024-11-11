@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -50,6 +51,12 @@ subprojects {
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	}
+
+	tasks.named<BootJar>("bootJar") {
+		enabled = false
+	}
+
+
 }
 
 kotlin {
@@ -62,26 +69,6 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-project(":quiz-service") {
-	tasks.named<BootJar>("bootJar") {
-		enabled = false
-	}
 
-	subprojects {
-		tasks.named<BootJar>("bootJar") {
-			enabled = false
-		}
-	}
-}
 
-project(":user-service") {
-	tasks.named<BootJar>("bootJar") {
-		enabled = false
-	}
 
-	subprojects {
-		tasks.named<BootJar>("bootJar") {
-			enabled = false
-		}
-	}
-}

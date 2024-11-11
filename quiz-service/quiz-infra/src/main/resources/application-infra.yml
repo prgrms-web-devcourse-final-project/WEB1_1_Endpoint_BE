@@ -35,3 +35,4 @@ spring:
       hibernate:
         show-sql: false
         format_sql: false
+
