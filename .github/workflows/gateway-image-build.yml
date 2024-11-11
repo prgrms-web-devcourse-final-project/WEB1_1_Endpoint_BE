@@ -1,7 +1,7 @@
 name: Gateway Image Build
 
 env:
-  BUILD_ID: ${{ github.sha }}
+  BUILD_ID: ${{ github.sha }}-${{ github.run_id }}
   HELM_VALUE: gateway-service-chart/values-dev.yaml
   HELM_BRANCH: dev
 
@@ -14,11 +14,8 @@ on:
       - 'gateway-service/**'
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -39,14 +36,14 @@ jobs:
           REPOSITORY: quizy
           IMAGE_TAG: ${{ env.BUILD_ID }}
         run: |
-          docker build -f ./quiz-service/quiz-application/app-api/Dockerfile -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker build -f ./gateway-service/Dockerfile -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
       - name: Checkout Helm Repository
         uses: actions/checkout@v4
         with:
           repository: quizy-web/quizy-helm-charts
           path: helm-chart
-          ref: main
+          ref: dev
           ssh-key: ${{ secrets.HELM_REPO_SSH_KEY }}
       - name: Change Image tag of the Helm Chart
         uses: mikefarah/yq@v4.34.1
@@ -58,7 +55,7 @@ jobs:
           cd helm-chart
           git config --local user.email "githubaction@gmail.com"
           git config --local user.name "githubaction"
-          git add .
+          git add ${{ env.HELM_VALUE }}
           git commit -m "Commit HELM changes ${{ env.ECR_REPOSITORY }}:${{ env.BUILD_ID }}"
           current_branch=$(git branch --show-current)
           git checkout -b ${{ env.HELM_BRANCH }} && git merge ${current_branch}

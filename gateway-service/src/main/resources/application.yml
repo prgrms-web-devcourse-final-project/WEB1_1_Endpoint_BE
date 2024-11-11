@@ -19,10 +19,6 @@ spring:
             - Path=/member/**
           filters:
             - StripPrefix=1
-    kubernetes:
-      discovery:
-        enabled: true
-        all-namespaces: true
 ---
 spring:
   config:
