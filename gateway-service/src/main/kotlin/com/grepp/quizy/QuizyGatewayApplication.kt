@@ -6,8 +6,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient
 
 @SpringBootApplication
 @EnableDiscoveryClient
-class QuizyGatewayApplication {
-}
+class QuizyGatewayApplication
 
 fun main(args: Array<String>) {
     runApplication<QuizyGatewayApplication>(*args)

@@ -1,6 +1,10 @@
 server:
   shutdown: graceful
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
 ---
 spring:
   config:
