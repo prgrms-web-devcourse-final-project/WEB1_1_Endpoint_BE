@@ -1,3 +1,9 @@
+spring:
+  profiles:
+    group:
+      local: common, domain, infra
+      dev: common, domain, infra
+
 management:
   endpoints:
     web:
