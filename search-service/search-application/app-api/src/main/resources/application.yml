@@ -8,7 +8,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, openapi, swagger-ui
 ---
 spring:
   config:
