@@ -11,6 +11,24 @@ springdoc:
 spring:
   main:
     web-application-type: reactive
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://k8s-apps-devgatew-4d7f7a82e4-1838977854.ap-northeast-2.elb.amazonaws.com"
+              - "http://localhost:8080"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
 ---
 spring:
   config:
