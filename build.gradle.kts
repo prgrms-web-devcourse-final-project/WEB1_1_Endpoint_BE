@@ -52,6 +52,13 @@ subprojects {
 		testImplementation("org.springframework.boot:spring-boot-starter-test")
 		testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+		// kotest
+		testImplementation("io.kotest:kotest-runner-junit5:5.9.0")
+		testImplementation("io.kotest:kotest-assertions-core:5.9.0")
+		testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
+		// mockk
+		testImplementation("io.mockk:mockk:1.13.13")
 	}
 
 	tasks.named<BootJar>("bootJar") {
