@@ -8,7 +8,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, openapi, swagger-ui
 ---
 spring:
   config:
@@ -16,8 +16,21 @@ spring:
       on-profile: local
 server:
   port: 8081
+
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: /api-docs
+  enable-spring-security: true
 ---
 spring:
   config:
     activate:
       on-profile: dev
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: /api-docs
+  enable-spring-security: true

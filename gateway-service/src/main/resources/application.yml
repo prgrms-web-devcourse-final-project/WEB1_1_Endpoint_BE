@@ -5,6 +5,12 @@ management:
     web:
       exposure:
         include: health, info
+springdoc:
+  swagger-ui:
+    use-root-path: true
+spring:
+  main:
+    web-application-type: reactive
 ---
 spring:
   config:
@@ -16,9 +22,14 @@ spring:
         - id: quiz
           uri: http://localhost:8081
           predicates:
-            - Path=/quiz/**
+            - Path=/game/**
           filters:
             - StripPrefix=1
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: Game API
+      url: http://localhost:8080/game/api-docs
 ---
 spring:
   config:
@@ -65,3 +76,21 @@ spring:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+
+springdoc:
+  swagger-ui:
+    urls[0]:
+      name: Game API
+      url: http://localhost:8080/game/api-docs
+    urls[1]:
+      name: Quiz API
+      url: http://localhost:8080/quiz/api-docs
+    urls[2]:
+      name: Matching API
+      url: http://localhost:8080/matching/api-docs
+    urls[3]:
+      name: Search API
+      url: http://localhost:8080/search/api-docs
+    urls[4]:
+      name: User API
+      url: http://localhost:8080/user/api-docs

@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RestController
 class HealthCheckApi {
     @GetMapping("/health")
     fun healthCheck(): String {
-        return "I'm QUIZ service"
+        return "I'm Quiz service"
     }
 }

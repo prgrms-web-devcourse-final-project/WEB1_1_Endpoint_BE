@@ -21,3 +21,9 @@ spring:
   config:
     activate:
       on-profile: dev
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: /api-docs
+  enable-spring-security: true
