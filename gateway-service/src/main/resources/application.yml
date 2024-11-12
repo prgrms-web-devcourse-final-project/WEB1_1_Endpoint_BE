@@ -4,7 +4,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, gateway, info
+        include: health, info
 ---
 spring:
   config:
@@ -33,6 +33,30 @@ spring:
             - Path=/quiz/**
           filters:
             - StripPrefix=1
+        - id: game
+          uri: http://dev-game-service:8080
+          predicates:
+              - Path=/game/**
+          filters:
+              - StripPrefix=1
+        - id: user
+          uri: http://dev-user-service:8080
+          predicates:
+              - Path=/user/**
+          filters:
+              - StripPrefix=1
+        - id: matching
+          uri: http://dev-matching-service:8080
+          predicates:
+              - Path=/matching/**
+          filters:
+              - StripPrefix=1
+        - id: search
+          uri: http://dev-search-service:8080
+          predicates:
+              - Path=/search/**
+          filters:
+              - StripPrefix=1
     kubernetes:
       discovery:
         enabled: true

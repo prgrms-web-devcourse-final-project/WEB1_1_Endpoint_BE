@@ -56,7 +56,7 @@ jobs:
           git config --local user.email "githubaction@gmail.com"
           git config --local user.name "githubaction"
           git add ${{ env.HELM_VALUE }}
-          git commit -m "Commit HELM changes ${{ env.ECR_REPOSITORY }}:${{ env.BUILD_ID }}"
+          git commit -m "Commit Gateway HELM changes ${{ env.ECR_REPOSITORY }}:${{ env.BUILD_ID }}"
           current_branch=$(git branch --show-current)
           git checkout -b ${{ env.HELM_BRANCH }} && git merge ${current_branch}
           git push --force origin ${{ env.HELM_BRANCH }}
