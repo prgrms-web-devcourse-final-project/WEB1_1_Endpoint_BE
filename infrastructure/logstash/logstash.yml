@@ -1,0 +1,19 @@
+services:
+  logstash:
+    build:
+      context: logstash/
+      dockerfile: Dockerfile
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - ./logstash/logstash.json:/usr/share/logstash/logstash.json
+      - ./nginx/log:/var/log/nginx
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro,Z
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro,Z
+    ports:
+      - 5044:5044
+    environment:
+      TZ: "Asia/Seoul"
+      LS_JAVA_OPTS: -Xms256m -Xmx256m
+    networks:
+      - ${GLOBAL_NETWORK:-app-tier}
+    restart: unless-stopped
