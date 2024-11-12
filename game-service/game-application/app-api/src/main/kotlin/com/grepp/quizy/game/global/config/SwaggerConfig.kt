@@ -8,14 +8,15 @@ import org.springframework.context.annotation.Configuration
 
 @Configuration
 @OpenAPIDefinition(
-    info = io.swagger.v3.oas.annotations.info.Info(
-        title = "Game API",
-        version = "v1"
-    )
+        info =
+                io.swagger.v3.oas.annotations.info.Info(
+                        title = "Game API",
+                        version = "v1",
+                )
 )
 class SwaggerConfig {
     @Bean
     fun openApi(): OpenAPI {
-        return OpenAPI().addServersItem(Server().url("/game"));
+        return OpenAPI().addServersItem(Server().url("/game"))
     }
 }

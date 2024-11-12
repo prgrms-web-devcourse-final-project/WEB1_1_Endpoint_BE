@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.25" apply false
 	id("org.springframework.boot") version "3.3.5" apply false
 	id("io.spring.dependency-management") version "1.1.6" apply false
+	id("com.diffplug.spotless") version "7.0.0.BETA4"
 }
 
 group = "com.grepp"
@@ -41,6 +42,7 @@ subprojects {
 	apply(plugin = "org.jetbrains.kotlin.plugin.spring")
 	apply(plugin = "org.springframework.boot")
 	apply(plugin = "io.spring.dependency-management")
+	apply(plugin = "com.diffplug.spotless")
 
 	dependencies {
 		implementation("org.springframework.boot:spring-boot-starter")
@@ -56,7 +58,26 @@ subprojects {
 		enabled = false
 	}
 
+	spotless {
+		kotlin {
+			targetExclude("build/generated/**/*.kt")
+			targetExclude("bin/**/*.kt")
+			ktfmt("0.49").googleStyle().configure {
+				it.setMaxWidth(80)
+				it.setBlockIndent(4)
+				it.setContinuationIndent(8)
+				it.setRemoveUnusedImports(true)
+			}
 
+		}
+	}
+
+
+}
+
+tasks.register<Copy>("addGitPreCommitHook") {
+	from("script/pre-commit")
+	into(".git/hooks")
 }
 
 kotlin {
