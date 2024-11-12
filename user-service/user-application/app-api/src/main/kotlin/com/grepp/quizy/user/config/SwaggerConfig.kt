@@ -1,4 +1,4 @@
-package com.grepp.quizy.config
+package com.grepp.quizy.user.config
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.models.OpenAPI

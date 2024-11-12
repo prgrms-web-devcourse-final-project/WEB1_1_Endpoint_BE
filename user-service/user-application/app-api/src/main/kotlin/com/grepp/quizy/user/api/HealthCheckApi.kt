@@ -1,12 +1,13 @@
-package com.grepp.quizy.api
+package com.grepp.quizy.user.api
 
+import com.grepp.quizy.common.api.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
 class HealthCheckApi {
     @GetMapping("/health")
-    fun healthCheck(): String {
-        return "I'm User service"
+    fun healthCheck(): ApiResponse<Void> {
+        return ApiResponse.success("I'm USER service")
     }
 }
