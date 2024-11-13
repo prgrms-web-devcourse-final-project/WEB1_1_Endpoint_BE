@@ -13,7 +13,7 @@ services:
       ZOOKEEPER_SERVERS: zookeeper:2888:3888
       KAFKA_OPTS: "-Dzookeeper.4lw.commands.whitelist=ruok"
     volumes:
-      - "kafka/volumes/zookeeper/data:/var/lib/zookeeper/data"
-      - "kafka/volumes/zookeeper/transactions:/var/lib/zookeeper/log"
+      - "./kafka/volumes/zookeeper/data:/var/lib/zookeeper/data"
+      - "./kafka/volumes/zookeeper/transactions:/var/lib/zookeeper/log"
     networks:
       - ${GLOBAL_NETWORK:-kafka}
