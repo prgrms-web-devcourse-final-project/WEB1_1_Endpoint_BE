@@ -36,17 +36,19 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: quiz
+        - id: game
           uri: http://localhost:8081
           predicates:
-            - Path=/game/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/game/**
+        - id: quiz
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/quiz/**
 springdoc:
   swagger-ui:
     urls[0]:
-      name: Game API
-      url: http://localhost:8080/game/api-docs
+      name: Quiz API
+      url: http://localhost:8080/api/quiz/api-docs
 ---
 spring:
   config:

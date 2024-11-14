@@ -7,9 +7,8 @@ env:
 
 on:
   push:
-    paths:
-      - 'quiz-service/**'
-  pull_request:
+    branches:
+      - 'develop'
     paths:
       - 'quiz-service/**'
 

@@ -7,9 +7,8 @@ env:
 
 on:
   push:
-    paths:
-      - 'gateway-service/**'
-  pull_request:
+    branches:
+      - 'develop'
     paths:
       - 'gateway-service/**'
 
