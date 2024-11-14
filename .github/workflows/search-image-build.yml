@@ -7,9 +7,8 @@ env:
 
 on:
   push:
-    paths:
-      - 'search-service/**'
-  pull_request:
+    branches:
+      - 'develop'
     paths:
       - 'search-service/**'
 

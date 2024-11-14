@@ -21,6 +21,7 @@ services:
   kafka-broker-2:
     image: confluentinc/cp-kafka:latest
     hostname: kafka-broker-2
+    restart: always
     depends_on:
       - zookeeper
       - kafka-broker-1
@@ -40,6 +41,7 @@ services:
   kafka-broker-3:
     image: confluentinc/cp-kafka:latest
     hostname: kafka-broker-3
+    restart: always
     depends_on:
       - zookeeper
       - kafka-broker-1

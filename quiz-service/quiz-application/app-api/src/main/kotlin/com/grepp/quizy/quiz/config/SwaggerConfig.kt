@@ -17,6 +17,6 @@ import org.springframework.context.annotation.Configuration
 class SwaggerConfig {
     @Bean
     fun openApi(): OpenAPI {
-        return OpenAPI().addServersItem(Server().url("/quiz"))
+        return OpenAPI().addServersItem(Server().url("/"))
     }
 }

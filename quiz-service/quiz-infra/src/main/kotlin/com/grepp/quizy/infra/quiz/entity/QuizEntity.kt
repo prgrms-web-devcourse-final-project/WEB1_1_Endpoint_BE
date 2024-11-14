@@ -1,16 +1,18 @@
 package com.grepp.quizy.infra.quiz.entity
 
+import com.grepp.quizy.domain.quiz.Quiz
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 
 @Entity
-class QuizEntity(var title: String = "") {
-
-    @Id var id: Long = 0
-
+class QuizEntity(@Id val id: Long = 0, val title: String) {
     companion object {
-        fun from(title: String): QuizEntity {
-            return QuizEntity(title)
+        fun from(quiz: Quiz): QuizEntity {
+            return QuizEntity(title = quiz.title)
         }
+    }
+
+    fun toDomain(): Quiz {
+        return Quiz(id = id, title = title)
     }
 }

@@ -34,6 +34,8 @@ include("search-service:search-domain")
 include("search-service:search-application")
 include("search-service:search-application:app-api")
 
+include("infrastructure:kafka")
+
 
 
 

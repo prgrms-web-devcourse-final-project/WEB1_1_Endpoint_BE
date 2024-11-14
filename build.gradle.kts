@@ -59,6 +59,9 @@ subprojects {
 		testImplementation("io.kotest.extensions:kotest-extensions-spring:1.3.0")
 		// mockk
 		testImplementation("io.mockk:mockk:1.13.13")
+
+		//logging
+		implementation("io.github.oshai:kotlin-logging-jvm:5.1.1")
 	}
 
 	tasks.named<BootJar>("bootJar") {
