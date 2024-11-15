@@ -3,6 +3,7 @@ rootProject.name = "quizy"
 include("gateway-service")
 
 include("common")
+include("common:common-jpa")
 
 include("quiz-service")
 include("quiz-service:quiz-infra")

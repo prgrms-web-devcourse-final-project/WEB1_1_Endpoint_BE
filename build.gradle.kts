@@ -82,7 +82,9 @@ subprojects {
 		}
 	}
 
-
+	tasks.withType<Test> {
+		useJUnitPlatform()
+	}
 }
 
 tasks.register<Copy>("addGitPreCommitHook") {
@@ -96,9 +98,7 @@ kotlin {
 	}
 }
 
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
+
 
 
 
