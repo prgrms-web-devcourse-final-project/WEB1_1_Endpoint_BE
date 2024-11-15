@@ -1,6 +1,7 @@
 package com.grepp.quizy.infra.game.websocket
 
 import com.grepp.quizy.domain.game.GameMessageSender
+import com.grepp.quizy.infra.game.websocket.WebSocketDestination.*
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Component
 import java.security.Principal
@@ -13,7 +14,7 @@ class GameWebSocketMessageSender(
     override fun send(principal: Principal, message: String) {
         messageTemplate.convertAndSendToUser(
             principal.name,
-            "/queue/quiz-grade",
+            "${USER_PREFIX.destination}${QUIZ_GRADE.destination}",
             message
         )
     }
