@@ -14,7 +14,7 @@ class GameWebSocketMessageSender(
     override fun send(principal: Principal, message: String) {
         messageTemplate.convertAndSendToUser(
             principal.name,
-            "${USER_PREFIX.destination}${QUIZ_GRADE.destination}",
+            "${SINGLE_PREFIX.destination}${QUIZ_GRADE.destination}",
             message
         )
     }

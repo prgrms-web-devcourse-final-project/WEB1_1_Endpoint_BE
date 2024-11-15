@@ -4,8 +4,8 @@ enum class WebSocketDestination(
     val destination: String
 ) {
 
-    MULTIPLE_PREFIX("/queue"),
-    SINGLE_PREFIX("/topic"),
+    SINGLE_PREFIX("/queue"),
+    MULTIPLE_PREFIX("/topic"),
     USER_PREFIX("/user"),
     APPLICATION_PREFIX("/app"),
 
