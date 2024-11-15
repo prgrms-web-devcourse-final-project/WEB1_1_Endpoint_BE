@@ -8,12 +8,11 @@ import java.util.*
 
 class CustomHandshakeHandler : DefaultHandshakeHandler() {
 
+    // TODO: 실제로 게이트웨이에서 사용자 정보를 받는 방식이 정해지면 구현 방식 변경
     override fun determineUser(
         request: ServerHttpRequest,
         wsHandler: WebSocketHandler,
         attributes: MutableMap<String, Any>
-    ): Principal {
-        // TODO: 실제로 게이트웨이에서 사용자 정보를 받는 방식이 정해지면 구현 방식 변경
-        return WebSocketPrincipal(UUID.randomUUID().toString())
-    }
+    ): Principal = WebSocketPrincipal(UUID.randomUUID().toString())
+
 }
