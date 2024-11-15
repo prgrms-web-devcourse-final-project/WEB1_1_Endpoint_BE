@@ -1,9 +1,9 @@
-package com.grepp.quizy.user.repository
+package com.grepp.quizy.infra.user.repository
 
-import com.grepp.quizy.user.User
-import com.grepp.quizy.user.UserRepository
-import com.grepp.quizy.user.entity.UserEntity
-import com.grepp.quizy.user.exception.UserNotFoundException
+import com.grepp.quizy.domain.user.User
+import com.grepp.quizy.domain.user.UserRepository
+import com.grepp.quizy.infra.user.entity.UserEntity
+import com.grepp.quizy.infra.user.exception.UserNotFoundException
 import jakarta.transaction.Transactional
 import org.springframework.stereotype.Repository
 import kotlin.jvm.optionals.getOrNull
@@ -18,7 +18,7 @@ class UserRepositoryAdaptor (
     }
 
     override fun existsByEmail(email: String): Boolean {
-        return userJPARepository.existsByUserProfileVO_Email(email)
+        return userJPARepository.existsByUserProfile_Email(email)
     }
 
     override fun save(user: User): User {

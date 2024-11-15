@@ -1,4 +1,4 @@
-package com.grepp.quizy.user.exception
+package com.grepp.quizy.domain.user.exception
 
 import com.grepp.quizy.common.exception.BaseErrorCode
 import com.grepp.quizy.common.exception.ErrorReason

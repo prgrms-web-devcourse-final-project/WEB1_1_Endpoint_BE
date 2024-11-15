@@ -1,4 +1,4 @@
-package com.grepp.quizy.user
+package com.grepp.quizy.domain.user
 
 import java.time.LocalDateTime
 

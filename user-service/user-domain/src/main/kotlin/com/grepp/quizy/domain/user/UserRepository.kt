@@ -1,4 +1,4 @@
-package com.grepp.quizy.user
+package com.grepp.quizy.domain.user
 
 interface UserRepository {
     fun findById(id: Long): User

@@ -1,6 +1,6 @@
-package com.grepp.quizy.user.entity
+package com.grepp.quizy.infra.user.entity
 
-import com.grepp.quizy.user.UserProfile
+import com.grepp.quizy.domain.user.UserProfile
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 

@@ -1,4 +1,4 @@
-package com.grepp.quizy.user
+package com.grepp.quizy.domain.user
 
 data class ProviderType(
     val provider: AuthProvider,

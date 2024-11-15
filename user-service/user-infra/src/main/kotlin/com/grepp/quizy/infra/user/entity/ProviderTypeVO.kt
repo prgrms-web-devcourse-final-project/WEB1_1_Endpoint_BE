@@ -1,7 +1,7 @@
-package com.grepp.quizy.user.entity
+package com.grepp.quizy.infra.user.entity
 
-import com.grepp.quizy.user.AuthProvider
-import com.grepp.quizy.user.ProviderType
+import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.domain.user.ProviderType
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EnumType

@@ -1,8 +1,8 @@
-package com.grepp.quizy.user.entity
+package com.grepp.quizy.infra.user.entity
 
-import com.grepp.quizy.user.Role
-import com.grepp.quizy.user.User
-import com.grepp.quizy.user.UserId
+import com.grepp.quizy.domain.user.Role
+import com.grepp.quizy.domain.user.User
+import com.grepp.quizy.domain.user.UserId
 import jakarta.persistence.*
 
 @Entity
@@ -13,7 +13,7 @@ class UserEntity (
     val id: Long = 0,
 
     @Embedded
-    val userProfileVO: UserProfileVO,
+    val userProfile: UserProfileVO,
 
     @Embedded
     val provider: ProviderTypeVO,
@@ -26,7 +26,7 @@ class UserEntity (
     fun toDomain(): User {
         return User(
             id = UserId(id),
-            userProfile = userProfileVO.toDomain(),
+            userProfile = userProfile.toDomain(),
             provider = provider.toDomain(),
             role = role
         )
@@ -36,7 +36,7 @@ class UserEntity (
         fun from(user: User): UserEntity {
             return UserEntity(
                 id = user.id.value,
-                userProfileVO = UserProfileVO.from(user.userProfile),
+                userProfile = UserProfileVO.from(user.userProfile),
                 provider = ProviderTypeVO.from(user.provider),
                 role = user.role
             )
