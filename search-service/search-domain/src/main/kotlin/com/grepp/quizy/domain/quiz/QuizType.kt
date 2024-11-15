@@ -1,4 +1,4 @@
-package com.grepp.quizy.search.domain.quiz
+package com.grepp.quizy.domain.quiz
 
 enum class QuizType(val typeName: String) {
     OX("OX 퀴즈"), AB("A/B 밸런스"), MULTIPLE_CHOICE("객관식");

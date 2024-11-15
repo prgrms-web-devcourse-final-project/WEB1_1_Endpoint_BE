@@ -1,7 +1,7 @@
-package com.grepp.quizy.search.domain.quiz
+package com.grepp.quizy.domain.quiz
 
 class Quiz(
-    val id: QuizId,
+    val id: Long,
     val question: String,
     val type: QuizType,
     val tag: QuizTag,

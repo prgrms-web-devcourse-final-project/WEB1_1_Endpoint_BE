@@ -1,6 +1,4 @@
-package com.grepp.quizy.search.domain.quiz
-
-data class QuizId(val value: Long)
+package com.grepp.quizy.domain.quiz
 
 data class QuizTag(val tags: List<String>) {
 

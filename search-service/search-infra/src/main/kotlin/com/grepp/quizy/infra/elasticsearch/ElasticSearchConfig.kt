@@ -1,4 +1,4 @@
-package com.grepp.quizy.search.infra.elasticsearch
+package com.grepp.quizy.infra.elasticsearch
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration

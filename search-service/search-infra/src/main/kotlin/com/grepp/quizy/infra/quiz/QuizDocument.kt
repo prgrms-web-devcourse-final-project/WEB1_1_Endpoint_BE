@@ -1,6 +1,6 @@
-package com.grepp.quizy.search.infra.quiz
+package com.grepp.quizy.infra.quiz
 
-import com.grepp.quizy.search.domain.quiz.*
+import com.grepp.quizy.domain.quiz.*
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
 import java.time.LocalDateTime
@@ -37,7 +37,7 @@ class QuizDocument(
 ) {
 
     fun toDomain() = Quiz(
-        id = QuizId(id),
+        id = id,
         question = question,
         tag = QuizTag.from(tag),
         type = QuizType.fromType(type),
