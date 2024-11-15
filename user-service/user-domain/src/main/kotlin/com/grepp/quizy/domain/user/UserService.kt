@@ -8,8 +8,8 @@ class UserService (
     private val userReader: UserReader,
     private val userRemover: UserRemover
 ) {
-    fun appendUser(user: User) {
-        userAppender.appendUser(user)
+    fun appendUser(user: User) : User {
+        return userAppender.appendUser(user)
     }
 
     fun getUser(userId: Long): User {

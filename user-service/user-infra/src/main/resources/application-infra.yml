@@ -18,7 +18,7 @@ spring:
   data:
     redis:
       host: localhost
-      port: 6378
+      port: 6379
 
 kafka:
   topic:
@@ -75,4 +75,36 @@ spring:
         show-sql: false
         format_sql: false
 
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
+---
+spring:
+  profiles:
+    active: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  h2:
+    console:
+      enabled: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
