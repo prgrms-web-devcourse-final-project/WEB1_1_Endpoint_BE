@@ -11,6 +11,7 @@ allOpen {
 
 dependencies {
     api(project(":infrastructure:kafka"))
+    api(project(":common:common-jpa"))
 
     implementation(project(":user-service:user-domain"))
 
@@ -18,3 +19,4 @@ dependencies {
     implementation("mysql:mysql-connector-java:8.0.28")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
+

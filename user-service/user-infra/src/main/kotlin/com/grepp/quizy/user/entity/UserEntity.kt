@@ -2,6 +2,7 @@ package com.grepp.quizy.user.entity
 
 import com.grepp.quizy.user.Role
 import com.grepp.quizy.user.User
+import com.grepp.quizy.user.UserId
 import jakarta.persistence.*
 
 @Entity
@@ -24,7 +25,7 @@ class UserEntity (
     ) {
     fun toDomain(): User {
         return User(
-            id = id,
+            id = UserId(id),
             userProfile = userProfileVO.toDomain(),
             provider = provider.toDomain(),
             role = role
@@ -34,7 +35,7 @@ class UserEntity (
     companion object {
         fun from(user: User): UserEntity {
             return UserEntity(
-                id = user.id,
+                id = user.id.value,
                 userProfileVO = UserProfileVO.from(user.userProfile),
                 provider = ProviderTypeVO.from(user.provider),
                 role = user.role
