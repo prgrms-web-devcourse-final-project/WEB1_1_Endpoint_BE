@@ -10,30 +10,30 @@ import java.time.LocalDateTime
 @Setting(settingPath = "elastic/es-settings.json")
 class QuizDocument(
     @Id @Field(type = FieldType.Keyword)
-    val id: Long,
+    private val id: Long,
 
     @Field(type = FieldType.Text)
-    val question: String,
+    private val question: String,
 
     @Field(type = FieldType.Text)
-    val tag: String,
+    private val tag: String,
 
     @Field(type = FieldType.Text)
-    val type: String,
+    private val type: String,
 
     @Field(type = FieldType.Object)
-    val choices: QuizChoice,
+    private val choices: QuizChoice,
 
     @Field(type = FieldType.Integer)
-    val numLikes: Int = 0,
+    private val numLikes: Int = 0,
 
     @Field(type = FieldType.Integer)
-    val numComments: Int = 0,
+    private val numComments: Int = 0,
 
     @Field(
         type = FieldType.Date,
         format = [DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis])
-    val createdAt: LocalDateTime,
+    private val createdAt: LocalDateTime,
 ) {
 
     fun toDomain() = Quiz(

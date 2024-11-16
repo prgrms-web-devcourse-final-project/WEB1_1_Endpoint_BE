@@ -1,6 +1,6 @@
 package com.grepp.quizy.domain.quiz
 
-data class QuizTag(val tags: List<String>) {
+data class QuizTag(private val tags: List<String>) {
 
     fun buildTagString() = tags.joinToString(" ")
 

@@ -7,11 +7,11 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = ["com.grepp.quizy.search.infra"])
+@EnableElasticsearchRepositories(basePackages = ["com.grepp.quizy.infra"])
 class ElasticSearchConfig: ElasticsearchConfiguration() {
 
     @Value("\${elasticsearch.host}")
-    lateinit var host: String
+    private lateinit var host: String
 
     override fun clientConfiguration(): ClientConfiguration =
         ClientConfiguration.builder()

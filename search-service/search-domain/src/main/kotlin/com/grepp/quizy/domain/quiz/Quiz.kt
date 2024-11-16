@@ -3,11 +3,11 @@ package com.grepp.quizy.domain.quiz
 class Quiz(
     val id: Long,
     val question: String,
-    val type: QuizType,
-    val tag: QuizTag,
-    val choice: QuizChoice,
-    val like: QuizLike,
-    val comment: QuizComment,
+    private val type: QuizType,
+    private val tag: QuizTag,
+    private val choice: QuizChoice,
+    private val like: QuizLike,
+    private val comment: QuizComment,
 ) {
     fun getTypeName(): String = type.typeName
 
