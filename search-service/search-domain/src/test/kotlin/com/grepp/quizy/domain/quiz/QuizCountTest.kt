@@ -1,5 +1,7 @@
 package com.grepp.quizy.domain.quiz
 
+import com.grepp.quizy.search.domain.quiz.QuizCommentCount
+import com.grepp.quizy.search.domain.quiz.QuizLikeCount
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe

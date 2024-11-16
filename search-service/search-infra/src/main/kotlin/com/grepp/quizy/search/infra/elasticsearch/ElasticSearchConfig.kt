@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.elasticsearch
+package com.grepp.quizy.search.infra.elasticsearch
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
@@ -7,7 +7,7 @@ import org.springframework.data.elasticsearch.client.elc.ElasticsearchConfigurat
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = ["com.grepp.quizy.infra"])
+@EnableElasticsearchRepositories(basePackages = ["com.grepp.quizy.search.infra"])
 class ElasticSearchConfig: ElasticsearchConfiguration() {
 
     @Value("\${elasticsearch.host}")

@@ -1,6 +1,6 @@
-package com.grepp.quizy.infra.document
+package com.grepp.quizy.search.infra.quiz
 
-import com.grepp.quizy.domain.quiz.*
+import com.grepp.quizy.search.domain.quiz.*
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
 import java.time.LocalDateTime
