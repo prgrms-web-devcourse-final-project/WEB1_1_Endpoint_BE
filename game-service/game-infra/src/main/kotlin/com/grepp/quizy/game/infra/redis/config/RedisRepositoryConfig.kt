@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.game.redis.config
+package com.grepp.quizy.game.infra.redis.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.game.redis.config
+package com.grepp.quizy.game.infra.redis.config
 
 import jakarta.annotation.PostConstruct
 import jakarta.annotation.PreDestroy

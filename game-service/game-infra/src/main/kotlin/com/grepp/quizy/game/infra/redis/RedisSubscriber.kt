@@ -1,8 +1,8 @@
-package com.grepp.quizy.infra.game.redis
+package com.grepp.quizy.game.infra.redis
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.grepp.quizy.infra.game.websocket.WebSocketDestination.MULTIPLE_PREFIX
+import com.grepp.quizy.game.infra.websocket.WebSocketDestination.MULTIPLE_PREFIX
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
 import org.springframework.messaging.simp.SimpMessagingTemplate
@@ -23,4 +23,5 @@ class RedisSubscriber(
             "$MULTIPLE_PREFIX/gameRoom/$roomId", publishMessage
         )
     }
+
 }

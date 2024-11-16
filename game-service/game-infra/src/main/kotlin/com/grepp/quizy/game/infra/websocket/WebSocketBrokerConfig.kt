@@ -1,13 +1,14 @@
-package com.grepp.quizy.infra.game.websocket
+package com.grepp.quizy.game.infra.websocket
 
-import com.grepp.quizy.infra.game.websocket.WebSocketDestination.*
+import com.grepp.quizy.game.infra.websocket.WebSocketDestination.*
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 
-
 @Configuration
+@EnableWebSocketMessageBroker
 class WebSocketBrokerConfig : WebSocketMessageBrokerConfigurer {
 
     override fun registerStompEndpoints(registry: StompEndpointRegistry) {

@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.game.websocket
+package com.grepp.quizy.game.infra.websocket
 
 enum class WebSocketDestination(
     val destination: String
