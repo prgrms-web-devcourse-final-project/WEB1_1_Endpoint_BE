@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.quiz
+package com.grepp.quizy.infra.document
 
 import com.grepp.quizy.domain.quiz.*
 import org.springframework.data.annotation.Id
