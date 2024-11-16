@@ -42,7 +42,7 @@ class QuizDocument(
         tag = QuizTag.from(tag),
         type = QuizType.fromType(type),
         choice = choices,
-        like = QuizLike(numLikes),
-        comment = QuizComment(numComments),
+        like = QuizLikeCount(numLikes),
+        comment = QuizCommentCount(numComments),
     )
 }

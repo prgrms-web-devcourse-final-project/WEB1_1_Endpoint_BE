@@ -6,8 +6,8 @@ class Quiz(
     private val type: QuizType,
     private val tag: QuizTag,
     private val choice: QuizChoice,
-    private val like: QuizLike,
-    private val comment: QuizComment,
+    private val like: QuizLikeCount,
+    private val comment: QuizCommentCount,
 ) {
     fun getTypeName(): String = type.typeName
 
@@ -19,7 +19,7 @@ class Quiz(
 
     fun getExplanation(): String = choice.explanation
 
-    fun getNumLikes(): Int = like.numLikes
+    fun getNumLikes(): Int = like.value
 
-    fun getNumComments(): Int = comment.numComments
+    fun getNumComments(): Int = comment.value
 }

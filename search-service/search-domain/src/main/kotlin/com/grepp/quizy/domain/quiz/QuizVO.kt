@@ -11,6 +11,14 @@ data class QuizTag(private val tags: List<String>) {
 
 data class QuizChoice(val choices: List<String>, val answer: String, val explanation: String)
 
-data class QuizLike(val numLikes: Int)
+data class QuizLikeCount(val value: Int) {
+    init {
+        require(value >= 0) { "Like count must be greater than or equal to zero: $value" }
+    }
+}
 
-data class QuizComment(val numComments: Int)
+data class QuizCommentCount(val value: Int) {
+    init {
+        require(value >= 0) { "Comment count must be greater than or equal to zero: $value" }
+    }
+}
