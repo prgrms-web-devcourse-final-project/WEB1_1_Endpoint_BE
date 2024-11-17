@@ -1,4 +1,4 @@
-package com.grepp.quizy.domain.game
+package com.grepp.quizy.game.domain
 
 import org.springframework.stereotype.Service
 
