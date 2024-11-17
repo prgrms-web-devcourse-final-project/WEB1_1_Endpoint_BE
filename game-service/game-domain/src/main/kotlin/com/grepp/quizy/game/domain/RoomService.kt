@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 class RoomService(
     private val roomAppender: RoomAppender
 ) {
-    fun createRoom() {
-        roomAppender.append()
+    fun createRoom(): Room{
+        return roomAppender.append()
     }
 }
