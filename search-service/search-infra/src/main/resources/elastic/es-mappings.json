@@ -1,0 +1,21 @@
+{
+  "properties" : {
+    "question": {
+      "type" : "text",
+      "analyzer": "standard",
+      "search_analyzer": "standard",
+      "fields": {
+        "nori": {
+          "type": "text",
+          "analyzer": "my_nori_analyzer",
+          "search_analyzer": "my_nori_analyzer"
+        },
+        "ngram": {
+          "type": "text",
+          "analyzer": "my_ngram_analyzer",
+          "search_analyzer": "my_ngram_analyzer"
+        }
+      }
+    }
+  }
+}

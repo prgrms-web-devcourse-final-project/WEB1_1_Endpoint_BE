@@ -1,0 +1,23 @@
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+elasticsearch:
+  client:
+    host: ${ELASTICSEARCH_HOST}
+  host: ${ELASTICSEARCH_HOST_PORT:localhost:9200}
+  port: 9200
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+elasticsearch:
+  client:
+    host: es
+  host: ${ELASTICSEARCH_HOST:es:9200}
+  port: 9200
