@@ -1,7 +1,7 @@
-package com.grepp.quizy.infra.game.redis.entity
+package com.grepp.quizy.game.infra.redis.entity
 
-import com.grepp.quizy.domain.game.GameStatus
-import com.grepp.quizy.domain.game.Room
+import com.grepp.quizy.game.domain.GameStatus
+import com.grepp.quizy.game.domain.Room
 import jakarta.persistence.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
