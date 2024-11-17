@@ -1,4 +1,4 @@
-package com.grepp.quizy.api
+package com.grepp.quizy.quiz.api
 
 import com.grepp.quizy.common.api.ApiResponse
 import org.springframework.web.bind.annotation.GetMapping

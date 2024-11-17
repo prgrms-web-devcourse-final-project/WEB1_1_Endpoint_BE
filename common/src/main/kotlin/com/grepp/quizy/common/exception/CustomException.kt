@@ -10,6 +10,7 @@ abstract class CustomException(
 
     override val message: String
         get() =
-                sourceLayer?.let { "$it - ${errorCode.errorReason.message}" }
-                        ?: errorCode.errorReason.message
+                sourceLayer?.let {
+                    "$it - ${errorCode.errorReason.message}"
+                } ?: errorCode.errorReason.message
 }

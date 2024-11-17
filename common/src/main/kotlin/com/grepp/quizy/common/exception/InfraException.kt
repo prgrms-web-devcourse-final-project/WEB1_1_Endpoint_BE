@@ -6,5 +6,7 @@ open class InfraException : CustomException {
             message: String,
     ) : super(errorCode, message)
 
-    constructor(errorCode: BaseErrorCode) : super(errorCode, "인프라 계층 예외")
+    constructor(
+            errorCode: BaseErrorCode
+    ) : super(errorCode, "인프라 계층 예외")
 }

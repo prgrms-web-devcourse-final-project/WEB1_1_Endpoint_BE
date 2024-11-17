@@ -1,4 +1,4 @@
-package com.grepp.quizy
+package com.grepp.quizy.quiz
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

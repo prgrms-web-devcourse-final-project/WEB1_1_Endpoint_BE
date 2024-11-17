@@ -6,5 +6,7 @@ open class DomainException : CustomException {
             message: String,
     ) : super(errorCode, message)
 
-    constructor(errorCode: BaseErrorCode) : super(errorCode, "도메인 계층 예외")
+    constructor(
+            errorCode: BaseErrorCode
+    ) : super(errorCode, "도메인 계층 예외")
 }
