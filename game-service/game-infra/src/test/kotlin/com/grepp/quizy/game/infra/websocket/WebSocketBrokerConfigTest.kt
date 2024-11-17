@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.game.websocket
+package com.grepp.quizy.game.infra.websocket
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe

@@ -1,7 +1,8 @@
-package com.grepp.quizy.infra.game.websocket
+package com.grepp.quizy.game.infra.websocket
 
 import com.grepp.quizy.domain.game.GameMessageSender
-import com.grepp.quizy.infra.game.websocket.WebSocketDestination.*
+import com.grepp.quizy.game.infra.websocket.WebSocketDestination.QUIZ_GRADE
+import com.grepp.quizy.game.infra.websocket.WebSocketDestination.SINGLE_PREFIX
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import org.springframework.stereotype.Component
 import java.security.Principal
