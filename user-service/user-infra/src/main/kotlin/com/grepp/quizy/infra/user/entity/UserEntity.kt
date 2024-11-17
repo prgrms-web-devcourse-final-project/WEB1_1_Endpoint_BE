@@ -3,11 +3,12 @@ package com.grepp.quizy.infra.user.entity
 import com.grepp.quizy.domain.user.Role
 import com.grepp.quizy.domain.user.User
 import com.grepp.quizy.domain.user.UserId
+import com.grepp.quizy.jpa.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
-class UserEntity (
+class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id: Long = 0,
@@ -22,7 +23,8 @@ class UserEntity (
     @Column(nullable = false)
     private val role: Role = Role.USER,
 
-    ) {
+    ) : BaseTimeEntity() {
+        
     fun toDomain(): User {
         return User(
             id = UserId(id),

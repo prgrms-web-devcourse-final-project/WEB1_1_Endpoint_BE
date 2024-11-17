@@ -20,7 +20,6 @@ dependencies {
 
     // Redis
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    implementation("io.lettuce:lettuce-core")
 
     // JWT
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
