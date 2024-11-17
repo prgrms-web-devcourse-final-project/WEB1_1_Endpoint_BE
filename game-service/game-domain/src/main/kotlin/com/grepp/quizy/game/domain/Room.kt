@@ -1,6 +1,6 @@
-package com.grepp.quizy.domain.game
+package com.grepp.quizy.game.domain
 
-import com.grepp.quizy.domain.game.GameStatus.WAITING
+import com.grepp.quizy.game.domain.GameStatus.WAITING
 
 class Room(
     private val id: String,
