@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 class UserRemover (
     private val userRepository: UserRepository
 ) {
-    fun removeUser(user: User) {
+    fun remove(user: User) =
         userRepository.delete(user)
-    }
 }

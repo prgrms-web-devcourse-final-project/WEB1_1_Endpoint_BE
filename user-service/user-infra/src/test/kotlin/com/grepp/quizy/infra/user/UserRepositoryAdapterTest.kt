@@ -1,7 +1,6 @@
 package com.grepp.quizy.infra.user
 
 import com.grepp.quizy.domain.user.*
-import com.grepp.quizy.infra.config.TestConfig
 import com.grepp.quizy.infra.user.entity.ProviderTypeVO
 import com.grepp.quizy.infra.user.entity.UserEntity
 import com.grepp.quizy.infra.user.entity.UserProfileVO
@@ -12,16 +11,16 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import java.util.*
 
-@SpringBootTest(classes = [TestConfig::class])
+
 @ActiveProfiles("test")
-class UserRepositoryAdapterTest (
-    private val userJPARepository: UserJPARepository,
-    private val userRepositoryAdaptor: UserRepositoryAdaptor
+class UserRepositoryAdapterTest(
 ) : DescribeSpec({
+
+    val userJPARepository: UserJPARepository = mockk<UserJPARepository>()
+    val userRepositoryAdaptor = UserRepositoryAdaptor(userJPARepository)
 
     // Dependencies (Context)
 
@@ -59,72 +58,70 @@ class UserRepositoryAdapterTest (
         clearAllMocks()
     }
 
-    describe("findById") {
-        context("유저 ID가 주어졌을 때") {
-            context("해당 ID의 유저가 존재하는 경우") {
-                // Context
-                every { userJPARepository.findById(userId.value) } returns Optional.of(userEntity)
+    describe("findById 에서") {
 
-                it("유저 도메인 객체를 반환한다") {
-                    // Execute
-                    val result = userRepositoryAdaptor.findById(userId.value)
+        context("존재하는 유저 ID가 주어졌을 때") {
+            // Context
+            every { userJPARepository.findById(userId.value) } returns Optional.of(userEntity)
 
-                    // Verify
-                    result.id shouldBe user.id
-                    verify(exactly = 1) { userJPARepository.findById(userId.value) }
-                }
+            it("유저 도메인 객체를 반환한다") {
+                // Execute
+                val result = userRepositoryAdaptor.findById(userId.value)
+
+                // Verify
+                result.getId() shouldBe user.getId()
+                verify(exactly = 1) { userJPARepository.findById(userId.value) }
             }
+        }
 
-            context("해당 ID의 유저가 존재하지 않는 경우") {
-                // Context
-                val nonExistentId = UserId(999)
-                every { userJPARepository.findById(nonExistentId.value) } returns Optional.empty()
+        context("존재하지 않는 유저 ID가 주어졌을 때") {
+            // Context
+            val nonExistentId = UserId(999)
+            every { userJPARepository.findById(nonExistentId.value) } returns Optional.empty()
 
-                it("UserNotFoundException을 발생시킨다") {
-                    // Execute & Verify
-                    shouldThrow<UserNotFoundException> {
-                        userRepositoryAdaptor.findById(nonExistentId.value)
-                    }
-                    verify(exactly = 1) { userJPARepository.findById(nonExistentId.value) }
+            it("UserNotFoundException을 발생시킨다") {
+                // Execute & Verify
+                shouldThrow<UserNotFoundException> {
+                    userRepositoryAdaptor.findById(nonExistentId.value)
                 }
+                verify(exactly = 1) { userJPARepository.findById(nonExistentId.value) }
+            }
+        }
+
+    }
+
+    describe("existsByEmail 에서") {
+        context("해당 이메일을 가진 유저가 존재하는 경우") {
+            // Context
+            every { userJPARepository.existsByUserProfile_Email(email) } returns true
+
+            it("true를 반환한다") {
+                // Execute
+                val result = userRepositoryAdaptor.existsByEmail(email)
+
+                // Verify
+                result shouldBe true
+                verify(exactly = 1) { userJPARepository.existsByUserProfile_Email(email) }
+            }
+        }
+
+        context("해당 이메일을 가진 유저가 존재하지 않는 경우") {
+            // Context
+            val nonExistentEmail = "nonexistent@example.com"
+            every { userJPARepository.existsByUserProfile_Email(nonExistentEmail) } returns false
+
+            it("false를 반환한다") {
+                // Execute
+                val result = userRepositoryAdaptor.existsByEmail(nonExistentEmail)
+
+                // Verify
+                result shouldBe false
+                verify(exactly = 1) { userJPARepository.existsByUserProfile_Email(nonExistentEmail) }
             }
         }
     }
 
-    describe("existsByEmail") {
-        context("이메일이 주어졌을 때") {
-            context("해당 이메일을 가진 유저가 존재하는 경우") {
-                // Context
-                every { userJPARepository.existsByUserProfile_Email(email) } returns true
-
-                it("true를 반환한다") {
-                    // Execute
-                    val result = userRepositoryAdaptor.existsByEmail(email)
-
-                    // Verify
-                    result shouldBe true
-                    verify(exactly = 1) { userJPARepository.existsByUserProfile_Email(email) }
-                }
-            }
-
-            context("해당 이메일을 가진 유저가 존재하지 않는 경우") {
-                // Context
-                val nonExistentEmail = "nonexistent@example.com"
-                every { userJPARepository.existsByUserProfile_Email(nonExistentEmail) } returns false
-
-                it("false를 반환한다") {
-                    // Execute
-                    val result = userRepositoryAdaptor.existsByEmail(nonExistentEmail)
-
-                    // Verify
-                    result shouldBe false
-                    verify(exactly = 1) { userJPARepository.existsByUserProfile_Email(nonExistentEmail) }
-                }
-            }
-        }
-    }
-
-    describe("save") {
+    describe("save 에서") {
         context("유저 도메인 객체가 주어졌을 때") {
             // Context
             every { userJPARepository.save(any()) } returns userEntity
@@ -134,7 +131,7 @@ class UserRepositoryAdapterTest (
                 val result = userRepositoryAdaptor.save(user)
 
                 // Verify
-                result.id shouldBe user.id
+                result.getId() shouldBe user.getId()
                 verify(exactly = 1) { userJPARepository.save(any()) }
             }
         }

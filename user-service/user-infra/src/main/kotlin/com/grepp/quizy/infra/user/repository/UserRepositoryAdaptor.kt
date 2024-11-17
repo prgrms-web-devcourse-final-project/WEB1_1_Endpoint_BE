@@ -13,19 +13,19 @@ class UserRepositoryAdaptor (
     private val userJPARepository: UserJPARepository
 ) : UserRepository {
 
-    override fun findById(id: Long): User {
-        return userJPARepository.findById(id).getOrNull()?.toDomain() ?: throw UserNotFoundException()
-    }
+    override fun findById(id: Long): User =
+        userJPARepository.findById(id).getOrNull()?.toDomain() ?: throw UserNotFoundException()
 
-    override fun existsByEmail(email: String): Boolean {
-        return userJPARepository.existsByUserProfile_Email(email)
-    }
 
-    override fun save(user: User): User {
-        return userJPARepository.save(UserEntity.from(user)).toDomain()
-    }
+    override fun existsByEmail(email: String): Boolean =
+        userJPARepository.existsByUserProfile_Email(email)
 
-    override fun delete(user: User) {
+
+    override fun save(user: User): User =
+        userJPARepository.save(UserEntity.from(user)).toDomain()
+
+
+    override fun delete(user: User) =
         userJPARepository.delete(UserEntity.from(user))
-    }
+
 }

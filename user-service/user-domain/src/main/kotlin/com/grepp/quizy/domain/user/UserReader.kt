@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component
 class UserReader (
         private val userRepository: UserRepository
 ) {
-    fun getUserById(userId: Long): User {
-        return userRepository.findById(userId)
-    }
-
+    fun read(userId: Long): User =
+        userRepository.findById(userId)
 }

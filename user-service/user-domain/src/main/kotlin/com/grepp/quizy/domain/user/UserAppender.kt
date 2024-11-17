@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component
 class UserAppender (
         private val userRepository: UserRepository
 ) {
-    fun appendUser(user: User): User {
-        return userRepository.save(user)
-    }
+    fun append(user: User): User =
+        userRepository.save(user)
 }

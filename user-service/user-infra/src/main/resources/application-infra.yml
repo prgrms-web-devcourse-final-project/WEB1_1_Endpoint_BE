@@ -22,9 +22,9 @@ spring:
 
 kafka:
   topic:
-    quiz: quiz
+    user: user
   consumer-group:
-    quiz: quiz
+    user: user
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
