@@ -7,7 +7,7 @@ import java.util.*
 class RoomAppender(
     private val roomRepository: RoomRepository
 ) {
-    fun append() {
-        roomRepository.save(Room(UUID.randomUUID().toString()))
+    fun append(): Room {
+        return roomRepository.save(Room(UUID.randomUUID().toString()))
     }
 }
