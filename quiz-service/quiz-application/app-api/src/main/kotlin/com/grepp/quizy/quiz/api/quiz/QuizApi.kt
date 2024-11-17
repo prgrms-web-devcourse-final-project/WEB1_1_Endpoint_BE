@@ -1,7 +1,8 @@
 package com.grepp.quizy.quiz.api.quiz
 
+import QuizResponse
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.quiz.domain.Quiz
+import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.domain.QuizService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,13 +16,15 @@ class QuizApi(private val quizService: QuizService) {
     @PostMapping
     fun createQuiz(
             @RequestBody request: CreateQuizRequest
-    ): ApiResponse<Quiz> =
+    ): ApiResponse<QuizResponse> =
             ApiResponse.success(
-                    quizService.createQuiz(
-                            request.toContent(),
-                            request.toQuizTags(),
-                            request.options,
-                            request.toAnswer(),
+                    QuizResponse.from(
+                            quizService.createQuiz(
+                                    request.toContent(),
+                                    request.toQuizTags(),
+                                    request.options,
+                                    request.toAnswer(),
+                            )
                     )
             )
 }

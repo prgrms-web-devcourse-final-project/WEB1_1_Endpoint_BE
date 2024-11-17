@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.api.quiz
+package com.grepp.quizy.quiz.api.quiz.dto
 
 import com.grepp.quizy.quiz.domain.*
 
