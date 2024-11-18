@@ -14,10 +14,26 @@ class Room(
         playerIds.add(userId)
     }
 
+    fun quit(userId: Long) {
+        checkQuitable(userId)
+        playerIds.remove(userId)
+    }
+
+    private fun checkQuitable(userId: Long) {
+        validatePlayerAlreadyJoined(userId)
+        validateGameIsWaiting()
+    }
+
     private fun checkJoinable(userId: Long) {
         validatePlayerNotAlreadyJoined(userId)
         validateGameIsWaiting()
         validateGameHasCapacity()
+    }
+
+    private fun validatePlayerAlreadyJoined(userId: Long) {
+        if (!playerIds.contains(userId)) {
+            throw GameNotParticipatedException()
+        }
     }
 
     private fun validatePlayerNotAlreadyJoined(userId: Long) {
