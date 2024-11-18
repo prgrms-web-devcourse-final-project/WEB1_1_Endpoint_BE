@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.infra.redis.repository
+package com.grepp.quizy.game.infra.game.repository
 
 import com.grepp.quizy.game.domain.Room
 import com.grepp.quizy.game.domain.RoomRepository

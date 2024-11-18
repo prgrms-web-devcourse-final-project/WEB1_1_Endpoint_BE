@@ -5,34 +5,33 @@ import com.grepp.quizy.game.domain.Room
 import jakarta.persistence.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
-import java.util.*
 
 private const val HOURS_IN_SECOND = 3600L
 
 @RedisHash("gameRoom")
 class RoomRedisEntity(
     @Id
-    private val id: String? = null,
+    private val id: Long = 0,
 
     @TimeToLive
     private val ttl: Long = HOURS_IN_SECOND,
 
     private val status: GameStatus = GameStatus.WAITING,
 
-    private val playerIds: MutableSet<Long> = mutableSetOf()
+    private val playerIds: Set<Long> = setOf()
 ) {
     companion object {
         fun from(room: Room): RoomRedisEntity {
             return RoomRedisEntity(
-                id = UUID.randomUUID().toString(),
-                playerIds = room.players.toMutableSet()
+                id = room.id,
+                playerIds = room.playerIds
             )
         }
     }
 
     fun toDomain(): Room {
         return Room(
-            id = id!!,
+            id = id,
             status = status,
             playerIds = playerIds
         )
