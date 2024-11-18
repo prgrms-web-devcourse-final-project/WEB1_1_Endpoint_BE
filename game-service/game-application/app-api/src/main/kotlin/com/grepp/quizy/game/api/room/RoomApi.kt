@@ -27,4 +27,12 @@ class RoomApi(
         return ApiResponse.success(RoomResponse.from(roomService.join(roomId, userId)))
     }
 
+    @PostMapping("/quit")
+    fun quit(
+        userId: Long,
+        @RequestParam roomId: Long
+    ): ApiResponse<Unit> {
+        return ApiResponse.success(roomService.quit(roomId, userId))
+    }
+
 }
