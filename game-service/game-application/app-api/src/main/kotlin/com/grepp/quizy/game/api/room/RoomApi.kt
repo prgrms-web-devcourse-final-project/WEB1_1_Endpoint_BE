@@ -19,7 +19,7 @@ class RoomApi(
         return ApiResponse.success(RoomResponse.from(roomService.createRoom()))
     }
 
-    @PostMapping
+    @PostMapping("/join")
     fun join(
         userId: Long,
         @RequestParam roomId: Long
