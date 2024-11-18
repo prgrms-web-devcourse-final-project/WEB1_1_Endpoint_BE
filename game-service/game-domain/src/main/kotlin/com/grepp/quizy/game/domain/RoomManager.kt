@@ -12,8 +12,9 @@ class RoomManager(
         return room
     }
 
-    fun quit(room: Room, userId: Long) {
+    fun quit(room: Room, userId: Long): Room {
         room.quit(userId)
         roomRepository.save(room)
+        return room
     }
 }
