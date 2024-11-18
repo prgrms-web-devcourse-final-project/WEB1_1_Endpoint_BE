@@ -1,31 +1,8 @@
-import com.grepp.quizy.quiz.domain.QuizAnswer
-import com.grepp.quizy.quiz.domain.QuizContent
-import com.grepp.quizy.quiz.domain.QuizOption
-import com.grepp.quizy.quiz.domain.QuizType
+package com.grepp.quizy.quiz.infra.quiz.entity
+
+import com.grepp.quizy.quiz.domain.quiz.QuizAnswer
+import com.grepp.quizy.quiz.domain.quiz.QuizOption
 import jakarta.persistence.Embeddable
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-
-@Embeddable
-data class QuizContentVO(
-        @Enumerated(EnumType.STRING) val type: QuizType,
-        val content: String,
-) {
-    protected constructor() : this(QuizType.AB_TEST, "")
-
-    fun toDomain(): QuizContent {
-        return QuizContent(type = type, content = content)
-    }
-
-    companion object {
-        fun from(content: QuizContent): QuizContentVO {
-            return QuizContentVO(
-                    type = content.type,
-                    content = content.content,
-            )
-        }
-    }
-}
 
 @Embeddable
 data class QuizOptionVO(

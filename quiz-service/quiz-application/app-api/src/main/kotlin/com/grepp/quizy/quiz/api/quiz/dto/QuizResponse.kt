@@ -1,6 +1,6 @@
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
-import com.grepp.quizy.quiz.domain.*
+import com.grepp.quizy.quiz.domain.quiz.*
 
 @JsonInclude(Include.NON_NULL)
 sealed class QuizResponse {
@@ -44,29 +44,34 @@ sealed class QuizResponse {
                 is ABTest ->
                         ABTestResponse(
                                 id = quiz.id.value,
-                                type = quiz.content.type,
+                                type = quiz.type,
                                 content =
                                         quiz.content
                                                 .content,
                                 tags =
-                                        quiz.tags.map {
-                                            it.name
-                                        },
-                                options = quiz.options,
+                                        quiz.content.tags
+                                                .map {
+                                                    it.name
+                                                },
+                                options =
+                                        quiz.content.options,
                         )
 
                 is OXQuiz ->
                         OXQuizResponse(
                                 id = quiz.id.value,
-                                type = quiz.content.type,
+                                type = quiz.type,
                                 content =
                                         quiz.content
                                                 .content,
                                 tags =
-                                        quiz.tags.map {
-                                            it.name
-                                        },
-                                options = quiz.options,
+                                        quiz.content.tags
+                                                .map {
+                                                    it.name
+                                                },
+                                options =
+                                        quiz.content
+                                                .options,
                                 answer =
                                         quiz
                                                 .getCorrectAnswer(),
@@ -78,15 +83,18 @@ sealed class QuizResponse {
                 is MultipleChoiceQuiz ->
                         MultipleChoiceQuizResponse(
                                 id = quiz.id.value,
-                                type = quiz.content.type,
+                                type = quiz.type,
                                 content =
                                         quiz.content
                                                 .content,
                                 tags =
-                                        quiz.tags.map {
-                                            it.name
-                                        },
-                                options = quiz.options,
+                                        quiz.content.tags
+                                                .map {
+                                                    it.name
+                                                },
+                                options =
+                                        quiz.content
+                                                .options,
                                 answer =
                                         quiz
                                                 .getCorrectAnswer(),

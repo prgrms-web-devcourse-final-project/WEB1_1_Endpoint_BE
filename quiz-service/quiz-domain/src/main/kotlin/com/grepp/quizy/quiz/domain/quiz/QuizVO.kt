@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.domain
+package com.grepp.quizy.quiz.domain.quiz
 
 @JvmInline value class QuizId(val value: Long)
 
@@ -9,8 +9,12 @@ data class QuizTag(
         val id: QuizTagId = QuizTagId(0),
 ) {
     companion object {
-        fun from(tag: String): QuizTag {
-            return QuizTag(tag)
+        fun create(name: String): QuizTag {
+            return QuizTag(name)
+        }
+
+        fun of(name: String, id: QuizTagId): QuizTag {
+            return QuizTag(name, id)
         }
     }
 }
@@ -22,8 +26,9 @@ data class QuizOption(
 )
 
 data class QuizContent(
-        val type: QuizType,
         val content: String,
+        val tags: List<QuizTag>,
+        val options: List<QuizOption>,
 ) {
 
     init {
@@ -31,6 +36,9 @@ data class QuizContent(
             "퀴즈 내용은 공백일 수 없습니다"
         }
     }
+
+    fun updateTags(tags: List<QuizTag>): QuizContent =
+            copy(tags = tags)
 }
 
 data class QuizAnswer(
