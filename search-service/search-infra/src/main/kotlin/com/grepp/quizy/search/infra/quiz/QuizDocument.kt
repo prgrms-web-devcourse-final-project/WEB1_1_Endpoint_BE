@@ -15,8 +15,11 @@ class QuizDocument(
     @Field(type = FieldType.Keyword)
     private val category: String,
 
-    @Field(type = FieldType.Object)
-    private val content: QuizContentVO,
+    @Field(type = FieldType.Keyword)
+    val type: QuizType,
+
+    @Field(type = FieldType.Text)
+    val content: String,
 
     @Field(type = FieldType.Text)
     private val tags: String,
