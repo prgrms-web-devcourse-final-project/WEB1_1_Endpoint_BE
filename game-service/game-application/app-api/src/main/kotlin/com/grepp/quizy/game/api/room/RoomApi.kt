@@ -5,6 +5,7 @@ import com.grepp.quizy.game.api.room.dto.RoomResponse
 import com.grepp.quizy.game.domain.RoomService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -16,6 +17,14 @@ class RoomApi(
     @PostMapping
     fun createRoom(): ApiResponse<RoomResponse> {
         return ApiResponse.success(RoomResponse.from(roomService.createRoom()))
+    }
+
+    @PostMapping
+    fun join(
+        userId: Long,
+        @RequestParam roomId: Long
+    ): ApiResponse<RoomResponse> {
+        return ApiResponse.success(RoomResponse.from(roomService.join(roomId, userId)))
     }
 
 }
