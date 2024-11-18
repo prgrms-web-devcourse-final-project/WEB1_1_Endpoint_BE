@@ -1,4 +1,4 @@
-package com.grepp.quizy.search.infra.quiz
+package com.grepp.quizy.search.infra.quiz.document
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.core.convert.converter.Converter

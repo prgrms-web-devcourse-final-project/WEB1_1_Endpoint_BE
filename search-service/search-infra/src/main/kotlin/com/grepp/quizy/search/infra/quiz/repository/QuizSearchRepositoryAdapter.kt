@@ -1,4 +1,4 @@
-package com.grepp.quizy.search.infra.quiz
+package com.grepp.quizy.search.infra.quiz.repository
 
 import com.grepp.quizy.search.domain.global.dto.Slice
 import com.grepp.quizy.search.domain.quiz.QuizSearchRepository
@@ -6,6 +6,7 @@ import com.grepp.quizy.search.domain.global.dto.SearchCondition
 import com.grepp.quizy.search.domain.quiz.Quiz
 import com.grepp.quizy.search.domain.quiz.QuizId
 import com.grepp.quizy.search.domain.quiz.UserAnswer
+import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository

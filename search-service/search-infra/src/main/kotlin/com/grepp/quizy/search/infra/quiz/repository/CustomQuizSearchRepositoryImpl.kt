@@ -1,6 +1,9 @@
-package com.grepp.quizy.search.infra.quiz
+package com.grepp.quizy.search.infra.quiz.repository
 
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
+import com.grepp.quizy.search.infra.quiz.document.CONTENT_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument
+import com.grepp.quizy.search.infra.quiz.document.TAG_FIELD
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice

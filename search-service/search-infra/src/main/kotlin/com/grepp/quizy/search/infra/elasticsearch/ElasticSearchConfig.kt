@@ -1,6 +1,9 @@
 package com.grepp.quizy.search.infra.elasticsearch
 
-import com.grepp.quizy.search.infra.quiz.*
+import com.grepp.quizy.search.infra.quiz.document.QuizAnswerVO
+import com.grepp.quizy.search.infra.quiz.document.QuizDocumentReadingConverter
+import com.grepp.quizy.search.infra.quiz.document.QuizDocumentWritingConverter
+import com.grepp.quizy.search.infra.quiz.document.QuizOptionVO
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.elasticsearch.client.ClientConfiguration
