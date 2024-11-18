@@ -18,7 +18,7 @@ class RoomRedisEntity(
 
     private val status: GameStatus = GameStatus.WAITING,
 
-    private val playerIds: Set<Long> = setOf()
+    private val playerIds: MutableSet<Long> = mutableSetOf()
 ) {
     companion object {
         fun from(room: Room): RoomRedisEntity {
