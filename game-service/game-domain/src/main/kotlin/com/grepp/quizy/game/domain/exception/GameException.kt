@@ -10,4 +10,5 @@ sealed class GameException (
     class GameAlreadyParticipatedException : GameException(GameErrorCode.GAME_ALREADY_PARTICIPATED)
     class GameAlreadyStartedException : GameException(GameErrorCode.GAME_ALREADY_STARTED)
     class GameAlreadyFullException : GameException(GameErrorCode.GAME_PARTICIPANT_ALREADY_FULL)
+    class GameNotParticipatedException : GameException(GameErrorCode.GAME_NOT_PARTICIPATED)
 }
