@@ -1,7 +1,7 @@
 package com.grepp.quizy.game.api.room
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.game.domain.Room
+import com.grepp.quizy.game.api.room.dto.RoomResponse
 import com.grepp.quizy.game.domain.RoomService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,8 +14,8 @@ class RoomApi(
 ) {
 
     @PostMapping
-    fun createRoom(): ApiResponse<Room> {
-        return ApiResponse.success(roomService.createRoom())
+    fun createRoom(): ApiResponse<RoomResponse> {
+        return ApiResponse.success(RoomResponse.from(roomService.createRoom()))
     }
 
 }
