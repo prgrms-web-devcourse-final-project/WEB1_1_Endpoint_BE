@@ -5,9 +5,10 @@ import java.util.*
 
 @Component
 class RoomAppender(
-    private val roomRepository: RoomRepository
+    private val roomRepository: RoomRepository,
+    private val idGenerator: IdGenerator
 ) {
     fun append(): Room {
-        return roomRepository.save(Room(UUID.randomUUID().toString()))
+        return roomRepository.save(Room(id = idGenerator.generate("room")))
     }
 }
