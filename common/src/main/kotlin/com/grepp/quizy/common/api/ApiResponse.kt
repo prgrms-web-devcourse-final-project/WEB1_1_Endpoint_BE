@@ -18,10 +18,10 @@ data class ApiResponse<T>(
                 ApiResponse(responseCode = "SUCCESS", result = result)
 
         @JvmStatic
-        fun success(): ApiResponse<Void> = ApiResponse(responseCode = "SUCCESS")
+        fun success(): ApiResponse<Unit> = ApiResponse(responseCode = "SUCCESS")
 
         @JvmStatic
-        fun success(message: String): ApiResponse<Void> =
+        fun success(message: String): ApiResponse<Unit> =
                 ApiResponse(responseCode = "SUCCESS", message = message)
 
         @JvmStatic
@@ -29,7 +29,7 @@ data class ApiResponse<T>(
                 errorReason: ErrorReason,
                 path: String,
                 message: String,
-        ): ApiResponse<Void> =
+        ): ApiResponse<Unit> =
                 ApiResponse(
                         path = path,
                         responseCode = errorReason.errorCode,
@@ -37,7 +37,7 @@ data class ApiResponse<T>(
                 )
 
         @JvmStatic
-        fun error(errorCode: String, message: String): ApiResponse<Void> =
+        fun error(errorCode: String, message: String): ApiResponse<Unit> =
                 ApiResponse(responseCode = errorCode, message = message)
     }
 }
