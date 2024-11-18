@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class RoomService(
     private val roomAppender: RoomAppender,
-    private val roomJoiner: RoomJoiner,
+    private val roomReader: RoomReader,
     private val roomManager: RoomManager
 ) {
 
@@ -16,11 +16,14 @@ class RoomService(
 
     @Transactional
     fun join(roomId: Long, userId: Long): Room {
-        return roomJoiner.join(roomId, userId)
+        val room = roomReader.read(roomId)
+        return roomManager.join(room, userId)
     }
 
+    @Transactional
     fun quit(roomId: Long, userId: Long) {
-        roomManager.quit(roomId, userId)
+        val room = roomReader.read(roomId)
+        roomManager.quit(room, userId)
     }
 
 }
