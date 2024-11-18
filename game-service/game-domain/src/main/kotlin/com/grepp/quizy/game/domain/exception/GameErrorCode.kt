@@ -30,7 +30,6 @@ enum class GameErrorCode(
     GAME_INVALID_PLAYER_RANKING_SCORE(409, "G019", "유효하지 않은 참가자 순위 목록 점수입니다."),
     GAME_ALREADY_PARTICIPATED(409, "G020", "이미 참가한 게임입니다."),
     GAME_PARTICIPANT_ALREADY_FULL(409, "G021", "게임 대기 인원이 꽉 찼습니다."),
-    GAME_NOT_PARTICIPATED(409, "G022", "참가하지 않은 게임입니다."),
 
     ;
 
