@@ -12,37 +12,30 @@ class QuizDocument(
     @Id @Field(type = FieldType.Keyword)
     private val id: Long,
 
-    @Field(type = FieldType.Text)
-    private val question: String,
-
-    @Field(type = FieldType.Text)
-    private val tag: String,
-
-    @Field(type = FieldType.Text)
-    private val type: String,
+    @Field(type = FieldType.Keyword)
+    private val category: String,
 
     @Field(type = FieldType.Object)
-    private val choices: QuizChoice,
+    private val content: QuizContentVO,
 
-    @Field(type = FieldType.Integer)
-    private val numLikes: Int = 0,
+    @Field(type = FieldType.Text)
+    private val tags: String,
 
-    @Field(type = FieldType.Integer)
-    private val numComments: Int = 0,
+    @Field(type = FieldType.Object)
+    private val options: List<QuizOptionVO>,
+
+    @Field(type = FieldType.Object)
+    private val answer: QuizAnswerVO?,
 
     @Field(
         type = FieldType.Date,
         format = [DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis])
     private val createdAt: LocalDateTime,
+
+    @Field(
+        type = FieldType.Date,
+        format = [DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis])
+    private val updatedAt: LocalDateTime,
 ) {
 
-    fun toDomain() = Quiz(
-        id = id,
-        question = question,
-        tag = QuizTag.from(tag),
-        type = QuizType.fromType(type),
-        choice = choices,
-        like = QuizLikeCount(numLikes),
-        comment = QuizCommentCount(numComments),
-    )
 }

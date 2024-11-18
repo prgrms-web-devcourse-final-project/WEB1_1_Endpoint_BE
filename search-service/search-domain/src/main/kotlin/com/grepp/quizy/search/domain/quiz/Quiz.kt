@@ -1,25 +1,15 @@
 package com.grepp.quizy.search.domain.quiz
 
-class Quiz(
-    val id: Long,
-    val question: String,
-    private val type: QuizType,
-    private val tag: QuizTag,
-    private val choice: QuizChoice,
-    private val like: QuizLikeCount,
-    private val comment: QuizCommentCount,
+sealed class Quiz(
+    private val id: QuizId,
+    private val content: QuizContent,
+    val category: QuizCategory,
+    val tags: List<QuizTag>,
+    val options: List<QuizOption>,
 ) {
-    fun getTypeName(): String = type.typeName
+    fun id() = id.value
 
-    fun getTags(): String = tag.buildTagString()
+    fun typeName() = content.type.typeName
 
-    fun getChoices(): List<String> = choice.choices
-
-    fun getAnswer(): String = choice.answer
-
-    fun getExplanation(): String = choice.explanation
-
-    fun getNumLikes(): Int = like.value
-
-    fun getNumComments(): Int = comment.value
+    fun content() = content.value
 }
