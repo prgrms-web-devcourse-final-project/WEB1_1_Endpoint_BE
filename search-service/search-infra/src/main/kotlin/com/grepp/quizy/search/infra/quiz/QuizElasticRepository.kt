@@ -1,5 +1,5 @@
 package com.grepp.quizy.search.infra.quiz
 
-import org.springframework.data.repository.Repository
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 
-interface QuizElasticRepository: Repository<QuizDocument, Long>
+interface QuizElasticRepository : ElasticsearchRepository<QuizDocument, Long>, CustomQuizSearchRepository
