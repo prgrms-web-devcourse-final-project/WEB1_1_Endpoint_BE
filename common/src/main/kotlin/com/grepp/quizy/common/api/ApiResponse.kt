@@ -13,31 +13,26 @@ data class ApiResponse<T>(
         val timeStamp: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
-        @JvmStatic
         fun <T> success(result: T): ApiResponse<T> =
                 ApiResponse(responseCode = "SUCCESS", result = result)
 
-        @JvmStatic
-        fun success(): ApiResponse<Void> = ApiResponse(responseCode = "SUCCESS")
+        fun success(): ApiResponse<Unit> = ApiResponse(responseCode = "SUCCESS")
 
-        @JvmStatic
-        fun success(message: String): ApiResponse<Void> =
+        fun success(message: String): ApiResponse<Unit> =
                 ApiResponse(responseCode = "SUCCESS", message = message)
 
-        @JvmStatic
         fun error(
                 errorReason: ErrorReason,
                 path: String,
                 message: String,
-        ): ApiResponse<Void> =
+        ): ApiResponse<Unit> =
                 ApiResponse(
                         path = path,
                         responseCode = errorReason.errorCode,
                         message = message,
                 )
 
-        @JvmStatic
-        fun error(errorCode: String, message: String): ApiResponse<Void> =
+        fun error(errorCode: String, message: String): ApiResponse<Unit> =
                 ApiResponse(responseCode = errorCode, message = message)
     }
 }
