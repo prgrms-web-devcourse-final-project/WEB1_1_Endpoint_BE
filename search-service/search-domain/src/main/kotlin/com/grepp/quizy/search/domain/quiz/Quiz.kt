@@ -1,7 +1,7 @@
 package com.grepp.quizy.search.domain.quiz
 
 sealed class Quiz(
-    private val id: QuizId,
+    val id: QuizId,
     private val content: QuizContent,
     val category: QuizCategory,
     val tags: List<QuizTag>,

@@ -2,7 +2,7 @@ package com.grepp.quizy.search.domain.quiz
 
 sealed interface SearchedQuiz
 
-sealed interface AnswerableQuiz
+sealed interface AnswerableQuiz : SearchedQuiz
 
 data class NonAnswerableQuiz(
     val id: Long,
@@ -10,17 +10,19 @@ data class NonAnswerableQuiz(
     val type: String,
     val options: List<SearchedQuizOption>,
     val count: SearchedQuizCount,
+    val isLiked: Boolean,
 ) : SearchedQuiz {
 
     companion object {
-        fun from(quiz: Quiz, count: SearchedQuizCount): NonAnswerableQuiz = with(quiz) {
+        fun from(quiz: Quiz, quizExtras: SearchedQuizExtras): NonAnswerableQuiz = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return NonAnswerableQuiz(
                 id = id(),
                 content = content(),
                 type = typeName(),
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
-                count = count,
+                count = quizExtras.count,
+                isLiked = quizExtras.isLiked
             )
         }
     }
@@ -33,10 +35,14 @@ data class UserNotAnsweredQuiz(
     val options: List<SearchedQuizOption>,
     val answer: SearchedQuizAnswer,
     val count: SearchedQuizCount,
+    val isLiked: Boolean,
 ) : SearchedQuiz, AnswerableQuiz {
 
     companion object {
-        fun <T> from(quiz: T, count: SearchedQuizCount): UserNotAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
+        fun <T> from(
+            quiz: T,
+            quizExtras: SearchedQuizExtras
+        ): UserNotAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return UserNotAnsweredQuiz(
                 id = id(),
@@ -44,7 +50,8 @@ data class UserNotAnsweredQuiz(
                 type = typeName(),
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
                 answer = SearchedQuizAnswer(answer(), explanation()),
-                count = count,
+                count = quizExtras.count,
+                isLiked = quizExtras.isLiked
             )
         }
     }
@@ -58,10 +65,15 @@ data class UserAnsweredQuiz(
     val answer: SearchedQuizAnswer,
     val answeredOption: Int,
     val count: SearchedQuizCount,
+    val isLiked: Boolean,
 ) : SearchedQuiz, AnswerableQuiz {
 
     companion object {
-        fun <T> from(quiz: T, answeredOption: Int, count: SearchedQuizCount): UserAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
+        fun <T> from(
+            quiz: T,
+            answeredOption: Int,
+            extras: SearchedQuizExtras
+        ): UserAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return UserAnsweredQuiz(
                 id = id(),
@@ -70,13 +82,23 @@ data class UserAnsweredQuiz(
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
                 answer = SearchedQuizAnswer(answer(), explanation()),
                 answeredOption = answeredOption,
-                count = count,
+                count = extras.count,
+                isLiked = extras.isLiked
             )
         }
     }
 }
 
-data class SearchedQuizCount(val like: Int, val comment: Int)
+data class SearchedQuizExtras(val count: SearchedQuizCount = SearchedQuizCount(), val isLiked: Boolean = false)
+
+data class SearchedQuizCount(val like: Int = 0, val comment: Int = 0) {
+
+    companion object {
+        fun from(count: QuizCount?) = count?.let {
+            SearchedQuizCount(it.like, it.comment)
+        } ?: SearchedQuizCount()
+    }
+}
 
 data class SearchedQuizOption(val no: Int, val content: String, val selectionRatio: Double) {
 
