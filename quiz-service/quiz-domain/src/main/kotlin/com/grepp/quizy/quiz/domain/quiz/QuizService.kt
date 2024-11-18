@@ -10,9 +10,12 @@ class QuizService(
         private val quizValidator: QuizValidator,
         private val quizRemover: QuizRemover,
         private val quizTagManager: QuizTagManager,
-) {
+) :
+        QuizCreateUseCase,
+        QuizUpdateUseCase,
+        QuizDeleteUseCase {
 
-    fun createQuiz(
+    override fun create(
             type: QuizType,
             content: QuizContent,
             answer: QuizAnswer,
@@ -26,7 +29,7 @@ class QuizService(
         )
     }
 
-    fun updateQuiz(
+    override fun update(
             id: QuizId,
             updatedContent: QuizContent,
             updatedAnswer: QuizAnswer?,
@@ -42,7 +45,7 @@ class QuizService(
         )
     }
 
-    fun deleteQuiz(id: QuizId) {
+    override fun delete(id: QuizId) {
         val quiz = quizReader.read(id)
         quizRemover.remove(quiz)
     }

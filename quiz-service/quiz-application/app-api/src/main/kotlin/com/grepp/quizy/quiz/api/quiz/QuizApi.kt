@@ -4,8 +4,7 @@ import QuizResponse
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
-import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.quiz.QuizService
+import com.grepp.quizy.quiz.domain.quiz.*
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -16,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/quiz")
-class QuizApi(private val quizService: QuizService) {
+class QuizApi(
+        private val quizCreateUseCase: QuizCreateUseCase,
+        private val quizUpdateUseCase: QuizUpdateUseCase,
+        private val quizDeleteUseCase: QuizDeleteUseCase,
+) {
 
     @PostMapping
     fun createQuiz(
@@ -24,7 +27,7 @@ class QuizApi(private val quizService: QuizService) {
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
-                            quizService.createQuiz(
+                            quizCreateUseCase.create(
                                     request.type,
                                     request.toContent(),
                                     request.toAnswer(),
@@ -39,7 +42,7 @@ class QuizApi(private val quizService: QuizService) {
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
-                            quizService.updateQuiz(
+                            quizUpdateUseCase.update(
                                     QuizId(id),
                                     request.toContent(),
                                     request.toAnswer(),
@@ -51,7 +54,7 @@ class QuizApi(private val quizService: QuizService) {
     fun deleteQuiz(
             @PathVariable id: Long
     ): ApiResponse<Unit> {
-        quizService.deleteQuiz(QuizId(id))
+        quizDeleteUseCase.delete(QuizId(id))
         return ApiResponse.success("퀴즈가 삭제되었습니다.")
     }
 }
