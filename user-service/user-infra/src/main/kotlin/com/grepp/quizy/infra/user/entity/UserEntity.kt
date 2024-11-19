@@ -11,20 +11,20 @@ import jakarta.persistence.*
 class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val id: Long = 0,
+    val id: Long = 0,
 
     @Embedded
-    private val userProfile: UserProfileVO,
+    val userProfile: UserProfileVO,
 
     @Embedded
-    private val provider: ProviderTypeVO,
+    val provider: ProviderTypeVO,
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private val role: Role = Role.USER,
+    val role: Role = Role.USER,
 
     ) : BaseTimeEntity() {
-        
+
     fun toDomain(): User {
         return User(
             id = UserId(id),
@@ -37,20 +37,11 @@ class UserEntity(
     companion object {
         fun from(user: User): UserEntity {
             return UserEntity(
-                id = user.getId().value,
-                userProfile = UserProfileVO.from(user.getUserProfile()),
-                provider = ProviderTypeVO.from(user.getProvider()),
-                role = user.getRole()
+                id = user.id.value,
+                userProfile = UserProfileVO.from(user.userProfile),
+                provider = ProviderTypeVO.from(user.provider),
+                role = user.role
             )
         }
     }
-
-    fun getId(): Long = id
-
-    fun getUserProfile(): UserProfileVO = userProfile
-
-    fun getProvider(): ProviderTypeVO = provider
-
-    fun getRole(): Role = role
-
 }

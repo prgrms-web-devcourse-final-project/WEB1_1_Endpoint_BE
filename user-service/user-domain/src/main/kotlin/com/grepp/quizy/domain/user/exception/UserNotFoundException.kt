@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.user.exception
+package com.grepp.quizy.domain.user.exception
 
 import com.grepp.quizy.common.exception.InfraException
 import com.grepp.quizy.domain.user.exception.UserErrorCode

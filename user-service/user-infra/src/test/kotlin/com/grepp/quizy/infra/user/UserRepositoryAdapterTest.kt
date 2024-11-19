@@ -4,10 +4,8 @@ import com.grepp.quizy.domain.user.*
 import com.grepp.quizy.infra.user.entity.ProviderTypeVO
 import com.grepp.quizy.infra.user.entity.UserEntity
 import com.grepp.quizy.infra.user.entity.UserProfileVO
-import com.grepp.quizy.infra.user.exception.UserNotFoundException
 import com.grepp.quizy.infra.user.repository.UserJPARepository
 import com.grepp.quizy.infra.user.repository.UserRepositoryAdaptor
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
@@ -60,7 +58,7 @@ class UserRepositoryAdapterTest(
 
     describe("findById 에서") {
 
-        context("존재하는 유저 ID가 주어졌을 때") {
+        context("유저 ID가 주어졌을 때") {
             // Context
             every { userJPARepository.findById(userId.value) } returns Optional.of(userEntity)
 
@@ -69,22 +67,8 @@ class UserRepositoryAdapterTest(
                 val result = userRepositoryAdaptor.findById(userId.value)
 
                 // Verify
-                result.getId() shouldBe user.getId()
+                result!!.getId() shouldBe user.getId()
                 verify(exactly = 1) { userJPARepository.findById(userId.value) }
-            }
-        }
-
-        context("존재하지 않는 유저 ID가 주어졌을 때") {
-            // Context
-            val nonExistentId = UserId(999)
-            every { userJPARepository.findById(nonExistentId.value) } returns Optional.empty()
-
-            it("UserNotFoundException을 발생시킨다") {
-                // Execute & Verify
-                shouldThrow<UserNotFoundException> {
-                    userRepositoryAdaptor.findById(nonExistentId.value)
-                }
-                verify(exactly = 1) { userJPARepository.findById(nonExistentId.value) }
             }
         }
 
