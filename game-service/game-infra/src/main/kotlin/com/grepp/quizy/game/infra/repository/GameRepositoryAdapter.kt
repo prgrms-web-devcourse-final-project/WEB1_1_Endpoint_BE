@@ -19,4 +19,8 @@ class GameRepositoryAdapter(
         return gameRedisRepository.findByIdOrNull(id)?.toDomain()
     }
 
+    override fun findByInviteCode(code: String): Game? {
+        return gameRedisRepository.findTopByInviteCode(code)?.toDomain()
+    }
+
 }
