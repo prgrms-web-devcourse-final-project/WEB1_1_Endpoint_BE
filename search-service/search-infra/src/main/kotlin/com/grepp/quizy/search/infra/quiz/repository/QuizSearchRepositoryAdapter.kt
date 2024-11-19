@@ -8,6 +8,7 @@ import com.grepp.quizy.search.domain.quiz.Quiz
 import com.grepp.quizy.search.domain.quiz.QuizId
 import com.grepp.quizy.search.domain.quiz.UserAnswer
 import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
+import com.grepp.quizy.search.infra.quiz.document.SortField
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Repository
@@ -33,6 +34,6 @@ class QuizSearchRepositoryAdapter(
         PageRequest.of(
             condition.page(),
             condition.size(),
-            Sort.by(Sort.Direction.DESC, condition.sort),
+            Sort.by(Sort.Direction.DESC, SortField.valueOf(condition.sort.name).fieldName),
         )
 }
