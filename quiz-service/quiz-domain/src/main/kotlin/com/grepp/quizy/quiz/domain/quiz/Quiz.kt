@@ -1,10 +1,12 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.dto.DateTime
+
 abstract class Quiz(
         val type: QuizType,
         private var _content: QuizContent,
         val id: QuizId,
-        val dateTime: QuizDateTime,
+        val dateTime: DateTime,
 ) {
     val content: QuizContent
         get() = this._content

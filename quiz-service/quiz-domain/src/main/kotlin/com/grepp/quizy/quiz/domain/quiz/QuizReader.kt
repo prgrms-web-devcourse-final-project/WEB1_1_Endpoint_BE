@@ -1,6 +1,6 @@
 package com.grepp.quizy.quiz.domain.quiz
 
-import com.grepp.quizy.quiz.domain.quiz.exception.QuizNotFoundException
+import com.grepp.quizy.quiz.domain.quiz.exception.QuizException.*
 import org.springframework.stereotype.Component
 
 @Component

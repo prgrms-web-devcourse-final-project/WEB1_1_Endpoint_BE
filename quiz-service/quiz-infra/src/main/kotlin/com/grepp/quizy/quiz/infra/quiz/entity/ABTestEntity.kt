@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.infra.quiz.entity
 
+import com.grepp.quizy.common.dto.DateTime
 import com.grepp.quizy.quiz.domain.quiz.*
 import jakarta.persistence.DiscriminatorValue
 import jakarta.persistence.Entity
@@ -25,7 +26,7 @@ class ABTestEntity(
                                 options = this.options.map { it.toDomain() },
                         ),
                 id = QuizId(this.id),
-                dateTime = QuizDateTime(this.createdAt, this.modifiedAt),
+                dateTime = DateTime(this.createdAt, this.updatedAt),
         )
     }
 
@@ -51,7 +52,7 @@ class ABTestEntity(
                     )
                     .apply {
                         this.createdAt = quiz.dateTime.createdAt
-                        this.modifiedAt = quiz.dateTime.updatedAt
+                        this.updatedAt = quiz.dateTime.updatedAt
                     }
         }
     }

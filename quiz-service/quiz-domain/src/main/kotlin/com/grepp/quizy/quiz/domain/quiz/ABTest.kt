@@ -1,9 +1,11 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.dto.DateTime
+
 class ABTest
 private constructor(
         content: QuizContent,
-        dateTime: QuizDateTime = QuizDateTime.init(),
+        dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.AB_TEST,
         id: QuizId = QuizId(0),
 ) : Quiz(type, content, id, dateTime) {
@@ -17,11 +19,7 @@ private constructor(
             return ABTest(content)
         }
 
-        fun of(
-                content: QuizContent,
-                id: QuizId,
-                dateTime: QuizDateTime,
-        ): ABTest {
+        fun of(content: QuizContent, id: QuizId, dateTime: DateTime): ABTest {
             return ABTest(content = content, id = id, dateTime = dateTime)
         }
     }

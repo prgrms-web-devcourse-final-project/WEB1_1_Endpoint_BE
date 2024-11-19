@@ -1,8 +1,6 @@
 package com.grepp.quizy.quiz.domain.quiz
 
-import java.time.LocalDateTime
-
-@JvmInline value class QuizId(val value: Long)
+@JvmInline value class QuizId(val value: Long) {}
 
 @JvmInline value class QuizTagId(val value: Long)
 
@@ -63,15 +61,4 @@ enum class QuizCategory(val description: String) {
     DEV_OPS("데브옵스"),
     DATABASE("데이터베이스"),
     SOFTWARE_ENGINEERING("소프트웨어 공학"),
-}
-
-data class QuizDateTime(
-        val createdAt: LocalDateTime?,
-        val updatedAt: LocalDateTime?,
-) {
-    companion object {
-        fun init(): QuizDateTime {
-            return QuizDateTime(null, null)
-        }
-    }
 }

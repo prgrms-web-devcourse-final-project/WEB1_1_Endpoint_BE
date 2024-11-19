@@ -21,10 +21,10 @@ abstract class QuizEntity(
                 inverseJoinColumns = [JoinColumn(name = "tag_id")],
         )
         val tags: MutableSet<QuizTagEntity> = mutableSetOf(),
-        @ElementCollection
+        @ElementCollection(fetch = FetchType.EAGER)
         @CollectionTable(
                 name = "quiz_options",
-                joinColumns = [JoinColumn(name = "quiz_id")],
+                joinColumns = [JoinColumn(name = "quiz_id", nullable = false)],
         )
         val options: MutableList<QuizOptionVO>,
         @Id

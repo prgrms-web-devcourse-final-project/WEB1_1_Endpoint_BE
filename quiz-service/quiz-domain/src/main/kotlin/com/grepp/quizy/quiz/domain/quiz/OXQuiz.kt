@@ -1,10 +1,12 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.dto.DateTime
+
 class OXQuiz
 private constructor(
         content: QuizContent,
         private var _answer: QuizAnswer,
-        dateTime: QuizDateTime = QuizDateTime.init(),
+        dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.OX,
         id: QuizId = QuizId(0),
 ) : Quiz(type, content, id, dateTime), Answerable {
@@ -26,7 +28,7 @@ private constructor(
                 content: QuizContent,
                 answer: QuizAnswer,
                 id: QuizId,
-                dateTime: QuizDateTime,
+                dateTime: DateTime,
         ): OXQuiz {
             return OXQuiz(
                     content = content,

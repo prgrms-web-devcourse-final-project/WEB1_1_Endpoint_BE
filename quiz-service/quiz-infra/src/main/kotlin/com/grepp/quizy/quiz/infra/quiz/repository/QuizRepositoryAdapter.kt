@@ -30,10 +30,8 @@ class QuizRepositoryAdapter(
     override fun findById(id: QuizId): Quiz? {
         return quizJpaRepository
                 .findById(id.value)
-                .orElseThrow {
-                    IllegalArgumentException("해당 ID의 퀴즈가 존재하지 않습니다")
-                }
-                .toDomain()
+                .map { it.toDomain() }
+                .orElse(null)
     }
 
     override fun findTagsByInId(ids: List<QuizTagId>): List<QuizTag> {
