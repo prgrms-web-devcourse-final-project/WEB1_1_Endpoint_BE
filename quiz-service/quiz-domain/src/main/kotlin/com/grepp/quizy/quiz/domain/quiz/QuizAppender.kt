@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.quiz.domain.useranswer.UserId
 import org.springframework.stereotype.Component
 
 @Component
@@ -7,13 +8,24 @@ class QuizAppender(
         private val quizRepository: QuizRepository,
         private val quizMessageSender: QuizMessageSender,
 ) {
-    fun append(type: QuizType, content: QuizContent, answer: QuizAnswer): Quiz {
+    fun append(
+            creatorId: UserId,
+            type: QuizType,
+            content: QuizContent,
+            answer: QuizAnswer,
+    ): Quiz {
         val quiz =
                 when (type) {
-                    QuizType.OX -> OXQuiz.create(content, answer)
-                    QuizType.AB_TEST -> ABTest.create(content)
+                    QuizType.OX ->
+                            OXQuiz.create(creatorId, content, answer)
+                    QuizType.AB_TEST ->
+                            ABTest.create(creatorId, content)
                     QuizType.MULTIPLE_CHOICE ->
-                            MultipleChoiceQuiz.create(content, answer)
+                            MultipleChoiceQuiz.create(
+                                    creatorId,
+                                    content,
+                                    answer,
+                            )
                 }
         val savedQuiz = quizRepository.save(quiz)
         quizMessageSender.send(QuizCreatedEvent.from(savedQuiz))

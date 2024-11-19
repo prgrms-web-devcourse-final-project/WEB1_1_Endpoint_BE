@@ -5,6 +5,7 @@ import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
 import com.grepp.quizy.quiz.domain.quiz.*
+import com.grepp.quizy.quiz.domain.useranswer.UserId
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -25,11 +26,13 @@ class QuizApi(
 
     @PostMapping
     fun createQuiz(
-            @RequestBody request: CreateQuizRequest
+            @RequestBody request: CreateQuizRequest,
+            userId: Long,
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
                             quizCreateUseCase.create(
+                                    UserId(userId),
                                     request.type,
                                     request.toContent(),
                                     request.toAnswer(),
@@ -38,20 +41,26 @@ class QuizApi(
             )
 
     @GetMapping("/tags")
-    fun getQuizTag(@RequestBody ids: List<Long>): ApiResponse<List<QuizTag>> =
+    fun getQuizTag(
+            @RequestBody ids: List<Long>
+    ): ApiResponse<List<QuizTag>> =
             ApiResponse.success(
-                    quizReadUseCase.getQuizTags(ids.map { QuizTagId(it) })
+                    quizReadUseCase.getQuizTags(
+                            ids.map { QuizTagId(it) }
+                    )
             )
 
     @PutMapping("/{id}")
     fun updateQuiz(
             @PathVariable id: Long,
+            userId: Long,
             @RequestBody request: UpdateQuizRequest,
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
                             quizUpdateUseCase.update(
                                     QuizId(id),
+                                    UserId(userId),
                                     request.toContent(),
                                     request.toAnswer(),
                             )
@@ -59,8 +68,11 @@ class QuizApi(
             )
 
     @DeleteMapping("/{id}")
-    fun deleteQuiz(@PathVariable id: Long): ApiResponse<Unit> {
-        quizDeleteUseCase.delete(QuizId(id))
+    fun deleteQuiz(
+            @PathVariable id: Long,
+            userId: Long,
+    ): ApiResponse<Unit> {
+        quizDeleteUseCase.delete(QuizId(id), UserId(userId))
         return ApiResponse.success("퀴즈가 삭제되었습니다.")
     }
 }

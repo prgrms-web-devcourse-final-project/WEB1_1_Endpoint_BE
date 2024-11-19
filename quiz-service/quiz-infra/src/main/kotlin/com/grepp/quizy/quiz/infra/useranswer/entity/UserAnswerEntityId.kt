@@ -8,8 +8,10 @@ import java.io.Serializable
 import java.util.*
 
 @Embeddable
-data class UserAnswerEntityId(val userId: Long = 0L, val quizId: Long = 0L) :
-        Serializable {
+data class UserAnswerEntityId(
+        val userId: Long = 0L,
+        val quizId: Long = 0L,
+) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is UserAnswerEntityId) return false
@@ -22,7 +24,10 @@ data class UserAnswerEntityId(val userId: Long = 0L, val quizId: Long = 0L) :
     }
 
     fun toDomain(): UserAnswerId {
-        return UserAnswerId(userId = UserId(userId), quizId = QuizId(quizId))
+        return UserAnswerId(
+                userId = UserId(userId),
+                quizId = QuizId(quizId),
+        )
     }
 
     companion object {

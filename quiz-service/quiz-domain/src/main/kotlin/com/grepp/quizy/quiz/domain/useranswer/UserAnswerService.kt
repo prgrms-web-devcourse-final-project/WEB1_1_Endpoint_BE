@@ -9,7 +9,10 @@ class UserAnswerService(
         private val userAnswerAppender: UserAnswerAppender,
 ) : UserAnswerCreateUseCase {
 
-    override fun create(id: UserAnswerId, userChoice: String): UserAnswer {
+    override fun create(
+            id: UserAnswerId,
+            userChoice: String,
+    ): UserAnswer {
         val quiz = quizReader.read(id.quizId)
         return userAnswerAppender.append(quiz, id, userChoice)
     }

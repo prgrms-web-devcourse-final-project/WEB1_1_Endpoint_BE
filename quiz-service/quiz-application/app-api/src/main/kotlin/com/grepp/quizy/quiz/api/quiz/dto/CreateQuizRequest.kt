@@ -11,6 +11,7 @@ data class CreateQuizRequest(
         val tags: List<String>,
         val options: List<QuizOption>,
 ) {
+
     fun toContent(): QuizContent =
             QuizContent(
                     category = category,

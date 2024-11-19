@@ -1,13 +1,17 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.dto.DateTime
+import com.grepp.quizy.quiz.domain.useranswer.UserId
+
 class OXQuiz
 private constructor(
+        userId: UserId,
         content: QuizContent,
         private var _answer: QuizAnswer,
-        dateTime: QuizDateTime = QuizDateTime.init(),
+        dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.OX,
         id: QuizId = QuizId(0),
-) : Quiz(type, content, id, dateTime), Answerable {
+) : Quiz(userId, type, content, id, dateTime), Answerable {
 
     val answer: QuizAnswer
         get() = _answer
@@ -18,17 +22,23 @@ private constructor(
     }
 
     companion object {
-        fun create(content: QuizContent, answer: QuizAnswer): OXQuiz {
-            return OXQuiz(content, answer)
+        fun create(
+                userId: UserId,
+                content: QuizContent,
+                answer: QuizAnswer,
+        ): OXQuiz {
+            return OXQuiz(userId, content, answer)
         }
 
         fun of(
+                userId: UserId,
                 content: QuizContent,
                 answer: QuizAnswer,
                 id: QuizId,
-                dateTime: QuizDateTime,
+                dateTime: DateTime,
         ): OXQuiz {
             return OXQuiz(
+                    userId = userId,
                     content = content,
                     _answer = answer,
                     id = id,
@@ -42,7 +52,9 @@ private constructor(
     }
 
     override fun validateAnswer() {
-        require(answer.value in listOf("O", "X")) { "OX 퀴즈의 답은 O 또는 X 여야 합니다" }
+        require(answer.value in listOf("O", "X")) {
+            "OX 퀴즈의 답은 O 또는 X 여야 합니다"
+        }
     }
 
     override fun updateAnswer(newAnswer: QuizAnswer): Answerable {
