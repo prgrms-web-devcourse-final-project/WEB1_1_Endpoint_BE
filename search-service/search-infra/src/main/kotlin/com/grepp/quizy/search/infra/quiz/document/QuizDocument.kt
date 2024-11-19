@@ -12,7 +12,7 @@ const val TAG_FIELD = "tags"
 @Mapping(mappingPath = "elastic/es-mappings.json")
 @Setting(settingPath = "elastic/es-settings.json")
 class QuizDocument(
-    @Id @Field(type = FieldType.Keyword)
+    @Id @Field(type = FieldType.Long)
     val id: Long,
 
     @Field(type = FieldType.Keyword)
@@ -25,7 +25,7 @@ class QuizDocument(
     val content: String,
 
     @Field(type = FieldType.Text)
-    val tags: String,
+    val tags: List<String>,
 
     @Field(type = FieldType.Object)
     val options: List<QuizOptionVO>,
@@ -38,9 +38,6 @@ class QuizDocument(
 
     @Field(type = FieldType.Integer)
     val totalAnsweredUser: Int,
-
-    @Field(type = FieldType.Long)
-    val answeredUser: Set<Long>,
 
     @Field(
         type = FieldType.Date,

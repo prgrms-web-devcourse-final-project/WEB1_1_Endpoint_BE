@@ -1,12 +1,9 @@
 package com.grepp.quizy.search.infra.quiz.repository
 
-import co.elastic.clients.elasticsearch.security.User
 import com.grepp.quizy.search.domain.global.dto.Slice
-import com.grepp.quizy.search.domain.quiz.QuizSearchRepository
 import com.grepp.quizy.search.domain.global.dto.SearchCondition
-import com.grepp.quizy.search.domain.quiz.Quiz
-import com.grepp.quizy.search.domain.quiz.QuizId
-import com.grepp.quizy.search.domain.quiz.UserAnswer
+import com.grepp.quizy.search.domain.quiz.*
+import com.grepp.quizy.search.domain.user.UserId
 import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
 import com.grepp.quizy.search.infra.quiz.document.SortField
 import org.springframework.data.domain.PageRequest
@@ -15,21 +12,25 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class QuizSearchRepositoryAdapter(
-    private val elasticRepository: QuizElasticRepository
+    private val quizElasticRepository: QuizElasticRepository,
+    private val userAnswerElasticRepository: UserAnswerElasticRepository
 ) : QuizSearchRepository {
 
     override fun search(condition: SearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
-        return elasticRepository.search(condition.field, pageable).let { slice ->
+
+        return quizElasticRepository.search(condition.field, pageable).let { slice ->
             Slice(slice.content.map { QuizDomainFactory.toQuiz(it) }, slice.hasNext())
         }
     }
 
-    override fun searchUserAnswer(quizIds: List<QuizId>): UserAnswer =
-        UserAnswer(mapOf())
+    override fun searchUserAnswer(userId: UserId, quizIds: List<QuizId>): UserAnswer {
+        val userAnswer = userAnswerElasticRepository.getByUserId(userId.id)
+        return userAnswer?.let { answer ->
+            UserAnswer(quizIds.mapNotNull { id -> answer.getOptionNumber(id) }.toMap())
+        } ?: UserAnswer()
+    }
 
-    // @TODO 리팩토링 필요
-    //  SearchCondition 쪽에서 해야 될 거 같은데 PageRequest 사용 불가..
     private fun convertPageable(condition: SearchCondition) =
         PageRequest.of(
             condition.page(),

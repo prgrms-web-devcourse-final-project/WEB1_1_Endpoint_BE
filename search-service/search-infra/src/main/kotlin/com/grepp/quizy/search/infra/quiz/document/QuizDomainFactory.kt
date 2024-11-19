@@ -17,7 +17,7 @@ class QuizDomainFactory {
                 id = QuizId(id),
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
-                tags = tags.split(" ").map { QuizTag(it) },
+                tags = tags.map { QuizTag(it) },
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
                 }
@@ -29,7 +29,7 @@ class QuizDomainFactory {
                 id = QuizId(id),
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
-                tags = tags.split(" ").map { QuizTag(it) },
+                tags = tags.map { QuizTag(it) },
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
                 },
@@ -42,7 +42,7 @@ class QuizDomainFactory {
                 id = QuizId(id),
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
-                tags = tags.split(" ").map { QuizTag(it) },
+                tags = tags.map { QuizTag(it) },
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
                 },
