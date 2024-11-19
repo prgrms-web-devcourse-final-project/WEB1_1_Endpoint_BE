@@ -33,6 +33,11 @@
           "search_analyzer": "my_ngram_analyzer"
         }
       }
+    },
+    "totalAnsweredUser": { "type":  "integer" },
+    "createdAt": {
+      "type": "date",
+      "format": "yyyy-MM-dd'T'HH:mm:ss.SSS||epoch_millis"
     }
   }
 }

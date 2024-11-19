@@ -6,7 +6,7 @@ import org.springframework.data.elasticsearch.annotations.*
 import java.time.LocalDateTime
 
 const val CONTENT_FIELD = "content"
-const val TAG_FIELD = "tag"
+const val TAG_FIELD = "tags"
 
 @Document(indexName = "quizzes")
 @Mapping(mappingPath = "elastic/es-mappings.json")
@@ -35,6 +35,9 @@ class QuizDocument(
 
     @Field(type = FieldType.Flattened)
     val selectionPerOption: Map<Int, Int>,
+
+    @Field(type = FieldType.Integer)
+    val totalAnsweredUser: Int,
 
     @Field(type = FieldType.Long)
     val answeredUser: Set<Long>,
