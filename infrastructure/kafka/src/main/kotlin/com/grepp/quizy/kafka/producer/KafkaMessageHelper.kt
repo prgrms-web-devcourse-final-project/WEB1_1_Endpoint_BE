@@ -12,9 +12,13 @@ object KafkaMessageHelper {
     fun <K, V> getKafkaCallback(
             payload: V
     ): CompletableFuture<SendResult<K, V>> {
-        return object : CompletableFuture<SendResult<K, V>>() {
-            override fun complete(value: SendResult<K, V>): Boolean {
-                val metadata: RecordMetadata = value.recordMetadata
+        return object :
+                CompletableFuture<SendResult<K, V>>() {
+            override fun complete(
+                    value: SendResult<K, V>
+            ): Boolean {
+                val metadata: RecordMetadata =
+                        value.recordMetadata
                 log.info {
                     "${"Kafka message sent successfully: Topic: {} Partition: {} Offset: {} Timestamp: {}"} ${
                         arrayOf<Any>(
@@ -28,7 +32,9 @@ object KafkaMessageHelper {
                 return super.complete(value)
             }
 
-            override fun completeExceptionally(ex: Throwable): Boolean {
+            override fun completeExceptionally(
+                    ex: Throwable
+            ): Boolean {
                 log.error {
                     "${"Error while sending Kafka message: {}"} ${payload.toString()} $ex"
                 }

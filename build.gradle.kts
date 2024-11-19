@@ -72,13 +72,12 @@ subprojects {
 		kotlin {
 			targetExclude("build/generated/**/*.kt")
 			targetExclude("bin/**/*.kt")
-			ktfmt("0.49").googleStyle().configure {
-				it.setMaxWidth(80)
+			ktfmt("0.51").googleStyle().configure {
+				it.setMaxWidth(60)
 				it.setBlockIndent(4)
 				it.setContinuationIndent(8)
 				it.setRemoveUnusedImports(true)
 			}
-
 		}
 	}
 
