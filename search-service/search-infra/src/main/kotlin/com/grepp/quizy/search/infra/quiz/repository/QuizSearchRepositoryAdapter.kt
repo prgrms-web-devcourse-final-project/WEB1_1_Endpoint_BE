@@ -1,5 +1,6 @@
 package com.grepp.quizy.search.infra.quiz.repository
 
+import co.elastic.clients.elasticsearch.security.User
 import com.grepp.quizy.search.domain.global.dto.Slice
 import com.grepp.quizy.search.domain.quiz.QuizSearchRepository
 import com.grepp.quizy.search.domain.global.dto.SearchCondition
@@ -23,9 +24,8 @@ class QuizSearchRepositoryAdapter(
         }
     }
 
-    override fun searchUserAnswer(quizIds: List<QuizId>): UserAnswer {
-        TODO("Not yet implemented")
-    }
+    override fun searchUserAnswer(quizIds: List<QuizId>): UserAnswer =
+        UserAnswer(mapOf())
 
     // @TODO 리팩토링 필요
     //  SearchCondition 쪽에서 해야 될 거 같은데 PageRequest 사용 불가..
