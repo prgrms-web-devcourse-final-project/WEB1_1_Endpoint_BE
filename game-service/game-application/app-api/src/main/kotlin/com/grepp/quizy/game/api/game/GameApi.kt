@@ -1,9 +1,9 @@
 package com.grepp.quizy.game.api.game
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.game.api.game.dto.GameCreateRequest
-import com.grepp.quizy.game.api.game.dto.GameResponse
+import com.grepp.quizy.game.api.game.dto.*
 import com.grepp.quizy.game.domain.GameService
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -53,5 +53,41 @@ class GameApi(
                 code
             )
         )
+
+    @MessageMapping("/update/subject")
+    fun updateSubject(
+        @RequestBody request: UpdateSubjectRequest,
+        @RequestHeader("X-AUTH-ID") userId: String
+    ) {
+        gameService.updateSubject(
+            userId.toLong(),
+            request.gameId,
+            request.subject
+        )
+    }
+
+    @MessageMapping("/update/level")
+    fun updateLevel(
+        @RequestBody request: UpdateLevelRequest,
+        @RequestHeader("X-AUTH-ID") userId: String
+    ) {
+        gameService.updateLevel(
+            userId.toLong(),
+            request.gameId,
+            request.level
+        )
+    }
+
+    @MessageMapping("/update/quiz-count")
+    fun updateQuizCount(
+        @RequestBody request: UpdateQuizCountRequest,
+        @RequestHeader("X-AUTH-ID") userId: String
+    ) {
+        gameService.updateQuizCount(
+            userId.toLong(),
+            request.gameId,
+            request.quizCount
+        )
+    }
 
 }
