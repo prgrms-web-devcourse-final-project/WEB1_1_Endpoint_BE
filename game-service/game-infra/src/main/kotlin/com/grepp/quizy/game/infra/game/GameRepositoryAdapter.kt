@@ -1,8 +1,8 @@
-package com.grepp.quizy.game.infra.repository
+package com.grepp.quizy.game.infra.game
 
 import com.grepp.quizy.game.domain.Game
 import com.grepp.quizy.game.domain.GameRepository
-import com.grepp.quizy.game.infra.redis.entity.GameRedisEntity
+import com.grepp.quizy.game.infra.repository.GameRedisRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
