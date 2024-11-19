@@ -7,6 +7,17 @@ data class GameSetting(
     private val level: GameLevel,
     private val quizCount: Int,
 ) {
+    fun updateSubject(subject: GameSubject): GameSetting {
+        return copy(subject = subject)
+    }
+
+    fun updateLevel(level: GameLevel): GameSetting {
+        return copy(level = level)
+    }
+
+    fun updateQuizCount(quizCount: Int): GameSetting {
+        return copy(quizCount = quizCount)
+    }
 }
 
 data class InviteCode(
@@ -43,6 +54,10 @@ data class Player(
         return id.hashCode()
     }
 
+    fun isGuest(): Boolean {
+        return role == PlayerRole.GUEST
+    }
+
 }
 
 enum class PlayerRole {
@@ -71,5 +86,11 @@ data class Players(
         }
         return Players(players - player)
     }
+
+    fun findPlayerById(userId: Long): Player {
+        return players.find { it.id == userId }
+            ?: throw GameException.GameNotParticipatedException()
+    }
+
 
 }

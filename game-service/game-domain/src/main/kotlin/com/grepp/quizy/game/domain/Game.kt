@@ -2,6 +2,7 @@ package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.GameStatus.WAITING
 import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedException
+import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
 
 class Game(
     val id: Long = 0,
@@ -36,6 +37,31 @@ class Game(
     fun quit(userId: Long) {
         validateGameNotStarted()
         players.remove(Player(id = userId))
+    }
+
+    fun updateSubject(userId: Long, subject: GameSubject) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        setting.updateSubject(subject)
+    }
+
+    fun updateLevel(userId: Long, level: GameLevel) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        setting.updateLevel(level)
+    }
+
+    fun updateQuizCount(userId: Long, quizCount: Int) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        setting.updateQuizCount(quizCount)
+    }
+
+    private fun validateHostPermission(userId: Long) {
+        val player = players.findPlayerById(userId)
+        if (player.isGuest()) {
+            throw GameHostPermissionException()
+        }
     }
 
     private fun validateGameNotStarted() {

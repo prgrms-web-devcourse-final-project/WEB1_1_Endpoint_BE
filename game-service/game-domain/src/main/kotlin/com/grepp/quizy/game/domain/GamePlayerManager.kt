@@ -3,7 +3,7 @@ package com.grepp.quizy.game.domain
 import org.springframework.stereotype.Component
 
 @Component
-class GameManager(
+class GamePlayerManager(
     private val gameRepository: GameRepository,
 ) {
 
