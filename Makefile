@@ -33,6 +33,16 @@ kafka-down:
 	$(COMPOSE) -f infrastructure/docker-compose/kafka/zookeeper.yml \
 		-f infrastructure/docker-compose/kafka/kafka_cluster.yml down -v
 
+connect-up:
+	$(COMPOSE) -f infrastructure/docker-compose/kafka/zookeeper.yml \
+		-f infrastructure/docker-compose/kafka/kafka_cluster.yml \
+		-f infrastructure/docker-compose/connect/connect.yml up -d
+
+connect-down:
+	$(COMPOSE) -f infrastructure/docker-compose/kafka/zookeeper.yml \
+		-f infrastructure/docker-compose/kafka/kafka_cluster.yml \
+		-f infrastructure/docker-compose/connect/connect.yml down
+
 redis-up:
 	$(COMPOSE) -f infrastructure/docker-compose/redis/redis.yml up -d
 
