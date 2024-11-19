@@ -12,4 +12,8 @@ class GameReader(
         return gameRepository.findById(id) ?: throw GameException.GameNotFoundException()
     }
 
+    fun readByInviteCode(code: String): Game {
+        return gameRepository.findByInviteCode(code) ?: throw GameException.GameNotFoundException()
+    }
+
 }

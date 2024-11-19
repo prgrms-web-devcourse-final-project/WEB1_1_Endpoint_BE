@@ -27,16 +27,16 @@ class GameService(
     }
 
     @Transactional
-    fun join(gameId: Long, userId: Long): Game {
-        val game = gameReader.read(gameId)
+    fun join(userId: Long, code: String): Game {
+        val game = gameReader.readByInviteCode(code)
         val currentGame = gameManager.join(game, userId)
         // TODO: publish message
         return currentGame
     }
 
     @Transactional
-    fun quit(gameId: Long, userId: Long) {
-        val game = gameReader.read(gameId)
+    fun quit(userId: Long, code: String) {
+        val game = gameReader.readByInviteCode(code)
         val currentGame = gameManager.quit(game, userId)
         // TODO: publish message
     }
