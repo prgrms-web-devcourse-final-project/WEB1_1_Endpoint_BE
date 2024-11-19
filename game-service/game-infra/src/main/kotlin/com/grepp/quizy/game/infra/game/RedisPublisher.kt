@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.infra.redis
+package com.grepp.quizy.game.infra.game
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.grepp.quizy.game.domain.GameMessagePublisher

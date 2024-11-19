@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.infra.redis.entity
+package com.grepp.quizy.game.infra.game
 
 import com.grepp.quizy.game.domain.Game
 import com.grepp.quizy.game.domain.GameLevel
