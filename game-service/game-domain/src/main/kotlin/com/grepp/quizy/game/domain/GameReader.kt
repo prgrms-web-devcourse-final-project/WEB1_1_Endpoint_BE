@@ -9,11 +9,11 @@ class GameReader(
 ) {
 
     fun read(id: Long): Game {
-        return gameRepository.findById(id) ?: throw GameException.GameNotFoundException()
+        return gameRepository.findById(id) ?: throw GameException.GameNotFoundException
     }
 
     fun readByInviteCode(code: String): Game {
-        return gameRepository.findByInviteCode(code) ?: throw GameException.GameNotFoundException()
+        return gameRepository.findByInviteCode(code) ?: throw GameException.GameNotFoundException
     }
 
 }
