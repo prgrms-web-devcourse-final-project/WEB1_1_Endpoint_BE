@@ -18,7 +18,9 @@ class QuizDomainFactory {
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
                 tags = tags.split(" ").map { QuizTag(it) },
-                options = options.map { QuizOption(it.optionNumber, it.content, 0) }
+                options = options.map { option ->
+                    QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
+                }
             )
         }
 
@@ -28,7 +30,9 @@ class QuizDomainFactory {
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
                 tags = tags.split(" ").map { QuizTag(it) },
-                options = options.map { QuizOption(it.optionNumber, it.content, 0) },
+                options = options.map { option ->
+                    QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
+                },
                 answer = QuizAnswer(answer!!.value, answer.explanation)
             )
         }
@@ -39,7 +43,9 @@ class QuizDomainFactory {
                 category = QuizCategory(category),
                 content = QuizContent(type, content),
                 tags = tags.split(" ").map { QuizTag(it) },
-                options = options.map { QuizOption(it.optionNumber, it.content, 0) },
+                options = options.map { option ->
+                    QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
+                },
                 answer = QuizAnswer(answer!!.value, answer.explanation)
             )
         }

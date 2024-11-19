@@ -33,6 +33,12 @@ class QuizDocument(
     @Field(type = FieldType.Object)
     val answer: QuizAnswerVO?,
 
+    @Field(type = FieldType.Flattened)
+    val selectionPerOption: Map<Int, Int>,
+
+    @Field(type = FieldType.Long)
+    val answeredUser: Set<Long>,
+
     @Field(
         type = FieldType.Date,
         format = [DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis])
