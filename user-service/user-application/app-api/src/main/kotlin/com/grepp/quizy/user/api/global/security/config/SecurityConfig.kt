@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.security.config
+package com.grepp.quizy.user.api.global.security.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -19,8 +19,7 @@ class SecurityConfig {
             .httpBasic { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
-                it.requestMatchers("/api/v1/auth/**").permitAll()
-                    .anyRequest().authenticated()
+                it.anyRequest().permitAll()
             }
             .oauth2Login { oAuth2LoginConfigurer ->
                 oAuth2LoginConfigurer.authorizationEndpoint {
