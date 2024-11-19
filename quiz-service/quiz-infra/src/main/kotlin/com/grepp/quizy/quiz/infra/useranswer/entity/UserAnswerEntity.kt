@@ -23,22 +23,16 @@ class UserAnswerEntity(
                                     type = QuizType.OX,
                                     value = choice,
                                     isCorrect =
-                                            requireNotNull(
-                                                    isCorrect
-                                            ) {
+                                            requireNotNull(isCorrect) {
                                                 "OX 퀴즈는 정답 여부가 필수입니다."
                                             },
                             )
                     QuizType.MULTIPLE_CHOICE ->
                             Choice.create(
-                                    type =
-                                            QuizType
-                                                    .MULTIPLE_CHOICE,
+                                    type = QuizType.MULTIPLE_CHOICE,
                                     value = choice,
                                     isCorrect =
-                                            requireNotNull(
-                                                    isCorrect
-                                            ) {
+                                            requireNotNull(isCorrect) {
                                                 "객관식 퀴즈는 정답 여부가 필수입니다."
                                             },
                             )
@@ -49,10 +43,7 @@ class UserAnswerEntity(
                             )
                 }
 
-        return UserAnswer(
-                id = id.toDomain(),
-                choice = domainChoice,
-        )
+        return UserAnswer(id = id.toDomain(), choice = domainChoice)
     }
 
     companion object {
@@ -68,9 +59,7 @@ class UserAnswerEntity(
                 is Choice.MultipleChoice ->
                         createAnswerable(
                                 id = domain.id,
-                                quizType =
-                                        QuizType
-                                                .MULTIPLE_CHOICE,
+                                quizType = QuizType.MULTIPLE_CHOICE,
                                 choice = choice.value,
                                 isCorrect = choice.isCorrect,
                         )

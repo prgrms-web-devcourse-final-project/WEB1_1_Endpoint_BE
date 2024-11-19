@@ -10,22 +10,17 @@ import org.hibernate.annotations.BatchSize
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "quiz_type")
 abstract class QuizEntity(
+        @Enumerated(EnumType.STRING) var category: QuizCategory,
         @Enumerated(EnumType.STRING) val type: QuizType,
         var content: String,
         @BatchSize(size = 100)
-        @ManyToMany(
-                fetch = FetchType.EAGER,
-                cascade = [CascadeType.MERGE],
-        )
+        @ManyToMany(fetch = FetchType.EAGER, cascade = [CascadeType.MERGE])
         @JoinTable(
                 name = "quiz_tags_mapping",
-                joinColumns =
-                        [JoinColumn(name = "quiz_id")],
-                inverseJoinColumns =
-                        [JoinColumn(name = "tag_id")],
+                joinColumns = [JoinColumn(name = "quiz_id")],
+                inverseJoinColumns = [JoinColumn(name = "tag_id")],
         )
-        val tags: MutableSet<QuizTagEntity> =
-                mutableSetOf(),
+        val tags: MutableSet<QuizTagEntity> = mutableSetOf(),
         @ElementCollection
         @CollectionTable(
                 name = "quiz_options",
@@ -46,29 +41,22 @@ abstract class QuizEntity(
             return when (quiz) {
                 is ABTest -> ABTestEntity.from(quiz)
                 is OXQuiz -> OXQuizEntity.from(quiz)
-                is MultipleChoiceQuiz ->
-                        MultipleChoiceQuizEntity.from(quiz)
-                else ->
-                        throw IllegalArgumentException(
-                                "알 수 없는 퀴즈 타입입니다"
-                        )
+                is MultipleChoiceQuiz -> MultipleChoiceQuizEntity.from(quiz)
+                else -> throw IllegalArgumentException("알 수 없는 퀴즈 타입입니다")
             }
         }
     }
 
     fun updateContent(content: QuizContent) {
+        this.category = content.category
         this.content = content.content
         updateOptions(content.options)
-        updateTags(
-                content.tags.map { QuizTagEntity.from(it) }
-        )
+        updateTags(content.tags.map { QuizTagEntity.from(it) })
     }
 
     private fun updateOptions(options: List<QuizOption>) {
         this.options.clear()
-        this.options.addAll(
-                options.map { QuizOptionVO.from(it) }
-        )
+        this.options.addAll(options.map { QuizOptionVO.from(it) })
     }
 
     private fun updateTags(newTags: List<QuizTagEntity>) {
@@ -77,14 +65,7 @@ abstract class QuizEntity(
 
         val tagsToAdd = newTagsSet.minus(currentTags)
         val tagsToRemove =
-                this.tags
-                        .filter {
-                            it in
-                                    currentTags.minus(
-                                            newTagsSet
-                                    )
-                        }
-                        .toSet()
+                this.tags.filter { it in currentTags.minus(newTagsSet) }.toSet()
 
         this.tags.addAll(tagsToAdd)
         this.tags.removeAll(tagsToRemove)

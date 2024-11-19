@@ -14,8 +14,7 @@ class KafkaProducerImpl<K : Serializable, V : Serializable>(
         private val kafkaTemplate: KafkaTemplate<K, V>
 ) : KafkaProducer<K, V> {
 
-    private val log =
-            LoggerFactory.getLogger(this::class.java)
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     override fun send(
             topicName: String,
@@ -30,12 +29,7 @@ class KafkaProducerImpl<K : Serializable, V : Serializable>(
         )
 
         try {
-            val kafkaResultFuture =
-                    kafkaTemplate.send(
-                            topicName,
-                            key,
-                            message,
-                    )
+            val kafkaResultFuture = kafkaTemplate.send(topicName, key, message)
             kafkaResultFuture.whenComplete {
                     result: SendResult<K, V>,
                     ex: Throwable? ->

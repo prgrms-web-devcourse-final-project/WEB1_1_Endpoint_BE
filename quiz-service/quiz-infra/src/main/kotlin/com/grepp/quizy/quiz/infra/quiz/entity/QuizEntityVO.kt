@@ -32,17 +32,11 @@ data class QuizOptionVO(
 }
 
 @Embeddable
-data class QuizAnswerVO(
-        val answer: String,
-        val explanation: String,
-) {
+data class QuizAnswerVO(val answer: String, val explanation: String) {
     protected constructor() : this("", "")
 
     fun toDomain(): QuizAnswer {
-        return QuizAnswer(
-                value = answer,
-                explanation = explanation,
-        )
+        return QuizAnswer(value = answer, explanation = explanation)
     }
 
     companion object {

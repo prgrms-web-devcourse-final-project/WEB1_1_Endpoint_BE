@@ -11,9 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
         KafkaProducerConfigData::class,
         KafkaConsumerConfigData::class,
 )
-@SpringBootApplication(
-        scanBasePackages = ["com.grepp.quizy.kafka"]
-)
+@SpringBootApplication(scanBasePackages = ["com.grepp.quizy.kafka"])
 class KafkaApplication
 
 fun main(args: Array<String>) {}

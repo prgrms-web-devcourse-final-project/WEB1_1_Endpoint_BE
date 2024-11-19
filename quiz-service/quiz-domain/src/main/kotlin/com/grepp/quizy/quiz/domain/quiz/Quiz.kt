@@ -4,6 +4,7 @@ abstract class Quiz(
         val type: QuizType,
         private var _content: QuizContent,
         val id: QuizId,
+        val dateTime: QuizDateTime,
 ) {
     val content: QuizContent
         get() = this._content

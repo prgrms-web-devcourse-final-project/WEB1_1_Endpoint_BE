@@ -10,23 +10,19 @@ class QuizService(
         private val quizValidator: QuizValidator,
         private val quizRemover: QuizRemover,
         private val quizTagManager: QuizTagManager,
-) :
-        QuizCreateUseCase,
-        QuizUpdateUseCase,
-        QuizDeleteUseCase {
+) : QuizCreateUseCase, QuizUpdateUseCase, QuizDeleteUseCase, QuizReadUseCase {
 
     override fun create(
             type: QuizType,
             content: QuizContent,
             answer: QuizAnswer,
     ): Quiz {
-        val preparedContent =
-                quizTagManager.saveNewTags(content)
-        return quizAppender.append(
-                type,
-                preparedContent,
-                answer,
-        )
+        val preparedContent = quizTagManager.saveNewTags(content)
+        return quizAppender.append(type, preparedContent, answer)
+    }
+
+    override fun getQuizTags(ids: List<QuizTagId>): List<QuizTag> {
+        return quizReader.readTags(ids)
     }
 
     override fun update(
@@ -35,14 +31,9 @@ class QuizService(
             updatedAnswer: QuizAnswer?,
     ): Quiz {
         val quiz = quizReader.read(id)
-        val preparedContent =
-                quizTagManager.saveNewTags(updatedContent)
-        //        quizValidator.validateUpdatable(quiz)
-        return quizUpdater.update(
-                quiz,
-                preparedContent,
-                updatedAnswer,
-        )
+        val preparedContent = quizTagManager.saveNewTags(updatedContent)
+        quizValidator.validateUpdatable(quiz)
+        return quizUpdater.update(quiz, preparedContent, updatedAnswer)
     }
 
     override fun delete(id: QuizId) {

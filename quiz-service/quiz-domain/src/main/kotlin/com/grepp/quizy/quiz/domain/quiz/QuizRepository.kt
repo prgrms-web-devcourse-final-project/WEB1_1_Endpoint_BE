@@ -7,9 +7,13 @@ interface QuizRepository {
 
     fun findById(id: QuizId): Quiz?
 
-    fun findTagsByNameIn(name: List<String>): List<QuizTag>
+    fun findTagsByNameIn(names: List<String>): List<QuizTag>
+
+    fun existsUserAnswerByQuizId(quizId: QuizId): Boolean
 
     fun delete(quiz: Quiz)
 
     fun saveTags(newTags: List<QuizTag>): List<QuizTag>
+
+    fun findTagsByInId(ids: List<QuizTagId>): List<QuizTag>
 }

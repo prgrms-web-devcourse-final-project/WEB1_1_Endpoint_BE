@@ -7,43 +7,27 @@ import jakarta.persistence.Entity
 @Entity
 @DiscriminatorValue("OX")
 class OXQuizEntity(
+        category: QuizCategory,
         content: String,
         tags: MutableSet<QuizTagEntity>,
         options: MutableList<QuizOptionVO>,
         id: Long = 0L,
         type: QuizType = QuizType.OX,
         var answer: QuizAnswerVO,
-) : QuizEntity(type, content, tags, options, id) {
-
-    protected constructor() :
-            this(
-                    "",
-                    mutableSetOf(),
-                    mutableListOf(),
-                    0L,
-                    QuizType.OX,
-                    QuizAnswerVO("", ""),
-            )
+) : QuizEntity(category, type, content, tags, options, id) {
 
     override fun toDomain(): Quiz {
         return OXQuiz.of(
                 content =
                         QuizContent(
+                                category = this.category,
                                 content = this.content,
-                                tags =
-                                        this.tags
-                                                .map {
-                                                    it
-                                                            .toDomain()
-                                                }
-                                                .toList(),
-                                options =
-                                        this.options.map {
-                                            it.toDomain()
-                                        },
+                                tags = this.tags.map { it.toDomain() }.toList(),
+                                options = this.options.map { it.toDomain() },
                         ),
                 answer = answer.toDomain(),
                 id = QuizId(this.id),
+                dateTime = QuizDateTime(this.createdAt, this.modifiedAt),
         )
     }
 
@@ -58,26 +42,23 @@ class OXQuizEntity(
     companion object {
         fun from(quiz: OXQuiz): OXQuizEntity {
             return OXQuizEntity(
-                    content = quiz.content.content,
-                    tags =
-                            quiz.content.tags
-                                    .map {
-                                        QuizTagEntity.from(
-                                                it
-                                        )
-                                    }
-                                    .toMutableSet(),
-                    options =
-                            quiz.content.options
-                                    .map {
-                                        QuizOptionVO.from(
-                                                it
-                                        )
-                                    }
-                                    .toMutableList(),
-                    answer = QuizAnswerVO.from(quiz.answer),
-                    id = quiz.id.value,
-            )
+                            category = quiz.content.category,
+                            content = quiz.content.content,
+                            tags =
+                                    quiz.content.tags
+                                            .map { QuizTagEntity.from(it) }
+                                            .toMutableSet(),
+                            options =
+                                    quiz.content.options
+                                            .map { QuizOptionVO.from(it) }
+                                            .toMutableList(),
+                            answer = QuizAnswerVO.from(quiz.answer),
+                            id = quiz.id.value,
+                    )
+                    .apply {
+                        this.createdAt = quiz.dateTime.createdAt
+                        this.modifiedAt = quiz.dateTime.updatedAt
+                    }
         }
     }
 }

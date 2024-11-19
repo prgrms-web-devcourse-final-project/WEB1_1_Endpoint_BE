@@ -6,6 +6,7 @@ import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
 import com.grepp.quizy.quiz.domain.quiz.*
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -19,6 +20,7 @@ class QuizApi(
         private val quizCreateUseCase: QuizCreateUseCase,
         private val quizUpdateUseCase: QuizUpdateUseCase,
         private val quizDeleteUseCase: QuizDeleteUseCase,
+        private val quizReadUseCase: QuizReadUseCase,
 ) {
 
     @PostMapping
@@ -33,6 +35,12 @@ class QuizApi(
                                     request.toAnswer(),
                             )
                     )
+            )
+
+    @GetMapping("/tags")
+    fun getQuizTag(@RequestBody ids: List<Long>): ApiResponse<List<QuizTag>> =
+            ApiResponse.success(
+                    quizReadUseCase.getQuizTags(ids.map { QuizTagId(it) })
             )
 
     @PutMapping("/{id}")
@@ -51,9 +59,7 @@ class QuizApi(
             )
 
     @DeleteMapping("/{id}")
-    fun deleteQuiz(
-            @PathVariable id: Long
-    ): ApiResponse<Unit> {
+    fun deleteQuiz(@PathVariable id: Long): ApiResponse<Unit> {
         quizDeleteUseCase.delete(QuizId(id))
         return ApiResponse.success("퀴즈가 삭제되었습니다.")
     }

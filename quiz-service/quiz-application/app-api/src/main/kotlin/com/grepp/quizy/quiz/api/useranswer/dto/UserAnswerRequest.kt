@@ -9,6 +9,5 @@ data class UserAnswerRequest(
         val quizId: Long,
         val choice: String,
 ) {
-    fun toId() =
-            UserAnswerId(UserId(userId), QuizId(quizId))
+    fun toId() = UserAnswerId(UserId(userId), QuizId(quizId))
 }

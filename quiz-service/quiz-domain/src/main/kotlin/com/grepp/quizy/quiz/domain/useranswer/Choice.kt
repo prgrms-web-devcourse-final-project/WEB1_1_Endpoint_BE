@@ -5,23 +5,16 @@ import com.grepp.quizy.quiz.domain.quiz.QuizType
 sealed class Choice {
     abstract val value: String
 
-    data class OXChoice(
-            override val value: String,
-            val isCorrect: Boolean,
-    ) : Choice() {
+    data class OXChoice(override val value: String, val isCorrect: Boolean) :
+            Choice() {
         init {
-            require(value in setOf("O", "X")) {
-                "OX 퀴즈의 선택지는 O 또는 X여야 합니다"
-            }
+            require(value in setOf("O", "X")) { "OX 퀴즈의 선택지는 O 또는 X여야 합니다" }
         }
     }
 
-    data class ABChoice(override val value: String) :
-            Choice() {
+    data class ABChoice(override val value: String) : Choice() {
         init {
-            require(value in setOf("A", "B")) {
-                "AB 테스트의 선택지는 A 또는 B여야 합니다"
-            }
+            require(value in setOf("A", "B")) { "AB 테스트의 선택지는 A 또는 B여야 합니다" }
         }
     }
 
@@ -30,26 +23,17 @@ sealed class Choice {
             val isCorrect: Boolean,
     ) : Choice() {
         init {
-            require(value.toIntOrNull() != null) {
-                "객관식 문항의 선택지는 숫자여야 합니다"
-            }
+            require(value.toIntOrNull() != null) { "객관식 문항의 선택지는 숫자여야 합니다" }
         }
     }
 
     companion object {
-        fun create(
-                type: QuizType,
-                value: String,
-                isCorrect: Boolean,
-        ): Choice {
+        fun create(type: QuizType, value: String, isCorrect: Boolean): Choice {
             return when (type) {
                 QuizType.OX -> OXChoice(value, isCorrect)
-                QuizType.MULTIPLE_CHOICE ->
-                        MultipleChoice(value, isCorrect)
+                QuizType.MULTIPLE_CHOICE -> MultipleChoice(value, isCorrect)
                 QuizType.AB_TEST ->
-                        throw IllegalArgumentException(
-                                "AB 테스트는 선택지가 없습니다"
-                        )
+                        throw IllegalArgumentException("AB 테스트는 선택지가 없습니다")
             }
         }
 

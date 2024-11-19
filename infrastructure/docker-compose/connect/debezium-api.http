@@ -33,6 +33,6 @@ Content-Type: application/json
 
 ###
 # 설정 삭제 API
-DELETE http://localhost:8083/connectors/debezium-connector-mysql
+DELETE http://localhost:8090/connectors/debezium-connector-mysql
 
 

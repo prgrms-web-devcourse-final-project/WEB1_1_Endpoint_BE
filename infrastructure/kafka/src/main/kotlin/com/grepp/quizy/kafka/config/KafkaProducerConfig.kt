@@ -11,13 +11,9 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 
 @Configuration
-class KafkaProducerConfig<
-        K : Serializable?,
-        V : Serializable?,
->(
+class KafkaProducerConfig<K : Serializable, V : Serializable>(
         private val kafkaConfigData: KafkaConfigData,
-        private val kafkaProducerConfigData:
-                KafkaProducerConfigData,
+        private val kafkaProducerConfigData: KafkaProducerConfigData,
 ) {
 
     @Bean
@@ -27,20 +23,16 @@ class KafkaProducerConfig<
                 kafkaConfigData.bootstrapServers
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] =
                 kafkaProducerConfigData.keySerializerClass
-        props[
-                ProducerConfig
-                        .VALUE_SERIALIZER_CLASS_CONFIG] =
+        props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] =
                 kafkaProducerConfigData.valueSerializerClass
         props[ProducerConfig.BATCH_SIZE_CONFIG] =
                 (kafkaProducerConfigData.batchSize *
-                        kafkaProducerConfigData
-                                .batchSizeBoostFactor)
+                        kafkaProducerConfigData.batchSizeBoostFactor)
         props[ProducerConfig.LINGER_MS_CONFIG] =
                 kafkaProducerConfigData.lingerMs
         props[ProducerConfig.COMPRESSION_TYPE_CONFIG] =
                 kafkaProducerConfigData.compressionType
-        props[ProducerConfig.ACKS_CONFIG] =
-                kafkaProducerConfigData.acks
+        props[ProducerConfig.ACKS_CONFIG] = kafkaProducerConfigData.acks
         props[ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG] =
                 kafkaProducerConfigData.requestTimeoutMs
         props[ProducerConfig.RETRIES_CONFIG] =

@@ -21,8 +21,7 @@ class QuizTagEntity(
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long = 0L,
 ) {
-    fun toDomain() =
-            QuizTag.of(name = name, id = QuizTagId(id))
+    fun toDomain() = QuizTag.of(name = name, id = QuizTagId(id))
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,10 +43,7 @@ class QuizTagEntity(
 
     companion object {
         fun from(tag: QuizTag): QuizTagEntity {
-            return QuizTagEntity(
-                    name = tag.name,
-                    id = tag.id.value,
-            )
+            return QuizTagEntity(name = tag.name, id = tag.id.value)
         }
     }
 }

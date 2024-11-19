@@ -3,9 +3,10 @@ package com.grepp.quizy.quiz.domain.quiz
 class ABTest
 private constructor(
         content: QuizContent,
+        dateTime: QuizDateTime = QuizDateTime.init(),
         type: QuizType = QuizType.AB_TEST,
         id: QuizId = QuizId(0),
-) : Quiz(type, content, id) {
+) : Quiz(type, content, id, dateTime) {
 
     init {
         validateOptions(2)
@@ -16,8 +17,12 @@ private constructor(
             return ABTest(content)
         }
 
-        fun of(content: QuizContent, id: QuizId): ABTest {
-            return ABTest(content, id = id)
+        fun of(
+                content: QuizContent,
+                id: QuizId,
+                dateTime: QuizDateTime,
+        ): ABTest {
+            return ABTest(content = content, id = id, dateTime = dateTime)
         }
     }
 }

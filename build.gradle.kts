@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
@@ -73,7 +71,7 @@ subprojects {
 			targetExclude("build/generated/**/*.kt")
 			targetExclude("bin/**/*.kt")
 			ktfmt("0.51").googleStyle().configure {
-				it.setMaxWidth(60)
+				it.setMaxWidth(80)
 				it.setBlockIndent(4)
 				it.setContinuationIndent(8)
 				it.setRemoveUnusedImports(true)

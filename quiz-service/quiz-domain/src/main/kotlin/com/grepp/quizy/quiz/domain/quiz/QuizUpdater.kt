@@ -3,9 +3,7 @@ package com.grepp.quizy.quiz.domain.quiz
 import org.springframework.stereotype.Component
 
 @Component
-class QuizUpdater(
-        private val quizRepository: QuizRepository
-) {
+class QuizUpdater(private val quizRepository: QuizRepository) {
 
     fun update(
             quiz: Quiz,

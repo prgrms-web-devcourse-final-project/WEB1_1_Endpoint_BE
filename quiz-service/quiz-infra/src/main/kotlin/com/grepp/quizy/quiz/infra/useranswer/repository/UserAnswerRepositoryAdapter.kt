@@ -9,8 +9,7 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 @Transactional
 class UserAnswerRepositoryAdapter(
-        private val userAnswerJpaRepository:
-                UserAnswerJpaRepository
+        private val userAnswerJpaRepository: UserAnswerJpaRepository
 ) : UserAnswerRepository {
 
     override fun save(userAnswer: UserAnswer): UserAnswer {

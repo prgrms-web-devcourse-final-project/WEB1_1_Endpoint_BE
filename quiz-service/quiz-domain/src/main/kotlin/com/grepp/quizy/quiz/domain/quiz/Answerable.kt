@@ -6,8 +6,7 @@ interface Answerable {
 
     fun getCorrectAnswer(): String = getQuizAnswer().value
 
-    fun getAnswerExplanation(): String =
-            getQuizAnswer().explanation
+    fun getAnswerExplanation(): String = getQuizAnswer().explanation
 
     fun updateAnswer(newAnswer: QuizAnswer): Answerable
 

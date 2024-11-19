@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.api.quiz.dto
 import com.grepp.quizy.quiz.domain.quiz.*
 
 data class CreateQuizRequest(
+        val category: QuizCategory,
         val type: QuizType,
         val content: String,
         val answer: String?,
@@ -12,6 +13,7 @@ data class CreateQuizRequest(
 ) {
     fun toContent(): QuizContent =
             QuizContent(
+                    category = category,
                     content = content,
                     tags = tags.map { QuizTag.create(it) },
                     options = options,
@@ -34,7 +36,4 @@ data class CreateQuizRequest(
                                         "AB 테스트가 아닌 경우 정답은 필수입니다"
                                 )
             }
-
-    fun toQuizTags(): List<QuizTag> =
-            tags.map { QuizTag.create(it) }
 }

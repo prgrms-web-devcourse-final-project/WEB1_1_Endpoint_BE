@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.api.quiz.dto
 import com.grepp.quizy.quiz.domain.quiz.*
 
 data class UpdateQuizRequest(
+        val category: QuizCategory,
         val type: QuizType,
         val content: String,
         val answer: String?,
@@ -12,6 +13,7 @@ data class UpdateQuizRequest(
 ) {
     fun toContent(): QuizContent =
             QuizContent(
+                    category = category,
                     content = content,
                     tags = tags.map { QuizTag.create(it) },
                     options = options,
