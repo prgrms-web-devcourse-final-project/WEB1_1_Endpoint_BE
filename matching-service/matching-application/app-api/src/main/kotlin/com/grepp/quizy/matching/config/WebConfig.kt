@@ -20,6 +20,7 @@ class WebConfig : WebMvcConfigurer {
                         "Cache-Control",
                         "Content-Type",
                         "Authorization",
+                        "X-Auth-Id"
                 )
                 .exposedHeaders("*") // CORS 응답에 대해 클라이언트가 접근할수있도록 허용
                 .allowCredentials(true)

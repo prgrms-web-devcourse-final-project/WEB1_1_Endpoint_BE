@@ -40,10 +40,18 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/game/**
+        - id: matching
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/matching/**
         - id: quiz
           uri: http://localhost:8083
           predicates:
             - Path=/api/quiz/**
+        - id: search
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/search/**
         - id: user
           uri: http://localhost:8085
           predicates:
