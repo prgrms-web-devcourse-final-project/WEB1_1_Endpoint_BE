@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.jwt.exception
+package com.grepp.quizy.user.api.global.jwt.exception
 
 import com.grepp.quizy.common.constants.QuizyConstants.BAD_REQUEST
 import com.grepp.quizy.common.constants.QuizyConstants.INTERNAL_SERVER

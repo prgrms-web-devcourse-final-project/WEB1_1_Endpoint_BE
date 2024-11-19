@@ -1,30 +1,26 @@
-package com.grepp.quizy.infra.jwt
+package com.grepp.quizy.user.api.global.jwt
 
-import com.grepp.quizy.domain.user.UserId
-import com.grepp.quizy.infra.jwt.exception.*
+import com.grepp.quizy.infra.redis.repository.RedisTokenRepository
+import com.grepp.quizy.infra.redis.util.RedisUtil
+import com.grepp.quizy.user.api.global.jwt.exception.*
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
 import io.jsonwebtoken.UnsupportedJwtException
 import io.jsonwebtoken.security.Keys
+import org.springframework.stereotype.Component
 import javax.crypto.SecretKey
 
-class JwtProvider(
-    private val jwtProperties: JwtProperties
+@Component
+class JwtValidator(
+    private val jwtProperties: JwtProperties,
+    private val jwtProvider: JwtProvider,
+    private val redisUtil: RedisUtil,
+    private val redisRepository: RedisTokenRepository
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(
         jwtProperties.secret.toByteArray()
     )
-
-    fun getUserIdFromToken(token: String): UserId {
-        val claims = Jwts.parserBuilder()
-            .setSigningKey(secretKey)
-            .build()
-            .parseClaimsJws(token)
-            .body
-
-        return UserId(claims.subject.toLong())
-    }
 
     fun validateToken(token: String): Boolean {
         try {

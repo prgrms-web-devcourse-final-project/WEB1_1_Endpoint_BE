@@ -1,4 +1,4 @@
-package com.grepp.quizy.infra.jwt.exception
+package com.grepp.quizy.user.api.global.jwt.exception
 
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.UnsupportedJwtException
