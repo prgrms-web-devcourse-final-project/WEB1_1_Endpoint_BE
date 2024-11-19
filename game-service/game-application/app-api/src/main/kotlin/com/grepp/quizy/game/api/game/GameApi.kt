@@ -14,10 +14,10 @@ class GameApi(
 
     @PostMapping
     fun createGame(
-        @RequestHeader("X-USER-ID") userId: String,
+        @RequestHeader("X-AUTH-ID") userId: String,
         @RequestBody request: GameCreateRequest
-    ): ApiResponse<GameResponse> {
-        return ApiResponse.success(
+    ): ApiResponse<GameResponse> =
+        ApiResponse.success(
             GameResponse.from(
                 gameService.create(
                     userId.toLong(),
@@ -27,22 +27,31 @@ class GameApi(
                 )
             )
         )
-    }
 
     @PostMapping("/join/{gameId}")
     fun join(
         @RequestHeader("X-AUTH-ID") userId: String,
         @RequestParam code: String
-    ): ApiResponse<GameResponse> {
-        return ApiResponse.success(GameResponse.from(gameService.join(userId.toLong(), code)))
-    }
+    ): ApiResponse<GameResponse> =
+        ApiResponse.success(
+            GameResponse.from(
+                gameService.join(
+                    userId.toLong(),
+                    code
+                )
+            )
+        )
 
     @PostMapping("/quit/{gameId}")
     fun quit(
         @RequestHeader("X-AUTH-ID") userId: String,
         @PathVariable code: String
-    ): ApiResponse<Unit> {
-        return ApiResponse.success(gameService.quit(userId.toLong(), code))
-    }
+    ): ApiResponse<Unit> =
+        ApiResponse.success(
+            gameService.quit(
+                userId.toLong(),
+                code
+            )
+        )
 
 }
