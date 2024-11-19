@@ -35,11 +35,10 @@ class GameService(
     }
 
     @Transactional
-    fun quit(gameId: Long, userId: Long): Game {
+    fun quit(gameId: Long, userId: Long) {
         val game = gameReader.read(gameId)
         val currentGame = gameManager.quit(game, userId)
         // TODO: publish message
-        return currentGame
     }
 
 }
