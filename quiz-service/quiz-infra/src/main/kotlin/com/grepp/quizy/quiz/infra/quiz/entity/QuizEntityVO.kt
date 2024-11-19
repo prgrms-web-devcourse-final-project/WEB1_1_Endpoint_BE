@@ -33,14 +33,14 @@ data class QuizOptionVO(
 
 @Embeddable
 data class QuizAnswerVO(
-        val value: String,
+        val answer: String,
         val explanation: String,
 ) {
     protected constructor() : this("", "")
 
     fun toDomain(): QuizAnswer {
         return QuizAnswer(
-                value = value,
+                value = answer,
                 explanation = explanation,
         )
     }
@@ -48,7 +48,7 @@ data class QuizAnswerVO(
     companion object {
         fun from(answer: QuizAnswer): QuizAnswerVO {
             return QuizAnswerVO(
-                    value = answer.value,
+                    answer = answer.value,
                     explanation = answer.explanation,
             )
         }
