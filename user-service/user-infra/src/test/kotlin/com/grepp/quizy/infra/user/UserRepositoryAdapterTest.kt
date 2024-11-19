@@ -1,6 +1,8 @@
 package com.grepp.quizy.infra.user
 
-import com.grepp.quizy.domain.user.*
+import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.domain.user.Role
+import com.grepp.quizy.domain.user.UserId
 import com.grepp.quizy.infra.user.entity.ProviderTypeVO
 import com.grepp.quizy.infra.user.entity.UserEntity
 import com.grepp.quizy.infra.user.entity.UserProfileVO
@@ -67,7 +69,7 @@ class UserRepositoryAdapterTest(
                 val result = userRepositoryAdaptor.findById(userId.value)
 
                 // Verify
-                result!!.getId() shouldBe user.getId()
+                result!!.id shouldBe user.id
                 verify(exactly = 1) { userJPARepository.findById(userId.value) }
             }
         }
@@ -115,7 +117,7 @@ class UserRepositoryAdapterTest(
                 val result = userRepositoryAdaptor.save(user)
 
                 // Verify
-                result.getId() shouldBe user.getId()
+                result.id shouldBe user.id
                 verify(exactly = 1) { userJPARepository.save(any()) }
             }
         }

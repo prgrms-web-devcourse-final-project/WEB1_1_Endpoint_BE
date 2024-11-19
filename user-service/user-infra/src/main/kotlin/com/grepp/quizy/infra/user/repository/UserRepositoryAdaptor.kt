@@ -14,6 +14,9 @@ class UserRepositoryAdaptor(
     override fun findById(id: Long): User? =
         userJPARepository.findById(id).getOrNull()?.toDomain()
 
+    override fun findByEmail(email: String): User? =
+        userJPARepository.findByUserProfile_Email(email)?.toDomain()
+
 
     override fun existsByEmail(email: String): Boolean =
         userJPARepository.existsByUserProfile_Email(email)
