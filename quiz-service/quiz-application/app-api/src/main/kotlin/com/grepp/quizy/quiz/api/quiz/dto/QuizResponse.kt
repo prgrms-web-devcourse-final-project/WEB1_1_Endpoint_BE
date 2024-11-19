@@ -60,7 +60,10 @@ sealed class QuizResponse {
                                 category = quiz.content.category,
                                 type = quiz.type,
                                 content = quiz.content.content,
-                                tags = quiz.content.tags.map { it.name },
+                                tags =
+                                        quiz.content.tags.map {
+                                            it.name
+                                        },
                                 options = quiz.content.options,
                                 createdAt = quiz.dateTime.createdAt!!,
                                 modifiedAt = quiz.dateTime.updatedAt!!,
@@ -72,10 +75,14 @@ sealed class QuizResponse {
                                 category = quiz.content.category,
                                 type = quiz.type,
                                 content = quiz.content.content,
-                                tags = quiz.content.tags.map { it.name },
+                                tags =
+                                        quiz.content.tags.map {
+                                            it.name
+                                        },
                                 options = quiz.content.options,
                                 answer = quiz.getCorrectAnswer(),
-                                explanation = quiz.getAnswerExplanation(),
+                                explanation =
+                                        quiz.getAnswerExplanation(),
                                 createdAt = quiz.dateTime.createdAt!!,
                                 modifiedAt = quiz.dateTime.updatedAt!!,
                         )
@@ -86,15 +93,22 @@ sealed class QuizResponse {
                                 category = quiz.content.category,
                                 type = quiz.type,
                                 content = quiz.content.content,
-                                tags = quiz.content.tags.map { it.name },
+                                tags =
+                                        quiz.content.tags.map {
+                                            it.name
+                                        },
                                 options = quiz.content.options,
                                 answer = quiz.getCorrectAnswer(),
-                                explanation = quiz.getAnswerExplanation(),
+                                explanation =
+                                        quiz.getAnswerExplanation(),
                                 createdAt = quiz.dateTime.createdAt!!,
                                 modifiedAt = quiz.dateTime.updatedAt!!,
                         )
 
-                else -> throw IllegalArgumentException("지원하지 않는 퀴즈 타입입니다")
+                else ->
+                        throw IllegalArgumentException(
+                                "지원하지 않는 퀴즈 타입입니다"
+                        )
             }
         }
     }

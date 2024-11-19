@@ -41,7 +41,8 @@ class QuizControllerAdvice {
                 .body(
                         ApiResponse.error(
                                 UNKNOWN_ERROR_CODE,
-                                exception.message ?: UNKNOWN_ERROR_MESSAGE,
+                                exception.message
+                                        ?: UNKNOWN_ERROR_MESSAGE,
                         )
                 )
     }

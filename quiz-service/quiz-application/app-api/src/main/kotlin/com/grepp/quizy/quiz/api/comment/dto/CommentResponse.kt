@@ -22,7 +22,8 @@ data class CommentResponse(
                     writerId = comment.writerId.value,
                     parentCommentId = comment.parentCommentId.value,
                     content = comment.content.value,
-                    childComments = comment.childComments.map { from(it) },
+                    childComments =
+                            comment.childComments.map { from(it) },
                     createdAt = comment.dateTime.createdAt.toString(),
                     updatedAt = comment.dateTime.updatedAt.toString(),
             )

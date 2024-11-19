@@ -5,6 +5,7 @@ import com.grepp.quizy.quiz.api.comment.dto.CommentResponse
 import com.grepp.quizy.quiz.api.comment.dto.CreateCommentRequest
 import com.grepp.quizy.quiz.domain.comment.*
 import com.grepp.quizy.quiz.domain.quiz.QuizId
+import com.grepp.quizy.quiz.domain.useranswer.UserId
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -32,28 +33,38 @@ class CommentApi(
             )
 
     @GetMapping
-    fun getComments(quizId: Long): ApiResponse<List<CommentResponse>> =
+    fun getComments(
+            quizId: Long
+    ): ApiResponse<List<CommentResponse>> =
             ApiResponse.success(
-                    commentReadUseCase.getComments(QuizId(quizId)).map {
-                        CommentResponse.from(it)
-                    }
+                    commentReadUseCase
+                            .getComments(QuizId(quizId))
+                            .map { CommentResponse.from(it) }
             )
 
     @PutMapping("/{id}")
     fun updateComment(
             @PathVariable id: Long,
+            userId: Long,
             updateContent: String,
     ): ApiResponse<Comment> =
             ApiResponse.success(
                     commentUpdateUseCase.updateComment(
                             CommentId(id),
+                            UserId(userId),
                             CommentContent(updateContent),
                     )
             )
 
     @DeleteMapping("/{id}")
-    fun deleteComment(@PathVariable id: Long): ApiResponse<Unit> =
+    fun deleteComment(
+            @PathVariable id: Long,
+            userId: Long,
+    ): ApiResponse<Unit> =
             ApiResponse.success(
-                    commentDeleteUseCase.deleteComment(CommentId(id))
+                    commentDeleteUseCase.deleteComment(
+                            CommentId(id),
+                            UserId(userId),
+                    )
             )
 }

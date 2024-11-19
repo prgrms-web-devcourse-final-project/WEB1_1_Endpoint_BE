@@ -23,7 +23,9 @@ class UserAnswerEntity(
                                     type = QuizType.OX,
                                     value = choice,
                                     isCorrect =
-                                            requireNotNull(isCorrect) {
+                                            requireNotNull(
+                                                    isCorrect
+                                            ) {
                                                 "OX 퀴즈는 정답 여부가 필수입니다."
                                             },
                             )
@@ -32,7 +34,9 @@ class UserAnswerEntity(
                                     type = QuizType.MULTIPLE_CHOICE,
                                     value = choice,
                                     isCorrect =
-                                            requireNotNull(isCorrect) {
+                                            requireNotNull(
+                                                    isCorrect
+                                            ) {
                                                 "객관식 퀴즈는 정답 여부가 필수입니다."
                                             },
                             )

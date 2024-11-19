@@ -16,7 +16,9 @@ import jakarta.persistence.Table
 @Entity
 @Table(name = "comments")
 class CommentEntity(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY) val id: Long,
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        val id: Long,
         val quizId: Long,
         val writerId: Long,
         val parentCommentId: Long,
@@ -38,7 +40,8 @@ class CommentEntity(
                                 id = comment.id.value,
                                 quizId = comment.quizId.value,
                                 writerId = comment.writerId.value,
-                                parentCommentId = comment.parentCommentId.value,
+                                parentCommentId =
+                                        comment.parentCommentId.value,
                                 content = comment.content.value,
                         )
                         .apply {

@@ -1,19 +1,22 @@
 package com.grepp.quizy.quiz.domain.comment
 
 import com.grepp.quizy.quiz.domain.comment.exception.CommentException
-import com.grepp.quizy.quiz.domain.quiz.Quiz
+import com.grepp.quizy.quiz.domain.quiz.QuizId
 import org.springframework.stereotype.Component
 
 @Component
-class CommentReader(private val commentRepository: CommentRepository) {
+class CommentReader(
+        private val commentRepository: CommentRepository
+) {
 
     fun read(id: CommentId): Comment {
-        return commentRepository.findById(id) ?: throw CommentException.NotFound
+        return commentRepository.findById(id)
+                ?: throw CommentException.NotFound
     }
 
-    fun readAll(quiz: Quiz): List<Comment> =
+    fun readAll(quizId: QuizId): List<Comment> =
             commentRepository
-                    .findAllByQuizId(quiz.id)
+                    .findAllByQuizId(quizId)
                     .groupBy { it.id }
                     .values
                     .flatten()
@@ -23,7 +26,9 @@ class CommentReader(private val commentRepository: CommentRepository) {
                                 .forEach { comment ->
                                     comments
                                             .find {
-                                                it.id == comment.parentCommentId
+                                                it.id ==
+                                                        comment
+                                                                .parentCommentId
                                             }
                                             ?.addChildren(comment)
                                 }

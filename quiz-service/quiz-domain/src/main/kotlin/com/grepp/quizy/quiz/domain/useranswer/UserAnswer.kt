@@ -21,7 +21,10 @@ data class UserAnswer(val id: UserAnswerId, val choice: Choice) {
                 userAnswerId: UserAnswerId,
                 choice: String,
         ): UserAnswer {
-            return UserAnswer(userAnswerId, Choice.create(quizType, choice))
+            return UserAnswer(
+                    userAnswerId,
+                    Choice.create(quizType, choice),
+            )
         }
     }
 }

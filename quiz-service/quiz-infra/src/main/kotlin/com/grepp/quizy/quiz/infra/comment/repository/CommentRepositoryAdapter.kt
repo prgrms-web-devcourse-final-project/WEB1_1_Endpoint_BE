@@ -15,7 +15,9 @@ class CommentRepositoryAdapter(
 ) : CommentRepository {
 
     override fun save(comment: Comment): Comment =
-            commentJpaRepository.save(CommentEntity.from(comment)).toDomain()
+            commentJpaRepository
+                    .save(CommentEntity.from(comment))
+                    .toDomain()
 
     override fun findById(id: CommentId): Comment? =
             commentJpaRepository

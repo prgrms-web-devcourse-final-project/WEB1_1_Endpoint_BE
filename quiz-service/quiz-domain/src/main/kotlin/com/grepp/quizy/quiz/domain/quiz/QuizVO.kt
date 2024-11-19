@@ -4,7 +4,10 @@ package com.grepp.quizy.quiz.domain.quiz
 
 @JvmInline value class QuizTagId(val value: Long)
 
-data class QuizTag(val name: String, val id: QuizTagId = QuizTagId(0)) {
+data class QuizTag(
+        val name: String,
+        val id: QuizTagId = QuizTagId(0),
+) {
     companion object {
         fun create(name: String): QuizTag {
             return QuizTag(name)
@@ -33,7 +36,8 @@ data class QuizContent(
         require(content.isNotBlank()) { "퀴즈 내용은 공백일 수 없습니다" }
     }
 
-    fun updateTags(tags: List<QuizTag>): QuizContent = copy(tags = tags)
+    fun updateTags(tags: List<QuizTag>): QuizContent =
+            copy(tags = tags)
 }
 
 data class QuizAnswer(val value: String, val explanation: String) {

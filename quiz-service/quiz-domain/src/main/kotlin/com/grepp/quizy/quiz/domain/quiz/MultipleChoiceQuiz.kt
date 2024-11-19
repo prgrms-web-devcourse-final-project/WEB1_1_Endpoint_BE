@@ -1,15 +1,17 @@
 package com.grepp.quizy.quiz.domain.quiz
 
 import com.grepp.quizy.common.dto.DateTime
+import com.grepp.quizy.quiz.domain.useranswer.UserId
 
 class MultipleChoiceQuiz
 private constructor(
+        userId: UserId,
         content: QuizContent,
         private var _answer: QuizAnswer,
         dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.MULTIPLE_CHOICE,
         id: QuizId = QuizId(0),
-) : Quiz(type, content, id, dateTime), Answerable {
+) : Quiz(userId, type, content, id, dateTime), Answerable {
 
     val answer: QuizAnswer
         get() = _answer
@@ -21,21 +23,24 @@ private constructor(
 
     companion object {
         fun create(
+                userId: UserId,
                 content: QuizContent,
                 answer: QuizAnswer,
         ): MultipleChoiceQuiz {
-            return MultipleChoiceQuiz(content, answer)
+            return MultipleChoiceQuiz(userId, content, answer)
         }
 
         fun of(
+                userId: UserId,
                 content: QuizContent,
                 answer: QuizAnswer,
                 id: QuizId,
                 dateTime: DateTime,
         ): MultipleChoiceQuiz {
             return MultipleChoiceQuiz(
-                    content,
-                    answer,
+                    userId = userId,
+                    content = content,
+                    _answer = answer,
                     id = id,
                     dateTime = dateTime,
             )
@@ -43,7 +48,10 @@ private constructor(
     }
 
     override fun validateAnswer() {
-        require(answer.value in content.options.indices.map { it.toString() }) {
+        require(
+                answer.value in
+                        content.options.indices.map { it.toString() }
+        ) {
             "객관식 퀴즈의 답은 0부터 ${content.options.size - 1} 사이의 값이어야 합니다"
         }
     }

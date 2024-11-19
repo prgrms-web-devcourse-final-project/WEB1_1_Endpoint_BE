@@ -1,8 +1,11 @@
 package com.grepp.quizy.quiz.domain.quiz
 
 import com.grepp.quizy.common.dto.DateTime
+import com.grepp.quizy.quiz.domain.quiz.exception.QuizException
+import com.grepp.quizy.quiz.domain.useranswer.UserId
 
 abstract class Quiz(
+        val userId: UserId,
         val type: QuizType,
         private var _content: QuizContent,
         val id: QuizId,
@@ -17,8 +20,13 @@ abstract class Quiz(
         }
     }
 
-    fun updateContent(newContent: QuizContent): Quiz {
+    fun updateContent(userId: UserId, newContent: QuizContent): Quiz {
+        validateOwner(userId)
         this._content = newContent
         return this
+    }
+
+    fun validateOwner(userId: UserId) {
+        require(this.userId == userId) { QuizException.NoPermission }
     }
 }

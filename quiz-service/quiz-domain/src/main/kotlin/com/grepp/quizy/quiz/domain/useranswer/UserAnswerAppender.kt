@@ -9,7 +9,11 @@ class UserAnswerAppender(
         private val userAnswerRepository: UserAnswerRepository
 ) {
 
-    fun append(quiz: Quiz, id: UserAnswerId, choice: String): UserAnswer {
+    fun append(
+            quiz: Quiz,
+            id: UserAnswerId,
+            choice: String,
+    ): UserAnswer {
         val userAnswer =
                 when (quiz) {
                     is Answerable ->

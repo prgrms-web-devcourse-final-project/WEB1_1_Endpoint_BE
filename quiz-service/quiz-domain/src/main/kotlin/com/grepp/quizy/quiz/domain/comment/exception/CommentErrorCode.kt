@@ -10,7 +10,8 @@ enum class CommentErrorCode(
         private val message: String,
 ) : BaseErrorCode {
 
-    COMMENT_NOT_FOUND_ERROR(404, "COMMENT_404_1", "해당 ID의 댓글이 없습니다");
+    COMMENT_NOT_FOUND_ERROR(404, "COMMENT_404_1", "해당 ID의 댓글이 없습니다"),
+    NO_PERMISSION_ERROR(403, "COMMENT_403_1", "댓글 작성자만 수정할 수 있습니다");
 
     override val errorReason: ErrorReason
         get() = of(status, errorCode, message)

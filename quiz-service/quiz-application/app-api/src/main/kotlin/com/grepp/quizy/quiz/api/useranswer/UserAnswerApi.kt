@@ -15,8 +15,10 @@ class UserAnswerApi(
 ) {
 
     @PostMapping
-    fun create(@RequestBody request: UserAnswerRequest): ApiResponse<Unit> =
-            userAnswerCreateUseCase.create(request.toId(), request.choice).let {
-                ApiResponse.success()
-            }
+    fun create(
+            @RequestBody request: UserAnswerRequest
+    ): ApiResponse<Unit> =
+            userAnswerCreateUseCase
+                    .create(request.toId(), request.choice)
+                    .let { ApiResponse.success() }
 }

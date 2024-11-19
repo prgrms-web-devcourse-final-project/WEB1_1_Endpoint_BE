@@ -16,14 +16,21 @@ class QuizRepositoryAdapter(
                 when (quiz) {
                     is ABTest -> ABTestEntity.from(quiz)
                     is OXQuiz -> OXQuizEntity.from(quiz)
-                    is MultipleChoiceQuiz -> MultipleChoiceQuizEntity.from(quiz)
-                    else -> throw IllegalArgumentException("알 수 없는 퀴즈 타입입니다")
+                    is MultipleChoiceQuiz ->
+                            MultipleChoiceQuizEntity.from(quiz)
+                    else ->
+                            throw IllegalArgumentException(
+                                    "알 수 없는 퀴즈 타입입니다"
+                            )
                 }
         return quizJpaRepository.save(quizEntity).toDomain()
     }
 
     override fun update(quiz: Quiz): Quiz {
-        val quizEntity = quizJpaRepository.findById(quiz.id.value).orElseThrow()
+        val quizEntity =
+                quizJpaRepository
+                        .findById(quiz.id.value)
+                        .orElseThrow()
         return quizEntity.update(quiz).toDomain()
     }
 
@@ -35,17 +42,23 @@ class QuizRepositoryAdapter(
     }
 
     override fun findTagsByInId(ids: List<QuizTagId>): List<QuizTag> {
-        return quizTagJpaRepository.findAllById(ids.map { it.value }).map {
+        return quizTagJpaRepository
+                .findAllById(ids.map { it.value })
+                .map { it.toDomain() }
+    }
+
+    override fun findTagsByNameIn(
+            names: List<String>
+    ): List<QuizTag> {
+        return quizTagJpaRepository.findByNameIn(names).map {
             it.toDomain()
         }
     }
 
-    override fun findTagsByNameIn(names: List<String>): List<QuizTag> {
-        return quizTagJpaRepository.findByNameIn(names).map { it.toDomain() }
-    }
-
     override fun existsUserAnswerByQuizId(quizId: QuizId): Boolean {
-        return quizJpaRepository.existsUserAnswerByQuizId(quizId.value)
+        return quizJpaRepository.existsUserAnswerByQuizId(
+                quizId.value
+        )
     }
 
     override fun saveTags(newTags: List<QuizTag>): List<QuizTag> {
