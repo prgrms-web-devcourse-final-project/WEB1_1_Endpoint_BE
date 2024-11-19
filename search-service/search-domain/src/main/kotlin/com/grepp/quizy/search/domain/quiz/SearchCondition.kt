@@ -1,4 +1,4 @@
-package com.grepp.quizy.search.domain.global.dto
+package com.grepp.quizy.search.domain.quiz
 
 import com.grepp.quizy.common.dto.Page
 

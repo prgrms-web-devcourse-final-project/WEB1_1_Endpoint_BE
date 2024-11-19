@@ -1,8 +1,8 @@
 package com.grepp.quizy.search.api.quiz.dto
 
 import com.grepp.quizy.common.dto.Page
-import com.grepp.quizy.search.domain.global.dto.QuizSortType
-import com.grepp.quizy.search.domain.global.dto.SearchCondition
+import com.grepp.quizy.search.domain.quiz.QuizSortType
+import com.grepp.quizy.search.domain.quiz.SearchCondition
 
 data class SearchParams(
     val keyword: String,
