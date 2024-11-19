@@ -17,9 +17,9 @@ class RedisSubscriber(
         val publishMessage = String(message.body)
         // TODO: 메시지 형식 수정 되면 수정 필요 현재는 객체가 아닌 json문자열 중 ID를 추출하여 사용
         val jsonNode = objectMapper.readTree(publishMessage)
-        val roomId = jsonNode.get("roomId").asText()
+        val gameId = jsonNode.get("gameId").asText()
         messagingTemplate.convertAndSend(
-            "$MULTIPLE_PREFIX/gameRoom/$roomId", publishMessage
+            "$MULTIPLE_PREFIX/gameRoom/$gameId", publishMessage
         )
     }
 
