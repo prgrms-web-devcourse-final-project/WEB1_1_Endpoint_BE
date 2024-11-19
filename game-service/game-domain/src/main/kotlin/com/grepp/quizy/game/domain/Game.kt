@@ -62,25 +62,25 @@ class Game(
 
     private fun validatePlayerAlreadyJoined(userId: Long) {
         if (!playerIds.contains(userId)) {
-            throw GameNotParticipatedException()
+            throw GameNotParticipatedException
         }
     }
 
     private fun validatePlayerNotAlreadyJoined(userId: Long) {
         if (playerIds.contains(userId)) {
-            throw GameAlreadyParticipatedException()
+            throw GameAlreadyParticipatedException
         }
     }
 
     private fun validateGameIsWaiting() {
         if (status != WAITING) {
-            throw GameAlreadyStartedException()
+            throw GameAlreadyStartedException
         }
     }
 
     private fun validateGameHasCapacity() {
         if (playerIds.size >= 5) {
-            throw GameAlreadyFullException()
+            throw GameAlreadyFullException
         }
     }
 
