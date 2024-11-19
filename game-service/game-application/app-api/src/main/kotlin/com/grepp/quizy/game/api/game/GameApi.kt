@@ -31,7 +31,7 @@ class GameApi(
 
     @PostMapping("/join/{gameId}")
     fun join(
-        @RequestHeader("X-USER-ID") userId: String,
+        @RequestHeader("X-AUTH-ID") userId: String,
         @RequestParam code: String
     ): ApiResponse<GameResponse> {
         return ApiResponse.success(GameResponse.from(gameService.join(userId.toLong(), code)))
@@ -39,7 +39,7 @@ class GameApi(
 
     @PostMapping("/quit/{gameId}")
     fun quit(
-        @RequestHeader("X-USER-ID") userId: String,
+        @RequestHeader("X-AUTH-ID") userId: String,
         @PathVariable code: String
     ): ApiResponse<Unit> {
         return ApiResponse.success(gameService.quit(userId.toLong(), code))
