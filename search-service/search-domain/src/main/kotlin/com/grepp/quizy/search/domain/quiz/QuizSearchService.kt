@@ -7,23 +7,12 @@ import org.springframework.stereotype.Service
 @Service
 class QuizSearchService(
     private val quizSearcher: QuizSearcher,
-    private val quizFetcher: QuizFetcher
+    private val quizMetadataCombiner: QuizMetadataCombiner
 ) : QuizSearchUseCase {
 
     override fun searchByKeyword(userId: UserId?, condition: SearchCondition): Slice<SearchedQuiz> {
         val searchedQuizzes = quizSearcher.search(condition)
-        val quizIds = searchedQuizzes.content.map { it.id }
-        val quizAdditional = quizFetcher.getQuizAdditionalData(quizIds)
-
-        val answerableQuiz = searchedQuizzes.content.filter { it is AnswerableQuiz }
-        val userAnswer = userId?.let { id ->
-            quizSearcher.searchUserAnswer(id, answerableQuiz.map { it.id })
-        } ?: UserAnswer()
-
-        val content = searchedQuizzes.content.map { quiz ->
-            QuizDTOFactory.SearchedQuiz(quiz, quizAdditional.get(quiz.id), userAnswer.getAnswerOf(quiz.id))
-        }
-
+        val content = quizMetadataCombiner.combine(userId, searchedQuizzes)
         return Slice(content, searchedQuizzes.hasNext)
     }
 }
