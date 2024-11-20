@@ -47,7 +47,7 @@ class Game(
     fun kick(userId: Long, targetId: Long) {
         validateGameNotStarted()
         validateHostPermission(userId)
-        players.remove(Player(id = targetId))
+        _players.remove(Player(id = targetId))
     }
 
     fun updateSubject(userId: Long, subject: GameSubject) {

@@ -19,8 +19,7 @@ class GamePlayerManager(
 
     fun kick(game: Game, userId: Long, targetUserId: Long): Game {
         game.kick(userId, targetUserId)
-        gameRepository.save(game)
-        return game
+        return gameRepository.save(game)
     }
 
 }
