@@ -1,5 +1,7 @@
 package com.grepp.quizy.search.domain.quiz
 
+import kotlin.math.round
+
 sealed interface SearchedQuiz
 
 sealed interface AnswerableQuiz : SearchedQuiz
@@ -89,8 +91,6 @@ data class UserAnsweredQuiz(
     }
 }
 
-data class SearchedQuizExtras(val count: SearchedQuizCount = SearchedQuizCount(), val isLiked: Boolean = false)
-
 data class SearchedQuizCount(val like: Int = 0, val comment: Int = 0) {
 
     companion object {
@@ -107,8 +107,10 @@ data class SearchedQuizOption(val no: Int, val content: String, val selectionRat
             SearchedQuizOption(
                 option.optionNumber,
                 option.content,
-                option.selectionCount.toDouble() / total.toDouble()
+                roundUp(option.selectionCount.toDouble() / total.toDouble())
             )
+
+        private fun roundUp(value: Double) = round(value * 100) / 100.0
     }
 }
 
