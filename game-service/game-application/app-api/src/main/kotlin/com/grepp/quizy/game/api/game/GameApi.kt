@@ -3,7 +3,10 @@ package com.grepp.quizy.game.api.game
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.*
 import com.grepp.quizy.game.domain.GameService
+import org.springframework.messaging.handler.annotation.DestinationVariable
+import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.MessageMapping
+import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -54,38 +57,41 @@ class GameApi(
             )
         )
 
-    @MessageMapping("/update/subject")
+    @MessageMapping("/update/{gameId}/subject")
     fun updateSubject(
-        @RequestBody request: UpdateSubjectRequest,
-        @RequestHeader("X-AUTH-ID") userId: String
+        @DestinationVariable gameId: Long,
+        @Payload request: UpdateSubjectRequest,
+        @Header("X-AUTH-ID") userId: String
     ) {
         gameService.updateSubject(
             userId.toLong(),
-            request.gameId,
+            gameId,
             request.subject
         )
     }
 
-    @MessageMapping("/update/level")
+    @MessageMapping("/update/{gameId}/level")
     fun updateLevel(
-        @RequestBody request: UpdateLevelRequest,
-        @RequestHeader("X-AUTH-ID") userId: String
+        @DestinationVariable gameId: Long,
+        @Payload request: UpdateLevelRequest,
+        @Header("X-AUTH-ID") userId: String
     ) {
         gameService.updateLevel(
             userId.toLong(),
-            request.gameId,
+            gameId,
             request.level
         )
     }
 
-    @MessageMapping("/update/quiz-count")
+    @MessageMapping("/update/{gameId}/quiz-count")
     fun updateQuizCount(
-        @RequestBody request: UpdateQuizCountRequest,
-        @RequestHeader("X-AUTH-ID") userId: String
+        @DestinationVariable gameId: Long,
+        @Payload request: UpdateQuizCountRequest,
+        @Header("X-AUTH-ID") userId: String
     ) {
         gameService.updateQuizCount(
             userId.toLong(),
-            request.gameId,
+            gameId,
             request.quizCount
         )
     }
