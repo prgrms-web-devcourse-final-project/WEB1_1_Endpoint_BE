@@ -1,6 +1,7 @@
 package com.grepp.quizy.damin.user
 
 import com.grepp.quizy.domain.user.*
+import com.grepp.quizy.user.domain.user.*
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

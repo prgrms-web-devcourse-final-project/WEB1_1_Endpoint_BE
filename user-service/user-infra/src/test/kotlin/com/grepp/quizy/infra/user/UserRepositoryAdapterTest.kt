@@ -1,13 +1,13 @@
 package com.grepp.quizy.infra.user
 
-import com.grepp.quizy.domain.user.AuthProvider
-import com.grepp.quizy.domain.user.Role
-import com.grepp.quizy.domain.user.UserId
-import com.grepp.quizy.infra.user.entity.ProviderTypeVO
-import com.grepp.quizy.infra.user.entity.UserEntity
-import com.grepp.quizy.infra.user.entity.UserProfileVO
-import com.grepp.quizy.infra.user.repository.UserJPARepository
-import com.grepp.quizy.infra.user.repository.UserRepositoryAdaptor
+import com.grepp.quizy.user.domain.user.AuthProvider
+import com.grepp.quizy.user.domain.user.Role
+import com.grepp.quizy.user.domain.user.UserId
+import com.grepp.quizy.user.infra.user.entity.ProviderTypeVO
+import com.grepp.quizy.user.infra.user.entity.UserEntity
+import com.grepp.quizy.user.infra.user.entity.UserProfileVO
+import com.grepp.quizy.user.infra.user.repository.UserJPARepository
+import com.grepp.quizy.user.infra.user.repository.UserRepositoryAdaptor
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
