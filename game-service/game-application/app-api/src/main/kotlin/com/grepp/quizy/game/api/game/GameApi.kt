@@ -28,7 +28,7 @@ class GameApi(
             )
         )
 
-    @PostMapping("/join/{gameId}")
+    @PostMapping("/join")
     fun join(
         @RequestHeader("X-AUTH-ID") userId: String,
         @RequestParam code: String
@@ -42,10 +42,10 @@ class GameApi(
             )
         )
 
-    @PostMapping("/quit/{gameId}")
+    @PostMapping("/quit")
     fun quit(
         @RequestHeader("X-AUTH-ID") userId: String,
-        @PathVariable code: String
+        @RequestParam code: String
     ): ApiResponse<Unit> =
         ApiResponse.success(
             gameService.quit(
