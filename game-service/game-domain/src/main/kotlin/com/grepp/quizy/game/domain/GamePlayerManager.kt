@@ -8,13 +8,13 @@ class GamePlayerManager(
 ) {
 
     fun join(game: Game, userId: Long): Game {
-        val currentGame = game.join(userId)
-        return gameRepository.save(currentGame)
+        game.join(userId)
+        return gameRepository.save(game)
     }
 
     fun quit(game: Game, userId: Long): Game {
-        val currentGame = game.quit(userId)
-        return gameRepository.save(currentGame)
+        game.quit(userId)
+        return gameRepository.save(game)
     }
 
 }
