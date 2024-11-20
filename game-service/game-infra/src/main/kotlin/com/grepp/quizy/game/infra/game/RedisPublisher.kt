@@ -1,6 +1,8 @@
-package com.grepp.quizy.game.infra.redis
+package com.grepp.quizy.game.infra.game
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.grepp.quizy.game.domain.GameMessagePublisher
+import com.grepp.quizy.game.domain.Message
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.listener.ChannelTopic
 import org.springframework.stereotype.Component
@@ -10,10 +12,9 @@ class RedisPublisher(
     private val redisTemplate: RedisTemplate<String, String>,
     private val objectMapper: ObjectMapper,
     private val gameTopic: ChannelTopic,
-) {
+) : GameMessagePublisher {
 
-    fun publish(message: String) {
-        // TODO: 메시지 형식 지정 되면 수정
+    override fun publish(message: Message) {
         val messageJson = objectMapper.writeValueAsString(message)
         redisTemplate.convertAndSend(gameTopic.topic, messageJson)
     }
