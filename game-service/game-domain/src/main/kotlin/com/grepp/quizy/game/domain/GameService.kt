@@ -1,7 +1,6 @@
 package com.grepp.quizy.game.domain
 
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GameService(
@@ -12,7 +11,6 @@ class GameService(
     private val messagePublisher: GameMessagePublisher
 ) {
 
-    @Transactional
     fun create(
         userId: Long,
         subject: GameSubject,
@@ -27,7 +25,6 @@ class GameService(
         )
     }
 
-    @Transactional
     fun join(userId: Long, code: String): Game {
         val game = gameReader.readByInviteCode(code)
         val currentGame = gamePlayerManager.join(game, userId)
@@ -35,32 +32,34 @@ class GameService(
         return currentGame
     }
 
-    @Transactional
     fun quit(userId: Long, code: String) {
         val game = gameReader.readByInviteCode(code)
         val currentGame = gamePlayerManager.quit(game, userId)
         // TODO: publish message
     }
 
-    @Transactional
     fun updateSubject(userId: Long, gameId: Long, subject: GameSubject) {
         val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateSubject(game, subject, userId)
         // TODO: publish message
     }
 
-    @Transactional
     fun updateLevel(userId: Long, gameId: Long, level: GameLevel) {
         val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateLevel(game, level, userId)
         // TODO: publish message
     }
 
-    @Transactional
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
         val game = gameReader.read(userId)
         val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
         // TODO: publish message
+    }
+
+    fun kickUser(userId: Long, gameId: Long, targetUserId: Long) {
+        val game = gameReader.read(gameId)
+        val currentGame = gamePlayerManager.kick(game, userId, targetUserId)
+        TODO("publish message / 메시지 보낼 형식이 정해지면 메시지 보낼 것")
     }
 
 }

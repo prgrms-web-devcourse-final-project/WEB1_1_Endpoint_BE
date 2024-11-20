@@ -96,4 +96,17 @@ class GameApi(
         )
     }
 
+    @MessageMapping("/kick/{gameId}")
+    fun kickUser(
+        @DestinationVariable gameId: Long,
+        @Payload request: KickUserRequest,
+        @Header("X-AUTH-ID") userId: String
+    ) {
+        gameService.kickUser(
+            userId.toLong(),
+            gameId,
+            request.targetUserId
+        )
+    }
+
 }
