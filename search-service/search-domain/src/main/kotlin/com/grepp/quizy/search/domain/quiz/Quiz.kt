@@ -6,6 +6,7 @@ sealed class Quiz(
     val category: QuizCategory,
     val tags: List<QuizTag>,
     val options: List<QuizOption>,
+    val count: QuizCount,
 ) {
     fun id() = id.value
 

@@ -12,7 +12,8 @@ class ABTest(
     category: QuizCategory,
     tags: List<QuizTag>,
     options: List<QuizOption>,
-) : Quiz(id, content, category, tags, options)
+    count: QuizCount,
+) : Quiz(id, content, category, tags, options, count)
 
 class OXQuiz(
     id: QuizId,
@@ -21,7 +22,8 @@ class OXQuiz(
     tags: List<QuizTag>,
     options: List<QuizOption>,
     private val answer: QuizAnswer,
-) : Quiz(id, content, category, tags, options), Answerable {
+    count: QuizCount,
+) : Quiz(id, content, category, tags, options, count), Answerable {
     override fun answer() = answer.value
 
     override fun explanation() = answer.explanation
@@ -34,7 +36,8 @@ class MultipleOptionQuiz(
     tags: List<QuizTag>,
     options: List<QuizOption>,
     private val answer: QuizAnswer,
-) : Quiz(id, content, category, tags, options), Answerable {
+    count: QuizCount,
+) : Quiz(id, content, category, tags, options, count), Answerable {
     override fun answer() = answer.value
 
     override fun explanation() = answer.explanation

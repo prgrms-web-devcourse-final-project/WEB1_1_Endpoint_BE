@@ -2,20 +2,20 @@ package com.grepp.quizy.search.domain.quiz
 
 class QuizDTOFactory {
     companion object {
-        fun SearchedQuiz(quiz: Quiz, extras: SearchedQuizExtras, answeredOption: OptionNumber?): SearchedQuiz =
+        fun SearchedQuiz(quiz: Quiz, isLiked: Boolean, answeredOption: OptionNumber?): SearchedQuiz =
             when (quiz) {
-                is ABTest -> NonAnswerableQuiz.from(quiz, extras)
-                is MultipleOptionQuiz -> AnswerableQuiz(quiz, extras, answeredOption)
-                is OXQuiz -> AnswerableQuiz(quiz, extras, answeredOption)
+                is ABTest -> NonAnswerableQuiz.from(quiz, isLiked)
+                is MultipleOptionQuiz -> AnswerableQuiz(quiz, isLiked, answeredOption)
+                is OXQuiz -> AnswerableQuiz(quiz, isLiked, answeredOption)
             }
 
         private fun <T> AnswerableQuiz(
             quiz: T,
-            extras: SearchedQuizExtras,
+            isLiked: Boolean,
             answeredOption: OptionNumber?
         ): AnswerableQuiz where T : Quiz, T : Answerable =
             answeredOption?.let {
-                UserAnsweredQuiz.from(quiz, answeredOption.value, extras)
-            } ?: UserNotAnsweredQuiz.from(quiz, extras)
+                UserAnsweredQuiz.from(quiz, answeredOption.value, isLiked)
+            } ?: UserNotAnsweredQuiz.from(quiz, isLiked)
     }
 }

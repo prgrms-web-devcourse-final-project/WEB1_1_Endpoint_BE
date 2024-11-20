@@ -14,15 +14,15 @@ data class NonAnswerableQuiz(
 ) : SearchedQuiz {
 
     companion object {
-        fun from(quiz: Quiz, quizExtras: SearchedQuizExtras): NonAnswerableQuiz = with(quiz) {
+        fun from(quiz: Quiz, isLiked: Boolean): NonAnswerableQuiz = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return NonAnswerableQuiz(
                 id = id(),
                 content = content(),
                 type = typeName(),
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
-                count = quizExtras.count,
-                isLiked = quizExtras.isLiked
+                count = SearchedQuizCount.from(count),
+                isLiked = isLiked
             )
         }
     }
@@ -41,7 +41,7 @@ data class UserNotAnsweredQuiz(
     companion object {
         fun <T> from(
             quiz: T,
-            quizExtras: SearchedQuizExtras
+            isLiked: Boolean
         ): UserNotAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return UserNotAnsweredQuiz(
@@ -50,8 +50,8 @@ data class UserNotAnsweredQuiz(
                 type = typeName(),
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
                 answer = SearchedQuizAnswer(answer(), explanation()),
-                count = quizExtras.count,
-                isLiked = quizExtras.isLiked
+                count = SearchedQuizCount.from(count),
+                isLiked = isLiked
             )
         }
     }
@@ -72,7 +72,7 @@ data class UserAnsweredQuiz(
         fun <T> from(
             quiz: T,
             answeredOption: Int,
-            extras: SearchedQuizExtras
+            isLiked: Boolean
         ): UserAnsweredQuiz where T : Quiz, T : Answerable = with(quiz) {
             val totalSelection = options.sumOf { it.selectionCount }
             return UserAnsweredQuiz(
@@ -82,8 +82,8 @@ data class UserAnsweredQuiz(
                 options = options.map { SearchedQuizOption.from(it, totalSelection) },
                 answer = SearchedQuizAnswer(answer(), explanation()),
                 answeredOption = answeredOption,
-                count = extras.count,
-                isLiked = extras.isLiked
+                count = SearchedQuizCount.from(count),
+                isLiked = isLiked
             )
         }
     }

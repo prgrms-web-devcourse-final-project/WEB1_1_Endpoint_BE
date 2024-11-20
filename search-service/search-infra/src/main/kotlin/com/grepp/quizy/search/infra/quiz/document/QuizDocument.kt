@@ -39,6 +39,12 @@ class QuizDocument(
     @Field(type = FieldType.Integer)
     val totalAnsweredUser: Int,
 
+    @Field(type = FieldType.Integer)
+    val totalLikeCount: Int,
+
+    @Field(type = FieldType.Integer)
+    val totalCommentCount: Int,
+
     @Field(
         type = FieldType.Date,
         format = [DateFormat.date_hour_minute_second_millis, DateFormat.epoch_millis])

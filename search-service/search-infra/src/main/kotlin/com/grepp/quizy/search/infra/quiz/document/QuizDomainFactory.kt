@@ -20,7 +20,8 @@ class QuizDomainFactory {
                 tags = tags.map { QuizTag(it) },
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
-                }
+                },
+                count = QuizCount(totalLikeCount, totalCommentCount),
             )
         }
 
@@ -33,7 +34,8 @@ class QuizDomainFactory {
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
                 },
-                answer = QuizAnswer(answer!!.value, answer.explanation)
+                answer = QuizAnswer(answer!!.value, answer.explanation),
+                count = QuizCount(totalLikeCount, totalCommentCount),
             )
         }
 
@@ -46,7 +48,8 @@ class QuizDomainFactory {
                 options = options.map { option ->
                     QuizOption(option.optionNumber, option.content, selectionPerOption[option.optionNumber] ?: 0)
                 },
-                answer = QuizAnswer(answer!!.value, answer.explanation)
+                answer = QuizAnswer(answer!!.value, answer.explanation),
+                count = QuizCount(totalLikeCount, totalCommentCount),
             )
         }
     }

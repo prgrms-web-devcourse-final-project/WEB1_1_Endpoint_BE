@@ -12,11 +12,13 @@ data class QuizOption(val optionNumber: Int, val content: String, val selectionC
 
 data class QuizAnswer(val value: String, val explanation: String)
 
+data class QuizCount(val like: Int = 0, val comment: Int = 0) {
+    init {
+        require(like >= 0) { "좋아요 수는 음수가 될 수 없습니다. $like" }
+        require(comment >= 0) { "댓글 수는 음수가 될 수 없습니다. $comment" }
+    }
+}
+
 enum class QuizType(val typeName: String) {
     OX("OX 퀴즈"), AB("A/B 밸런스"), MULTIPLE_CHOICE("객관식");
-
-    companion object {
-        fun fromType(typeName: String): QuizType =
-            entries.find { type -> type.typeName == typeName } ?: throw IllegalArgumentException("Unknown type $typeName")
-    }
 }
