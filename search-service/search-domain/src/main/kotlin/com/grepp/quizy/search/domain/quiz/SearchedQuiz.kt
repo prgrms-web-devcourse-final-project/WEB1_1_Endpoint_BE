@@ -107,7 +107,7 @@ data class SearchedQuizOption(val no: Int, val content: String, val selectionRat
             SearchedQuizOption(
                 option.optionNumber,
                 option.content,
-                (option.selectionCount / total).toDouble(),
+                option.selectionCount.toDouble() / total.toDouble()
             )
     }
 }
