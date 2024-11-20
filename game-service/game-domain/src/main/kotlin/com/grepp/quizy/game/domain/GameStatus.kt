@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.domain.game
 
 enum class GameStatus(
     val description: String
