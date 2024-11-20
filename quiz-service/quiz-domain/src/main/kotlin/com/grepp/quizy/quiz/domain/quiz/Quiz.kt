@@ -10,9 +10,14 @@ abstract class Quiz(
         private var _content: QuizContent,
         val id: QuizId,
         val dateTime: DateTime,
+        private var _commentCount: Long,
 ) {
+
     val content: QuizContent
         get() = this._content
+
+    val commentCount: Long
+        get() = this._commentCount
 
     protected fun validateOptions(requiredSize: Int) {
         require(_content.options.size == requiredSize) {
@@ -28,5 +33,9 @@ abstract class Quiz(
 
     fun validateOwner(userId: UserId) {
         require(this.userId == userId) { QuizException.NoPermission }
+    }
+
+    fun increaseCommentCount() {
+        this._commentCount++
     }
 }

@@ -20,6 +20,9 @@ logging:
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql: trace
 
+shedlock:
+  name: like_sync_lock
+
 kafka:
   topic:
     quiz: quiz
@@ -54,6 +57,10 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+
+redis:
+  host: localhost
+  port: 6379
 
 ---
 spring:

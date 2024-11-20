@@ -38,12 +38,14 @@ class MultipleChoiceQuizEntity(
                 answer = this.answer.toDomain(),
                 id = QuizId(this.id),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
+                commentCount = this.commentCount,
         )
     }
 
     override fun update(quiz: Quiz): QuizEntity {
         val multipleChoiceQuiz = quiz as MultipleChoiceQuiz
         updateContent(quiz.content)
+        commentCount = quiz.commentCount
         answer = QuizAnswerVO.from(multipleChoiceQuiz.answer)
         return this
     }
@@ -72,6 +74,7 @@ class MultipleChoiceQuizEntity(
                     .apply {
                         this.createdAt = quiz.dateTime.createdAt
                         this.updatedAt = quiz.dateTime.updatedAt
+                        this.commentCount = quiz.commentCount
                     }
         }
     }
