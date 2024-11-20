@@ -8,27 +8,27 @@ class GameSettingManager(
 ) {
 
     fun updateSubject(game: Game, subject: GameSubject, userId: Long): Game {
-        game.updateSubject(
+        val currentGame = game.updateSubject(
             userId = userId,
             subject = subject
         )
-        return gameRepository.save(game)
+        return gameRepository.save(currentGame)
     }
 
     fun updateLevel(game: Game, level: GameLevel, userId: Long): Game {
-        game.updateLevel(
+        val currentGame = game.updateLevel(
             userId = userId,
             level = level
         )
-        return gameRepository.save(game)
+        return gameRepository.save(currentGame)
     }
 
     fun updateQuizCount(game: Game, quizCount: Int, userId: Long): Game {
-        game.updateQuizCount(
+        val currentGame = game.updateQuizCount(
             userId = userId,
             quizCount = quizCount
         )
-        return gameRepository.save(game)
+        return gameRepository.save(currentGame)
     }
 
 }

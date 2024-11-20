@@ -4,7 +4,7 @@ import com.grepp.quizy.game.domain.GameStatus.WAITING
 import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedException
 import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
 
-class Game(
+data class Game(
     val id: Long = 0,
     val setting: GameSetting,
     val status: GameStatus = WAITING,
@@ -29,32 +29,32 @@ class Game(
         }
     }
 
-    fun join(userId: Long) {
+    fun join(userId: Long): Game {
         validateGameNotStarted()
-        players.add(Player(id = userId))
+        return copy(players = players.add(Player(id = userId)))
     }
 
-    fun quit(userId: Long) {
+    fun quit(userId: Long): Game {
         validateGameNotStarted()
-        players.remove(Player(id = userId))
+        return copy(players = players.remove(Player(id = userId)))
     }
 
-    fun updateSubject(userId: Long, subject: GameSubject) {
+    fun updateSubject(userId: Long, subject: GameSubject): Game {
         validateGameNotStarted()
         validateHostPermission(userId)
-        setting.updateSubject(subject)
+        return copy(setting = setting.updateSubject(subject))
     }
 
-    fun updateLevel(userId: Long, level: GameLevel) {
+    fun updateLevel(userId: Long, level: GameLevel): Game {
         validateGameNotStarted()
         validateHostPermission(userId)
-        setting.updateLevel(level)
+        return copy(setting = setting.updateLevel(level))
     }
 
-    fun updateQuizCount(userId: Long, quizCount: Int) {
+    fun updateQuizCount(userId: Long, quizCount: Int): Game {
         validateGameNotStarted()
         validateHostPermission(userId)
-        setting.updateQuizCount(quizCount)
+        return copy(setting = setting.updateQuizCount(quizCount))
     }
 
     private fun validateHostPermission(userId: Long) {
