@@ -71,10 +71,10 @@ data class Players(
 
     fun add(player: Player): Players {
         if (players.size > 5) {
-            throw GameException.GameAlreadyFullException()
+            throw GameException.GameAlreadyFullException
         }
         if (players.contains(player)) {
-            throw GameException.GameAlreadyParticipatedException()
+            throw GameException.GameAlreadyParticipatedException
         }
         return Players(players + player)
     }
@@ -82,14 +82,14 @@ data class Players(
     fun remove(player: Player): Players {
 
         if (!players.contains(player)) {
-            throw GameException.GameNotParticipatedException()
+            throw GameException.GameNotParticipatedException
         }
         return Players(players - player)
     }
 
     fun findPlayerById(userId: Long): Player {
         return players.find { it.id == userId }
-            ?: throw GameException.GameNotParticipatedException()
+            ?: throw GameException.GameNotParticipatedException
     }
 
 

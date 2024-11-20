@@ -60,13 +60,13 @@ class Game(
     private fun validateHostPermission(userId: Long) {
         val player = players.findPlayerById(userId)
         if (player.isGuest()) {
-            throw GameHostPermissionException()
+            throw GameHostPermissionException
         }
     }
 
     private fun validateGameNotStarted() {
         if (status != WAITING) {
-            throw GameAlreadyStartedException()
+            throw GameAlreadyStartedException
         }
     }
 
