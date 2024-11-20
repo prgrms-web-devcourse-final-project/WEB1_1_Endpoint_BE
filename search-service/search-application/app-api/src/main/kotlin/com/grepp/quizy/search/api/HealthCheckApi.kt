@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class HealthCheckApi {
     @GetMapping("/health")
-    fun healthCheck(): ApiResponse<Void> {
+    fun healthCheck(): ApiResponse<Unit> {
         return ApiResponse.success("I'm SEARCH service")
     }
 }

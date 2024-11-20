@@ -10,6 +10,22 @@ elasticsearch:
   host: ${ELASTICSEARCH_HOST_PORT:localhost:9200}
   port: 9200
 
+# 슬로우 쿼리 로그
+index:
+  search:
+    slowlog:
+      threshold:
+        query:
+          warn: 1s
+          debug: 200ms
+      level: TRACE
+
+logging:
+  level:
+    org.springframework.data.elasticsearch.core: DEBUG
+    org.elasticsearch.rest: DEBUG
+    org.elasticsearch.client: DEBUG
+
 ---
 spring:
   config:
