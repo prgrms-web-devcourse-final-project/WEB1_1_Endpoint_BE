@@ -27,5 +27,5 @@ class QuizMetadataCombiner(
 
     private fun parseQuizIds(quizzes: List<Quiz>) = quizzes.map { it.id }
 
-    private fun filterAnswerableQuiz(quizSlice: Slice<Quiz>) = quizSlice.content.filter { it is AnswerableQuiz }
+    private fun filterAnswerableQuiz(quizSlice: Slice<Quiz>) = quizSlice.content.filter { it is Answerable }
 }
