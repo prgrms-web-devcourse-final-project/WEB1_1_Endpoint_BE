@@ -1,31 +1,23 @@
 package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.GameStatus.WAITING
-import com.grepp.quizy.game.domain.exception.GameException.*
-import java.security.SecureRandom
+import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedException
+import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
 
 class Game(
     val id: Long = 0,
-    val subject: GameSubject,
-    val quizCount: Int,
-    val level: GameLevel,
+    private var _setting: GameSetting,
     val status: GameStatus = WAITING,
-    val playerIds: MutableSet<Long> = mutableSetOf(),
-    val inviteCode: String = generateInviteCode()
+    private var _players: Players,
+    val inviteCode: InviteCode = InviteCode()
 ) {
+    val setting: GameSetting
+        get() = _setting
+
+    val players: Players
+        get() = _players
 
     companion object {
-
-        private const val INVITE_CODE_LENGTH = 6
-        private val ALLOWED_CHARS = ('A'..'Z') + ('0'..'9')
-        private val secureRandom = SecureRandom()
-
-        private fun generateInviteCode(): String = buildString {
-            repeat(INVITE_CODE_LENGTH) {
-                append(ALLOWED_CHARS[secureRandom.nextInt(ALLOWED_CHARS.size)])
-            }
-        }
-
         fun create(
             id: Long,
             subject: GameSubject,
@@ -33,54 +25,53 @@ class Game(
             level: GameLevel,
             userId: Long
         ): Game {
-            val game = Game(id = id, subject = subject, level = level, quizCount = quizCount)
-            game.join(userId)
+            val game = Game(
+                id = id,
+                _setting = GameSetting(subject = subject, level = level, quizCount = quizCount),
+                _players = Players(listOf(Player(id = userId, role = PlayerRole.HOST)))
+            )
             return game
         }
     }
 
     fun join(userId: Long) {
-        checkJoinable(userId)
-        playerIds.add(userId)
+        validateGameNotStarted()
+        _players.add(Player(id = userId))
     }
 
     fun quit(userId: Long) {
-        checkQuitable(userId)
-        playerIds.remove(userId)
+        validateGameNotStarted()
+        _players.remove(Player(id = userId))
     }
 
-    private fun checkQuitable(userId: Long) {
-        validatePlayerAlreadyJoined(userId)
-        validateGameIsWaiting()
+    fun updateSubject(userId: Long, subject: GameSubject) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        _setting.updateSubject(subject)
     }
 
-    private fun checkJoinable(userId: Long) {
-        validatePlayerNotAlreadyJoined(userId)
-        validateGameIsWaiting()
-        validateGameHasCapacity()
+    fun updateLevel(userId: Long, level: GameLevel) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        _setting.updateLevel(level)
     }
 
-    private fun validatePlayerAlreadyJoined(userId: Long) {
-        if (!playerIds.contains(userId)) {
-            throw GameNotParticipatedException
+    fun updateQuizCount(userId: Long, quizCount: Int) {
+        validateGameNotStarted()
+        validateHostPermission(userId)
+        _setting.updateQuizCount(quizCount)
+    }
+
+    private fun validateHostPermission(userId: Long) {
+        val player = players.findPlayerById(userId)
+        if (player.isGuest()) {
+            throw GameHostPermissionException
         }
     }
 
-    private fun validatePlayerNotAlreadyJoined(userId: Long) {
-        if (playerIds.contains(userId)) {
-            throw GameAlreadyParticipatedException
-        }
-    }
-
-    private fun validateGameIsWaiting() {
+    private fun validateGameNotStarted() {
         if (status != WAITING) {
             throw GameAlreadyStartedException
-        }
-    }
-
-    private fun validateGameHasCapacity() {
-        if (playerIds.size >= 5) {
-            throw GameAlreadyFullException
         }
     }
 

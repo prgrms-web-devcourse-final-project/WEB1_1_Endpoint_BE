@@ -10,7 +10,7 @@ class GameResponse(
         fun from(game: Game): GameResponse {
             return GameResponse(
                 id = game.id,
-                inviteCode = game.inviteCode
+                inviteCode = game.inviteCode.value
             )
         }
     }

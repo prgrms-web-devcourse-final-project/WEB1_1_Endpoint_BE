@@ -2,7 +2,7 @@ package com.grepp.quizy.game.domain.exception
 
 import com.grepp.quizy.common.exception.DomainException
 
-sealed class GameException (
+sealed class GameException(
     errorCode: GameErrorCode,
 ) : DomainException(errorCode) {
 
@@ -11,5 +11,5 @@ sealed class GameException (
     data object GameAlreadyStartedException : GameException(GameErrorCode.GAME_ALREADY_STARTED)
     data object GameAlreadyFullException : GameException(GameErrorCode.GAME_PARTICIPANT_ALREADY_FULL)
     data object GameNotParticipatedException : GameException(GameErrorCode.GAME_NOT_PARTICIPATED)
-
+    data object GameHostPermissionException : GameException(GameErrorCode.GAME_HOST_PERMISSION)
 }

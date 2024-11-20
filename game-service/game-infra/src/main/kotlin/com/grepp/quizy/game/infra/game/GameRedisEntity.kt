@@ -1,9 +1,6 @@
 package com.grepp.quizy.game.infra.game
 
-import com.grepp.quizy.game.domain.Game
-import com.grepp.quizy.game.domain.GameLevel
-import com.grepp.quizy.game.domain.GameStatus
-import com.grepp.quizy.game.domain.GameSubject
+import com.grepp.quizy.game.domain.*
 import jakarta.persistence.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
@@ -18,27 +15,21 @@ class GameRedisEntity(
     @TimeToLive
     private val ttl: Long = HOURS_IN_SECOND,
 
-    val subject: GameSubject,
-
-    val quizCount: Int,
-
-    val level: GameLevel,
+    val setting: GameSetting,
 
     val status: GameStatus,
 
-    val playerIds: MutableSet<Long>,
+    val players: Players,
 
-    val inviteCode: String
+    val inviteCode: InviteCode
 ) {
     companion object {
         fun from(game: Game): GameRedisEntity {
             return GameRedisEntity(
                 id = game.id,
-                subject = game.subject,
-                quizCount = game.quizCount,
-                level = game.level,
+                setting = game.setting,
                 status = game.status,
-                playerIds = game.playerIds,
+                players = game.players,
                 inviteCode = game.inviteCode
             )
         }
@@ -48,11 +39,9 @@ class GameRedisEntity(
     fun toDomain(): Game {
         return Game(
             id = id,
-            subject = subject,
-            quizCount = quizCount,
-            level = level,
+            setting = setting,
             status = status,
-            playerIds = playerIds,
+            players = players,
             inviteCode = inviteCode
         )
     }
