@@ -1,8 +1,8 @@
 package com.grepp.quizy.game.infra.game
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.GameMessagePublisher
-import com.grepp.quizy.game.domain.Message
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.listener.ChannelTopic
 import org.springframework.stereotype.Component
@@ -14,7 +14,7 @@ class RedisPublisher(
     private val gameTopic: ChannelTopic,
 ) : GameMessagePublisher {
 
-    override fun publish(message: Message) {
+    override fun publish(message: GameMessage) {
         val messageJson = objectMapper.writeValueAsString(message)
         redisTemplate.convertAndSend(gameTopic.topic, messageJson)
     }
