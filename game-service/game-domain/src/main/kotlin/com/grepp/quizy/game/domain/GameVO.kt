@@ -3,9 +3,9 @@ package com.grepp.quizy.game.domain
 import com.grepp.quizy.game.domain.exception.GameException
 
 data class GameSetting(
-    private val subject: GameSubject,
-    private val level: GameLevel,
-    private val quizCount: Int,
+    val subject: GameSubject,
+    val level: GameLevel,
+    val quizCount: Int,
 ) {
     fun updateSubject(subject: GameSubject): GameSetting {
         return copy(subject = subject)

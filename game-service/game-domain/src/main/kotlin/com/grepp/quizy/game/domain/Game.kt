@@ -36,7 +36,7 @@ class Game(
 
     fun join(userId: Long) {
         validateGameNotStarted()
-        _players.add(Player(id = userId))
+        this._players = _players.add(Player(id = userId))
     }
 
     fun quit(userId: Long) {
