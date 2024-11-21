@@ -39,8 +39,8 @@ class GameService(
         return currentGame
     }
 
-    fun quit(userId: Long, code: String) {
-        val game = gameReader.readByInviteCode(code)
+    fun quit(userId: Long, gameId: Long) {
+        val game = gameReader.read(gameId)
         val currentGame = gamePlayerManager.quit(game, userId)
         messagePublisher.publish(
             GameMessage.room(

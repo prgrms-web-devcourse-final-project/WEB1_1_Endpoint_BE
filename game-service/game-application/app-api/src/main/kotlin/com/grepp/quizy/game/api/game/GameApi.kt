@@ -45,15 +45,15 @@ class GameApi(
             )
         )
 
-    @PostMapping("/quit")
+    @MessageMapping("/quit/{gameId}")
     fun quit(
-        @RequestHeader("X-AUTH-ID") userId: String,
-        @RequestParam code: String
+        @DestinationVariable gameId: Long,
+        @Header("X-AUTH-ID") userId: String
     ): ApiResponse<Unit> =
         ApiResponse.success(
             gameService.quit(
                 userId.toLong(),
-                code
+                gameId
             )
         )
 
