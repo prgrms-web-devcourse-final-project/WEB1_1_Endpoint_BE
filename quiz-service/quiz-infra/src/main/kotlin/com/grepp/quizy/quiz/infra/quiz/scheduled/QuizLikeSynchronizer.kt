@@ -30,7 +30,6 @@ class QuizLikeSynchronizer(
                         .count(100)
                         .build()
 
-        val previousCounts = mutableMapOf<String, Long>()
         val quizIdToCountMap = mutableMapOf<Long, Long>()
 
         redisTemplate.execute { connection ->
@@ -47,35 +46,12 @@ class QuizLikeSynchronizer(
                     val count =
                             redisTemplate
                                     .opsForValue()
-                                    .get(key)
+                                    .getAndDelete(key)
                                     ?.toLongOrNull() ?: 0L
                     quizIdToCountMap[quizId] = count
-                    previousCounts[key] = count
                 }
             }
         }
         quizJpaRepository.batchUpdate(quizIdToCountMap)
-
-        previousCounts.forEach { (key, previousCount) ->
-            val currentCount =
-                    redisTemplate
-                            .opsForValue()
-                            .get(key)
-                            ?.toLongOrNull() ?: 0L
-
-            if (currentCount > previousCount) {
-                // 새로운 차이값만 남기기
-                redisTemplate
-                        .opsForValue()
-                        .set(
-                                key,
-                                (currentCount - previousCount)
-                                        .toString(),
-                        )
-            } else {
-                // 변화가 없다면 키 삭제
-                redisTemplate.delete(key)
-            }
-        }
     }
 }
