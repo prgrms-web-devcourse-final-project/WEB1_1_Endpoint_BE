@@ -25,12 +25,15 @@ class UserEntity(
 
     ) : BaseTimeEntity() {
 
+    constructor() : this(0, UserProfileVO(), ProviderTypeVO(), Role.USER)
+
+
     fun toDomain(): User {
         return User(
             id = UserId(id),
             userProfile = userProfile.toDomain(),
             provider = provider.toDomain(),
-            role = role
+            _role = role
         )
     }
 

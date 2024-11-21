@@ -17,6 +17,8 @@ data class ProviderTypeVO(
     @Column(nullable = false)
     val providerId: String
 ) {
+    constructor() : this(AuthProvider.DEFAULT, "")
+
     fun toDomain(): ProviderType {
         return ProviderType(provider, providerId)
     }
@@ -39,6 +41,8 @@ data class UserProfileVO(
     @Column(nullable = false)
     val profileImageUrl: String,
 ) {
+    constructor() : this("", "", "")
+
     fun toDomain(): UserProfile {
         return UserProfile(
             name = name,

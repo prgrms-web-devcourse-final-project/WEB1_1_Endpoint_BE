@@ -11,7 +11,7 @@ allOpen {
 
 dependencies {
     api(project(":infrastructure:kafka"))
-    api(project(":common:common-jpa"))
+    implementation(project(":common:common-jpa"))
 
     implementation(project(":user-service:user-domain"))
 

@@ -18,5 +18,6 @@ data class ProviderType(
 
 enum class AuthProvider {
     GOOGLE,
-    KAKAO
+    KAKAO,
+    DEFAULT
 }
