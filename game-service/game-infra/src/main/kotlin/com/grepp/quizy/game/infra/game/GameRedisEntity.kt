@@ -40,7 +40,7 @@ class GameRedisEntity(
         return Game(
             id = id,
             _setting = setting,
-            status = status,
+            _status = status,
             _players = players,
             inviteCode = inviteCode
         )
