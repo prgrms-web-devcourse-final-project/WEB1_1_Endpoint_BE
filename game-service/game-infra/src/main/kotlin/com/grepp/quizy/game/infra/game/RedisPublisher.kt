@@ -9,14 +9,12 @@ import org.springframework.stereotype.Component
 
 @Component
 class RedisPublisher(
-    private val redisTemplate: RedisTemplate<String, String>,
-    private val objectMapper: ObjectMapper,
-    private val gameTopic: ChannelTopic,
+        private val redisTemplate: RedisTemplate<String, String>,
+        private val objectMapper: ObjectMapper,
+        private val gameTopic: ChannelTopic,
 ) : GameMessagePublisher {
-
     override fun publish(message: GameMessage) {
         val messageJson = objectMapper.writeValueAsString(message)
         redisTemplate.convertAndSend(gameTopic.topic, messageJson)
     }
-
 }

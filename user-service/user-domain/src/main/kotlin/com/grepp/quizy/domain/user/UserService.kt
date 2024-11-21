@@ -3,10 +3,10 @@ package com.grepp.quizy.domain.user
 import org.springframework.stereotype.Service
 
 @Service
-class UserService (
-    private val userAppender: UserAppender,
-    private val userReader: UserReader,
-    private val userRemover: UserRemover
+class UserService(
+        private val userAppender: UserAppender,
+        private val userReader: UserReader,
+        private val userRemover: UserRemover,
 ) {
     fun appendUser(user: User): User {
         return userAppender.append(user)

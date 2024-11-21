@@ -29,7 +29,8 @@ class KafkaProducerImpl<K : Serializable, V : Serializable>(
         )
 
         try {
-            val kafkaResultFuture = kafkaTemplate.send(topicName, key, message)
+            val kafkaResultFuture =
+                    kafkaTemplate.send(topicName, key, message)
             kafkaResultFuture.whenComplete {
                     result: SendResult<K, V>,
                     ex: Throwable? ->

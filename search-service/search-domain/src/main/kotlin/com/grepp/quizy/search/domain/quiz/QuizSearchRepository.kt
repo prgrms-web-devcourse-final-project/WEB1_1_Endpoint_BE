@@ -8,7 +8,10 @@ import com.grepp.quizy.search.domain.user.UserId
 interface QuizSearchRepository {
     fun search(condition: SearchCondition): Slice<Quiz>
 
-    fun searchUserAnswer(userId: UserId, quizIds: List<QuizId>): UserAnswer
+    fun searchUserAnswer(
+            userId: UserId,
+            quizIds: List<QuizId>,
+    ): UserAnswer
 }
 
 data class UserAnswer(val answers: Map<QuizId, OptionNumber>) {

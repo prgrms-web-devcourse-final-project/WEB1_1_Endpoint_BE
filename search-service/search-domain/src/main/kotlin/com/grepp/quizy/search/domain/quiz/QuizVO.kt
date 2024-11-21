@@ -8,7 +8,11 @@ package com.grepp.quizy.search.domain.quiz
 
 data class QuizContent(val type: QuizType, val value: String)
 
-data class QuizOption(val optionNumber: Int, val content: String, val selectionCount: Int)
+data class QuizOption(
+        val optionNumber: Int,
+        val content: String,
+        val selectionCount: Int,
+)
 
 data class QuizAnswer(val value: String, val explanation: String)
 
@@ -20,5 +24,7 @@ data class QuizCount(val like: Int = 0, val comment: Int = 0) {
 }
 
 enum class QuizType(val typeName: String) {
-    OX("OX 퀴즈"), AB("A/B 밸런스"), MULTIPLE_CHOICE("객관식");
+    OX("OX 퀴즈"),
+    AB("A/B 밸런스"),
+    MULTIPLE_CHOICE("객관식"),
 }
