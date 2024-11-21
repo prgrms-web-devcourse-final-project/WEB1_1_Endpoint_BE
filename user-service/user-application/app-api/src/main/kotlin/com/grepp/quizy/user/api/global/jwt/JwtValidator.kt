@@ -1,8 +1,8 @@
 package com.grepp.quizy.user.api.global.jwt
 
-import com.grepp.quizy.infra.redis.repository.RedisTokenRepository
-import com.grepp.quizy.infra.redis.util.RedisUtil
 import com.grepp.quizy.user.api.global.jwt.exception.*
+import com.grepp.quizy.user.infra.redis.repository.RedisTokenRepositoryAdaptor
+import com.grepp.quizy.user.infra.redis.util.RedisUtil
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MalformedJwtException
@@ -16,7 +16,7 @@ class JwtValidator(
     private val jwtProperties: JwtProperties,
     private val jwtProvider: JwtProvider,
     private val redisUtil: RedisUtil,
-    private val redisRepository: RedisTokenRepository
+    private val redisRepository: RedisTokenRepositoryAdaptor
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(
         jwtProperties.secret.toByteArray()

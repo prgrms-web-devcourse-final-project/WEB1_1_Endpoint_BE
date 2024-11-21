@@ -1,8 +1,8 @@
 package com.grepp.quizy.user.api.global.jwt
 
-import com.grepp.quizy.domain.user.Role
-import com.grepp.quizy.domain.user.User
-import com.grepp.quizy.domain.user.UserId
+import com.grepp.quizy.user.domain.user.Role
+import com.grepp.quizy.user.domain.user.User
+import com.grepp.quizy.user.domain.user.UserId
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
@@ -18,12 +18,12 @@ class JwtGenerator(
         jwtProperties.secret.toByteArray()
     )
 
-    fun generateAccessToken(userId: UserId, userRole: Role): String {
+    fun generateAccessToken(user: User): String {
         return generateToken(
             claims = mutableMapOf(
-                "role" to userRole
+                "role" to user.role
             ),
-            subject = userId,
+            subject = user.id,
             expirationTime = jwtProperties.accessTokenValidity
         )
     }

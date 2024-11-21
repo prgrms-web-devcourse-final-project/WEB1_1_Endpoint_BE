@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.jwt
 
-import com.grepp.quizy.domain.user.UserId
+import com.grepp.quizy.user.domain.user.UserId
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component

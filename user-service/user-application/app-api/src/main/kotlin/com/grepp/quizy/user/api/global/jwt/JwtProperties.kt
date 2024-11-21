@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
-data class JwtProperties(
+class JwtProperties{
     @Value("\${jwt.secret}")
-    val secret: String,
+    lateinit var secret: String
+
     @Value("\${jwt.access-token-validity}")
-    val accessTokenValidity: Long,
+    var accessTokenValidity: Long = 0
+
     @Value("\${jwt.refresh-token-validity}")
-    val refreshTokenValidity: Long
-)
+    var refreshTokenValidity: Long = 0
+}
