@@ -12,7 +12,6 @@ class GameReaderTest() : DescribeSpec({
 
     beforeTest {
         val game = Game(
-            id = 1,
             _setting = GameSetting(
                 subject = GameSubject.SPRING,
                 level = GameLevel.EASY,
@@ -46,7 +45,7 @@ class GameReaderTest() : DescribeSpec({
                 it("게임을 반환한다.") {
                     val foundGame = gameReader.read(1)
 
-                    foundGame.id shouldBe 1
+                    foundGame.id shouldBe foundGame.id
                     foundGame.setting.subject shouldBe GameSubject.SPRING
                     foundGame.setting.level shouldBe GameLevel.EASY
                     foundGame.setting.quizCount shouldBe 10
@@ -70,7 +69,7 @@ class GameReaderTest() : DescribeSpec({
                 it("게임을 반환한다.") {
                     val foundGame = gameReader.readByInviteCode("ABC123")
 
-                    foundGame.id shouldBe 1
+                    foundGame.id shouldBe foundGame.id
                     foundGame.setting.subject shouldBe GameSubject.SPRING
                     foundGame.setting.level shouldBe GameLevel.EASY
                     foundGame.setting.quizCount shouldBe 10

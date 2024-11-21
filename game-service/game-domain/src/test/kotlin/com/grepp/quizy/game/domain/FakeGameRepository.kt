@@ -1,25 +1,35 @@
 package com.grepp.quizy.game.domain
 
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicLong
+
 class FakeGameRepository : GameRepository {
 
-    private val games = mutableListOf<Game>()
+    private val games = ConcurrentHashMap<Long, Game>()
+    private var sequence = AtomicLong(0)
 
     override fun save(game: Game): Game {
-        val index = games.indexOfFirst { it.id == game.id }
-        if (index == -1) {
-            games.add(game)
+        val savedGame = if (game.id == 0L) {
+            Game(
+                id = sequence.incrementAndGet(),
+                inviteCode = game.inviteCode,
+                _setting = game.setting,
+                _status = game.status,
+                _players = game.players,
+            )
         } else {
-            games[index] = game
+            game
         }
-        return game
+        games[savedGame.id] = savedGame
+        return savedGame
     }
 
     override fun findById(id: Long): Game? {
-        return games.find { it.id == id }
+        return games[id]
     }
 
     override fun findByInviteCode(code: String): Game? {
-        return games.find { it.inviteCode.value == code }
+        return games.values.find { it.inviteCode.value == code }
     }
 
     fun clear() {

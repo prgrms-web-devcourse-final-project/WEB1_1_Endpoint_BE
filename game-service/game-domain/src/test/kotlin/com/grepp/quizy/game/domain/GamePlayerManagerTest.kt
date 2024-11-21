@@ -59,7 +59,6 @@ class GamePlayerManagerTest() : DescribeSpec({
 
 private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
     val game = Game(
-        id = 1,
         _setting = GameSetting(
             subject = GameSubject.SPRING,
             level = GameLevel.EASY,

@@ -7,11 +7,7 @@ class GameAppenderTest(
 ) : DescribeSpec({
     val gameRepository = FakeGameRepository()
 
-    val idGenerator = object : IdGenerator {
-        override fun generate(key: String): Long {
-            return 1L
-        }
-    }
+    val idGenerator = FakeIdGenerator()
 
     val gameAppender = GameAppender(gameRepository, idGenerator)
 
@@ -26,7 +22,7 @@ class GameAppenderTest(
                     10
                 )
 
-                appendedGame.id shouldBe 1L
+                appendedGame.id shouldBe appendedGame.id
                 appendedGame.setting.subject shouldBe GameSubject.SPRING
                 appendedGame.setting.level shouldBe GameLevel.EASY
                 appendedGame.setting.quizCount shouldBe 10

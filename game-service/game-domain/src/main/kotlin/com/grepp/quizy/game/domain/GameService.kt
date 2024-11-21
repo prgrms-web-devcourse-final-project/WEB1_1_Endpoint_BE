@@ -79,7 +79,7 @@ class GameService(
     }
 
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
-        val game = gameReader.read(userId)
+        val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
         messagePublisher.publish(
             GameMessage.room(

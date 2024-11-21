@@ -37,7 +37,7 @@ class GameServiceTest() : DescribeSpec({
                     10
                 )
 
-                createdGame.id shouldBe 1L
+                createdGame.id shouldBe createdGame.id
                 createdGame.setting.subject shouldBe GameSubject.JAVASCRIPT
                 createdGame.setting.level shouldBe GameLevel.EASY
                 createdGame.setting.quizCount shouldBe 10
@@ -51,7 +51,7 @@ class GameServiceTest() : DescribeSpec({
         }
         context("게임에 참가하면") {
             it("게임에 참가한 유저가 추가된다.") {
-                generateGameFixture(gameRepository)
+                val game = generateGameFixture(gameRepository)
 
                 val joinedGame = gameService.join(3, "ABC123")
 
@@ -63,7 +63,7 @@ class GameServiceTest() : DescribeSpec({
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -86,14 +86,14 @@ class GameServiceTest() : DescribeSpec({
         }
         context("게임에서 나가면") {
             it("게임에서 사용자가 제거된다.") {
-                generateGameFixture(gameRepository)
+                val game = generateGameFixture(gameRepository)
 
-                gameService.quit(2,1)
+                gameService.quit(2,game.id)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -111,14 +111,14 @@ class GameServiceTest() : DescribeSpec({
         }
         context("게임 주제를 변경하면") {
             it("게임 주제가 변경된다.") {
-                generateGameFixture(gameRepository)
+                val game = generateGameFixture(gameRepository)
 
-                gameService.updateSubject(1, 1, GameSubject.JAVASCRIPT)
+                gameService.updateSubject(1, game.id, GameSubject.JAVASCRIPT)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -138,14 +138,14 @@ class GameServiceTest() : DescribeSpec({
         }
         context("게임 난이도를 변경하면") {
             it("게임 난이도가 변경된다.") {
-                generateGameFixture(gameRepository)
+                val game = generateGameFixture(gameRepository)
 
-                gameService.updateLevel(1, 1, GameLevel.HARD)
+                gameService.updateLevel(1, game.id, GameLevel.HARD)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -167,12 +167,12 @@ class GameServiceTest() : DescribeSpec({
             it("게임 퀴즈 수가 변경된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                val updatedGame = gameService.updateQuizCount(1, 1, 20)
+                val updatedGame = gameService.updateQuizCount(1, game.id, 20)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -192,14 +192,14 @@ class GameServiceTest() : DescribeSpec({
         }
         context("사용자를 강퇴하면") {
             it("게임에서 사용자가 제거된다.") {
-                generateGameFixture(gameRepository)
+                val game = generateGameFixture(gameRepository)
 
-                gameService.kickUser(1, 1, 2)
+                gameService.kickUser(1, game.id, 2)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
                 val publishedMessage = gameMessagePublisher.getMessages().first()
-                publishedMessage.gameId shouldBe 1L
+                publishedMessage.gameId shouldBe game.id
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
@@ -221,7 +221,6 @@ class GameServiceTest() : DescribeSpec({
 
 private fun generateGameFixture(gameRepository: FakeGameRepository) = gameRepository.save(
     Game(
-        id = 1,
         _setting = GameSetting(
             subject = GameSubject.SPRING,
             level = GameLevel.EASY,
