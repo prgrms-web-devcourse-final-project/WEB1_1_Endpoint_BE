@@ -2,6 +2,18 @@ package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.exception.GameException
 
+enum class GameStatus(
+    val description: String
+) {
+    WAITING("대기 중"),
+    PLAYING("진행 중"),
+    FINISHED("종료"),
+    DELETED("삭제됨")
+
+    ;
+
+}
+
 data class GameSetting(
     val subject: GameSubject,
     val level: GameLevel,
@@ -18,6 +30,28 @@ data class GameSetting(
     fun updateQuizCount(quizCount: Int): GameSetting {
         return copy(quizCount = quizCount)
     }
+}
+
+enum class GameSubject(
+    val description: String
+) {
+
+    JAVASCRIPT("자바스크립트"),
+    SPRING("스프링"),
+    // TODO: 정해진 형식의 주제 10개를 Enum으로 정의한다.
+    ;
+
+}
+
+enum class GameLevel(
+    val description: String
+) {
+
+    EASY("쉬움"),
+    NORMAL("보통"),
+    HARD("어려움"),
+
+    ;
 }
 
 data class InviteCode(
