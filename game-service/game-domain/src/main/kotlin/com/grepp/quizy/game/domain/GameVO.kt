@@ -3,9 +3,9 @@ package com.grepp.quizy.game.domain
 import com.grepp.quizy.game.domain.exception.GameException
 
 data class GameSetting(
-    private val subject: GameSubject,
-    private val level: GameLevel,
-    private val quizCount: Int,
+        private val subject: GameSubject,
+        private val level: GameLevel,
+        private val quizCount: Int,
 ) {
     fun updateSubject(subject: GameSubject): GameSetting {
         return copy(subject = subject)
@@ -20,9 +20,7 @@ data class GameSetting(
     }
 }
 
-data class InviteCode(
-    val value: String = generate()
-) {
+data class InviteCode(val value: String = generate()) {
     companion object {
         private const val INVITE_CODE_LENGTH = 6
         private val ALLOWED_CHARS = ('A'..'Z') + ('0'..'9')
@@ -38,8 +36,8 @@ data class InviteCode(
 }
 
 data class Player(
-    val id: Long,
-    val role: PlayerRole = PlayerRole.GUEST
+        val id: Long,
+        val role: PlayerRole = PlayerRole.GUEST,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -57,17 +55,14 @@ data class Player(
     fun isGuest(): Boolean {
         return role == PlayerRole.GUEST
     }
-
 }
 
 enum class PlayerRole {
     HOST,
-    GUEST
+    GUEST,
 }
 
-data class Players(
-    val players: List<Player>
-) {
+data class Players(val players: List<Player>) {
 
     fun add(player: Player): Players {
         if (players.size > 5) {
@@ -89,8 +84,6 @@ data class Players(
 
     fun findPlayerById(userId: Long): Player {
         return players.find { it.id == userId }
-            ?: throw GameException.GameNotParticipatedException
+                ?: throw GameException.GameNotParticipatedException
     }
-
-
 }

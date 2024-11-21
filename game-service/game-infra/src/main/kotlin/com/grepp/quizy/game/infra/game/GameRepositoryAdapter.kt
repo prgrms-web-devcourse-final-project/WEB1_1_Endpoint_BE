@@ -8,11 +8,13 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class GameRepositoryAdapter(
-    private val gameRedisRepository: GameRedisRepository
+        private val gameRedisRepository: GameRedisRepository
 ) : GameRepository {
 
     override fun save(game: Game): Game {
-        return gameRedisRepository.save(GameRedisEntity.from(game)).toDomain()
+        return gameRedisRepository
+                .save(GameRedisEntity.from(game))
+                .toDomain()
     }
 
     override fun findById(id: Long): Game? {
@@ -20,7 +22,8 @@ class GameRepositoryAdapter(
     }
 
     override fun findByInviteCode(code: String): Game? {
-        return gameRedisRepository.findTopByInviteCode(code)?.toDomain()
+        return gameRedisRepository
+                .findTopByInviteCode(code)
+                ?.toDomain()
     }
-
 }

@@ -6,7 +6,8 @@ import org.springframework.data.convert.ReadingConverter
 import org.springframework.data.convert.WritingConverter
 
 @WritingConverter
-class QuizDocumentWritingConverter<T : QuizDocumentVo> : Converter<T, String> {
+class QuizDocumentWritingConverter<T : QuizDocumentVo> :
+        Converter<T, String> {
     override fun convert(source: T): String {
         try {
             val objectMapper = ObjectMapper()
@@ -18,7 +19,9 @@ class QuizDocumentWritingConverter<T : QuizDocumentVo> : Converter<T, String> {
 }
 
 @ReadingConverter
-class QuizDocumentReadingConverter<T : QuizDocumentVo>(private val targetType: Class<T>) : Converter<String, T> {
+class QuizDocumentReadingConverter<T : QuizDocumentVo>(
+        private val targetType: Class<T>
+) : Converter<String, T> {
     override fun convert(source: String): T? {
         try {
             val objectMapper = ObjectMapper()

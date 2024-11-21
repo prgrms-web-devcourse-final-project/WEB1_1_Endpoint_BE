@@ -9,18 +9,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class RedisPublisher(
-<<<<<<< Updated upstream:game-service/game-infra/src/main/kotlin/com/grepp/quizy/game/infra/game/RedisPublisher.kt
-    private val redisTemplate: RedisTemplate<String, String>,
-    private val objectMapper: ObjectMapper,
-    private val gameTopic: ChannelTopic,
-) : GameMessagePublisher {
-=======
         private val redisTemplate: RedisTemplate<String, String>,
         private val objectMapper: ObjectMapper,
         private val gameTopic: ChannelTopic,
-) {
->>>>>>> Stashed changes:game-service/game-infra/src/main/kotlin/com/grepp/quizy/game/infra/redis/RedisPublisher.kt
-
+) : GameMessagePublisher {
     override fun publish(message: GameMessage) {
         val messageJson = objectMapper.writeValueAsString(message)
         redisTemplate.convertAndSend(gameTopic.topic, messageJson)

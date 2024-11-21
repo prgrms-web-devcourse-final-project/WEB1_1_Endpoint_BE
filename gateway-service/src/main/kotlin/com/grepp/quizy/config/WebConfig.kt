@@ -10,24 +10,6 @@ import org.springframework.web.reactive.config.WebFluxConfigurer
 class WebConfig : WebFluxConfigurer {
     override fun addCorsMappings(registry: CorsRegistry) {
         registry
-<<<<<<< Updated upstream
-            .addMapping("/**")
-            .allowedOrigins("*")
-            .allowedMethods("DELETE", "GET", "POST", "PATCH", "PUT")
-            .allowedHeaders(
-                "Access-Control-Allow-Headers",
-                "Access-Control-Allow-Origin",
-                "Access-Control-Request-Method",
-                "Access-Control-Request-Headers",
-                "Origin",
-                "Cache-Control",
-                "Content-Type",
-                "Authorization",
-            )
-            .exposedHeaders("*") // CORS 응답에 대해 클라이언트가 접근할수있도록 허용
-            .allowCredentials(false)
-            .maxAge(3600)
-=======
                 .addMapping("/**")
                 .allowedOrigins("*")
                 .allowedMethods(
@@ -50,6 +32,5 @@ class WebConfig : WebFluxConfigurer {
                 .exposedHeaders("*") // CORS 응답에 대해 클라이언트가 접근할수있도록 허용
                 .allowCredentials(false)
                 .maxAge(3600)
->>>>>>> Stashed changes
     }
 }

@@ -9,13 +9,13 @@ import org.springframework.data.elasticsearch.annotations.FieldType
 
 @Document(indexName = "user_answer")
 class UserAnswerDocument(
-    @Id @Field(type = FieldType.Long)
-    val id: Long,
-
-    @Field(type = FieldType.Flattened)
-    val answers: MutableMap<Long, Int>,
+        @Id @Field(type = FieldType.Long) val id: Long,
+        @Field(type = FieldType.Flattened)
+        val answers: MutableMap<Long, Int>,
 ) {
 
     fun getOptionNumber(id: QuizId) =
-        answers[id.value]?.let { option -> id to OptionNumber(option) }
+            answers[id.value]?.let { option ->
+                id to OptionNumber(option)
+            }
 }
