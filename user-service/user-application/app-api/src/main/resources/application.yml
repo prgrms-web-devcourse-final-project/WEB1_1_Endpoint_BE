@@ -25,7 +25,7 @@ spring:
             scope:
               - email
               - profile
-            redirect-uri: http://localhost:8080/api/v1/auth/oauth2/code/google
+            redirect-uri: http://localhost:8085/login/oauth2/code/google
           kakao:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
@@ -36,7 +36,7 @@ spring:
               - profile_image
               - account_email
             client-name: Kakao
-            redirect-uri: http://localhost:8080/api/v1/auth/oauth2/code/kakao
+            redirect-uri: http://localhost:8085/login/oauth2/code/kakao
 
         provider:
           kakao:
@@ -50,12 +50,17 @@ jwt:
   access-token-validity: 3600000  # 1시간
   refresh-token-validity: 604800000  # 7일
 
+frontend:
+  url: http://localhost:3000
+  home-path: /home # TODO : 홈 경로 수정
+  sign-up-path: /onboarding # TODO : 회원가입 경로 수정
+
 server:
   port: 8085
 
-logging:
-  level:
-    root: debug
+#logging:
+#  level:
+#    root: debug
 
 ---
 spring:
@@ -96,6 +101,11 @@ jwt:
   secret: ${JWT_SECRET}
   access-token-validity: 3600000  # 1시간
   refresh-token-validity: 604800000  # 7일
+
+frontend:
+  url: http://localhost:3000 # TODO : 프론트엔드 URL 수정
+  home-path: /home # TODO : 홈 경로 수정
+  sign-up-path: /onboarding # TODO : 회원가입 경로 수정
 
 springdoc:
   api-docs:

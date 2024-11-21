@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.user.domain.user.AuthProvider
 
 class GoogleOAuth2UserInfoExtractor : OAuth2UserInfoExtractor {
     override fun extract(attributes: Map<String, Any>): OAuth2Attributes {
@@ -9,6 +9,7 @@ class GoogleOAuth2UserInfoExtractor : OAuth2UserInfoExtractor {
             email = attributes["email"] as String,
             provider = AuthProvider.GOOGLE,
             snsId = attributes["sub"] as String,
+            profileImageUrl = attributes["picture"] as String,
             attributes = attributes
         )
     }

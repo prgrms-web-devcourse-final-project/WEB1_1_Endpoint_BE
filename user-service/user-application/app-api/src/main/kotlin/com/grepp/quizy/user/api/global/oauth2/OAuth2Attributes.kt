@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.user.domain.user.AuthProvider
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
@@ -10,6 +10,7 @@ data class OAuth2Attributes(
     val email: String,
     val provider: AuthProvider,
     val snsId: String,
+    val profileImageUrl: String,
     private val attributes: Map<String, Any>
 ) {
     // OAuth2User의 메소드들은 별도로 구현하지 않음

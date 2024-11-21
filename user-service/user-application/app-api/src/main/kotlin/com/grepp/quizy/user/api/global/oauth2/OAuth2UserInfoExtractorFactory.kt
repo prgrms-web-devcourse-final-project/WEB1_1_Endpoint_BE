@@ -12,5 +12,6 @@ class OAuth2UserInfoExtractorFactory {
     fun getExtractor(registrationId: String): OAuth2UserInfoExtractor {
         return extractors[registrationId]
             ?: throw IllegalArgumentException("Unsupported OAuth2 provider: $registrationId")
+        // TODO: custom 예외 추가
     }
 }

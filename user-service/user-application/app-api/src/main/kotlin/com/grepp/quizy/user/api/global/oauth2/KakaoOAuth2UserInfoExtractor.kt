@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.user.domain.user.AuthProvider
 
 class KakaoOAuth2UserInfoExtractor : OAuth2UserInfoExtractor {
     override fun extract(attributes: Map<String, Any>): OAuth2Attributes {
@@ -11,7 +11,8 @@ class KakaoOAuth2UserInfoExtractor : OAuth2UserInfoExtractor {
             name = profile["nickname"] as String,
             email = kakaoAccount["email"] as String,
             provider = AuthProvider.KAKAO,
-            snsId = attributes["id"] as String,
+            snsId = attributes["id"].toString(),
+            profileImageUrl = profile["profile_image_url"] as String,
             attributes = attributes
         )
     }

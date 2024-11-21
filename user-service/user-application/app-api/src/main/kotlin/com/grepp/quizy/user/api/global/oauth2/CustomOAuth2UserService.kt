@@ -1,6 +1,7 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.grepp.quizy.domain.user.*
+import com.grepp.quizy.user.domain.user.*
+import com.grepp.quizy.user.domain.user.exception.UserNotFoundException
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -31,37 +32,40 @@ class CustomOAuth2UserService(
             findOrCreateUser(attributes)
             CustomOAuth2User(attributes)
         }.getOrElse { e ->
-            throw IllegalArgumentException(
-//                when (e) {
-//                    is IllegalArgumentException -> "Invalid OAuth2 provider"
-//                    is EmailNotFoundExceptionException -> "Email not found from OAuth2 provider"
-//                    else -> "Failed to process OAuth2 user"
-//                }
-            )
+            e.printStackTrace()
+            throw IllegalArgumentException()
         }
     }
 
-    private fun findOrCreateUser(attributes: OAuth2Attributes): User {
+    private fun findOrCreateUser(attributes: OAuth2Attributes) {
         val email = attributes.email
+        val provider = attributes.provider
 
-        return userReader.isExist(email).let {
-            if (it) {
+        try {
+            val user = userReader.read(email)
+            if (user.provider.provider != provider) {
                 throw IllegalArgumentException("User already exists with email: $email")
                 // TODO: 예외 처리하기
-            } else null
-        } ?: createNewUser(attributes)
+            }
+        } catch (e: UserNotFoundException) {
+            createNewUser(attributes)
+        }
     }
 
-    private fun createNewUser(attributes: OAuth2Attributes): User {
+    private fun createNewUser(attributes: OAuth2Attributes) {
         val newUser = User(
             id = UserId(0),
             userProfile = UserProfile(
                 name = attributes.name,
-                email = attributes.email
+                email = attributes.email,
+                profileImageUrl = attributes.profileImageUrl
             ),
-            provider = ProviderType(attributes.provider, attributes.email),
-            role = Role.USER
+            provider = ProviderType(
+                attributes.provider,
+                attributes.snsId
+            ),
+            _role = Role.GUEST
         )
-        return userAppender.append(newUser)
+        userAppender.append(newUser)
     }
 }

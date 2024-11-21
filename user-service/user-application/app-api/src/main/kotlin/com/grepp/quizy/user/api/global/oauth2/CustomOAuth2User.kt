@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.grepp.quizy.domain.user.AuthProvider
+import com.grepp.quizy.user.domain.user.AuthProvider
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.core.user.OAuth2User
 
@@ -18,4 +18,5 @@ class CustomOAuth2User(
     fun getEmail(): String = oauth2Attributes.email
     fun getProvider(): AuthProvider = oauth2Attributes.provider
     fun getSnsId(): String = oauth2Attributes.snsId
+    fun getProfileImageUrl(): String = oauth2Attributes.profileImageUrl
 }
