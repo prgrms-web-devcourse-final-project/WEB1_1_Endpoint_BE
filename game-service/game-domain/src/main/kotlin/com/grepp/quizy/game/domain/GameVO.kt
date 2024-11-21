@@ -39,8 +39,23 @@ data class InviteCode(
 
 data class Player(
     val id: Long,
-    val role: PlayerRole = PlayerRole.GUEST
+    private var _role: PlayerRole = PlayerRole.GUEST
 ) {
+    val role: PlayerRole
+        get() = _role
+
+    fun isGuest(): Boolean {
+        return _role == PlayerRole.GUEST
+    }
+
+    fun isHost(): Boolean {
+        return role == PlayerRole.HOST
+    }
+
+    fun grantHost() {
+        _role = PlayerRole.HOST
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -52,10 +67,6 @@ data class Player(
 
     override fun hashCode(): Int {
         return id.hashCode()
-    }
-
-    fun isGuest(): Boolean {
-        return role == PlayerRole.GUEST
     }
 
 }
@@ -80,9 +91,13 @@ data class Players(
     }
 
     fun remove(player: Player): Players {
-
         if (!players.contains(player)) {
             throw GameException.GameNotParticipatedException
+        }
+        if(player.isHost()) {
+            val newPlayers = players - player
+            newPlayers.firstOrNull()?.grantHost()
+            return Players(newPlayers)
         }
         return Players(players - player)
     }
@@ -90,6 +105,10 @@ data class Players(
     fun findPlayerById(userId: Long): Player {
         return players.find { it.id == userId }
             ?: throw GameException.GameNotParticipatedException
+    }
+
+    fun isEmpty(): Boolean {
+        return players.isEmpty()
     }
 
 

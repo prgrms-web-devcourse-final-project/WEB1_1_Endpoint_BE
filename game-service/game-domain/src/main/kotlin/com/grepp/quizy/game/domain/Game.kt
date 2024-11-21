@@ -28,7 +28,7 @@ class Game(
             val game = Game(
                 id = id,
                 _setting = GameSetting(subject = subject, level = level, quizCount = quizCount),
-                _players = Players(listOf(Player(id = userId, role = PlayerRole.HOST)))
+                _players = Players(listOf(Player(id = userId, _role = PlayerRole.HOST)))
             )
             return game
         }
@@ -41,7 +41,11 @@ class Game(
 
     fun quit(userId: Long) {
         validateGameNotStarted()
-        _players.remove(Player(id = userId))
+        val player = _players.findPlayerById(userId)
+        this._players = _players.remove(player)
+        if(_players.isEmpty()) {
+            _status = DELETED
+        }
     }
 
     fun kick(userId: Long, targetId: Long) {

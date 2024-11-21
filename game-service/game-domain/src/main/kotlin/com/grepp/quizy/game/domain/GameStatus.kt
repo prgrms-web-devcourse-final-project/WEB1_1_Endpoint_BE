@@ -6,6 +6,7 @@ enum class GameStatus(
     WAITING("대기 중"),
     PLAYING("진행 중"),
     FINISHED("종료"),
+    DELETED("삭제됨")
 
     ;
 

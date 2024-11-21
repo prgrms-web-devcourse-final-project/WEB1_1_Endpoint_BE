@@ -61,6 +61,51 @@ class GameTest() : DescribeSpec({
                 newPlayer.role shouldBe GUEST
             }
         }
+
+        context("게임에서 게스트가 나가면") {
+            val game = Game(
+                1L,
+                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                GameStatus.WAITING,
+                Players(listOf(Player(1, HOST), Player(2, GUEST)))
+            )
+
+            game.quit(2)
+            it("게임에서 나간 유저를 게임에서 제거한다.") {
+                game.players shouldBe Players(listOf(Player(1, HOST)))
+            }
+        }
+        context("게임에서 방장이 나가면") {
+            val game = Game(
+                1L,
+                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                GameStatus.WAITING,
+                Players(listOf(Player(1, HOST), Player(2, GUEST)))
+            )
+
+            game.quit(1)
+            it("방장의 권한을 위임한다.") {
+                val remainPlayer = game.players.players.first()
+                remainPlayer.id shouldBe 2
+                remainPlayer.role shouldBe HOST
+            }
+        }
+
+        context("게임에서 사용자가 모두 나가면") {
+            val game = Game(
+                1L,
+                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                GameStatus.WAITING,
+                Players(listOf(Player(1, HOST)))
+            )
+
+            game.quit(1)
+
+            it("게임을 삭제한다.") {
+                game.status shouldBe GameStatus.DELETED
+            }
+        }
+
     }
 
 }) {
