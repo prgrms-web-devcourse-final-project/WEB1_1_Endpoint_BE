@@ -1,7 +1,6 @@
 package com.grepp.quizy.game.domain
 
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class GameService(
@@ -12,7 +11,6 @@ class GameService(
     private val messagePublisher: GameMessagePublisher
 ) {
 
-    @Transactional
     fun create(
         userId: Long,
         subject: GameSubject,
@@ -27,40 +25,83 @@ class GameService(
         )
     }
 
-    @Transactional
     fun join(userId: Long, code: String): Game {
         val game = gameReader.readByInviteCode(code)
         val currentGame = gamePlayerManager.join(game, userId)
-        // TODO: publish message
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
         return currentGame
     }
 
-    @Transactional
     fun quit(userId: Long, code: String) {
         val game = gameReader.readByInviteCode(code)
         val currentGame = gamePlayerManager.quit(game, userId)
-        // TODO: publish message
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
     }
 
-    @Transactional
     fun updateSubject(userId: Long, gameId: Long, subject: GameSubject) {
         val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateSubject(game, subject, userId)
-        // TODO: publish message
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
     }
 
-    @Transactional
     fun updateLevel(userId: Long, gameId: Long, level: GameLevel) {
         val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateLevel(game, level, userId)
-        // TODO: publish message
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
     }
 
-    @Transactional
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
         val game = gameReader.read(userId)
         val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
-        // TODO: publish message
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
+    }
+
+    fun kickUser(userId: Long, gameId: Long, targetUserId: Long) {
+        val game = gameReader.read(gameId)
+        val currentGame = gamePlayerManager.kick(game, userId, targetUserId)
+        messagePublisher.publish(
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(
+                    currentGame
+                )
+            )
+        )
     }
 
 }

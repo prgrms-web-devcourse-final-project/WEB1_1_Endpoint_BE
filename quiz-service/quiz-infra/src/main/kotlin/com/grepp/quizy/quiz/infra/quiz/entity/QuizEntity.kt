@@ -40,6 +40,8 @@ abstract class QuizEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long = 0L,
+        val likeCount: Long = 0,
+        var commentCount: Long = 0,
 ) : BaseTimeEntity() {
 
     abstract fun toDomain(): Quiz

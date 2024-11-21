@@ -4,6 +4,14 @@ spring:
       local: common, domain, infra
       dev: common, domain, infra
 
+server:
+  tomcat:
+    max-connections: 10000
+    accept-count: 1000
+    connection-timeout: 20000
+    threads:
+      max: 200
+
 management:
   endpoints:
     web:

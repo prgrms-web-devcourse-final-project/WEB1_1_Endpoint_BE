@@ -36,11 +36,13 @@ class ABTestEntity(
                         ),
                 id = QuizId(this.id),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
+                commentCount = this.commentCount,
         )
     }
 
     override fun update(quiz: Quiz): QuizEntity {
         updateContent(quiz.content)
+        commentCount = quiz.commentCount
         return this
     }
 
@@ -67,6 +69,7 @@ class ABTestEntity(
                     .apply {
                         this.createdAt = quiz.dateTime.createdAt
                         this.updatedAt = quiz.dateTime.updatedAt
+                        this.commentCount = quiz.commentCount
                     }
         }
     }

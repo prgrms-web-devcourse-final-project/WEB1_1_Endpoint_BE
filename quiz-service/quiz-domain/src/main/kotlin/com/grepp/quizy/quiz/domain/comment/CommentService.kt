@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.domain.comment
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.useranswer.UserId
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CommentService(
@@ -16,6 +17,7 @@ class CommentService(
         CommentUpdateUseCase,
         CommentDeleteUseCase {
 
+    @Transactional
     override fun createComment(
             quizId: QuizId,
             writerId: UserId,

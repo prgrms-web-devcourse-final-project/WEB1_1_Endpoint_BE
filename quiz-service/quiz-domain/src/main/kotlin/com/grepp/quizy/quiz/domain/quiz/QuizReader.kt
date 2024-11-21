@@ -10,6 +10,11 @@ class QuizReader(private val quizRepository: QuizRepository) {
                 ?: throw QuizException.NotFound
     }
 
+    fun readWithLock(id: QuizId): Quiz {
+        return quizRepository.findByIdWithLock(id)
+                ?: throw QuizException.NotFound
+    }
+
     fun readTags(ids: List<QuizTagId>): List<QuizTag> {
         return quizRepository.findTagsByInId(ids)
     }
