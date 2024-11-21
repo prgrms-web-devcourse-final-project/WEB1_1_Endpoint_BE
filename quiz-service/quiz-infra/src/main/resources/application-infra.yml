@@ -15,10 +15,10 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
+#logging:
+#  level:
+#    org.hibernate.SQL: debug
+#    org.hibernate.type.descriptor.sql: trace
 
 shedlock:
   name: like_sync_lock

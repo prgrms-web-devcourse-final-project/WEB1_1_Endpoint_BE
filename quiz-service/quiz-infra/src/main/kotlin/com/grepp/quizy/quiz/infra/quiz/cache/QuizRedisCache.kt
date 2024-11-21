@@ -3,7 +3,6 @@ package com.grepp.quizy.quiz.infra.quiz.cache
 import com.grepp.quizy.quiz.domain.like.Like
 import com.grepp.quizy.quiz.domain.quiz.QuizCache
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.infra.quiz.repository.QuizJpaRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
 import java.time.Duration
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -12,13 +11,11 @@ import org.springframework.stereotype.Component
 private val log = KotlinLogging.logger {}
 
 @Component
-class QuizRedisCache(
-        private val redisTemplate: StringRedisTemplate,
-        private val quizJpaRepository: QuizJpaRepository,
-) : QuizCache {
+class QuizRedisCache(private val redisTemplate: StringRedisTemplate) :
+        QuizCache {
 
     companion object {
-        public const val QUIZ_LIKE_KEY = "quiz:like:"
+        const val QUIZ_LIKE_KEY = "quiz:like:"
         private const val EXPIRE_DAYS = 7L
     }
 
@@ -39,24 +36,24 @@ class QuizRedisCache(
     }
 
     override fun cacheLike(like: Like) {
-        val userLikeKey =
-                "$QUIZ_LIKE_KEY${like.quizId.value}:${like.likerId.value}"
+        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
         redisTemplate
-                .opsForValue()
-                .set(userLikeKey, "1", Duration.ofDays(EXPIRE_DAYS))
+                .opsForSet()
+                .add(setKey, like.likerId.value.toString())
+        redisTemplate.expire(setKey, Duration.ofDays(EXPIRE_DAYS))
     }
 
     override fun deleteLike(like: Like) {
-        val userLikeKey =
-                "$QUIZ_LIKE_KEY${like.quizId.value}:${like.likerId.value}"
-        redisTemplate.delete(userLikeKey)
+        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
+        redisTemplate
+                .opsForSet()
+                .remove(setKey, like.likerId.value.toString())
     }
 
     override fun isLikeCached(like: Like): Boolean? {
-        val userLikeKey =
-                "$QUIZ_LIKE_KEY${like.quizId.value}:${like.likerId.value}"
-        return redisTemplate.opsForValue().get(userLikeKey)?.let {
-            true
-        }
+        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
+        return redisTemplate
+                .opsForSet()
+                .isMember(setKey, like.likerId.value.toString())
     }
 }
