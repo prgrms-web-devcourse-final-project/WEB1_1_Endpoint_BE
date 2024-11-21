@@ -38,12 +38,13 @@ class OXQuizEntity(
                 answer = answer.toDomain(),
                 id = QuizId(this.id),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
+                commentCount = this.commentCount,
         )
     }
 
     override fun update(quiz: Quiz): QuizEntity {
         val oxQuiz = quiz as OXQuiz
-
+        commentCount = quiz.commentCount
         updateContent(quiz.content)
         answer = QuizAnswerVO.from(oxQuiz.answer)
         return this
@@ -73,6 +74,7 @@ class OXQuizEntity(
                     .apply {
                         this.createdAt = quiz.dateTime.createdAt
                         this.updatedAt = quiz.dateTime.updatedAt
+                        this.commentCount = quiz.commentCount
                     }
         }
     }

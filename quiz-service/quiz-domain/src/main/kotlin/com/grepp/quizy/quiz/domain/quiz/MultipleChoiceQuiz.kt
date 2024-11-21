@@ -11,7 +11,10 @@ private constructor(
         dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.MULTIPLE_CHOICE,
         id: QuizId = QuizId(0),
-) : Quiz(userId, type, content, id, dateTime), Answerable {
+        commentCount: Long = 0,
+) :
+        Quiz(userId, type, content, id, dateTime, commentCount),
+        Answerable {
 
     val answer: QuizAnswer
         get() = _answer
@@ -36,6 +39,7 @@ private constructor(
                 answer: QuizAnswer,
                 id: QuizId,
                 dateTime: DateTime,
+                commentCount: Long,
         ): MultipleChoiceQuiz {
             return MultipleChoiceQuiz(
                     userId = userId,
@@ -43,6 +47,7 @@ private constructor(
                     _answer = answer,
                     id = id,
                     dateTime = dateTime,
+                    commentCount = commentCount,
             )
         }
     }

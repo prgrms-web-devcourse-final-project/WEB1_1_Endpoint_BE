@@ -10,7 +10,13 @@ class WebConfig : WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedOriginPatterns("*")
-                .allowedMethods("DELETE", "GET", "POST", "PATCH", "PUT")
+                .allowedMethods(
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PATCH",
+                        "PUT",
+                )
                 .allowedHeaders(
                         "Access-Control-Allow-Headers",
                         "Access-Control-Allow-Origin",
@@ -20,7 +26,7 @@ class WebConfig : WebMvcConfigurer {
                         "Cache-Control",
                         "Content-Type",
                         "Authorization",
-                        "X-Auth-Id"
+                        "X-Auth-Id",
                 )
                 .exposedHeaders("*") // CORS 응답에 대해 클라이언트가 접근할수있도록 허용
                 .allowCredentials(true)

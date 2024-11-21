@@ -7,5 +7,4 @@ interface GameRepository {
     fun findById(id: Long): Game?
 
     fun findByInviteCode(code: String): Game?
-
 }

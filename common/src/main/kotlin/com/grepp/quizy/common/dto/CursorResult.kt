@@ -7,10 +7,7 @@ data class CursorResult<T>(
         val nextCursor: Long?,
 ) {
     fun <R> map(mapper: Function<T, R>?) =
-            of(
-                    content.stream().map(mapper).toList(),
-                    nextCursor,
-            )
+            of(content.stream().map(mapper).toList(), nextCursor)
 
     companion object {
         fun <T> of(content: List<T>, nextCursor: Long?) =

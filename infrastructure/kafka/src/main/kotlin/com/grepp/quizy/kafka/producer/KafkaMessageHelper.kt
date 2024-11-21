@@ -28,7 +28,9 @@ object KafkaMessageHelper {
                 return super.complete(value)
             }
 
-            override fun completeExceptionally(ex: Throwable): Boolean {
+            override fun completeExceptionally(
+                    ex: Throwable
+            ): Boolean {
                 log.error {
                     """Error while sending Kafka message: $payload"""
                             .trimIndent()

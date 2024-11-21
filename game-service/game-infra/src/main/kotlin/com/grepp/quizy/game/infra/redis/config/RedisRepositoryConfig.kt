@@ -13,11 +13,9 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 @EnableRedisRepositories
 class RedisRepositoryConfig {
 
-    @Value("\${spring.redis.host}")
-    private lateinit var host: String
+    @Value("\${spring.redis.host}") private lateinit var host: String
 
-    @Value("\${spring.redis.port}")
-    private var port: Int = 0
+    @Value("\${spring.redis.port}") private var port: Int = 0
 
     @Bean
     fun redisConnectionFactory(): RedisConnectionFactory {
@@ -37,5 +35,4 @@ class RedisRepositoryConfig {
 
         return redisTemplate
     }
-
 }

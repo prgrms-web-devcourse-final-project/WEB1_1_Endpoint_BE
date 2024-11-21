@@ -12,21 +12,30 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException::class)
-    protected fun handleGameException(e: GameException, request: HttpServletRequest): ApiResponse<Unit> {
+    protected fun handleGameException(
+            e: GameException,
+            request: HttpServletRequest,
+    ): ApiResponse<Unit> {
         return ApiResponse.error(
-            e.errorCode.errorReason,
-            request.requestURI,
-            e.message
+                e.errorCode.errorReason,
+                request.requestURI,
+                e.message,
         )
     }
 
     @ExceptionHandler(Exception::class)
-    protected fun handleException(e: Exception, request: HttpServletRequest): ApiResponse<Unit> {
+    protected fun handleException(
+            e: Exception,
+            request: HttpServletRequest,
+    ): ApiResponse<Unit> {
         return ApiResponse.error(
-            ErrorReason.of(500,"INTERNAL_SERVER_ERROR", "Internal Server Error"),
-            request.requestURI,
-            e.message ?: "Internal Server Error"
+                ErrorReason.of(
+                        500,
+                        "INTERNAL_SERVER_ERROR",
+                        "Internal Server Error",
+                ),
+                request.requestURI,
+                e.message ?: "Internal Server Error",
         )
     }
-
 }

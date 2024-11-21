@@ -12,31 +12,21 @@ class QuizRepositoryAdapter(
         private val quizTagJpaRepository: QuizTagJpaRepository,
 ) : QuizRepository {
     override fun save(quiz: Quiz): Quiz {
-        val quizEntity =
-                when (quiz) {
-                    is ABTest -> ABTestEntity.from(quiz)
-                    is OXQuiz -> OXQuizEntity.from(quiz)
-                    is MultipleChoiceQuiz ->
-                            MultipleChoiceQuizEntity.from(quiz)
-                    else ->
-                            throw IllegalArgumentException(
-                                    "알 수 없는 퀴즈 타입입니다"
-                            )
-                }
-        return quizJpaRepository.save(quizEntity).toDomain()
-    }
-
-    override fun update(quiz: Quiz): Quiz {
-        val quizEntity =
-                quizJpaRepository
-                        .findById(quiz.id.value)
-                        .orElseThrow()
-        return quizEntity.update(quiz).toDomain()
+        return quizJpaRepository
+                .save(QuizEntity.from(quiz))
+                .toDomain()
     }
 
     override fun findById(id: QuizId): Quiz? {
         return quizJpaRepository
                 .findById(id.value)
+                .map { it.toDomain() }
+                .orElse(null)
+    }
+
+    override fun findByIdWithLock(id: QuizId): Quiz? {
+        return quizJpaRepository
+                .findByIdWithLock(id.value)
                 .map { it.toDomain() }
                 .orElse(null)
     }

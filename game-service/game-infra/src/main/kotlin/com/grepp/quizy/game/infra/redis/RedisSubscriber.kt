@@ -10,16 +10,20 @@ import org.springframework.stereotype.Component
 
 @Component
 class RedisSubscriber(
-    private val objectMapper: ObjectMapper,
-    private val messagingTemplate: SimpMessagingTemplate
+        private val objectMapper: ObjectMapper,
+        private val messagingTemplate: SimpMessagingTemplate,
 ) : MessageListener {
 
     override fun onMessage(message: Message, pattern: ByteArray?) {
         val publishMessage = String(message.body)
-        val gameMessage = objectMapper.readValue(publishMessage, GameMessage::class.java)
+        val gameMessage =
+                objectMapper.readValue(
+                        publishMessage,
+                        GameMessage::class.java,
+                )
         messagingTemplate.convertAndSend(
-            "$MULTIPLE_PREFIX/game/${gameMessage.gameId}", publishMessage
+                "$MULTIPLE_PREFIX/game/${gameMessage.gameId}",
+                publishMessage,
         )
     }
-
 }

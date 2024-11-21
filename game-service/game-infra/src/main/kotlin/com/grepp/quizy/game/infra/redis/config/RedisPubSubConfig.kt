@@ -17,21 +17,25 @@ class RedisPubSubConfig {
     }
 
     @Bean
-    fun gameMessageListenerAdapter(redisSubscriber: RedisSubscriber): MessageListenerAdapter {
+    fun gameMessageListenerAdapter(
+            redisSubscriber: RedisSubscriber
+    ): MessageListenerAdapter {
         return MessageListenerAdapter(redisSubscriber, "onMessage")
     }
 
     @Bean
     fun redisMessageListenerContainer(
-        redisConnectionFactory: RedisConnectionFactory,
-        gameMessageListenerAdapter: MessageListenerAdapter,
-        gameTopic: ChannelTopic,
+            redisConnectionFactory: RedisConnectionFactory,
+            gameMessageListenerAdapter: MessageListenerAdapter,
+            gameTopic: ChannelTopic,
     ): RedisMessageListenerContainer {
         val container = RedisMessageListenerContainer()
         container.connectionFactory = redisConnectionFactory
-        container.addMessageListener(gameMessageListenerAdapter, gameTopic)
+        container.addMessageListener(
+                gameMessageListenerAdapter,
+                gameTopic,
+        )
 
         return container
     }
-
 }
