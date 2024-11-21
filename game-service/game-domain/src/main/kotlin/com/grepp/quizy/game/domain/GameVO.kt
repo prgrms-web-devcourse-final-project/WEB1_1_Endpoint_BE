@@ -115,7 +115,7 @@ data class Players(
 ) {
 
     fun add(player: Player): Players {
-        if (players.size > 5) {
+        if (players.size >= 5) {
             throw GameException.GameAlreadyFullException
         }
         if (players.contains(player)) {
@@ -128,7 +128,7 @@ data class Players(
         if (!players.contains(player)) {
             throw GameException.GameNotParticipatedException
         }
-        if(player.isHost()) {
+        if (player.isHost()) {
             val newPlayers = players - player
             newPlayers.firstOrNull()?.grantHost()
             return Players(newPlayers)
