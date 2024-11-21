@@ -44,7 +44,6 @@ class Game(
     }
 
     fun quit(userId: Long) {
-        validateGameNotStarted()
         val player = _players.findPlayerById(userId)
         this._players = _players.remove(player)
         if(_players.isEmpty()) {

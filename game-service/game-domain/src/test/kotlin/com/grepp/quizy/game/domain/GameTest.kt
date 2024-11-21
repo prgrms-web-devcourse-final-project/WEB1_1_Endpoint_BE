@@ -187,6 +187,32 @@ class GameTest() : DescribeSpec({
         }
 
         context("게임이 대기 상태가 아니면") {
+            it("게임에 참가하면 예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.PLAYING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                shouldThrow<GameException.GameAlreadyStartedException> {
+                    game.join(2)
+                }
+            }
+
+            it("강퇴하면 예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.PLAYING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                shouldThrow<GameException.GameAlreadyStartedException> {
+                    game.kick(1, 2)
+                }
+            }
+
             it("주제를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
