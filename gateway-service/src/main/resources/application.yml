@@ -81,33 +81,24 @@ spring:
         - id: quiz
           uri: http://dev-quiz-service:8080
           predicates:
-            - Path=/quiz/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/quiz/**
         - id: game
           uri: http://dev-game-service:8080
           predicates:
-            - Path=/game/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/game/**
         - id: user
           uri: http://dev-user-service:8080
           predicates:
-            - Path=/user/**
-          filters:
-            - StripPrefix=1
+              - Path=/api/user/**
         - id: matching
           uri: http://dev-matching-service:8080
           predicates:
-            - Path=/matching/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/matching/**
         - id: search
           uri: http://dev-search-service:8080
           predicates:
-            - Path=/search/**
-          filters:
-            - StripPrefix=1
+            - Path=/api/search/**
+
     kubernetes:
       discovery:
         enabled: true
