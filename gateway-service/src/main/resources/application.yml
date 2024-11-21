@@ -40,15 +40,36 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/game/**
+        - id: matching
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/matching/**
         - id: quiz
           uri: http://localhost:8083
           predicates:
             - Path=/api/quiz/**
+        - id: search
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/search/**
+        - id: user
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/user/**
 springdoc:
   swagger-ui:
     urls[0]:
       name: Quiz API
       url: http://localhost:8080/api/quiz/api-docs
+
+jwt:
+  secret: ${JWT_SECRET}
+
+logging:
+  level:
+    org:
+      springframework:
+        DEBUG
 ---
 spring:
   config:
@@ -66,27 +87,27 @@ spring:
         - id: game
           uri: http://dev-game-service:8080
           predicates:
-              - Path=/game/**
+            - Path=/game/**
           filters:
-              - StripPrefix=1
+            - StripPrefix=1
         - id: user
           uri: http://dev-user-service:8080
           predicates:
-              - Path=/user/**
+            - Path=/user/**
           filters:
-              - StripPrefix=1
+            - StripPrefix=1
         - id: matching
           uri: http://dev-matching-service:8080
           predicates:
-              - Path=/matching/**
+            - Path=/matching/**
           filters:
-              - StripPrefix=1
+            - StripPrefix=1
         - id: search
           uri: http://dev-search-service:8080
           predicates:
-              - Path=/search/**
+            - Path=/search/**
           filters:
-              - StripPrefix=1
+            - StripPrefix=1
     kubernetes:
       discovery:
         enabled: true
@@ -113,3 +134,6 @@ springdoc:
     urls[4]:
       name: User API
       url: http://${GATEWAY_HOST}/user/api-docs
+
+jwt:
+  secret: ${JWT_SECRET}

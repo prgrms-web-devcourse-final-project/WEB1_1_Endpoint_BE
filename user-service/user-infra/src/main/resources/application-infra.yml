@@ -80,7 +80,6 @@ spring:
       host: localhost
       port: 6379
 
-
 ---
 spring:
   config:
@@ -110,5 +109,3 @@ spring:
     redis:
       host: localhost
       port: 6379
-
-

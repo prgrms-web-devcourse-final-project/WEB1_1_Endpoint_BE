@@ -14,7 +14,10 @@ data class ApiResponse<T>(
 ) {
     companion object {
         fun <T> success(result: T): ApiResponse<T> =
-                ApiResponse(responseCode = "SUCCESS", result = result)
+                ApiResponse(
+                        responseCode = "SUCCESS",
+                        result = result,
+                )
 
         fun success(): ApiResponse<Unit> = ApiResponse(responseCode = "SUCCESS")
 
@@ -28,7 +31,8 @@ data class ApiResponse<T>(
         ): ApiResponse<Unit> =
                 ApiResponse(
                         path = path,
-                        responseCode = errorReason.errorCode,
+                        responseCode =
+                                errorReason.errorCode,
                         message = message,
                 )
 

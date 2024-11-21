@@ -1,0 +1,38 @@
+
+### DB 연결 설정 API
+POST http://localhost:8090/connectors
+Content-Type: application/json
+
+{
+  "name": "debezium-connector-mysql",
+  "config": {
+    "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+    "database.hostname": "host.docker.internal",
+    "database.port": "3306",
+    "database.user": "mysqluser",
+    "database.password": "mysqlpw",
+    "database.include.list": "quiz",
+    "table.include.list": "quiz.quizzes, quiz.user_answers, quiz.quiz_tags_mapping, quiz.quiz_options",
+    "database.server.id": "184054",
+    "database.server.name": "mysqlcdc",
+    "topic.prefix": "quizy",
+    "database.history.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092",
+    "database.history.kafka.topic": "dbhistory.mysqlcdc",
+    "include.schema.changes": "true",
+    "database.ssl.mode": "disabled",
+    "database.allowPublicKeyRetrieval": "true",
+    "transforms": "addTopicPrefix",
+    "transforms.addTopicPrefix.type": "org.apache.kafka.connect.transforms.RegexRouter",
+    "transforms.addTopicPrefix.regex": "(.*)",
+    "transforms.addTopicPrefix.replacement": "$1",
+    "schema.history.internal.kafka.topic": "schemahistory.fullfillment",
+    "schema.history.internal.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092",
+    "tombstones.on.delete": "false"
+  }
+}
+
+###
+# 설정 삭제 API
+DELETE http://localhost:8090/connectors/debezium-connector-mysql
+
+

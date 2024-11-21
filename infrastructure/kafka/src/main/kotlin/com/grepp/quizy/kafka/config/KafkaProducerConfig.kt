@@ -11,7 +11,7 @@ import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
 
 @Configuration
-class KafkaProducerConfig<K : Serializable?, V : Serializable?>(
+class KafkaProducerConfig<K : Serializable, V : Serializable>(
         private val kafkaConfigData: KafkaConfigData,
         private val kafkaProducerConfigData: KafkaProducerConfigData,
 ) {

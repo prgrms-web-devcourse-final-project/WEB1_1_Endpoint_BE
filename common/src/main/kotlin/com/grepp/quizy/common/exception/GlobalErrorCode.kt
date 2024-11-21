@@ -9,8 +9,16 @@ enum class GlobalErrorCode(
         private val errorCode: String,
         private val message: String,
 ) : BaseErrorCode {
-    PERMISSION_DENIED(403, "PERMISSION_DENIED_401", "해당 API 권한이 없습니다"),
-    FILE_NOT_FOUND(404, "FILE_NOT_FOUND_404", "해당 파일이 존재하지 않습니다"),
+    PERMISSION_DENIED(
+            403,
+            "PERMISSION_DENIED_401",
+            "해당 API 권한이 없습니다",
+    ),
+    FILE_NOT_FOUND(
+            404,
+            "FILE_NOT_FOUND_404",
+            "해당 파일이 존재하지 않습니다",
+    ),
     OTHER_SERVER_BAD_REQUEST(
             BAD_REQUEST,
             "AUTH_OTHER_400",
