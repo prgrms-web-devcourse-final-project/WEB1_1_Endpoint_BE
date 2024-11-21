@@ -19,6 +19,30 @@ data class QuizCount(val like: Int = 0, val comment: Int = 0) {
     }
 }
 
+<<<<<<< Updated upstream
 enum class QuizType(val typeName: String) {
     OX("OX 퀴즈"), AB("A/B 밸런스"), MULTIPLE_CHOICE("객관식");
 }
+=======
+data class QuizChoice(
+        val choices: List<String>,
+        val answer: String,
+        val explanation: String,
+)
+
+data class QuizLikeCount(val value: Int) {
+    init {
+        require(value >= 0) {
+            "Like count must be greater than or equal to zero: $value"
+        }
+    }
+}
+
+data class QuizCommentCount(val value: Int) {
+    init {
+        require(value >= 0) {
+            "Comment count must be greater than or equal to zero: $value"
+        }
+    }
+}
+>>>>>>> Stashed changes

@@ -10,7 +10,13 @@ class WebConfig : WebMvcConfigurer {
         registry
                 .addMapping("/**")
                 .allowedOriginPatterns("*")
-                .allowedMethods("DELETE", "GET", "POST", "PATCH", "PUT")
+                .allowedMethods(
+                        "DELETE",
+                        "GET",
+                        "POST",
+                        "PATCH",
+                        "PUT",
+                )
                 .allowedHeaders(
                         "Access-Control-Allow-Headers",
                         "Access-Control-Allow-Origin",

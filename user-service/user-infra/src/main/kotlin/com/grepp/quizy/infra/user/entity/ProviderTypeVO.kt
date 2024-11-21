@@ -8,13 +8,11 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 
 @Embeddable
-data class ProviderTypeVO (
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    val provider: AuthProvider,
-
-    @Column(nullable = false)
-    val providerId: String
+data class ProviderTypeVO(
+        @Enumerated(EnumType.STRING)
+        @Column(nullable = false)
+        val provider: AuthProvider,
+        @Column(nullable = false) val providerId: String,
 ) {
     fun toDomain(): ProviderType {
         return ProviderType(provider, providerId)
@@ -22,7 +20,10 @@ data class ProviderTypeVO (
 
     companion object {
         fun from(providerType: ProviderType): ProviderTypeVO {
-            return ProviderTypeVO(providerType.provider, providerType.providerId)
+            return ProviderTypeVO(
+                    providerType.provider,
+                    providerType.providerId,
+            )
         }
     }
 }

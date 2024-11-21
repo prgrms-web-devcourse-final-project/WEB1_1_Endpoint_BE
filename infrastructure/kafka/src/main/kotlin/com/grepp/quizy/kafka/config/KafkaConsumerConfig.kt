@@ -36,7 +36,8 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
         props[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] =
                 kafkaConsumerConfigData.maxPollIntervalMs
         props[ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG] =
-                (kafkaConsumerConfigData.maxPartitionFetchBytesDefault *
+                (kafkaConsumerConfigData
+                        .maxPartitionFetchBytesDefault *
                         kafkaConsumerConfigData
                                 .maxPartitionFetchBytesBoostFactor)
         props[ConsumerConfig.MAX_POLL_RECORDS_CONFIG] =
@@ -58,8 +59,11 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
             > {
         val factory = ConcurrentKafkaListenerContainerFactory<K, V>()
         factory.consumerFactory = consumerFactory()
-        factory.isBatchListener = kafkaConsumerConfigData.batchListener
-        factory.setConcurrency(kafkaConsumerConfigData.concurrencyLevel)
+        factory.isBatchListener =
+                kafkaConsumerConfigData.batchListener
+        factory.setConcurrency(
+                kafkaConsumerConfigData.concurrencyLevel
+        )
         factory.setAutoStartup(kafkaConsumerConfigData.autoStartup)
         factory.containerProperties.pollTimeout =
                 kafkaConsumerConfigData.pollTimeoutMs

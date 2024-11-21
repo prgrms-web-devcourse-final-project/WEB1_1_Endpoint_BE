@@ -14,29 +14,51 @@ import reactor.core.publisher.Mono
 @Component
 @Order(-1) // 높은 우선순위
 class JwtAuthGlobalFilter(
-    private val routeValidator: RouteValidator,
-    private val jwtProvider: JwtProvider
+        private val routeValidator: RouteValidator,
+        private val jwtProvider: JwtProvider,
 ) : GlobalFilter {
 
-    private val logger = LoggerFactory.getLogger(JwtAuthGlobalFilter::class.java)
+    private val logger =
+            LoggerFactory.getLogger(JwtAuthGlobalFilter::class.java)
 
-    override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
+    override fun filter(
+            exchange: ServerWebExchange,
+            chain: GatewayFilterChain,
+    ): Mono<Void> {
         val request = exchange.request
 
         if (routeValidator.isSecured(request)) {
-            if (!request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-                return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED)
+            if (
+                    !request.headers.containsKey(
+                            HttpHeaders.AUTHORIZATION
+                    )
+            ) {
+                return onError(
+                        exchange,
+                        "No authorization header",
+                        HttpStatus.UNAUTHORIZED,
+                )
             }
 
-            val authHeader = request.headers[HttpHeaders.AUTHORIZATION]?.get(0) ?: ""
+            val authHeader =
+                    request.headers[HttpHeaders.AUTHORIZATION]?.get(0)
+                            ?: ""
             if (!authHeader.startsWith("Bearer ")) {
-                return onError(exchange, "Invalid authorization header", HttpStatus.UNAUTHORIZED)
+                return onError(
+                        exchange,
+                        "Invalid authorization header",
+                        HttpStatus.UNAUTHORIZED,
+                )
             }
 
             val token = authHeader.substring(7)
 
             if (!jwtProvider.validateToken(token)) {
-                return onError(exchange, "Invalid JWT token", HttpStatus.UNAUTHORIZED)
+                return onError(
+                        exchange,
+                        "Invalid JWT token",
+                        HttpStatus.UNAUTHORIZED,
+                )
             }
 
             logger.info("token: $token")
@@ -52,24 +74,41 @@ class JwtAuthGlobalFilter(
                 headers["X-Auth-Id"] = jwtProvider.getUserId(token)
 
                 // 새로운 요청 객체 생성
-                val mutatedRequest = object : ServerHttpRequestDecorator(request) {
-                    override fun getHeaders(): HttpHeaders {
-                        return headers
-                    }
-                }
+                val mutatedRequest =
+                        object : ServerHttpRequestDecorator(request) {
+                            override fun getHeaders(): HttpHeaders {
+                                return headers
+                            }
+                        }
 
                 // 수정된 요청으로 교체한 exchange로 체인 실행
-                return chain.filter(exchange.mutate().request(mutatedRequest).build())
+                return chain.filter(
+                        exchange
+                                .mutate()
+                                .request(mutatedRequest)
+                                .build()
+                )
             } catch (ex: Exception) {
-                logger.error("Error occurred while processing JWT token", ex)
-                return onError(exchange, "Invalid JWT token", HttpStatus.UNAUTHORIZED)
+                logger.error(
+                        "Error occurred while processing JWT token",
+                        ex,
+                )
+                return onError(
+                        exchange,
+                        "Invalid JWT token",
+                        HttpStatus.UNAUTHORIZED,
+                )
             }
         }
 
         return chain.filter(exchange)
     }
 
-    private fun onError(exchange: ServerWebExchange, message: String, status: HttpStatus): Mono<Void> {
+    private fun onError(
+            exchange: ServerWebExchange,
+            message: String,
+            status: HttpStatus,
+    ): Mono<Void> {
         val response = exchange.response
         response.statusCode = status
         logger.error(message)
@@ -79,14 +118,18 @@ class JwtAuthGlobalFilter(
 
 @Component
 class RouteValidator {
-    private val openApiEndpoints = listOf(
-        "/api/auth/",
-        "/api/quiz/feed",
-        "/api/search",
-        "/ping"
-    )
+    private val openApiEndpoints =
+            listOf(
+                    "/api/auth/",
+                    "/api/quiz/feed",
+                    "/api/search",
+                    "/ping",
+            )
 
-    fun isSecured(request: org.springframework.http.server.reactive.ServerHttpRequest): Boolean {
+    fun isSecured(
+            request:
+                    org.springframework.http.server.reactive.ServerHttpRequest
+    ): Boolean {
         return openApiEndpoints.none { path ->
             request.uri.path.contains(path)
         }

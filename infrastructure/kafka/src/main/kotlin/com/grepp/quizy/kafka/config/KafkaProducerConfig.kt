@@ -32,7 +32,8 @@ class KafkaProducerConfig<K : Serializable, V : Serializable>(
                 kafkaProducerConfigData.lingerMs
         props[ProducerConfig.COMPRESSION_TYPE_CONFIG] =
                 kafkaProducerConfigData.compressionType
-        props[ProducerConfig.ACKS_CONFIG] = kafkaProducerConfigData.acks
+        props[ProducerConfig.ACKS_CONFIG] =
+                kafkaProducerConfigData.acks
         props[ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG] =
                 kafkaProducerConfigData.requestTimeoutMs
         props[ProducerConfig.RETRIES_CONFIG] =

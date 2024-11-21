@@ -3,11 +3,11 @@ package com.grepp.quizy.game.infra.websocket
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.*
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 import org.springframework.messaging.simp.stomp.StompSession
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter
 import org.springframework.web.socket.messaging.WebSocketStompClient
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.TimeUnit
 
 class WebSocketBrokerConfigTest : FunSpec() {
 
@@ -17,7 +17,10 @@ class WebSocketBrokerConfigTest : FunSpec() {
     init {
         beforeTest {
             every {
-                stompClient.connectAsync(any(), any<StompSessionHandlerAdapter>())
+                stompClient.connectAsync(
+                        any(),
+                        any<StompSessionHandlerAdapter>(),
+                )
             } returns CompletableFuture.completedFuture(stompSession)
 
             every { stompSession.isConnected } returns true
@@ -35,14 +38,22 @@ class WebSocketBrokerConfigTest : FunSpec() {
             val url = "ws://localhost:8080/ws"
 
             // when
-            val session = stompClient
-                .connectAsync(url, object : StompSessionHandlerAdapter() {})
-                .get(60, TimeUnit.SECONDS)
+            val session =
+                    stompClient
+                            .connectAsync(
+                                    url,
+                                    object :
+                                            StompSessionHandlerAdapter() {},
+                            )
+                            .get(60, TimeUnit.SECONDS)
 
             // then
             session.isConnected shouldBe true
             verify {
-                stompClient.connectAsync(url, any<StompSessionHandlerAdapter>())
+                stompClient.connectAsync(
+                        url,
+                        any<StompSessionHandlerAdapter>(),
+                )
                 session.isConnected
             }
         }

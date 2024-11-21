@@ -11,14 +11,15 @@ import redis.embedded.RedisServer
 @Configuration
 class RedisEmbeddedConfig {
 
-    @Value("\${spring.redis.port}")
-    private val redisPort: Int = 6379
+    @Value("\${spring.redis.port}") private val redisPort: Int = 6379
 
     private var redisServer: RedisServer? = null
 
     @PostConstruct
     private fun start() {
-        val port = if (isRedisRunning()) findAvailablePort() else redisPort
+        val port =
+                if (isRedisRunning()) findAvailablePort()
+                else redisPort
         redisServer = RedisServer(port)
         redisServer?.start()
     }
@@ -39,7 +40,9 @@ class RedisEmbeddedConfig {
                 return port
             }
         }
-        throw IllegalArgumentException("Not Found Available port: 10000 ~ 65535")
+        throw IllegalArgumentException(
+                "Not Found Available port: 10000 ~ 65535"
+        )
     }
 
     private fun executeGrepProcessCommand(port: Int): Process {
@@ -52,14 +55,11 @@ class RedisEmbeddedConfig {
         var pidInfo = StringBuilder()
         try {
             process.inputStream.bufferedReader().use { reader ->
-                reader.forEachLine { line ->
-                    pidInfo.append(line)
-                }
+                reader.forEachLine { line -> pidInfo.append(line) }
             }
         } catch (e: Exception) {
             println(e.message)
         }
         return pidInfo.isNotEmpty()
     }
-
 }

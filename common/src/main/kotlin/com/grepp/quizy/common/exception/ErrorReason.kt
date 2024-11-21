@@ -8,10 +8,7 @@ data class ErrorReason(
 
     companion object {
         @JvmStatic
-        fun of(
-                status: Int,
-                errorCode: String,
-                message: String,
-        ) = ErrorReason(status, errorCode, message)
+        fun of(status: Int, errorCode: String, message: String) =
+                ErrorReason(status, errorCode, message)
     }
 }

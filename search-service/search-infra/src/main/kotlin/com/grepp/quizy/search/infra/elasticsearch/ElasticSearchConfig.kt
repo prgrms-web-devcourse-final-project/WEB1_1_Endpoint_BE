@@ -12,13 +12,15 @@ import org.springframework.data.elasticsearch.core.convert.ElasticsearchCustomCo
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories
 
 @Configuration
-@EnableElasticsearchRepositories(basePackages = ["com.grepp.quizy.search.infra"])
-class ElasticSearchConfig: ElasticsearchConfiguration() {
+@EnableElasticsearchRepositories(
+        basePackages = ["com.grepp.quizy.search.infra"]
+)
+class ElasticSearchConfig : ElasticsearchConfiguration() {
 
-    @Value("\${elasticsearch.host}")
-    private lateinit var host: String
+    @Value("\${elasticsearch.host}") private lateinit var host: String
 
     override fun clientConfiguration(): ClientConfiguration =
+<<<<<<< Updated upstream
         ClientConfiguration.builder()
             .connectedTo(host)
             .build()
@@ -32,3 +34,7 @@ class ElasticSearchConfig: ElasticsearchConfiguration() {
         ))
     }
 }
+=======
+            ClientConfiguration.builder().connectedTo(host).build()
+}
+>>>>>>> Stashed changes
