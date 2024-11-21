@@ -18,6 +18,10 @@ class QuizUpdater(private val quizRepository: QuizRepository) {
             quiz.updateAnswer(updatedAnswer)
         }
 
-        return quizRepository.update(quiz)
+        return quizRepository.save(quiz)
+    }
+
+    fun update(quiz: Quiz) {
+        quizRepository.save(quiz)
     }
 }

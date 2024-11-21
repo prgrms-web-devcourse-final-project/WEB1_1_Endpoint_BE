@@ -3,9 +3,9 @@ package com.grepp.quizy.quiz.domain.quiz
 interface QuizRepository {
     fun save(quiz: Quiz): Quiz
 
-    fun update(quiz: Quiz): Quiz
-
     fun findById(id: QuizId): Quiz?
+
+    fun findByIdWithLock(id: QuizId): Quiz?
 
     fun findTagsByNameIn(names: List<String>): List<QuizTag>
 

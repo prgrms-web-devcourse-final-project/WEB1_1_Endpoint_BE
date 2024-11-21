@@ -32,6 +32,10 @@ class QuizService(
         )
     }
 
+    override fun toggleLike(id: QuizId, userId: UserId) {
+        TODO("Not yet implemented")
+    }
+
     // TODO: Pagination
     override fun getQuizTags(ids: List<QuizTagId>): List<QuizTag> {
         return quizReader.readTags(ids)

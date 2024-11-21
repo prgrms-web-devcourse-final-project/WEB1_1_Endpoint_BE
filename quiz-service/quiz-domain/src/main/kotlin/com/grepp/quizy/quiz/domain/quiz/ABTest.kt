@@ -10,7 +10,8 @@ private constructor(
         dateTime: DateTime = DateTime.init(),
         type: QuizType = QuizType.AB_TEST,
         id: QuizId = QuizId(0),
-) : Quiz(userId, type, content, id, dateTime) {
+        commentCount: Long = 0,
+) : Quiz(userId, type, content, id, dateTime, commentCount) {
 
     init {
         validateOptions(2)
@@ -26,12 +27,14 @@ private constructor(
                 content: QuizContent,
                 id: QuizId,
                 dateTime: DateTime,
+                commentCount: Long,
         ): ABTest {
             return ABTest(
                     userId = userId,
                     content = content,
                     id = id,
                     dateTime = dateTime,
+                    commentCount = commentCount,
             )
         }
     }
