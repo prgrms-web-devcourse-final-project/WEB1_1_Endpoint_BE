@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameStatus.DELETED
 import com.grepp.quizy.game.domain.GameStatus.WAITING
 import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedException
 import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
@@ -7,7 +8,7 @@ import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionExc
 class Game(
     val id: Long = 0,
     private var _setting: GameSetting,
-    val status: GameStatus = WAITING,
+    private var _status: GameStatus = WAITING,
     private var _players: Players,
     val inviteCode: InviteCode = InviteCode()
 ) {
@@ -16,6 +17,9 @@ class Game(
 
     val players: Players
         get() = _players
+
+    val status: GameStatus
+        get() = _status
 
     companion object {
         fun create(
@@ -51,7 +55,7 @@ class Game(
     fun kick(userId: Long, targetId: Long) {
         validateGameNotStarted()
         validateHostPermission(userId)
-        _players.remove(Player(id = targetId))
+        this._players = _players.remove(Player(id = targetId))
     }
 
     fun updateSubject(userId: Long, subject: GameSubject) {

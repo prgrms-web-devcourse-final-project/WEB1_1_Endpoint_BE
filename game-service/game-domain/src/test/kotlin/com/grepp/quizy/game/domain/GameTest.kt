@@ -1,6 +1,8 @@
 package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.PlayerRole.*
+import com.grepp.quizy.game.domain.exception.GameException
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -63,28 +65,30 @@ class GameTest() : DescribeSpec({
         }
 
         context("게임에서 게스트가 나가면") {
-            val game = Game(
-                1L,
-                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
-                GameStatus.WAITING,
-                Players(listOf(Player(1, HOST), Player(2, GUEST)))
-            )
-
-            game.quit(2)
             it("게임에서 나간 유저를 게임에서 제거한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                game.quit(2)
+
                 game.players shouldBe Players(listOf(Player(1, HOST)))
             }
         }
         context("게임에서 방장이 나가면") {
-            val game = Game(
-                1L,
-                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
-                GameStatus.WAITING,
-                Players(listOf(Player(1, HOST), Player(2, GUEST)))
-            )
-
-            game.quit(1)
             it("방장의 권한을 위임한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                game.quit(1)
+
                 val remainPlayer = game.players.players.first()
                 remainPlayer.id shouldBe 2
                 remainPlayer.role shouldBe HOST
@@ -92,17 +96,48 @@ class GameTest() : DescribeSpec({
         }
 
         context("게임에서 사용자가 모두 나가면") {
-            val game = Game(
-                1L,
-                GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
-                GameStatus.WAITING,
-                Players(listOf(Player(1, HOST)))
-            )
-
-            game.quit(1)
-
             it("게임을 삭제한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                game.quit(1)
+
                 game.status shouldBe GameStatus.DELETED
+            }
+        }
+
+        context("방장이 사용자를 강퇴하면") {
+            it("강퇴된 사용자를 게임에서 제거한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                game.kick(1, 2)
+
+                game.players shouldBe Players(listOf(Player(1)))
+            }
+        }
+
+        context("사용자가 강퇴하면") {
+            it("예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                shouldThrow<GameException.GameHostPermissionException> {
+                    game.kick(2, 1)
+                }
+
             }
         }
 
