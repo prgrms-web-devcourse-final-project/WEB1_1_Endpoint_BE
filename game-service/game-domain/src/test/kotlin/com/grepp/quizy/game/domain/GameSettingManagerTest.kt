@@ -16,25 +16,7 @@ class GameSettingManagerTest() : DescribeSpec({
         context("게임 설정 변경할 때") {
             context("게임 주제를 변경하면") {
                 it("게임 주제가 변경된다.") {
-                    val game = Game(
-                        id = 1,
-                        _setting = GameSetting(
-                            subject = GameSubject.SPRING,
-                            level = GameLevel.EASY,
-                            quizCount = 10
-                        ),
-                        _status = GameStatus.WAITING,
-                        _players = Players(
-                            listOf(
-                                Player(
-                                    id = 1,
-                                    PlayerRole.HOST
-                                )
-                            )
-                        ),
-                        inviteCode = InviteCode("ABC123")
-                    )
-                    gameRepository.save(game)
+                    val game = generateGameFixture(gameRepository)
 
                     val updatedGame = gameSettingManager.updateSubject(game, GameSubject.JAVASCRIPT, 1)
 
@@ -44,25 +26,7 @@ class GameSettingManagerTest() : DescribeSpec({
 
             context("게임 레벨을 변경하면") {
                 it("게임 레벨이 변경된다.") {
-                    val game = Game(
-                        id = 1,
-                        _setting = GameSetting(
-                            subject = GameSubject.SPRING,
-                            level = GameLevel.EASY,
-                            quizCount = 10
-                        ),
-                        _status = GameStatus.WAITING,
-                        _players = Players(
-                            listOf(
-                                Player(
-                                    id = 1,
-                                    PlayerRole.HOST
-                                )
-                            )
-                        ),
-                        inviteCode = InviteCode("ABC123")
-                    )
-                    gameRepository.save(game)
+                    val game = generateGameFixture(gameRepository)
 
                     val updatedGame = gameSettingManager.updateLevel(game, GameLevel.HARD, 1)
 
@@ -72,25 +36,7 @@ class GameSettingManagerTest() : DescribeSpec({
 
             context("퀴즈 문항 개수를 변경하면") {
                 it("퀴즈 문항 개수가 변경된다.") {
-                    val game = Game(
-                        id = 1,
-                        _setting = GameSetting(
-                            subject = GameSubject.SPRING,
-                            level = GameLevel.EASY,
-                            quizCount = 10
-                        ),
-                        _status = GameStatus.WAITING,
-                        _players = Players(
-                            listOf(
-                                Player(
-                                    id = 1,
-                                    PlayerRole.HOST
-                                )
-                            )
-                        ),
-                        inviteCode = InviteCode("ABC123")
-                    )
-                    gameRepository.save(game)
+                    val game = generateGameFixture(gameRepository)
 
                     val updatedGame = gameSettingManager.updateQuizCount(game, 20, 1)
 
@@ -102,3 +48,26 @@ class GameSettingManagerTest() : DescribeSpec({
     }
 
 })
+
+private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
+    val game = Game(
+        id = 1,
+        _setting = GameSetting(
+            subject = GameSubject.SPRING,
+            level = GameLevel.EASY,
+            quizCount = 10
+        ),
+        _status = GameStatus.WAITING,
+        _players = Players(
+            listOf(
+                Player(
+                    id = 1,
+                    PlayerRole.HOST
+                )
+            )
+        ),
+        inviteCode = InviteCode("ABC123")
+    )
+    gameRepository.save(game)
+    return game
+}
