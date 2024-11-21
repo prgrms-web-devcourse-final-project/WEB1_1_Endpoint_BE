@@ -24,13 +24,12 @@ class JwtValidator(
         jwtProperties.secret.toByteArray()
     )
 
-    fun validateToken(token: String): Boolean {
+    fun validateToken(token: String) {
         try {
             Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-            return true
         } catch (ex: Exception) {
             when (ex) {
                 is SecurityException,
@@ -44,13 +43,13 @@ class JwtValidator(
         }
     }
 
-    fun validateRefreshToken(token: String): Boolean {
-        if (!validateToken(token)) {
-            return false
-        }
+    fun validateRefreshToken(token: String) {
+        validateToken(token)
         val userId = jwtProvider.getUserIdFromToken(token)
-        val refreshToken = redisRepository.getRefreshToken(userId) ?: return false
+        val refreshToken = redisRepository.getRefreshToken(userId) ?: throw CustomJwtException.JwtNotFountException
 
-        return refreshToken == token
+        if (refreshToken != token) {
+            throw CustomJwtException.JwtNotValidateException
+        }
     }
 }

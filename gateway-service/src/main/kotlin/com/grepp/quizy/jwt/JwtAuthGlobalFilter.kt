@@ -35,6 +35,7 @@ class JwtAuthGlobalFilter(
         if (!request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             CookieUtils.getCookieValue(request, "refreshToken").let {
                 it ?: throw CustomJwtException.JwtNotFountException
+                jwtValidator.validateRefreshToken(it)
                 return addHeader(it, exchange, chain)
             }
         }
