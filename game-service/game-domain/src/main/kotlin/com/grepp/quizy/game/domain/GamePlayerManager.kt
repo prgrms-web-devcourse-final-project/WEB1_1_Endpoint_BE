@@ -3,9 +3,7 @@ package com.grepp.quizy.game.domain
 import org.springframework.stereotype.Component
 
 @Component
-class GamePlayerManager(
-    private val gameRepository: GameRepository,
-) {
+class GamePlayerManager(private val gameRepository: GameRepository) {
 
     fun join(game: Game, userId: Long): Game {
         game.join(userId)
@@ -21,5 +19,4 @@ class GamePlayerManager(
         game.kick(userId, targetUserId)
         return gameRepository.save(game)
     }
-
 }

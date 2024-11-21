@@ -16,14 +16,14 @@ class RedisSubscriber(
 
     override fun onMessage(message: Message, pattern: ByteArray?) {
         val publishMessage = String(message.body)
-        val gameMessage = objectMapper.readValue(publishMessage, GameMessage::class.java)
+        val gameMessage =
+                objectMapper.readValue(
+                        publishMessage,
+                        GameMessage::class.java,
+                )
         messagingTemplate.convertAndSend(
-<<<<<<< Updated upstream
-            "$MULTIPLE_PREFIX/game/${gameMessage.gameId}", publishMessage
-=======
-                "$MULTIPLE_PREFIX/gameRoom/$roomId",
+                "$MULTIPLE_PREFIX/game/${gameMessage.gameId}",
                 publishMessage,
->>>>>>> Stashed changes
         )
     }
 }

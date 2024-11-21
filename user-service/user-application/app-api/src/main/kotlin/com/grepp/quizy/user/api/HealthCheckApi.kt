@@ -9,9 +9,14 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/user")
 class HealthCheckApi {
+
     @GetMapping("/health")
-    fun healthCheck(@RequestHeader("X-Auth-Id") userId: String): ApiResponse<Unit> {
-        return ApiResponse.success("I'm USER service. UserId : ${userId.toLong()}")
+    fun healthCheck(
+            @RequestHeader("X-Auth-Id") userId: String
+    ): ApiResponse<Unit> {
+        return ApiResponse.success(
+                "I'm USER service. UserId : ${userId.toLong()}"
+        )
     }
 
     @GetMapping("/ping")

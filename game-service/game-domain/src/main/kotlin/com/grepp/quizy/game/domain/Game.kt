@@ -5,11 +5,11 @@ import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedExc
 import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
 
 class Game(
-    val id: Long = 0,
-    private var _setting: GameSetting,
-    val status: GameStatus = WAITING,
-    private var _players: Players,
-    val inviteCode: InviteCode = InviteCode()
+        val id: Long = 0,
+        private var _setting: GameSetting,
+        val status: GameStatus = WAITING,
+        private var _players: Players,
+        val inviteCode: InviteCode = InviteCode(),
 ) {
     val setting: GameSetting
         get() = _setting
@@ -19,17 +19,34 @@ class Game(
 
     companion object {
         fun create(
-            id: Long,
-            subject: GameSubject,
-            quizCount: Int,
-            level: GameLevel,
-            userId: Long
+                id: Long,
+                subject: GameSubject,
+                quizCount: Int,
+                level: GameLevel,
+                userId: Long,
         ): Game {
-            val game = Game(
-                id = id,
-                _setting = GameSetting(subject = subject, level = level, quizCount = quizCount),
-                _players = Players(listOf(Player(id = userId, role = PlayerRole.HOST)))
-            )
+            val game =
+                    Game(
+                            id = id,
+                            _setting =
+                                    GameSetting(
+                                            subject = subject,
+                                            level = level,
+                                            quizCount = quizCount,
+                                    ),
+                            _players =
+                                    Players(
+                                            listOf(
+                                                    Player(
+                                                            id =
+                                                                    userId,
+                                                            role =
+                                                                    PlayerRole
+                                                                            .HOST,
+                                                    )
+                                            )
+                                    ),
+                    )
             return game
         }
     }
@@ -80,5 +97,4 @@ class Game(
             throw GameAlreadyStartedException
         }
     }
-
 }

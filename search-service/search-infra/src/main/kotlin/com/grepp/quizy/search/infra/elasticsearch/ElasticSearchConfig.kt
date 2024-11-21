@@ -20,21 +20,21 @@ class ElasticSearchConfig : ElasticsearchConfiguration() {
     @Value("\${elasticsearch.host}") private lateinit var host: String
 
     override fun clientConfiguration(): ClientConfiguration =
-<<<<<<< Updated upstream
-        ClientConfiguration.builder()
-            .connectedTo(host)
-            .build()
+            ClientConfiguration.builder().connectedTo(host).build()
 
-    override fun elasticsearchCustomConversions(): ElasticsearchCustomConversions {
-        return ElasticsearchCustomConversions(listOf(
-            QuizDocumentWritingConverter<QuizOptionVO>(),
-            QuizDocumentReadingConverter(QuizOptionVO::class.java),
-            QuizDocumentWritingConverter<QuizAnswerVO>(),
-            QuizDocumentReadingConverter(QuizAnswerVO::class.java),
-        ))
+    override fun elasticsearchCustomConversions():
+            ElasticsearchCustomConversions {
+        return ElasticsearchCustomConversions(
+                listOf(
+                        QuizDocumentWritingConverter<QuizOptionVO>(),
+                        QuizDocumentReadingConverter(
+                                QuizOptionVO::class.java
+                        ),
+                        QuizDocumentWritingConverter<QuizAnswerVO>(),
+                        QuizDocumentReadingConverter(
+                                QuizAnswerVO::class.java
+                        ),
+                )
+        )
     }
 }
-=======
-            ClientConfiguration.builder().connectedTo(host).build()
-}
->>>>>>> Stashed changes

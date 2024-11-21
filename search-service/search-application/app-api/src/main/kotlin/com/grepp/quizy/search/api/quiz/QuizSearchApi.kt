@@ -12,12 +12,21 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/search/quiz")
-class QuizSearchApi(private val quizSearchUseCase: QuizSearchUseCase) {
+class QuizSearchApi(
+        private val quizSearchUseCase: QuizSearchUseCase
+) {
 
     @GetMapping
     fun searchByKeyword(
-        @RequestHeader("X-Auth-Id") userId: UserId?,
-        params: SearchParams
+            @RequestHeader("X-Auth-Id") userId: UserId?,
+            params: SearchParams,
     ): ApiResponse<SearchedQuizResponse> =
-        ApiResponse.success(SearchedQuizResponse.from(quizSearchUseCase.searchByKeyword(userId, params.SearchCondition())))
+            ApiResponse.success(
+                    SearchedQuizResponse.from(
+                            quizSearchUseCase.searchByKeyword(
+                                    userId,
+                                    params.SearchCondition(),
+                            )
+                    )
+            )
 }
