@@ -141,6 +141,129 @@ class GameTest() : DescribeSpec({
             }
         }
 
+        context("게임의 주제를 변경하면") {
+            it("원하는 주제로 변경한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                game.updateSubject(1, GameSubject.SPRING)
+
+                game.setting.subject shouldBe GameSubject.SPRING
+            }
+        }
+
+        context("게임의 난이도를 변경하면") {
+            it("원하는 난이도로 변경한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                game.updateLevel(1, GameLevel.HARD)
+
+                game.setting.level shouldBe GameLevel.HARD
+            }
+        }
+
+        context("게임의 퀴즈 수를 변경하면") {
+            it("원하는 수로 변경한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                game.updateQuizCount(1, 20)
+
+                game.setting.quizCount shouldBe 20
+            }
+        }
+
+        context("게임이 대기 상태가 아니면") {
+            it("주제를 변경하면 예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.PLAYING,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                shouldThrow<GameException.GameAlreadyStartedException> {
+                    game.updateSubject(1, GameSubject.SPRING)
+                }
+            }
+            it("난이도를 변경하면 예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.FINISHED,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                shouldThrow<GameException.GameAlreadyStartedException> {
+                    game.updateLevel(1, GameLevel.HARD)
+                }
+            }
+            it("퀴즈 수를 변경하면 예외가 발생한다.") {
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.DELETED,
+                    Players(listOf(Player(1, HOST)))
+                )
+
+                shouldThrow<GameException.GameAlreadyStartedException> {
+                    game.updateQuizCount(1, 20)
+                }
+            }
+        }
+
+        context("호스트가 아니면"){
+            it("주제를 변경하면 예외가 발생한다."){
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                shouldThrow<GameException.GameHostPermissionException> {
+                    game.updateSubject(2, GameSubject.SPRING)
+                }
+            }
+            it("난이도를 변경하면 예외가 발생한다."){
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                shouldThrow<GameException.GameHostPermissionException> {
+                    game.updateLevel(2, GameLevel.HARD)
+                }
+            }
+            it("퀴즈 수를 변경하면 예외가 발생한다."){
+                val game = Game(
+                    1L,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                )
+
+                shouldThrow<GameException.GameHostPermissionException> {
+                    game.updateQuizCount(2, 20)
+                }
+            }
+        }
+
     }
 
 }) {

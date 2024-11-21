@@ -61,19 +61,19 @@ class Game(
     fun updateSubject(userId: Long, subject: GameSubject) {
         validateGameNotStarted()
         validateHostPermission(userId)
-        _setting.updateSubject(subject)
+        this._setting = _setting.updateSubject(subject)
     }
 
     fun updateLevel(userId: Long, level: GameLevel) {
         validateGameNotStarted()
         validateHostPermission(userId)
-        _setting.updateLevel(level)
+        this._setting = _setting.updateLevel(level)
     }
 
     fun updateQuizCount(userId: Long, quizCount: Int) {
         validateGameNotStarted()
         validateHostPermission(userId)
-        _setting.updateQuizCount(quizCount)
+        this._setting = _setting.updateQuizCount(quizCount)
     }
 
     private fun validateHostPermission(userId: Long) {
