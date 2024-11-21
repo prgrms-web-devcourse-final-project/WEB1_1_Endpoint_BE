@@ -39,9 +39,9 @@ class GameRedisEntity(
     fun toDomain(): Game {
         return Game(
             id = id,
-            setting = setting,
+            _setting = setting,
             status = status,
-            players = players,
+            _players = players,
             inviteCode = inviteCode
         )
     }

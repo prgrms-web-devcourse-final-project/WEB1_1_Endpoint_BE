@@ -1,5 +1,6 @@
-package com.grepp.quizy.game.infra.websocket
+package com.grepp.quizy.game.infra.game
 
+import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.GameMessageSender
 import com.grepp.quizy.game.infra.websocket.WebSocketDestination.QUIZ_GRADE
 import com.grepp.quizy.game.infra.websocket.WebSocketDestination.SINGLE_PREFIX
@@ -12,7 +13,7 @@ class GameWebSocketMessageSender(
     private val messageTemplate: SimpMessagingTemplate
 ) : GameMessageSender {
 
-    override fun send(principal: Principal, message: String) {
+    override fun send(principal: Principal, message: GameMessage) {
         messageTemplate.convertAndSendToUser(
             principal.name,
             "${SINGLE_PREFIX.destination}${QUIZ_GRADE.destination}",
