@@ -1,18 +1,19 @@
 package com.grepp.quizy.user.infra.redis.repository
 
+import com.grepp.quizy.user.domain.user.RedisTokenRepository
 import com.grepp.quizy.user.domain.user.UserId
 import com.grepp.quizy.user.infra.redis.util.RedisUtil
 import org.springframework.stereotype.Repository
 
 @Repository
-class RedisTokenRepository(
+class RedisTokenRepositoryAdaptor(
     private val redisUtil: RedisUtil
-) {
+) : RedisTokenRepository {
     private val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
     private val LOGOUT_TOKEN_KEY = "logout"
 
 
-    fun saveRefreshToken(userId: UserId, refreshToken: String, expirationTime: Long) {
+    override fun saveRefreshToken(userId: UserId, refreshToken: String, expirationTime: Long) {
         val key = generateRefreshTokenKey(userId)
         redisUtil.saveValue(key, refreshToken, expirationTime)
     }
