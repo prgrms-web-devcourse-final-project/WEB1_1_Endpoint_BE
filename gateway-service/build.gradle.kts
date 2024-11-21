@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
+    implementation(project(":common"))
 
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
@@ -18,6 +19,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
 
+    //redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 }
 
 tasks.named<BootJar>("bootJar") {

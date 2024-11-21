@@ -56,6 +56,24 @@ spring:
           uri: http://localhost:8085
           predicates:
             - Path=/api/user/**
+        - id: oauth2
+          uri: http://localhost:8085
+          predicates:
+            - Path=/oauth2/**
+        - id: websocket
+          uri: ws://localhost:8081
+          predicates:
+            - Path=/ws/**
+        - id: sockjs
+          uri: http://localhost:8081
+          predicates:
+            - Path=/ws/**
+            - Query=transport, websocket
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
 springdoc:
   swagger-ui:
     urls[0]:
@@ -64,6 +82,8 @@ springdoc:
 
 jwt:
   secret: ${JWT_SECRET}
+  access-token-validity: 3600000  # 1시간
+  refresh-token-validity: 604800000  # 7일
 
 logging:
   level:
@@ -137,3 +157,5 @@ springdoc:
 
 jwt:
   secret: ${JWT_SECRET}
+  access-token-validity: 3600000  # 1시간
+  refresh-token-validity: 604800000  # 7일
