@@ -12,7 +12,6 @@ import com.grepp.quizy.user.domain.user.RedisTokenRepository
 import com.grepp.quizy.user.domain.user.UserReader
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
@@ -28,29 +27,16 @@ class CustomOAuth2LoginSuccessHandler(
     private val redisTokenRepository: RedisTokenRepository,
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
-    private val targetUrl = "/health"
-
-    @Value("\${frontend.url}")
-    private lateinit var frontendUrl: String
-
-    @Value("\${frontend.home-path}")
-    private lateinit var frontendHomePath: String
-
-    @Value("\${frontend.sign-up-path}")
-    private lateinit var frontendSignUpPath: String
-
     private val objectMapper = ObjectMapper()
         .registerModule(JavaTimeModule())
         .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         .setDateFormat(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
-
 
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
         response: HttpServletResponse,
         authentication: Authentication
     ) {
-
 
         if (response.isCommitted) {
             logger.debug("Response has already been committed")
@@ -65,7 +51,7 @@ class CustomOAuth2LoginSuccessHandler(
 
         redisTokenRepository.saveRefreshToken(user.id, refreshToken, refreshTokenExpirationTime)
 
-        CookieUtils.addCookie(response, "refreshToken", refreshToken, (14 * 24 * 60 * 60 * 1000))
+        CookieUtils.addCookie(response, "refreshToken", refreshToken, refreshTokenExpirationTime.toInt())
 
         clearAuthenticationAttributes(request)
 

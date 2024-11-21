@@ -1,16 +1,26 @@
 package com.grepp.quizy.user.api.global.jwt
 
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
+import org.springframework.context.annotation.Configuration
 
-@Component
-class JwtProperties{
-    @Value("\${jwt.secret}")
-    lateinit var secret: String
+@Configuration
+@EnableConfigurationProperties(JwtProperties::class)
+class JwtConfig
 
-    @Value("\${jwt.access-token-validity}")
-    var accessTokenValidity: Long = 0
+@ConfigurationProperties(prefix = "jwt")
+data class JwtProperties(
+    val secret: String,
+    val accessTokenValidity: Long,
+    val refreshTokenValidity: Long,
+) {
+//    @Value("\${jwt.secret}")
+//    lateinit var secret: String
+//
+//    @Value("\${jwt.access-token-validity}")
+//    var accessTokenValidity: Long = 0
+//
+//    @Value("\${jwt.refresh-token-validity}")
+//    var refreshTokenValidity: Long = 0
 
-    @Value("\${jwt.refresh-token-validity}")
-    var refreshTokenValidity: Long = 0
 }

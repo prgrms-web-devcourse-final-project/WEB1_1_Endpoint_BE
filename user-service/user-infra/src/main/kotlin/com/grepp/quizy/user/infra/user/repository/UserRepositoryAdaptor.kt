@@ -3,8 +3,8 @@ package com.grepp.quizy.user.infra.user.repository
 import com.grepp.quizy.user.domain.user.User
 import com.grepp.quizy.user.domain.user.UserRepository
 import com.grepp.quizy.user.infra.user.entity.UserEntity
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
-import kotlin.jvm.optionals.getOrNull
 
 @Repository
 class UserRepositoryAdaptor(
@@ -12,7 +12,7 @@ class UserRepositoryAdaptor(
 ) : UserRepository {
 
     override fun findById(id: Long): User? =
-        userJPARepository.findById(id).getOrNull()?.toDomain()
+        userJPARepository.findByIdOrNull(id)?.toDomain()
 
     override fun findByEmail(email: String): User? =
         userJPARepository.findByUserProfile_Email(email)?.toDomain()
