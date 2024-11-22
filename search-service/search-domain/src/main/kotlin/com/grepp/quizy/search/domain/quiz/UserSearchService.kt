@@ -5,10 +5,10 @@ import com.grepp.quizy.search.domain.user.UserId
 import org.springframework.stereotype.Service
 
 @Service
-class QuizSearchService(
+class UserSearchService(
         private val quizSearcher: QuizSearcher,
         private val quizMetadataCombiner: QuizMetadataCombiner,
-) : QuizSearchUseCase {
+) : UserSearchUseCase {
 
     override fun searchByKeyword(
             userId: UserId?,
