@@ -5,9 +5,6 @@ import java.time.LocalDateTime
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
 
-const val CONTENT_FIELD = "content"
-const val TAG_FIELD = "tags"
-
 @Document(indexName = "quizzes")
 @Mapping(mappingPath = "elastic/es-mappings.json")
 @Setting(settingPath = "elastic/es-settings.json")
@@ -23,6 +20,7 @@ class QuizDocument(
         @Field(type = FieldType.Flattened)
         val selectionPerOption: Map<Int, Int>,
         @Field(type = FieldType.Integer) val totalAnsweredUser: Int,
+        @Field(type = FieldType.Double) val correctionRatio: Double,
         @Field(type = FieldType.Integer) val totalLikeCount: Int,
         @Field(type = FieldType.Integer) val totalCommentCount: Int,
         @Field(
@@ -45,4 +43,12 @@ class QuizDocument(
                         ],
         )
         val updatedAt: LocalDateTime,
-)
+) {
+        companion object {
+                const val CONTENT_FIELD = "content"
+                const val CATEGORY_FIELD = "category"
+                const val TAG_FIELD = "tags"
+                const val DIFFICULTY_FIELD = "correctionRatio"
+                const val TYPE_FIELD = "type"
+        }
+}

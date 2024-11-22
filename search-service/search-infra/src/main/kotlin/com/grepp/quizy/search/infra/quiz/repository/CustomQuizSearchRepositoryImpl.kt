@@ -1,9 +1,12 @@
 package com.grepp.quizy.search.infra.quiz.repository
 
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
-import com.grepp.quizy.search.infra.quiz.document.CONTENT_FIELD
 import com.grepp.quizy.search.infra.quiz.document.QuizDocument
-import com.grepp.quizy.search.infra.quiz.document.TAG_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.CATEGORY_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.CONTENT_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.DIFFICULTY_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.TAG_FIELD
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.TYPE_FIELD
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.domain.SliceImpl
@@ -54,6 +57,28 @@ class CustomQuizSearchRepositoryImpl(
         val hasNext = hasNext(searchHits.totalHits, pageable)
 
         return SliceImpl(content, pageable, hasNext)
+    }
+
+    override fun searchAnswerableQuiz(category: String, difficultyCriteria: Double, pageable: Pageable): List<QuizDocument> {
+        val query = NativeQueryBuilder()
+            .withQuery(
+                QueryBuilders.bool()
+                    .must(
+                        QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery(),
+                        QueryBuilders.term().field(DIFFICULTY_FIELD).value(difficultyCriteria).build()._toQuery()
+                    )
+                    .mustNot(
+                        QueryBuilders.term().field(TYPE_FIELD).value("AB").build()._toQuery()
+                    )
+                    .build()
+                    ._toQuery()
+            )
+            .withPageable(pageable)
+            .build()
+
+        return elasticSearchOperations.search(query, QuizDocument::class.java)
+            .map(SearchHit<QuizDocument>::getContent)
+            .toList()
     }
 
     override fun searchUserAnswer(

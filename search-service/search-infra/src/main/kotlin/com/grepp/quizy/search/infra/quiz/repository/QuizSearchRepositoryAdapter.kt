@@ -5,7 +5,6 @@ import com.grepp.quizy.search.domain.quiz.*
 import com.grepp.quizy.search.domain.quiz.UserSearchCondition
 import com.grepp.quizy.search.domain.user.UserId
 import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
-import com.grepp.quizy.search.infra.quiz.document.SortField
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -33,6 +32,14 @@ class QuizSearchRepositoryAdapter(
                 }
     }
 
+    override fun search(condition: GameSearchCondition): List<AnswerableQuiz> {
+        val pageable = convertPageable(condition)
+
+        return quizElasticRepository
+            .searchAnswerableQuiz(condition.category, condition.difficulty.criteria, pageable)
+            .map { QuizDomainFactory.toAnswerableQuiz(it) }
+    }
+
     override fun searchUserAnswer(
             userId: UserId,
             quizIds: List<QuizId>,
@@ -49,14 +56,12 @@ class QuizSearchRepositoryAdapter(
         } ?: UserAnswer()
     }
 
-    private fun convertPageable(condition: UserSearchCondition) =
+    private fun convertPageable(condition: SearchCondition) =
+        condition.sort()?.let {
             PageRequest.of(
-                    condition.page(),
-                    condition.size(),
-                    Sort.by(
-                            Sort.Direction.DESC,
-                            SortField.valueOf(condition.sort.name)
-                                    .fieldName,
-                    ),
+                condition.page(),
+                condition.size(),
+                Sort.by(Sort.Direction.DESC, it.name)
             )
+        } ?: PageRequest.of(condition.page(), condition.size())
 }
