@@ -19,6 +19,10 @@ class RedisUtil(
         return operationValue[key]
     }
 
+    fun deleteValue(key: String) {
+        redisTemplate.delete(key)
+    }
+
     fun saveSet(key: String, value: String) {
         operationSet.add(key, value)
     }
