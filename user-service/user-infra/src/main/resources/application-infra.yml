@@ -75,10 +75,9 @@ spring:
         show-sql: false
         format_sql: false
 
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
+redis:
+  host: ${REDIS_HOST}
+  port: 6379
 
 kafka:
   topic:

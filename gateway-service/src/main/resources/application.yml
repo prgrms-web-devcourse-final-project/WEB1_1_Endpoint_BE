@@ -125,10 +125,10 @@ spring:
         all-namespaces: true
         primary-port-name: http
 
-  data:
-    redis:
-      host: ${REDIS_HOST}
-      port: 6379
+
+redis:
+  host: ${REDIS_HOST}
+  port: 6379
 
 logging:
   level:
