@@ -2,7 +2,7 @@ package com.grepp.quizy.search.api.quiz.dto
 
 import com.grepp.quizy.common.dto.Page
 import com.grepp.quizy.search.domain.quiz.QuizSortType
-import com.grepp.quizy.search.domain.quiz.SearchCondition
+import com.grepp.quizy.search.domain.quiz.UserSearchCondition
 
 data class SearchParams(
         val keyword: String,
@@ -11,7 +11,7 @@ data class SearchParams(
         val sort: QuizSortType = QuizSortType.TRENDING,
 ) {
     fun SearchCondition() =
-            SearchCondition(
+            UserSearchCondition(
                     field = keyword,
                     page = Page(page, size),
                     sort = sort,

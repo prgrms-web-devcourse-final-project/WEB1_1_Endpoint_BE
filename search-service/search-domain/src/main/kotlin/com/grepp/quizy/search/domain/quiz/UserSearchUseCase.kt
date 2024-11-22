@@ -5,7 +5,7 @@ import com.grepp.quizy.search.domain.user.UserId
 
 interface UserSearchUseCase {
     fun searchByKeyword(
-            userId: UserId?,
-            condition: SearchCondition,
-    ): Slice<SearchedQuiz>
+        userId: UserId?,
+        condition: UserSearchCondition,
+    ): Slice<QuizWithDetail>
 }

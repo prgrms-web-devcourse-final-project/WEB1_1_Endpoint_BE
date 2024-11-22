@@ -6,7 +6,7 @@ import com.grepp.quizy.search.domain.user.UserId
 @JvmInline value class OptionNumber(val value: Int)
 
 interface QuizSearchRepository {
-    fun search(condition: SearchCondition): Slice<Quiz>
+    fun search(condition: UserSearchCondition): Slice<Quiz>
 
     fun searchUserAnswer(
             userId: UserId,

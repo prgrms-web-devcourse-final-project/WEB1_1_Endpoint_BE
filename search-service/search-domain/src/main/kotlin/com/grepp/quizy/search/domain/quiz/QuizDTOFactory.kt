@@ -6,9 +6,9 @@ class QuizDTOFactory {
                 quiz: Quiz,
                 isLiked: Boolean,
                 answeredOption: OptionNumber?,
-        ): SearchedQuiz =
+        ): QuizWithDetail =
                 when (quiz) {
-                    is ABTest -> NonAnswerableQuiz.from(quiz, isLiked)
+                    is ABTest -> NonAnswerableQuizWithDetail.from(quiz, isLiked)
                     is MultipleOptionQuiz ->
                             AnswerableQuiz(
                                     quiz,

@@ -2,36 +2,36 @@ package com.grepp.quizy.search.domain.quiz
 
 import kotlin.math.round
 
-sealed interface SearchedQuiz
+sealed interface QuizWithDetail
 
-sealed interface AnswerableQuiz : SearchedQuiz
+sealed interface AnswerableQuiz : QuizWithDetail
 
-data class NonAnswerableQuiz(
-        val id: Long,
-        val content: String,
-        val type: String,
-        val options: List<SearchedQuizOption>,
-        val count: SearchedQuizCount,
-        val isLiked: Boolean,
-) : SearchedQuiz {
+data class NonAnswerableQuizWithDetail(
+    val id: Long,
+    val content: String,
+    val type: String,
+    val options: List<QuizDetailOption>,
+    val count: QuizDetailCount,
+    val isLiked: Boolean,
+) : QuizWithDetail {
 
     companion object {
-        fun from(quiz: Quiz, isLiked: Boolean): NonAnswerableQuiz =
+        fun from(quiz: Quiz, isLiked: Boolean): NonAnswerableQuizWithDetail =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
-                    return NonAnswerableQuiz(
+                    return NonAnswerableQuizWithDetail(
                             id = id(),
                             content = content(),
                             type = typeName(),
                             options =
                                     options.map {
-                                        SearchedQuizOption.from(
+                                        QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
                                         )
                                     },
-                            count = SearchedQuizCount.from(count),
+                            count = QuizDetailCount.from(count),
                             isLiked = isLiked,
                     )
                 }
@@ -39,14 +39,14 @@ data class NonAnswerableQuiz(
 }
 
 data class UserNotAnsweredQuiz(
-        val id: Long,
-        val content: String,
-        val type: String,
-        val options: List<SearchedQuizOption>,
-        val answer: SearchedQuizAnswer,
-        val count: SearchedQuizCount,
-        val isLiked: Boolean,
-) : SearchedQuiz, AnswerableQuiz {
+    val id: Long,
+    val content: String,
+    val type: String,
+    val options: List<QuizDetailOption>,
+    val answer: QuizDetailAnswer,
+    val count: QuizDetailCount,
+    val isLiked: Boolean,
+) : QuizWithDetail, AnswerableQuiz {
 
     companion object {
         fun <T> from(
@@ -62,17 +62,17 @@ data class UserNotAnsweredQuiz(
                             type = typeName(),
                             options =
                                     options.map {
-                                        SearchedQuizOption.from(
+                                        QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
                                         )
                                     },
                             answer =
-                                    SearchedQuizAnswer(
+                                    QuizDetailAnswer(
                                             answer(),
                                             explanation(),
                                     ),
-                            count = SearchedQuizCount.from(count),
+                            count = QuizDetailCount.from(count),
                             isLiked = isLiked,
                     )
                 }
@@ -80,15 +80,15 @@ data class UserNotAnsweredQuiz(
 }
 
 data class UserAnsweredQuiz(
-        val id: Long,
-        val content: String,
-        val type: String,
-        val options: List<SearchedQuizOption>,
-        val answer: SearchedQuizAnswer,
-        val answeredOption: Int,
-        val count: SearchedQuizCount,
-        val isLiked: Boolean,
-) : SearchedQuiz, AnswerableQuiz {
+    val id: Long,
+    val content: String,
+    val type: String,
+    val options: List<QuizDetailOption>,
+    val answer: QuizDetailAnswer,
+    val answeredOption: Int,
+    val count: QuizDetailCount,
+    val isLiked: Boolean,
+) : QuizWithDetail, AnswerableQuiz {
 
     companion object {
         fun <T> from(
@@ -105,37 +105,37 @@ data class UserAnsweredQuiz(
                             type = typeName(),
                             options =
                                     options.map {
-                                        SearchedQuizOption.from(
+                                        QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
                                         )
                                     },
                             answer =
-                                    SearchedQuizAnswer(
+                                    QuizDetailAnswer(
                                             answer(),
                                             explanation(),
                                     ),
                             answeredOption = answeredOption,
-                            count = SearchedQuizCount.from(count),
+                            count = QuizDetailCount.from(count),
                             isLiked = isLiked,
                     )
                 }
     }
 }
 
-data class SearchedQuizCount(
+data class QuizDetailCount(
         val like: Int = 0,
         val comment: Int = 0,
 ) {
 
     companion object {
         fun from(count: QuizCount?) =
-                count?.let { SearchedQuizCount(it.like, it.comment) }
-                        ?: SearchedQuizCount()
+                count?.let { QuizDetailCount(it.like, it.comment) }
+                        ?: QuizDetailCount()
     }
 }
 
-data class SearchedQuizOption(
+data class QuizDetailOption(
         val no: Int,
         val content: String,
         val selectionRatio: Double,
@@ -143,7 +143,7 @@ data class SearchedQuizOption(
 
     companion object {
         fun from(option: QuizOption, total: Int) =
-                SearchedQuizOption(
+                QuizDetailOption(
                         option.optionNumber,
                         option.content,
                         roundUp(
@@ -157,7 +157,7 @@ data class SearchedQuizOption(
     }
 }
 
-data class SearchedQuizAnswer(
+data class QuizDetailAnswer(
         val content: String,
         val explanation: String,
 )

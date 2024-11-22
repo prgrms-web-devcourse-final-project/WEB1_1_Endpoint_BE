@@ -2,7 +2,7 @@ package com.grepp.quizy.search.domain.quiz
 
 import com.grepp.quizy.common.dto.Page
 
-data class SearchCondition(
+data class UserSearchCondition(
         val field: String,
         private val page: Page,
         val sort: QuizSortType,

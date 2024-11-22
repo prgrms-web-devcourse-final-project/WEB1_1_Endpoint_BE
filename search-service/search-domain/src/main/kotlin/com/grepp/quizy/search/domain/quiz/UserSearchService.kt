@@ -11,9 +11,9 @@ class UserSearchService(
 ) : UserSearchUseCase {
 
     override fun searchByKeyword(
-            userId: UserId?,
-            condition: SearchCondition,
-    ): Slice<SearchedQuiz> {
+        userId: UserId?,
+        condition: UserSearchCondition,
+    ): Slice<QuizWithDetail> {
         val searchedQuizzes = quizSearcher.search(condition)
         val content =
                 quizMetadataCombiner.combine(userId, searchedQuizzes)
