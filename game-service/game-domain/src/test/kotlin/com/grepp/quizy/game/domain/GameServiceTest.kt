@@ -13,7 +13,7 @@ class GameServiceTest() : DescribeSpec({
     val playerManager = GamePlayerManager(gameRepository)
     val settingManager = GameSettingManager(gameRepository)
 
-    val gameService = GameService(
+    val gamePrivateService = GamePrivateService(
         appender,
         reader,
         playerManager,
@@ -30,7 +30,7 @@ class GameServiceTest() : DescribeSpec({
     describe("GameService") {
         context("게임을 생성하면") {
             it("게임이 생성되고 저장된다.") {
-                val createdGame = gameService.create(
+                val createdGame = gamePrivateService.create(
                     1L,
                     GameSubject.JAVASCRIPT,
                     GameLevel.EASY,
@@ -53,7 +53,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임에 참가한 유저가 추가된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                val joinedGame = gameService.join(3, "ABC123")
+                val joinedGame = gamePrivateService.join(3, "ABC123")
 
                 // 게임 상태 검증
                 joinedGame.players.players.size shouldBe 3
@@ -88,7 +88,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임에서 사용자가 제거된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                gameService.quit(2,game.id)
+                gamePrivateService.quit(2,game.id)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
@@ -113,7 +113,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임 주제가 변경된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                gameService.updateSubject(1, game.id, GameSubject.JAVASCRIPT)
+                gamePrivateService.updateSubject(1, game.id, GameSubject.JAVASCRIPT)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
@@ -140,7 +140,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임 난이도가 변경된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                gameService.updateLevel(1, game.id, GameLevel.HARD)
+                gamePrivateService.updateLevel(1, game.id, GameLevel.HARD)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
@@ -167,7 +167,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임 퀴즈 수가 변경된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                val updatedGame = gameService.updateQuizCount(1, game.id, 20)
+                val updatedGame = gamePrivateService.updateQuizCount(1, game.id, 20)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
@@ -194,7 +194,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임에서 사용자가 제거된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                gameService.kickUser(1, game.id, 2)
+                gamePrivateService.kickUser(1, game.id, 2)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1

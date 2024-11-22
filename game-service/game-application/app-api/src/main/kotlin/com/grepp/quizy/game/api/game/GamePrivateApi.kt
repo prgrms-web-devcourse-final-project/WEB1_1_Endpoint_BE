@@ -2,17 +2,17 @@ package com.grepp.quizy.game.api.game
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.*
-import com.grepp.quizy.game.domain.GameService
+import com.grepp.quizy.game.domain.GamePrivateService
 import org.springframework.messaging.handler.annotation.DestinationVariable
-import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
-@RequestMapping("/api/game")
-class GameApi(
-    private val gameService: GameService
+@RequestMapping("/api/game/private")
+class GamePrivateApi(
+    private val gamePrivateService: GamePrivateService
 ) {
 
     @PostMapping
@@ -22,7 +22,7 @@ class GameApi(
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
-                gameService.create(
+                gamePrivateService.create(
                     userId.toLong(),
                     request.subject,
                     request.level,
@@ -38,7 +38,7 @@ class GameApi(
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
-                gameService.join(
+                gamePrivateService.join(
                     userId.toLong(),
                     code
                 )
@@ -48,11 +48,11 @@ class GameApi(
     @MessageMapping("/quit/{gameId}")
     fun quit(
         @DestinationVariable gameId: Long,
-        @Header("X-AUTH-ID") userId: String
+        principal: Principal
     ): ApiResponse<Unit> =
         ApiResponse.success(
-            gameService.quit(
-                userId.toLong(),
+            gamePrivateService.quit(
+                principal.name.toLong(),
                 gameId
             )
         )
@@ -60,11 +60,11 @@ class GameApi(
     @MessageMapping("/update/{gameId}/subject")
     fun updateSubject(
         @DestinationVariable gameId: Long,
-        @Payload request: UpdateSubjectRequest,
-        @Header("X-AUTH-ID") userId: String
+        @Payload request: UpdateSubjectPayloadRequest,
+        principal: Principal
     ) {
-        gameService.updateSubject(
-            userId.toLong(),
+        gamePrivateService.updateSubject(
+            principal.name.toLong(),
             gameId,
             request.subject
         )
@@ -73,11 +73,11 @@ class GameApi(
     @MessageMapping("/update/{gameId}/level")
     fun updateLevel(
         @DestinationVariable gameId: Long,
-        @Payload request: UpdateLevelRequest,
-        @Header("X-AUTH-ID") userId: String
+        @Payload request: UpdateLevelPayloadRequest,
+        principal: Principal
     ) {
-        gameService.updateLevel(
-            userId.toLong(),
+        gamePrivateService.updateLevel(
+            principal.name.toLong(),
             gameId,
             request.level
         )
@@ -86,11 +86,11 @@ class GameApi(
     @MessageMapping("/update/{gameId}/quiz-count")
     fun updateQuizCount(
         @DestinationVariable gameId: Long,
-        @Payload request: UpdateQuizCountRequest,
-        @Header("X-AUTH-ID") userId: String
+        @Payload request: UpdateQuizCountPayloadRequest,
+        principal: Principal
     ) {
-        gameService.updateQuizCount(
-            userId.toLong(),
+        gamePrivateService.updateQuizCount(
+            principal.name.toLong(),
             gameId,
             request.quizCount
         )
@@ -99,11 +99,11 @@ class GameApi(
     @MessageMapping("/kick/{gameId}")
     fun kickUser(
         @DestinationVariable gameId: Long,
-        @Payload request: KickUserRequest,
-        @Header("X-AUTH-ID") userId: String
+        @Payload request: KickUserPayloadRequest,
+        principal: Principal
     ) {
-        gameService.kickUser(
-            userId.toLong(),
+        gamePrivateService.kickUser(
+            principal.name.toLong(),
             gameId,
             request.targetUserId
         )

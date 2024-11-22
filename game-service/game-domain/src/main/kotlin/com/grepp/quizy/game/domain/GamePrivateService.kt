@@ -3,7 +3,7 @@ package com.grepp.quizy.game.domain
 import org.springframework.stereotype.Service
 
 @Service
-class GameService(
+class GamePrivateService(
         private val gameAppender: GameAppender,
         private val gameReader: GameReader,
         private val gamePlayerManager: GamePlayerManager,
