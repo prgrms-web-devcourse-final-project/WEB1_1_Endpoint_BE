@@ -37,8 +37,8 @@ class GameService(
         return currentGame
     }
 
-    fun quit(userId: Long, code: String) {
-        val game = gameReader.readByInviteCode(code)
+    fun quit(userId: Long, gameId: Long) {
+        val game = gameReader.read(gameId)
         val currentGame = gamePlayerManager.quit(game, userId)
         messagePublisher.publish(
                 GameMessage.room(
@@ -81,18 +81,13 @@ class GameService(
     }
 
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
-        val game = gameReader.read(userId)
-        val currentGame =
-                gameSettingManager.updateQuizCount(
-                        game,
-                        quizCount,
-                        userId,
-                )
+        val game = gameReader.read(gameId)
+        val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
         messagePublisher.publish(
-                GameMessage.room(
-                        currentGame.id,
-                        GamePayload.from(currentGame),
-                )
+            GameMessage.room(
+                currentGame.id,
+                GamePayload.from(currentGame)
+            )
         )
     }
 
