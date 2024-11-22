@@ -61,7 +61,6 @@ kafka-consumer-config:
 redis:
   host: localhost
   port: 6379
-
 ---
 spring:
   config:
