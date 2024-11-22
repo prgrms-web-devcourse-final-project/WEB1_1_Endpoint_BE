@@ -1,57 +1,53 @@
 package com.grepp.quizy.jwt
 
-import io.jsonwebtoken.Claims
+import com.grepp.quizy.user.UserId
+import com.grepp.quizy.user.api.global.jwt.JwtProperties
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
+import org.springframework.stereotype.Component
 import java.util.*
 import javax.crypto.SecretKey
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.stereotype.Component
+
 
 @Component
 class JwtProvider(
-        @Value("\${jwt.secret}") private val secretKey: String
+    private val jwtProperties: JwtProperties
 ) {
-    private val key = Keys.hmacShaKeyFor(secretKey.toByteArray())
+    private val secretKey: SecretKey = Keys.hmacShaKeyFor(
+        jwtProperties.secret.toByteArray()
+    )
 
-    fun validateToken(token: String): Boolean {
-        return try {
-            val claims =
-                    Jwts.parserBuilder()
-                            .setSigningKey(key)
-                            .build()
-                            .parseClaimsJws(token)
-                            .body
+    fun getUserIdFromToken(token: String): UserId {
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .body
 
-            !claims.expiration.before(Date())
-        } catch (e: Exception) {
-            e.printStackTrace()
-            false
-        }
+        return UserId(claims.subject.toLong())
     }
 
-    fun getUserId(token: String): String {
-        return getSubject(key, token)
+    fun getUserRoleFromToken(token: String): String {
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(token)
+            .body
+
+        return claims["role"] as String
     }
 
-    fun getUserRole(token: String): String {
-        return getClaims(token)["role"].toString()
+    fun getExpiration(accessToken: String): Long {
+        val expiration = Jwts.parserBuilder()
+            .setSigningKey(secretKey)
+            .build()
+            .parseClaimsJws(accessToken)
+            .body
+            .expiration
+
+        val now = Date().time
+        return (expiration.time - now)
     }
 
-    private fun getClaims(token: String): Claims {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .body
-    }
 
-    private fun getSubject(key: SecretKey, token: String): String {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .body
-                .subject
-    }
 }
