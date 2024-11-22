@@ -71,11 +71,6 @@ subprojects {
 	}
 }
 
-tasks.register<Copy>("addGitPreCommitHook") {
-	from("script/pre-commit")
-	into(".git/hooks")
-}
-
 kotlin {
 	compilerOptions {
 		freeCompilerArgs.addAll("-Xjsr305=strict")
