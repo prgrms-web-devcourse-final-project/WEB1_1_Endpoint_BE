@@ -30,7 +30,27 @@ class GameAppenderTest(
                 appendedGame.players.players.size shouldBe 1
                 appendedGame.players.players[0].id shouldBe 1L
                 appendedGame.players.players[0].role shouldBe PlayerRole.HOST
-                appendedGame.inviteCode.value.length shouldBe 6
+                appendedGame.inviteCode!!.value.length shouldBe 6
+            }
+        }
+        context("랜덤 게임을 추가하면") {
+            it("랜덤 게임이 생성된다.") {
+                val randomGame = gameAppender.appendRandomGame(
+                    listOf(
+                        1L,
+                        2L,
+                        3L,
+                        4L,
+                        5L
+                    ), GameSubject.SPRING
+                )
+
+                randomGame.id shouldBe randomGame.id
+                randomGame.setting.subject shouldBe GameSubject.SPRING
+                randomGame.setting.level shouldBe GameLevel.RANDOM
+                randomGame.setting.quizCount shouldBe 10
+                randomGame.status shouldBe GameStatus.WAITING
+                randomGame.players.players.size shouldBe 5
             }
         }
     }

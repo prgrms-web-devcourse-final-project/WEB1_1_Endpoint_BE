@@ -25,6 +25,7 @@ data class GameMessage(
                 payload = payload,
             )
         }
+
         fun chat(gameId: Long, payload: MessagePayload): GameMessage {
             return GameMessage(
                 gameId = gameId,
@@ -35,19 +36,19 @@ data class GameMessage(
     }
 }
 
-data class GamePayload(
+data class RoomPayload(
     val setting: GameSetting,
     val status: GameStatus,
     val players: Players,
-    val inviteCode: InviteCode,
+    val inviteCode: InviteCode?,
 ) : MessagePayload {
     companion object {
-        fun from(game: Game): GamePayload {
-            return GamePayload(
-                setting = game.setting,
-                status = game.status,
-                players = game.players,
-                inviteCode = game.inviteCode,
+        fun from(game: Game): RoomPayload {
+            return RoomPayload(
+                game.setting,
+                game.status,
+                game.players,
+                game.inviteCode,
             )
         }
     }

@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameType.PRIVATE
 import com.grepp.quizy.game.domain.exception.GameException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -12,6 +13,7 @@ class GameReaderTest() : DescribeSpec({
 
     beforeTest {
         val game = Game(
+            type = PRIVATE,
             _setting = GameSetting(
                 subject = GameSubject.SPRING,
                 level = GameLevel.EASY,
@@ -55,7 +57,7 @@ class GameReaderTest() : DescribeSpec({
                     foundGame.players.players[0].role shouldBe PlayerRole.HOST
                     foundGame.players.players[1].id shouldBe 2
                     foundGame.players.players[1].role shouldBe PlayerRole.GUEST
-                    foundGame.inviteCode.value shouldBe "ABC123"
+                    foundGame.inviteCode!!.value shouldBe "ABC123"
                 }
             }
             context("게임이 존재하지 않으면") {
@@ -79,7 +81,7 @@ class GameReaderTest() : DescribeSpec({
                     foundGame.players.players[0].role shouldBe PlayerRole.HOST
                     foundGame.players.players[1].id shouldBe 2
                     foundGame.players.players[1].role shouldBe PlayerRole.GUEST
-                    foundGame.inviteCode.value shouldBe "ABC123"
+                    foundGame.inviteCode!!.value shouldBe "ABC123"
                 }
             }
             context("게임이 존재하지 않으면") {

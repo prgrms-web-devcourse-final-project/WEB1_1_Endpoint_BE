@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameType.PRIVATE
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -59,6 +60,7 @@ class GamePlayerManagerTest() : DescribeSpec({
 
 private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
     val game = Game(
+        type = PRIVATE,
         _setting = GameSetting(
             subject = GameSubject.SPRING,
             level = GameLevel.EASY,

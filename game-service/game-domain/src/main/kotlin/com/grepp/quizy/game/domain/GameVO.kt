@@ -2,6 +2,14 @@ package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.exception.GameException
 
+enum class GameType(
+    val description: String
+) {
+    PRIVATE("사설 게임"),
+    RANDOM("랜덤 매칭 게임"),
+    ;
+}
+
 enum class GameStatus(
     val description: String
 ) {
@@ -16,8 +24,8 @@ enum class GameStatus(
 
 data class GameSetting(
     val subject: GameSubject,
-    val level: GameLevel,
-    val quizCount: Int,
+    val level: GameLevel = GameLevel.RANDOM,
+    val quizCount: Int = 10,
 ) {
     fun updateSubject(subject: GameSubject): GameSetting {
         return copy(subject = subject)
@@ -50,6 +58,7 @@ enum class GameLevel(
     EASY("쉬움"),
     NORMAL("보통"),
     HARD("어려움"),
+    RANDOM("랜덤")
 
     ;
 }

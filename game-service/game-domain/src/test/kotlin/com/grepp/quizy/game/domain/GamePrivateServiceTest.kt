@@ -1,9 +1,10 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameType.PRIVATE
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.*
+import io.kotest.matchers.shouldBe
 
-class GameServiceTest() : DescribeSpec({
+class GamePrivateServiceTest() : DescribeSpec({
     val gameRepository = FakeGameRepository()
     val idGenerator = FakeIdGenerator()
     val gameMessagePublisher = FakeGameMessagePublisher()
@@ -45,7 +46,7 @@ class GameServiceTest() : DescribeSpec({
                 createdGame.players.players.size shouldBe 1
                 createdGame.players.players[0].id shouldBe 1L
                 createdGame.players.players[0].role shouldBe PlayerRole.HOST
-                createdGame.inviteCode.value.length shouldBe 6
+                createdGame.inviteCode!!.value.length shouldBe 6
 
             }
         }
@@ -67,7 +68,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.SPRING
                 payload.setting.level shouldBe GameLevel.EASY
@@ -80,7 +81,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
                 payload.players.players[2].id shouldBe 3L
                 payload.players.players[2].role shouldBe PlayerRole.GUEST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
 
             }
         }
@@ -88,7 +89,7 @@ class GameServiceTest() : DescribeSpec({
             it("게임에서 사용자가 제거된다.") {
                 val game = generateGameFixture(gameRepository)
 
-                gamePrivateService.quit(2,game.id)
+                gamePrivateService.quit(2, game.id)
 
                 // 메시지 검증
                 gameMessagePublisher.getMessages().size shouldBe 1
@@ -97,7 +98,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.SPRING
                 payload.setting.level shouldBe GameLevel.EASY
@@ -106,7 +107,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players.size shouldBe 1
                 payload.players.players[0].id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
         context("게임 주제를 변경하면") {
@@ -122,7 +123,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.JAVASCRIPT
                 payload.setting.level shouldBe GameLevel.EASY
@@ -133,7 +134,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players[0].role shouldBe PlayerRole.HOST
                 payload.players.players[1].id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
         context("게임 난이도를 변경하면") {
@@ -149,7 +150,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.SPRING
                 payload.setting.level shouldBe GameLevel.HARD
@@ -160,7 +161,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players[0].role shouldBe PlayerRole.HOST
                 payload.players.players[1].id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
         context("게임 퀴즈 수를 변경하면") {
@@ -176,7 +177,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.SPRING
                 payload.setting.level shouldBe GameLevel.EASY
@@ -187,7 +188,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players[0].role shouldBe PlayerRole.HOST
                 payload.players.players[1].id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
         context("사용자를 강퇴하면") {
@@ -203,7 +204,7 @@ class GameServiceTest() : DescribeSpec({
                 publishedMessage.type shouldBe MessageType.GAME_ROOM
 
                 // GamePayload 검증
-                val payload = gameMessagePublisher.getMessages().first().payload as GamePayload
+                val payload = gameMessagePublisher.getMessages().first().payload as RoomPayload
 
                 payload.setting.subject shouldBe GameSubject.SPRING
                 payload.setting.level shouldBe GameLevel.EASY
@@ -212,7 +213,7 @@ class GameServiceTest() : DescribeSpec({
                 payload.players.players.size shouldBe 1
                 payload.players.players[0].id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.inviteCode.value shouldBe "ABC123"
+                payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
     }
@@ -221,6 +222,7 @@ class GameServiceTest() : DescribeSpec({
 
 private fun generateGameFixture(gameRepository: FakeGameRepository) = gameRepository.save(
     Game(
+        type = PRIVATE,
         _setting = GameSetting(
             subject = GameSubject.SPRING,
             level = GameLevel.EASY,
