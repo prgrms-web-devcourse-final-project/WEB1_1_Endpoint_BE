@@ -1,9 +1,9 @@
-name: GCP Gateway Image Build
+name: Game Image Build
 
 env:
-  SERVICE_NAME: gateway-service
+  SERVICE_NAME: game-service
   BUILD_ID: ${{ github.sha }}-${{ github.run_id }}
-  HELM_VALUE: gateway-service-chart/values-dev.yaml
+  HELM_VALUE: game-service-chart/values-dev.yaml
   HELM_BRANCH: dev
 
 on:
@@ -11,7 +11,7 @@ on:
     branches:
       - 'develop'
     paths:
-      - 'gateway-service/**'
+      - 'game-service/**'
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
         env:
           IMAGE_TAG: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ env.SERVICE_NAME }}:${{ env.BUILD_ID }}
         run: |
-          docker build -f ./gateway-service/Dockerfile -t $IMAGE_TAG .
+          docker build -f ./game-service/game-application/app-api/Dockerfile -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
       - name: Checkout Helm Repository
