@@ -190,5 +190,11 @@ data class Players(
         return players.isEmpty()
     }
 
+    fun isAllParticipated(): Boolean {
+        return players.map {
+            it.isWaiting()
+        }.all { !it }
+    }
+
 
 }

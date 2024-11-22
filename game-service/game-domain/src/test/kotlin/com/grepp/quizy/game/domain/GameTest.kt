@@ -327,6 +327,52 @@ class GameTest() : DescribeSpec({
                 }
             }
         }
+        context("모든 플레이어가 준비되었는지 확인하면") {
+            context("대기 상태인 플레이어가 없으면") {
+                it("true를 반환한다.") {
+                    val game = Game(
+                        1L,
+                        type = PRIVATE,
+                        GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                        GameStatus.WAITING,
+                        Players(
+                            listOf(
+                                Player(1, HOST, PlayerStatus.JOINED),
+                                Player(2, GUEST, PlayerStatus.JOINED),
+                                Player(3, GUEST, PlayerStatus.JOINED),
+                                Player(4, GUEST, PlayerStatus.JOINED),
+                                Player(5, GUEST, PlayerStatus.JOINED)
+                            )
+                        ),
+                        InviteCode("ABC123")
+                    )
+
+                    game.isReady() shouldBe true
+                }
+            }
+            context("대기중인 사용자가 존재하면") {
+                it("false를 반환한다.") {
+                    val game = Game(
+                        1L,
+                        type = PRIVATE,
+                        GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                        GameStatus.WAITING,
+                        Players(
+                            listOf(
+                                Player(1, HOST, PlayerStatus.JOINED),
+                                Player(2, GUEST, PlayerStatus.JOINED),
+                                Player(3, GUEST, PlayerStatus.JOINED),
+                                Player(4, GUEST, PlayerStatus.WAITING),
+                                Player(5, GUEST, PlayerStatus.JOINED)
+                            )
+                        ),
+                        InviteCode("ABC123")
+                    )
+
+                    game.isReady() shouldBe false
+                }
+            }
+        }
         context("랜덤 게임을 생성하면") {
             it("랜덤 게임을 생성한다.") {
                 val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))

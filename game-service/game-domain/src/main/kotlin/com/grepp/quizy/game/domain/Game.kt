@@ -128,4 +128,8 @@ class Game(
         }
     }
 
+    fun isReady(): Boolean {
+        return _players.isAllParticipated()
+    }
+
 }

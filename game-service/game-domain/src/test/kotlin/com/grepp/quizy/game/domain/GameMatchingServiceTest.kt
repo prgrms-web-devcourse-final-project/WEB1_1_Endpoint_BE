@@ -1,5 +1,8 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameType.RANDOM
+import com.grepp.quizy.game.domain.PlayerRole.GUEST
+import com.grepp.quizy.game.domain.PlayerRole.HOST
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -10,12 +13,14 @@ class GameMatchingServiceTest() : DescribeSpec({
     val gameAppender = GameAppender(gameRepository, idGenerator)
     val gameReader = GameReader(gameRepository)
     val messagePublisher = FakeGameMessagePublisher()
+    val eventPublisher = FakeGameApplicationEventPublisher()
 
-    val matchingService = GameMatchingService(gameAppender, gameReader, messagePublisher)
+    val matchingService = GameMatchingService(gameAppender, gameReader, messagePublisher, eventPublisher)
 
     afterTest {
         gameRepository.clear()
         idGenerator.reset()
+        eventPublisher.clear()
     }
 
     describe("GameMatchingService") {
@@ -52,6 +57,37 @@ class GameMatchingServiceTest() : DescribeSpec({
                 roomPayload.setting.quizCount shouldBe 10
                 roomPayload.status shouldBe GameStatus.WAITING
 
+            }
+        }
+    }
+    describe("join 메서드는") {
+        context("게임이 ready 상태가 되면") {
+            it("GameStartEvent를 발행한다") {
+                val game = Game(
+                    1L,
+                    type = RANDOM,
+                    GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                    GameStatus.WAITING,
+                    Players(
+                        listOf(
+                            Player(1, HOST, PlayerStatus.JOINED),
+                            Player(2, GUEST, PlayerStatus.JOINED),
+                            Player(3, GUEST, PlayerStatus.JOINED),
+                            Player(4, GUEST, PlayerStatus.WAITING),
+                            Player(5, GUEST, PlayerStatus.JOINED)
+                        )
+                    ),
+                    InviteCode("ABC123")
+                )
+                val savedGame = gameRepository.save(game)
+
+                matchingService.join(4L, savedGame.id)
+
+                val events = eventPublisher.getEvents()
+                events.size shouldBe 1
+                events.all { event -> event is GameStartEvent } shouldBe true
+                val event = events.first() as GameStartEvent
+                event.game.id shouldBe savedGame.id
             }
         }
     }
