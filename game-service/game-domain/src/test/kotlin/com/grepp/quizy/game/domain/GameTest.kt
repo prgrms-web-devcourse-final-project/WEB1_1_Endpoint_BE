@@ -345,6 +345,15 @@ class GameTest() : DescribeSpec({
 
                 game.setting.level shouldBe GameLevel.RANDOM
             }
+            it("랜덤 게임의 사용자는 대기 상태이다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.players.players[0].status shouldBe PlayerStatus.WAITING
+                game.players.players[1].status shouldBe PlayerStatus.WAITING
+                game.players.players[2].status shouldBe PlayerStatus.WAITING
+                game.players.players[3].status shouldBe PlayerStatus.WAITING
+                game.players.players[4].status shouldBe PlayerStatus.WAITING
+            }
             context("일정 인원이 아니라면") {
                 it("게임을 생성할 수 없다.") {
                     shouldThrow<GameException.GameMisMatchNumberOfPlayersException> {
@@ -354,6 +363,21 @@ class GameTest() : DescribeSpec({
             }
         }
 
+    }
+    describe("랜덤 게임에서") {
+        context("게임에 참가하면") {
+            it("참가상태로 변경한다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.joinRandomGame(1)
+
+                game.players.players[0].status shouldBe PlayerStatus.JOINED
+                game.players.players[1].status shouldBe PlayerStatus.WAITING
+                game.players.players[2].status shouldBe PlayerStatus.WAITING
+                game.players.players[3].status shouldBe PlayerStatus.WAITING
+                game.players.players[4].status shouldBe PlayerStatus.WAITING
+            }
+        }
     }
 
 }) {

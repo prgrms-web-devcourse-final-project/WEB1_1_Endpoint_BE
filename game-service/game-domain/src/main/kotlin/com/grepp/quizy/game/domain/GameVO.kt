@@ -80,12 +80,29 @@ data class InviteCode(
     }
 }
 
+enum class PlayerStatus {
+    WAITING,
+    JOINED,
+}
+
 data class Player(
     val id: Long,
-    private var _role: PlayerRole = PlayerRole.GUEST
+    private var _role: PlayerRole = PlayerRole.GUEST,
+    private var _status: PlayerStatus = PlayerStatus.JOINED
 ) {
     val role: PlayerRole
         get() = _role
+
+    val status: PlayerStatus
+        get() = _status
+
+    fun join() {
+        _status = PlayerStatus.JOINED
+    }
+
+    fun grantHost() {
+        _role = PlayerRole.HOST
+    }
 
     fun isGuest(): Boolean {
         return _role == PlayerRole.GUEST
@@ -95,8 +112,8 @@ data class Player(
         return role == PlayerRole.HOST
     }
 
-    fun grantHost() {
-        _role = PlayerRole.HOST
+    fun isWaiting(): Boolean {
+        return status == PlayerStatus.WAITING
     }
 
     override fun equals(other: Any?): Boolean {
@@ -149,6 +166,25 @@ data class Players(
         return players.find { it.id == userId }
             ?: throw GameException.GameNotParticipatedException
     }
+
+    fun joinRandomGame(userId: Long): Players =
+        findPlayerById(userId)
+            .takeIf {
+                it.isWaiting()
+            }
+            ?.let {
+                Players(updatePlayerStatus(userId))
+            }
+            ?: throw GameException.GameAlreadyParticipatedException
+
+    private fun updatePlayerStatus(userId: Long): List<Player> =
+        players.map { player ->
+            when (player.id) {
+                userId -> player.apply { join() }
+                else -> player
+            }
+        }
+
 
     fun isEmpty(): Boolean {
         return players.isEmpty()

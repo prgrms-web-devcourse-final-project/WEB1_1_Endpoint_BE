@@ -31,7 +31,7 @@ class Game(
         id = id,
         type = GameType.RANDOM,
         _setting = GameSetting(subject),
-        _players = Players(userIds.map { Player(id = it) }.toList()),
+        _players = Players(userIds.map { Player(id = it, _status = PlayerStatus.WAITING) }.toList()),
         inviteCode = null
     ) {
         validatePlayerCount(userIds)
@@ -71,6 +71,10 @@ class Game(
     fun join(userId: Long) {
         validateGameNotStarted()
         this._players = _players.add(Player(id = userId))
+    }
+
+    fun joinRandomGame(userId: Long) {
+        this._players = _players.joinRandomGame(userId)
     }
 
     fun quit(userId: Long) {

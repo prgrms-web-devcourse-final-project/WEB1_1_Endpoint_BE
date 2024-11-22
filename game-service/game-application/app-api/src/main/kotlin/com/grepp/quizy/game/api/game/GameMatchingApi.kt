@@ -4,10 +4,13 @@ import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.GameResponse
 import com.grepp.quizy.game.api.game.dto.MatchingRequest
 import com.grepp.quizy.game.domain.GameMatchingService
+import org.springframework.messaging.handler.annotation.DestinationVariable
+import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.security.Principal
 
 @RestController
 @RequestMapping("/api/game/matching")
@@ -27,5 +30,16 @@ class GameMatchingApi(
             )
         )
     )
+
+    @MessageMapping("/join/{gameId}")
+    fun joinRandomGame(
+        @DestinationVariable gameId: Long,
+        principal: Principal
+    ) {
+        gameMatchingService.join(
+            principal.name.toLong(),
+            gameId
+        )
+    }
 
 }

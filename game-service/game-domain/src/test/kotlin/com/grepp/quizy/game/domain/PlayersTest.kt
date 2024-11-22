@@ -151,7 +151,60 @@ class PlayersTest() : DescribeSpec({
                 players.isEmpty() shouldBe true
             }
         }
+    }
 
+    describe("랜덤 게임 플레이어가") {
+        context("사용자가 게임에 참여하면") {
+            it("참여 상태로 변경한다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.WAITING),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                val updatedPlayers = players.joinRandomGame(1)
+
+                updatedPlayers.players[0].status shouldBe PlayerStatus.JOINED
+                updatedPlayers.players[1].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[2].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[3].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[4].status shouldBe PlayerStatus.WAITING
+            }
+        }
+        context("이미 참여한 사용자가 참여하면") {
+            it("예외를 발생시킨다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.JOINED),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                shouldThrow<GameAlreadyParticipatedException> { players.joinRandomGame(1) }
+            }
+        }
+        context("참여목록에 없는 사용자가 참여하면") {
+            it("예외를 발생시킨다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.WAITING),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                shouldThrow<GameNotParticipatedException> { players.joinRandomGame(6) }
+            }
+        }
     }
 }) {
 }
