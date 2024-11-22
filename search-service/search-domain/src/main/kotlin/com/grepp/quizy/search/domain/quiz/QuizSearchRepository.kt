@@ -8,6 +8,8 @@ import com.grepp.quizy.search.domain.user.UserId
 interface QuizSearchRepository {
     fun search(condition: UserSearchCondition): Slice<Quiz>
 
+    fun search(condition: GameSearchCondition): List<AnswerableQuiz>
+
     fun searchUserAnswer(
             userId: UserId,
             quizIds: List<QuizId>,
