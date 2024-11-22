@@ -10,24 +10,24 @@ class QuizDTOFactory {
                 when (quiz) {
                     is ABTest -> NonAnswerableQuizWithDetail.from(quiz, isLiked)
                     is MultipleOptionQuiz ->
-                            AnswerableQuiz(
+                            AnswerableQuizDetail(
                                     quiz,
                                     isLiked,
                                     answeredOption,
                             )
                     is OXQuiz ->
-                            AnswerableQuiz(
+                            AnswerableQuizDetail(
                                     quiz,
                                     isLiked,
                                     answeredOption,
                             )
                 }
 
-        private fun <T> AnswerableQuiz(
-                quiz: T,
+        private fun AnswerableQuizDetail(
+                quiz: AnswerableQuiz,
                 isLiked: Boolean,
                 answeredOption: OptionNumber?,
-        ): AnswerableQuiz where T : Quiz, T : Answerable =
+        ): AnswerableQuizDetail =
                 answeredOption?.let {
                     UserAnsweredQuiz.from(
                             quiz,

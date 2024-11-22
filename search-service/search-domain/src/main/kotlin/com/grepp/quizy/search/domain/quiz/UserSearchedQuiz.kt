@@ -4,7 +4,7 @@ import kotlin.math.round
 
 sealed interface QuizWithDetail
 
-sealed interface AnswerableQuiz : QuizWithDetail
+sealed interface AnswerableQuizDetail : QuizWithDetail
 
 data class NonAnswerableQuizWithDetail(
     val id: Long,
@@ -46,13 +46,13 @@ data class UserNotAnsweredQuiz(
     val answer: QuizDetailAnswer,
     val count: QuizDetailCount,
     val isLiked: Boolean,
-) : QuizWithDetail, AnswerableQuiz {
+) : QuizWithDetail, AnswerableQuizDetail {
 
     companion object {
-        fun <T> from(
-                quiz: T,
+        fun from(
+                quiz: AnswerableQuiz,
                 isLiked: Boolean,
-        ): UserNotAnsweredQuiz where T : Quiz, T : Answerable =
+        ): UserNotAnsweredQuiz =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
@@ -88,14 +88,14 @@ data class UserAnsweredQuiz(
     val answeredOption: Int,
     val count: QuizDetailCount,
     val isLiked: Boolean,
-) : QuizWithDetail, AnswerableQuiz {
+) : QuizWithDetail, AnswerableQuizDetail {
 
     companion object {
-        fun <T> from(
-                quiz: T,
+        fun from(
+                quiz: AnswerableQuiz,
                 answeredOption: Int,
                 isLiked: Boolean,
-        ): UserAnsweredQuiz where T : Quiz, T : Answerable =
+        ): UserAnsweredQuiz =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
