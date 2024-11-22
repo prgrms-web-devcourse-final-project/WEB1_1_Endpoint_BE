@@ -12,8 +12,7 @@ class RedisConfig {
     @Value("\${spring.data.redis.host}")
     private lateinit var host: String
 
-    @Value("\${spring.data.redis.port}")
-    private var port: Int = 0
+    @Value("\${spring.data.redis.port}") private var port: Int = 0
 
     @Bean
     fun redisConnectionFactory(): LettuceConnectionFactory {

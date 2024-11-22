@@ -4,14 +4,15 @@ import com.grepp.quizy.global.RedisUtil
 import org.springframework.stereotype.Repository
 
 @Repository
-class RedisTokenRepository(
-    private val redisUtil: RedisUtil
-) {
+class RedisTokenRepository(private val redisUtil: RedisUtil) {
     private val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
     private val LOGOUT_TOKEN_KEY = "logout"
 
-
-    fun saveRefreshToken(userId: UserId, refreshToken: String, expirationTime: Long) {
+    fun saveRefreshToken(
+            userId: UserId,
+            refreshToken: String,
+            expirationTime: Long,
+    ) {
         val key = generateRefreshTokenKey(userId)
         redisUtil.saveValue(key, refreshToken, expirationTime)
     }
@@ -34,5 +35,6 @@ class RedisTokenRepository(
         return !redisUtil.isExistSet(LOGOUT_TOKEN_KEY, accessToken)
     }
 
-    private fun generateRefreshTokenKey(userId: UserId): String = "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
+    private fun generateRefreshTokenKey(userId: UserId): String =
+            "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
 }

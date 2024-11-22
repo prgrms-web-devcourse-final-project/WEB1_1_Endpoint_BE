@@ -132,19 +132,19 @@ springdoc:
   swagger-ui:
     urls[0]:
       name: Game API
-      url: http://${GATEWAY_HOST}/game/api-docs
+      url: http://${GATEWAY_HOST}/api/game/api-docs
     urls[1]:
       name: Quiz API
-      url: http://${GATEWAY_HOST}/quiz/api-docs
+      url: http://${GATEWAY_HOST}/api/quiz/api-docs
     urls[2]:
       name: Matching API
-      url: http://${GATEWAY_HOST}/matching/api-docs
+      url: http://${GATEWAY_HOST}/api/matching/api-docs
     urls[3]:
       name: Search API
-      url: http://${GATEWAY_HOST}/search/api-docs
+      url: http://${GATEWAY_HOST}/api/search/api-docs
     urls[4]:
       name: User API
-      url: http://${GATEWAY_HOST}/user/api-docs
+      url: http://${GATEWAY_HOST}/api/user/api-docs
 
 jwt:
   secret: ${JWT_SECRET}
