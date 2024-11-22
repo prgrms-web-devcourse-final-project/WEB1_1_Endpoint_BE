@@ -1,6 +1,7 @@
 name: Quiz Image Build
 
 env:
+  SERVICE_NAME: quiz-service
   BUILD_ID: ${{ github.sha }}-${{ github.run_id }}
   HELM_VALUE: quiz-service-chart/values-dev.yaml
   HELM_BRANCH: dev
