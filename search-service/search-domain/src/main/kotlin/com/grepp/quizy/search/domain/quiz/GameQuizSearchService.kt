@@ -3,9 +3,9 @@ package com.grepp.quizy.search.domain.quiz
 import org.springframework.stereotype.Component
 
 @Component
-class GameSearchService(
+class GameQuizSearchService(
     private val quizSearcher: QuizSearcher
-) : GameSearchUseCase {
+) : GameQuizSearchUseCase {
 
     override fun searchForPrivateGame(condition: GameQuizSearchCondition): List<GameQuizDetail> {
         val poolSize = GameQuizPoolUtils.expandQuizPoolSize(condition.size)

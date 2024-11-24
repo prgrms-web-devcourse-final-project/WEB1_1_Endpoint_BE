@@ -1,5 +1,5 @@
 package com.grepp.quizy.search.domain.quiz
 
-interface GameSearchUseCase {
+interface GameQuizSearchUseCase {
     fun searchForPrivateGame(condition: GameQuizSearchCondition): List<GameQuizDetail>
 }
