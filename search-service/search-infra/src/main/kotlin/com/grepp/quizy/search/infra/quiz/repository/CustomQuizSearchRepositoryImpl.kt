@@ -1,6 +1,7 @@
 package com.grepp.quizy.search.infra.quiz.repository
 
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
+import com.grepp.quizy.search.domain.quiz.QuizDifficultyType
 import com.grepp.quizy.search.infra.quiz.document.QuizDocument
 import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.CATEGORY_FIELD
 import com.grepp.quizy.search.infra.quiz.document.QuizDocument.Companion.CONTENT_FIELD
@@ -59,14 +60,19 @@ class CustomQuizSearchRepositoryImpl(
         return SliceImpl(content, pageable, hasNext)
     }
 
-    override fun searchAnswerableQuiz(category: String, difficultyCriteria: Double, pageable: Pageable): List<QuizDocument> {
+    override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficultyType, pageable: Pageable): List<QuizDocument> {
+        val mustQueries = mutableListOf(QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery())
+
+        if (difficulty != QuizDifficultyType.RANDOM) {
+            mustQueries.add(
+                QueryBuilders.term().field(DIFFICULTY_FIELD).value(difficulty.name).build()._toQuery()
+            )
+        }
+
         val query = NativeQueryBuilder()
             .withQuery(
                 QueryBuilders.bool()
-                    .must(
-                        QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery(),
-                        QueryBuilders.term().field(DIFFICULTY_FIELD).value(difficultyCriteria).build()._toQuery()
-                    )
+                    .must(mustQueries)
                     .mustNot(
                         QueryBuilders.term().field(TYPE_FIELD).value("AB").build()._toQuery()
                     )

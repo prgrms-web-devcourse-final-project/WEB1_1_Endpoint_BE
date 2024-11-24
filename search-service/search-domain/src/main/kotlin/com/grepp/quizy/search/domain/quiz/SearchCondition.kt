@@ -39,6 +39,6 @@ data class GameQuizSearchCondition(
     override fun sort() = null
 }
 
-enum class QuizDifficultyType(val criteria: Double) {
-    EASY(0.75), MEDIUM(0.5), HARD(0.25)
+enum class QuizDifficultyType {
+    EASY, MEDIUM, HARD, RANDOM
 }

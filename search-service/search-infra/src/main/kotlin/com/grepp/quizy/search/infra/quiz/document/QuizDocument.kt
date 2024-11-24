@@ -20,7 +20,7 @@ class QuizDocument(
         @Field(type = FieldType.Flattened)
         val selectionPerOption: Map<Int, Int>,
         @Field(type = FieldType.Integer) val totalAnsweredUser: Int,
-        @Field(type = FieldType.Double) val correctionRatio: Double,
+        @Field(type = FieldType.Double) val difficulty: String,
         @Field(type = FieldType.Integer) val totalLikeCount: Int,
         @Field(type = FieldType.Integer) val totalCommentCount: Int,
         @Field(
@@ -48,7 +48,7 @@ class QuizDocument(
                 const val CONTENT_FIELD = "content"
                 const val CATEGORY_FIELD = "category"
                 const val TAG_FIELD = "tags"
-                const val DIFFICULTY_FIELD = "correctionRatio"
+                const val DIFFICULTY_FIELD = "difficulty"
                 const val TYPE_FIELD = "type"
         }
 }

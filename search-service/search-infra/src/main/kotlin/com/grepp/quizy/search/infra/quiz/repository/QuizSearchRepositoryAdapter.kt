@@ -36,7 +36,7 @@ class QuizSearchRepositoryAdapter(
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
-            .searchAnswerableQuiz(condition.category, condition.difficulty.criteria, pageable)
+            .searchAnswerableQuiz(condition.category, condition.difficulty, pageable)
             .map { QuizDomainFactory.toAnswerableQuiz(it) }
     }
 
