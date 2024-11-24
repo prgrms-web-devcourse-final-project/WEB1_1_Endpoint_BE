@@ -61,6 +61,23 @@ kafka-consumer-config:
 redis:
   host: localhost
   port: 6379
+
+elasticsearch:
+  client:
+    host: ${ELASTICSEARCH_HOST}
+  host: ${ELASTICSEARCH_HOST_PORT:localhost:9200}
+  port: 9200
+
+# 슬로우 쿼리 로그
+index:
+  search:
+    slowlog:
+      threshold:
+        query:
+          warn: 1s
+          debug: 200ms
+      level: TRACE
+
 ---
 spring:
   config:
@@ -120,3 +137,9 @@ kafka-consumer-config:
 redis:
   host: ${REDIS_HOST}
   port: 6379
+
+elasticsearch:
+  client:
+    host: es
+  host: ${ELASTICSEARCH_HOST:es:9200}
+  port: 9200
