@@ -1,10 +1,10 @@
-package com.grepp.quizy.search.api.quiz.dto
+package com.grepp.quizy.quiz.api.quizread.dto
 
 import com.grepp.quizy.common.dto.Page
-import com.grepp.quizy.search.domain.quiz.GameQuizSearchCondition
-import com.grepp.quizy.search.domain.quiz.QuizDifficultyType
-import com.grepp.quizy.search.domain.quiz.QuizSortType
-import com.grepp.quizy.search.domain.quiz.UserSearchCondition
+import com.grepp.quizy.quiz.domain.quizread.GameQuizSearchCondition
+import com.grepp.quizy.quiz.domain.quizread.QuizDifficultyType
+import com.grepp.quizy.quiz.domain.quizread.QuizSortType
+import com.grepp.quizy.quiz.domain.quizread.UserSearchCondition
 
 data class UserSearchParams(
         val keyword: String,

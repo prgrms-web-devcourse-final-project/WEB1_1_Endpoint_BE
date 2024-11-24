@@ -1,8 +1,8 @@
-package com.grepp.quizy.search.api.quiz.dto
+package com.grepp.quizy.quiz.api.quizread.dto
 
-import com.grepp.quizy.search.domain.global.dto.Slice
-import com.grepp.quizy.search.domain.quiz.GameQuizDetail
-import com.grepp.quizy.search.domain.quiz.QuizWithDetail
+import com.grepp.quizy.quiz.domain.global.dto.Slice
+import com.grepp.quizy.quiz.domain.quizread.GameQuizDetail
+import com.grepp.quizy.quiz.domain.quizread.QuizWithDetail
 
 data class SearchedQuizResponse(
     val quizzes: List<QuizWithDetail>,

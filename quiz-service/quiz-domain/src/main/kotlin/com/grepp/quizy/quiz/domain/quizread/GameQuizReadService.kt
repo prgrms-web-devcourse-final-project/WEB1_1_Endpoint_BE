@@ -1,8 +1,8 @@
 package com.grepp.quizy.quiz.domain.quizread
 
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
-@Component
+@Service
 class GameQuizReadService(
     private val quizSearcher: QuizSearcher
 ) : GameQuizReadUseCase {
