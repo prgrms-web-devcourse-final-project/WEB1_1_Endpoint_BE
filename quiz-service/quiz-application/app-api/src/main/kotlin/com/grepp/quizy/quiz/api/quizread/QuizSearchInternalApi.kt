@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api/internal/search/quiz")
+@RequestMapping("/api/quiz/internal/read")
 class QuizSearchInternalApi(private val gameQuizSearchUseCase: GameQuizReadUseCase) {
 
     @GetMapping("/game-set")
