@@ -46,9 +46,9 @@ class QuizDocument(
 ) {
         companion object {
                 const val CONTENT_FIELD = "content"
-                const val CATEGORY_FIELD = "category"
+                const val CATEGORY_FIELD = "category.keyword"
                 const val TAG_FIELD = "tags"
-                const val DIFFICULTY_FIELD = "difficulty"
-                const val TYPE_FIELD = "type"
+                const val DIFFICULTY_FIELD = "difficulty.keyword"
+                const val TYPE_FIELD = "type.keyword"
         }
 }
