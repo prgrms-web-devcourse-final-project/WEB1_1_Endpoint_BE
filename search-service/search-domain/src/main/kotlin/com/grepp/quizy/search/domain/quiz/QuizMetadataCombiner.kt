@@ -13,7 +13,7 @@ class QuizMetadataCombiner(
     fun combine(
             userId: UserId?,
             searchedQuizzes: Slice<Quiz>,
-    ): List<SearchedQuiz> {
+    ): List<QuizWithDetail> {
         val quizIds = parseQuizIds(searchedQuizzes.content)
         val likeStatus = quizFetcher.fetchUserLikeStatus(quizIds)
 
@@ -24,7 +24,7 @@ class QuizMetadataCombiner(
                 } ?: UserAnswer()
 
         return searchedQuizzes.content.map { quiz ->
-            QuizDTOFactory.SearchedQuiz(
+            QuizDTOFactory.QuizDetail(
                     quiz,
                     likeStatus.isLikedBy(quiz.id),
                     userAnswer.getAnswerOf(quiz.id),

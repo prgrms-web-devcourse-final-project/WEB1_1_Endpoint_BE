@@ -13,6 +13,14 @@ class QuizDomainFactory {
             }
         }
 
+        fun toAnswerableQuiz(document: QuizDocument): AnswerableQuiz {
+            return when (document.type) {
+                QuizType.OX -> OXQuiz(document)
+                QuizType.MULTIPLE_CHOICE -> MultipleOptionQuiz(document)
+                QuizType.AB -> throw IllegalArgumentException("Unexpected QuizType ${document.type}")
+            }
+        }
+
         private fun ABTest(document: QuizDocument): ABTest =
                 with(document) {
                     return ABTest(

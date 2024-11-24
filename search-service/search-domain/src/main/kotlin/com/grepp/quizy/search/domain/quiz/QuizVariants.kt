@@ -6,6 +6,16 @@ interface Answerable {
     fun explanation(): String
 }
 
+abstract class AnswerableQuiz(
+    id: QuizId,
+    content: QuizContent,
+    category: QuizCategory,
+    tags: List<QuizTag>,
+    options: List<QuizOption>,
+    count: QuizCount,
+    val answer: QuizAnswer,
+) : Quiz(id, content, category, tags, options, count), Answerable
+
 class ABTest(
         id: QuizId,
         content: QuizContent,
@@ -21,9 +31,9 @@ class OXQuiz(
         category: QuizCategory,
         tags: List<QuizTag>,
         options: List<QuizOption>,
-        private val answer: QuizAnswer,
+        answer: QuizAnswer,
         count: QuizCount,
-) : Quiz(id, content, category, tags, options, count), Answerable {
+) : AnswerableQuiz(id, content, category, tags, options, count, answer) {
     override fun answer() = answer.value
 
     override fun explanation() = answer.explanation
@@ -35,9 +45,9 @@ class MultipleOptionQuiz(
         category: QuizCategory,
         tags: List<QuizTag>,
         options: List<QuizOption>,
-        private val answer: QuizAnswer,
+        answer: QuizAnswer,
         count: QuizCount,
-) : Quiz(id, content, category, tags, options, count), Answerable {
+) : AnswerableQuiz(id, content, category, tags, options, count, answer) {
     override fun answer() = answer.value
 
     override fun explanation() = answer.explanation

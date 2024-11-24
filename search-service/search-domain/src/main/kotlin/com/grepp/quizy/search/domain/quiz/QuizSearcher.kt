@@ -8,7 +8,10 @@ class QuizSearcher(
         private val quizSearchRepository: QuizSearchRepository
 ) {
 
-    fun search(condition: SearchCondition) =
+    fun search(condition: UserSearchCondition) =
+            quizSearchRepository.search(condition)
+
+    fun search(condition: GameQuizSearchCondition) =
             quizSearchRepository.search(condition)
 
     fun searchUserAnswer(userId: UserId, quizIds: List<QuizId>) =

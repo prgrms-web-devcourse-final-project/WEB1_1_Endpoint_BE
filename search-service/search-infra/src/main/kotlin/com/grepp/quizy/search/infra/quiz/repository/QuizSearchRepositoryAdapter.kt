@@ -2,8 +2,9 @@ package com.grepp.quizy.search.infra.quiz.repository
 
 import com.grepp.quizy.search.domain.global.dto.Slice
 import com.grepp.quizy.search.domain.quiz.*
-import com.grepp.quizy.search.domain.quiz.SearchCondition
+import com.grepp.quizy.search.domain.quiz.UserSearchCondition
 import com.grepp.quizy.search.domain.user.UserId
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument
 import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
 import com.grepp.quizy.search.infra.quiz.document.SortField
 import org.springframework.data.domain.PageRequest
@@ -18,7 +19,7 @@ class QuizSearchRepositoryAdapter(
                 UserAnswerElasticRepository,
 ) : QuizSearchRepository {
 
-    override fun search(condition: SearchCondition): Slice<Quiz> {
+    override fun search(condition: UserSearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
@@ -31,6 +32,14 @@ class QuizSearchRepositoryAdapter(
                             slice.hasNext(),
                     )
                 }
+    }
+
+    override fun search(condition: GameQuizSearchCondition): List<AnswerableQuiz> {
+        val pageable = convertPageable(condition)
+
+        return quizElasticRepository
+            .searchAnswerableQuiz(condition.category, condition.difficulty, pageable)
+            .map { QuizDomainFactory.toAnswerableQuiz(it) }
     }
 
     override fun searchUserAnswer(
@@ -50,13 +59,11 @@ class QuizSearchRepositoryAdapter(
     }
 
     private fun convertPageable(condition: SearchCondition) =
+        condition.sort()?.let {
             PageRequest.of(
-                    condition.page(),
-                    condition.size(),
-                    Sort.by(
-                            Sort.Direction.DESC,
-                            SortField.valueOf(condition.sort.name)
-                                    .fieldName,
-                    ),
+                condition.page(),
+                condition.size(),
+                Sort.by(Sort.Direction.DESC, SortField.from(it).fieldName)
             )
+        } ?: PageRequest.of(condition.page(), condition.size())
 }

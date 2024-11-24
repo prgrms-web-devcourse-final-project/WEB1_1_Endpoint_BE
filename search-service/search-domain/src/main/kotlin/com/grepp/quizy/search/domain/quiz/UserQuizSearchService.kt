@@ -5,15 +5,15 @@ import com.grepp.quizy.search.domain.user.UserId
 import org.springframework.stereotype.Service
 
 @Service
-class QuizSearchService(
+class UserQuizSearchService(
         private val quizSearcher: QuizSearcher,
         private val quizMetadataCombiner: QuizMetadataCombiner,
-) : QuizSearchUseCase {
+) : UserQuizSearchUseCase {
 
     override fun searchByKeyword(
-            userId: UserId?,
-            condition: SearchCondition,
-    ): Slice<SearchedQuiz> {
+        userId: UserId?,
+        condition: UserSearchCondition,
+    ): Slice<QuizWithDetail> {
         val searchedQuizzes = quizSearcher.search(condition)
         val content =
                 quizMetadataCombiner.combine(userId, searchedQuizzes)
