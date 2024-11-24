@@ -1,33 +1,43 @@
 package com.grepp.quizy.quiz.domain.quizread
 
+import com.grepp.quizy.quiz.domain.useranswer.Choice
+
 class QuizDTOFactory {
     companion object {
         fun QuizWithDetail(
             quiz: QuizForRead,
             isLiked: Boolean,
-            answeredOption: OptionNumber?,
+            answered: Choice?,
         ): QuizWithDetail =
                 when (quiz) {
-                    is ABTest -> NonAnswerableQuizWithDetail.from(quiz, isLiked)
-                    is AnswerableQuiz ->
-                            AnswerableQuizDetail(
-                                    quiz,
-                                    isLiked,
-                                    answeredOption,
-                            )
+                    is ABTest -> NotAnswerableQuizDetail(quiz, isLiked, answered)
+                    is AnswerableQuiz -> AnswerableQuizDetail(quiz, isLiked, answered,)
                 }
 
+        private fun NotAnswerableQuizDetail(
+            quiz: QuizForRead,
+            isLiked: Boolean,
+            answered: Choice?,
+        ): NotAnswerableQuizDetail =
+            answered?.let {
+                AnsweredQuizWithoutAnswer.from(
+                    quiz,
+                    answered.value,
+                    isLiked,
+                )
+            } ?: NotAnsweredQuizWithoutAnswer.from(quiz, isLiked)
+
         private fun AnswerableQuizDetail(
-                quiz: AnswerableQuiz,
-                isLiked: Boolean,
-                answeredOption: OptionNumber?,
+            quiz: AnswerableQuiz,
+            isLiked: Boolean,
+            answered: Choice?,
         ): AnswerableQuizDetail =
-                answeredOption?.let {
-                    UserAnsweredQuiz.from(
+                answered?.let {
+                    AnsweredQuizWithAnswer.from(
                             quiz,
-                            answeredOption.value,
+                            answered.value,
                             isLiked,
                     )
-                } ?: UserNotAnsweredQuiz.from(quiz, isLiked)
+                } ?: NotAnsweredQuizWithAnswer.from(quiz, isLiked)
     }
 }

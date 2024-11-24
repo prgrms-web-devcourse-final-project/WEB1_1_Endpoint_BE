@@ -4,23 +4,25 @@ import kotlin.math.round
 
 sealed interface QuizWithDetail
 
+sealed interface NotAnswerableQuizDetail : QuizWithDetail
+
 sealed interface AnswerableQuizDetail : QuizWithDetail
 
-data class NonAnswerableQuizWithDetail(
+data class NotAnsweredQuizWithoutAnswer(
     val id: Long,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
     val count: QuizDetailCount,
     val isLiked: Boolean,
-) : QuizWithDetail {
+) : QuizWithDetail, NotAnswerableQuizDetail {
 
     companion object {
-        fun from(quiz: QuizForRead, isLiked: Boolean): NonAnswerableQuizWithDetail =
+        fun from(quiz: QuizForRead, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
-                    return NonAnswerableQuizWithDetail(
+                    return NotAnsweredQuizWithoutAnswer(
                             id = id(),
                             content = content(),
                             type = typeName(),
@@ -38,7 +40,45 @@ data class NonAnswerableQuizWithDetail(
     }
 }
 
-data class UserNotAnsweredQuiz(
+data class AnsweredQuizWithoutAnswer(
+    val id: Long,
+    val content: String,
+    val type: String,
+    val options: List<QuizDetailOption>,
+    val answeredOption: String,
+    val count: QuizDetailCount,
+    val isLiked: Boolean,
+) : QuizWithDetail, NotAnswerableQuizDetail {
+
+    companion object {
+        fun from(
+            quiz: QuizForRead,
+            answeredOption: String,
+            isLiked: Boolean
+        ): AnsweredQuizWithoutAnswer =
+            with(quiz) {
+                val totalSelection =
+                    options.sumOf { it.selectionCount }
+                return AnsweredQuizWithoutAnswer(
+                    id = id(),
+                    content = content(),
+                    type = typeName(),
+                    options =
+                    options.map {
+                        QuizDetailOption.from(
+                            it,
+                            totalSelection,
+                        )
+                    },
+                    count = QuizDetailCount.from(count),
+                    answeredOption = answeredOption,
+                    isLiked = isLiked,
+                )
+            }
+    }
+}
+
+data class NotAnsweredQuizWithAnswer(
     val id: Long,
     val content: String,
     val type: String,
@@ -52,11 +92,11 @@ data class UserNotAnsweredQuiz(
         fun from(
                 quiz: AnswerableQuiz,
                 isLiked: Boolean,
-        ): UserNotAnsweredQuiz =
+        ): NotAnsweredQuizWithAnswer =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
-                    return UserNotAnsweredQuiz(
+                    return NotAnsweredQuizWithAnswer(
                             id = id(),
                             content = content(),
                             type = typeName(),
@@ -79,13 +119,13 @@ data class UserNotAnsweredQuiz(
     }
 }
 
-data class UserAnsweredQuiz(
+data class AnsweredQuizWithAnswer(
     val id: Long,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
     val answer: QuizDetailAnswer,
-    val answeredOption: Int,
+    val answeredOption: String,
     val count: QuizDetailCount,
     val isLiked: Boolean,
 ) : QuizWithDetail, AnswerableQuizDetail {
@@ -93,13 +133,13 @@ data class UserAnsweredQuiz(
     companion object {
         fun from(
                 quiz: AnswerableQuiz,
-                answeredOption: Int,
+                answeredOption: String,
                 isLiked: Boolean,
-        ): UserAnsweredQuiz =
+        ): AnsweredQuizWithAnswer =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
-                    return UserAnsweredQuiz(
+                    return AnsweredQuizWithAnswer(
                             id = id(),
                             content = content(),
                             type = typeName(),
