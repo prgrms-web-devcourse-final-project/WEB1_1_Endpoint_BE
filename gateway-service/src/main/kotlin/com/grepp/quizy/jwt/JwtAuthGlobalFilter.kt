@@ -99,7 +99,6 @@ class RouteValidator {
     private val openApiEndpoints =
         listOf(
             "/oauth2/",
-            "/api/auth/",
             "/api/quiz/feed",
             "/api/search",
         )
