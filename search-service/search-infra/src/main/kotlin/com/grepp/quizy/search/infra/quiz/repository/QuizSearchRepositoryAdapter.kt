@@ -4,7 +4,9 @@ import com.grepp.quizy.search.domain.global.dto.Slice
 import com.grepp.quizy.search.domain.quiz.*
 import com.grepp.quizy.search.domain.quiz.UserSearchCondition
 import com.grepp.quizy.search.domain.user.UserId
+import com.grepp.quizy.search.infra.quiz.document.QuizDocument
 import com.grepp.quizy.search.infra.quiz.document.QuizDomainFactory
+import com.grepp.quizy.search.infra.quiz.document.SortField
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.findByIdOrNull
@@ -61,7 +63,7 @@ class QuizSearchRepositoryAdapter(
             PageRequest.of(
                 condition.page(),
                 condition.size(),
-                Sort.by(Sort.Direction.DESC, it.name)
+                Sort.by(Sort.Direction.DESC, SortField.from(it).fieldName)
             )
         } ?: PageRequest.of(condition.page(), condition.size())
 }
