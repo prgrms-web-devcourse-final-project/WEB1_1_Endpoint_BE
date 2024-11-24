@@ -32,7 +32,7 @@ class QuizSearchRepositoryAdapter(
                 }
     }
 
-    override fun search(condition: GameSearchCondition): List<AnswerableQuiz> {
+    override fun search(condition: GameQuizSearchCondition): List<AnswerableQuiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository

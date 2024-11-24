@@ -11,7 +11,7 @@ class QuizSearcher(
     fun search(condition: UserSearchCondition) =
             quizSearchRepository.search(condition)
 
-    fun search(condition: GameSearchCondition) =
+    fun search(condition: GameQuizSearchCondition) =
             quizSearchRepository.search(condition)
 
     fun searchUserAnswer(userId: UserId, quizIds: List<QuizId>) =

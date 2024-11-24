@@ -27,7 +27,7 @@ data class UserSearchCondition(
     override fun sort() = sort
 }
 
-data class GameSearchCondition(
+data class GameQuizSearchCondition(
     val category: String,
     val difficulty: QuizDifficultyType,
     val size: Int,

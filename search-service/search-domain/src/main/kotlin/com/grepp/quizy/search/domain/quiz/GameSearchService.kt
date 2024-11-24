@@ -7,13 +7,9 @@ class GameSearchService(
     private val quizSearcher: QuizSearcher
 ) : GameSearchUseCase {
 
-    override fun searchForPrivateGame(
-        category: String,
-        size: Int,
-        difficultyType: QuizDifficultyType
-    ): List<GameQuizDetail> {
-        val poolSize = GameQuizPoolUtils.expandQuizPoolSize(size)
-        val candidates = quizSearcher.search(GameSearchCondition(category, difficultyType, poolSize))
-        return GameQuizPoolUtils.makeGameSet(candidates, size)
+    override fun searchForPrivateGame(condition: GameQuizSearchCondition): List<GameQuizDetail> {
+        val poolSize = GameQuizPoolUtils.expandQuizPoolSize(condition.size)
+        val candidates = quizSearcher.search(GameQuizSearchCondition(condition.category, condition.difficulty, poolSize))
+        return GameQuizPoolUtils.makeGameSet(candidates, condition.size)
     }
 }

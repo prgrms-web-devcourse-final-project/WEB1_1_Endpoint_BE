@@ -1,6 +1,8 @@
 package com.grepp.quizy.search.api.quiz.dto
 
 import com.grepp.quizy.common.dto.Page
+import com.grepp.quizy.search.domain.quiz.GameQuizSearchCondition
+import com.grepp.quizy.search.domain.quiz.QuizDifficultyType
 import com.grepp.quizy.search.domain.quiz.QuizSortType
 import com.grepp.quizy.search.domain.quiz.UserSearchCondition
 
@@ -16,4 +18,17 @@ data class UserSearchParams(
                     page = Page(page, size),
                     sort = sort,
             )
+}
+
+data class GameQuizSearchParams(
+        val category: String,
+        val size: Int,
+        val difficulty: QuizDifficultyType
+) {
+        fun GameQuizSearchCondition() =
+                GameQuizSearchCondition(
+                        category = category,
+                        size = size,
+                        difficulty = difficulty
+                )
 }
