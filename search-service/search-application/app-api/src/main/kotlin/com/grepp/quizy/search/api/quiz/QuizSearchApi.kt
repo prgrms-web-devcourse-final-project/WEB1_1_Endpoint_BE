@@ -3,7 +3,7 @@ package com.grepp.quizy.search.api.quiz
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.search.api.quiz.dto.UserSearchParams
 import com.grepp.quizy.search.api.quiz.dto.SearchedQuizResponse
-import com.grepp.quizy.search.domain.quiz.UserSearchUseCase
+import com.grepp.quizy.search.domain.quiz.UserQuizSearchUseCase
 import com.grepp.quizy.search.domain.user.UserId
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/search/quiz")
 class QuizSearchApi(
-        private val userSearchUseCase: UserSearchUseCase
+        private val userQuizSearchUseCase: UserQuizSearchUseCase
 ) {
 
     @GetMapping
@@ -23,7 +23,7 @@ class QuizSearchApi(
     ): ApiResponse<SearchedQuizResponse> =
             ApiResponse.success(
                     SearchedQuizResponse.from(
-                            userSearchUseCase.searchByKeyword(
+                            userQuizSearchUseCase.searchByKeyword(
                                     userId,
                                     params.UserSearchCondition(),
                             )
