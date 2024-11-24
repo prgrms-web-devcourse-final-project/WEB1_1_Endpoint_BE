@@ -1,7 +1,7 @@
 package com.grepp.quizy.search.api.quiz
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.search.api.quiz.dto.SearchParams
+import com.grepp.quizy.search.api.quiz.dto.UserSearchParams
 import com.grepp.quizy.search.api.quiz.dto.SearchedQuizResponse
 import com.grepp.quizy.search.domain.quiz.UserSearchUseCase
 import com.grepp.quizy.search.domain.user.UserId
@@ -18,14 +18,14 @@ class QuizSearchApi(
 
     @GetMapping
     fun searchByKeyword(
-            @RequestHeader("X-Auth-Id") userId: UserId?,
-            params: SearchParams,
+        @RequestHeader("X-Auth-Id") userId: UserId?,
+        params: UserSearchParams,
     ): ApiResponse<SearchedQuizResponse> =
             ApiResponse.success(
                     SearchedQuizResponse.from(
                             userSearchUseCase.searchByKeyword(
                                     userId,
-                                    params.SearchCondition(),
+                                    params.UserSearchCondition(),
                             )
                     )
             )
