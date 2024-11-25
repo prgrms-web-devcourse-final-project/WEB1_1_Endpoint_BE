@@ -1,7 +1,7 @@
 package com.grepp.quizy.game.api.game.dto
 
-import com.grepp.quizy.game.domain.GameLevel
-import com.grepp.quizy.game.domain.GameSubject
+import com.grepp.quizy.game.domain.game.GameLevel
+import com.grepp.quizy.game.domain.game.GameSubject
 
 data class UpdateSubjectPayloadRequest(val subject: GameSubject)
 

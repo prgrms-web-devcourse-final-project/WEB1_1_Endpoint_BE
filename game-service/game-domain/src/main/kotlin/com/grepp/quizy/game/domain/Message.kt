@@ -1,5 +1,7 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.game.*
+
 enum class MessageType {
     GAME_ROOM,
     CHAT,

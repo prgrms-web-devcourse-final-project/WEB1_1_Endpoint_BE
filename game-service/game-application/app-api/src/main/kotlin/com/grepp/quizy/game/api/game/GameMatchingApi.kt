@@ -3,7 +3,7 @@ package com.grepp.quizy.game.api.game
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.GameResponse
 import com.grepp.quizy.game.api.game.dto.MatchingRequest
-import com.grepp.quizy.game.domain.GameMatchingService
+import com.grepp.quizy.game.domain.game.GameMatchingService
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.PostMapping
