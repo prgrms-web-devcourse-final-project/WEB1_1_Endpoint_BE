@@ -21,7 +21,7 @@ springdoc:
   api-docs:
     version: openapi_3_1
     enabled: true
-    path: /api-docs
+    path: api/game/api-docs
   enable-spring-security: true
 ---
 spring:
@@ -32,5 +32,5 @@ springdoc:
   api-docs:
     version: openapi_3_1
     enabled: true
-    path: /api-docs
+    path: api/game/api-docs
   enable-spring-security: true
