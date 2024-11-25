@@ -11,7 +11,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 class SecurityConfig() {
 
     companion object {
-        private val PERMIT_ALL_PATHS = arrayOf(
+        public val PERMIT_ALL_PATHS = arrayOf(
             "/api/*/api-docs",     // api-docs 경로들
             "/api-docs",
             "/api-docs/**",
