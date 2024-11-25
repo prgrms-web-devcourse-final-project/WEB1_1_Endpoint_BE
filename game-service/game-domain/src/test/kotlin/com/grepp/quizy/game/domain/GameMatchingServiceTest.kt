@@ -1,9 +1,16 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user1
+import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user2
+import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user3
+import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user4
+import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user5
 import com.grepp.quizy.game.domain.game.*
 import com.grepp.quizy.game.domain.game.GameType.RANDOM
 import com.grepp.quizy.game.domain.game.PlayerRole.GUEST
 import com.grepp.quizy.game.domain.game.PlayerRole.HOST
+import com.grepp.quizy.game.domain.user.User
+import com.grepp.quizy.game.domain.user.UserReader
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -15,13 +22,21 @@ class GameMatchingServiceTest() : DescribeSpec({
     val gameReader = GameReader(gameRepository)
     val messagePublisher = FakeGameMessagePublisher()
     val eventPublisher = FakeGameApplicationEventPublisher()
+    val userRepository = FakeUserRepository()
+    val userReader = UserReader(userRepository)
 
-    val matchingService = GameMatchingService(gameAppender, gameReader, messagePublisher, eventPublisher)
+
+    val matchingService = GameMatchingService(gameAppender, gameReader, userReader, messagePublisher, eventPublisher)
+
+    beforeTest {
+        userRepository.saveAll(listOf(user1, user2, user3, user4, user5))
+    }
 
     afterTest {
         gameRepository.clear()
         idGenerator.reset()
         eventPublisher.clear()
+        userRepository.clear()
     }
 
     describe("GameMatchingService") {
@@ -71,11 +86,31 @@ class GameMatchingServiceTest() : DescribeSpec({
                     GameStatus.WAITING,
                     Players(
                         listOf(
-                            Player(1, HOST, PlayerStatus.JOINED),
-                            Player(2, GUEST, PlayerStatus.JOINED),
-                            Player(3, GUEST, PlayerStatus.JOINED),
-                            Player(4, GUEST, PlayerStatus.WAITING),
-                            Player(5, GUEST, PlayerStatus.JOINED)
+                            Player(
+                                user1,
+                                HOST,
+                                PlayerStatus.JOINED
+                            ),
+                            Player(
+                                user2,
+                                GUEST,
+                                PlayerStatus.JOINED
+                            ),
+                            Player(
+                                user3,
+                                GUEST,
+                                PlayerStatus.JOINED
+                            ),
+                            Player(
+                                user4,
+                                GUEST,
+                                PlayerStatus.WAITING
+                            ),
+                            Player(
+                                user5,
+                                GUEST,
+                                PlayerStatus.JOINED
+                            )
                         )
                     ),
                     InviteCode("ABC123")
@@ -92,7 +127,15 @@ class GameMatchingServiceTest() : DescribeSpec({
             }
         }
     }
-})
+}) {
+    companion object {
+        val user1 = User(1L, "프로게이머", "imgPath")
+        val user2 = User(2L, "게임좋아", "imgPath123")
+        val user3 = User(3L, "퀴즈왕", "img456")
+        val user4 = User(4L, "퀴즈신", "imgPath")
+        val user5 = User(5L, "퀴즈짱", "imgPath")
+    }
+}
 
 private fun generateRandomGameFixture(
     gameRepository: FakeGameRepository
@@ -100,6 +143,8 @@ private fun generateRandomGameFixture(
     Game.random(
         id = 1,
         subject = GameSubject.SPRING,
-        userIds = listOf(1L, 2L, 3L, 4L, 5L)
+        users = listOf(
+            user1, user2, user3, user4, user5
+        )
     )
 )

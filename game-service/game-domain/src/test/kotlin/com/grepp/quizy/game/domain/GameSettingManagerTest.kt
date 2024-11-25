@@ -1,7 +1,9 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GameSettingManagerTest.Companion.user
 import com.grepp.quizy.game.domain.game.*
 import com.grepp.quizy.game.domain.game.GameType.PRIVATE
+import com.grepp.quizy.game.domain.user.User
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -20,7 +22,7 @@ class GameSettingManagerTest() : DescribeSpec({
                 it("게임 주제가 변경된다.") {
                     val game = generateGameFixture(gameRepository)
 
-                    val updatedGame = gameSettingManager.updateSubject(game, GameSubject.JAVASCRIPT, 1)
+                    val updatedGame = gameSettingManager.updateSubject(game, GameSubject.JAVASCRIPT, user)
 
                     updatedGame.setting.subject shouldBe GameSubject.JAVASCRIPT
                 }
@@ -30,7 +32,7 @@ class GameSettingManagerTest() : DescribeSpec({
                 it("게임 레벨이 변경된다.") {
                     val game = generateGameFixture(gameRepository)
 
-                    val updatedGame = gameSettingManager.updateLevel(game, GameLevel.HARD, 1)
+                    val updatedGame = gameSettingManager.updateLevel(game, GameLevel.HARD, user)
 
                     updatedGame.setting.level shouldBe GameLevel.HARD
                 }
@@ -40,7 +42,7 @@ class GameSettingManagerTest() : DescribeSpec({
                 it("퀴즈 문항 개수가 변경된다.") {
                     val game = generateGameFixture(gameRepository)
 
-                    val updatedGame = gameSettingManager.updateQuizCount(game, 20, 1)
+                    val updatedGame = gameSettingManager.updateQuizCount(game, 20, user)
 
                     updatedGame.setting.quizCount shouldBe 20
                 }
@@ -49,7 +51,11 @@ class GameSettingManagerTest() : DescribeSpec({
         }
     }
 
-})
+}) {
+    companion object {
+        val user = User(1, "프로게이머", "imgPath")
+    }
+}
 
 private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
     val game = Game(
@@ -63,13 +69,13 @@ private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
         _players = Players(
             listOf(
                 Player(
-                    id = 1,
+                    user = user,
                     PlayerRole.HOST
                 )
             )
         ),
         inviteCode = InviteCode("ABC123")
     )
-    gameRepository.save(game)
-    return game
+    return gameRepository.save(game)
 }
+

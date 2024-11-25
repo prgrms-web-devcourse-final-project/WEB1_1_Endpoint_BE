@@ -2,6 +2,7 @@ package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.RoomPayload
+import com.grepp.quizy.game.domain.user.UserReader
 import org.springframework.stereotype.Service
 
 @Service
@@ -10,6 +11,7 @@ class GamePrivateService(
     private val gameReader: GameReader,
     private val gamePlayerManager: GamePlayerManager,
     private val gameSettingManager: GameSettingManager,
+    private val userReader: UserReader,
     private val messagePublisher: GameMessagePublisher,
 ) {
 
@@ -19,8 +21,9 @@ class GamePrivateService(
         level: GameLevel,
         quizCount: Int,
     ): Game {
+        val user = userReader.read(userId)
         return gameAppender.append(
-            userId = userId,
+            user = user,
             subject = subject,
             level = level,
             quizCount = quizCount,
@@ -29,7 +32,8 @@ class GamePrivateService(
 
     fun join(userId: Long, code: String): Game {
         val game = gameReader.readByInviteCode(code)
-        val currentGame = gamePlayerManager.join(game, userId)
+        val user = userReader.read(userId)
+        val currentGame = gamePlayerManager.join(game, user)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -41,7 +45,8 @@ class GamePrivateService(
 
     fun quit(userId: Long, gameId: Long) {
         val game = gameReader.read(gameId)
-        val currentGame = gamePlayerManager.quit(game, userId)
+        val user = userReader.read(userId)
+        val currentGame = gamePlayerManager.quit(game, user)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -56,11 +61,12 @@ class GamePrivateService(
         subject: GameSubject,
     ) {
         val game = gameReader.read(gameId)
+        val user = userReader.read(userId)
         val currentGame =
             gameSettingManager.updateSubject(
                 game,
                 subject,
-                userId,
+                user,
             )
         messagePublisher.publish(
             GameMessage.room(
@@ -72,8 +78,9 @@ class GamePrivateService(
 
     fun updateLevel(userId: Long, gameId: Long, level: GameLevel) {
         val game = gameReader.read(gameId)
+        val user = userReader.read(userId)
         val currentGame =
-            gameSettingManager.updateLevel(game, level, userId)
+            gameSettingManager.updateLevel(game, level, user)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -84,7 +91,8 @@ class GamePrivateService(
 
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
         val game = gameReader.read(gameId)
-        val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
+        val user = userReader.read(userId)
+        val currentGame = gameSettingManager.updateQuizCount(game, quizCount, user)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -95,8 +103,10 @@ class GamePrivateService(
 
     fun kickUser(userId: Long, gameId: Long, targetUserId: Long) {
         val game = gameReader.read(gameId)
+        val user = userReader.read(userId)
+        val targetUser = userReader.read(targetUserId)
         val currentGame =
-            gamePlayerManager.kick(game, userId, targetUserId)
+            gamePlayerManager.kick(game, user, targetUser)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,

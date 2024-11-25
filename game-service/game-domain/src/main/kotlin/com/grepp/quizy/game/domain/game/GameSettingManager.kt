@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain.game
 
+import com.grepp.quizy.game.domain.user.User
 import org.springframework.stereotype.Component
 
 @Component
@@ -8,27 +9,27 @@ class GameSettingManager(private val gameRepository: GameRepository) {
     fun updateSubject(
         game: Game,
         subject: GameSubject,
-        userId: Long,
+        user: User,
     ): Game {
-        game.updateSubject(userId = userId, subject = subject)
+        game.updateSubject(user = user, subject = subject)
         return gameRepository.save(game)
     }
 
     fun updateLevel(
         game: Game,
         level: GameLevel,
-        userId: Long,
+        user: User,
     ): Game {
-        game.updateLevel(userId = userId, level = level)
+        game.updateLevel(user = user, level = level)
         return gameRepository.save(game)
     }
 
     fun updateQuizCount(
         game: Game,
         quizCount: Int,
-        userId: Long,
+        user: User,
     ): Game {
-        game.updateQuizCount(userId = userId, quizCount = quizCount)
+        game.updateQuizCount(user = user, quizCount = quizCount)
         return gameRepository.save(game)
     }
 }

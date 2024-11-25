@@ -3,6 +3,7 @@ package com.grepp.quizy.game.domain
 import com.grepp.quizy.game.domain.exception.GameException
 import com.grepp.quizy.game.domain.game.*
 import com.grepp.quizy.game.domain.game.GameType.PRIVATE
+import com.grepp.quizy.game.domain.user.User
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -24,11 +25,11 @@ class GameReaderTest() : DescribeSpec({
             _players = Players(
                 listOf(
                     Player(
-                        id = 1,
+                        User(1, "프로게이머", "imgPath"),
                         PlayerRole.HOST
                     ),
                     Player(
-                        id = 2,
+                        User(2, "게임좋아", "imgPath123"),
                         PlayerRole.GUEST
                     )
                 )
@@ -54,9 +55,9 @@ class GameReaderTest() : DescribeSpec({
                     foundGame.setting.quizCount shouldBe 10
                     foundGame.status shouldBe GameStatus.WAITING
                     foundGame.players.players.size shouldBe 2
-                    foundGame.players.players[0].id shouldBe 1
+                    foundGame.players.players[0].user.id shouldBe 1
                     foundGame.players.players[0].role shouldBe PlayerRole.HOST
-                    foundGame.players.players[1].id shouldBe 2
+                    foundGame.players.players[1].user.id shouldBe 2
                     foundGame.players.players[1].role shouldBe PlayerRole.GUEST
                     foundGame.inviteCode!!.value shouldBe "ABC123"
                 }
@@ -78,9 +79,9 @@ class GameReaderTest() : DescribeSpec({
                     foundGame.setting.quizCount shouldBe 10
                     foundGame.status shouldBe GameStatus.WAITING
                     foundGame.players.players.size shouldBe 2
-                    foundGame.players.players[0].id shouldBe 1
+                    foundGame.players.players[0].user.id shouldBe 1
                     foundGame.players.players[0].role shouldBe PlayerRole.HOST
-                    foundGame.players.players[1].id shouldBe 2
+                    foundGame.players.players[1].user.id shouldBe 2
                     foundGame.players.players[1].role shouldBe PlayerRole.GUEST
                     foundGame.inviteCode!!.value shouldBe "ABC123"
                 }

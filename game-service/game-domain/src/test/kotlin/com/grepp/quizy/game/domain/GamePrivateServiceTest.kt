@@ -1,7 +1,11 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.GamePrivateServiceTest.Companion.guestUser1
+import com.grepp.quizy.game.domain.GamePrivateServiceTest.Companion.hostUser
 import com.grepp.quizy.game.domain.game.*
 import com.grepp.quizy.game.domain.game.GameType.PRIVATE
+import com.grepp.quizy.game.domain.user.User
+import com.grepp.quizy.game.domain.user.UserReader
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
@@ -14,19 +18,27 @@ class GamePrivateServiceTest() : DescribeSpec({
     val reader = GameReader(gameRepository)
     val playerManager = GamePlayerManager(gameRepository)
     val settingManager = GameSettingManager(gameRepository)
+    val userRepository = FakeUserRepository()
+    val userReader = UserReader(userRepository)
 
     val gamePrivateService = GamePrivateService(
         appender,
         reader,
         playerManager,
         settingManager,
+        userReader,
         gameMessagePublisher
     )
+
+    beforeTest {
+        userRepository.saveAll(listOf(hostUser, guestUser1, guestUser2, guestUser3, guestUser4))
+    }
 
     afterTest {
         gameRepository.clear()
         idGenerator.reset()
         gameMessagePublisher.clear()
+        userRepository.clear()
     }
 
     describe("GameService") {
@@ -45,7 +57,7 @@ class GamePrivateServiceTest() : DescribeSpec({
                 createdGame.setting.quizCount shouldBe 10
                 createdGame.status shouldBe GameStatus.WAITING
                 createdGame.players.players.size shouldBe 1
-                createdGame.players.players[0].id shouldBe 1L
+                createdGame.players.players[0].user.id shouldBe 1L
                 createdGame.players.players[0].role shouldBe PlayerRole.HOST
                 createdGame.inviteCode!!.value.length shouldBe 6
 
@@ -59,7 +71,7 @@ class GamePrivateServiceTest() : DescribeSpec({
 
                 // 게임 상태 검증
                 joinedGame.players.players.size shouldBe 3
-                joinedGame.players.players[2].id shouldBe 3L
+                joinedGame.players.players[2].user.id shouldBe 3L
                 joinedGame.players.players[2].role shouldBe PlayerRole.GUEST
 
                 // 메시지 검증
@@ -76,11 +88,11 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 10
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 3
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.players.players[1].id shouldBe 2L
+                payload.players.players[1].user.id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
-                payload.players.players[2].id shouldBe 3L
+                payload.players.players[2].user.id shouldBe 3L
                 payload.players.players[2].role shouldBe PlayerRole.GUEST
                 payload.inviteCode!!.value shouldBe "ABC123"
 
@@ -106,7 +118,7 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 10
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 1
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
                 payload.inviteCode!!.value shouldBe "ABC123"
             }
@@ -131,9 +143,9 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 10
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 2
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.players.players[1].id shouldBe 2L
+                payload.players.players[1].user.id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
                 payload.inviteCode!!.value shouldBe "ABC123"
             }
@@ -158,9 +170,9 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 10
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 2
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.players.players[1].id shouldBe 2L
+                payload.players.players[1].user.id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
                 payload.inviteCode!!.value shouldBe "ABC123"
             }
@@ -185,9 +197,9 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 20
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 2
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
-                payload.players.players[1].id shouldBe 2L
+                payload.players.players[1].user.id shouldBe 2L
                 payload.players.players[1].role shouldBe PlayerRole.GUEST
                 payload.inviteCode!!.value shouldBe "ABC123"
             }
@@ -212,17 +224,33 @@ class GamePrivateServiceTest() : DescribeSpec({
                 payload.setting.quizCount shouldBe 10
                 payload.status shouldBe GameStatus.WAITING
                 payload.players.players.size shouldBe 1
-                payload.players.players[0].id shouldBe 1L
+                payload.players.players[0].user.id shouldBe 1L
                 payload.players.players[0].role shouldBe PlayerRole.HOST
                 payload.inviteCode!!.value shouldBe "ABC123"
             }
         }
     }
 
-})
+}) {
+    companion object {
+        val hostUser = User(1L, "프로게이머", "imgPath")
+        val guestUser1 = User(2L, "게임좋아", "imgPath123")
+        val guestUser2 = User(3L, "게임신", "imgPath23")
+        val guestUser3 = User(4L, "퀴즈신", "imgPath")
+        val guestUser4 = User(5L, "퀴즈짱", "imgPath")
+    }
+}
 
-private fun generateGameFixture(gameRepository: FakeGameRepository) = gameRepository.save(
-    Game(
+private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
+    val hostPlayer = Player(
+        hostUser,
+        PlayerRole.HOST
+    )
+    val guestPlayer1 = Player(
+        guestUser1,
+        PlayerRole.GUEST
+    )
+    val game = Game(
         type = PRIVATE,
         _setting = GameSetting(
             subject = GameSubject.SPRING,
@@ -232,16 +260,11 @@ private fun generateGameFixture(gameRepository: FakeGameRepository) = gameReposi
         _status = GameStatus.WAITING,
         _players = Players(
             listOf(
-                Player(
-                    id = 1,
-                    PlayerRole.HOST
-                ),
-                Player(
-                    id = 2,
-                    PlayerRole.GUEST
-                )
+                hostPlayer,
+                guestPlayer1
             )
         ),
         inviteCode = InviteCode("ABC123")
     )
-)
+    return gameRepository.save(game)
+}

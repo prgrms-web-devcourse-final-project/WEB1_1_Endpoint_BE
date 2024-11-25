@@ -5,6 +5,7 @@ import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedExc
 import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
 import com.grepp.quizy.game.domain.game.GameStatus.DELETED
 import com.grepp.quizy.game.domain.game.GameStatus.WAITING
+import com.grepp.quizy.game.domain.user.User
 
 class Game(
     val id: Long = 0,
@@ -26,15 +27,15 @@ class Game(
     constructor(
         id: Long,
         subject: GameSubject,
-        userIds: List<Long>
+        users: List<User>
     ) : this(
         id = id,
         type = GameType.RANDOM,
         _setting = GameSetting(subject),
-        _players = Players(userIds.map { Player(id = it, _status = PlayerStatus.WAITING) }.toList()),
+        _players = Players(users.map { Player(user = it, _status = PlayerStatus.WAITING) }.toList()),
         inviteCode = null
     ) {
-        validatePlayerCount(userIds)
+        validatePlayerCount(users)
     }
 
     companion object {
@@ -43,13 +44,13 @@ class Game(
             subject: GameSubject,
             quizCount: Int,
             level: GameLevel,
-            userId: Long
+            user: User
         ): Game {
             val game = Game(
                 id = id,
                 type = GameType.PRIVATE,
                 _setting = GameSetting(subject = subject, level = level, quizCount = quizCount),
-                _players = Players(listOf(Player(id = userId, _role = PlayerRole.HOST))),
+                _players = Players(listOf(Player(user, _role = PlayerRole.HOST))),
                 inviteCode = InviteCode()
             )
             return game
@@ -58,59 +59,59 @@ class Game(
         fun random(
             id: Long,
             subject: GameSubject,
-            userIds: List<Long>
+            users: List<User>
         ): Game {
             return Game(
                 id = id,
                 subject = subject,
-                userIds = userIds
+                users = users
             )
         }
     }
 
-    fun join(userId: Long) {
+    fun join(user: User) {
         validateGameNotStarted()
-        this._players = _players.add(Player(id = userId))
+        this._players = _players.add(Player(user))
     }
 
-    fun joinRandomGame(userId: Long) {
-        this._players = _players.joinRandomGame(userId)
+    fun joinRandomGame(user: User) {
+        this._players = _players.joinRandomGame(user)
     }
 
-    fun quit(userId: Long) {
-        val player = _players.findPlayerById(userId)
+    fun quit(user: User) {
+        val player = _players.findPlayer(user)
         this._players = _players.remove(player)
         if (_players.isEmpty()) {
             _status = DELETED
         }
     }
 
-    fun kick(userId: Long, targetId: Long) {
+    fun kick(user: User, targetUser: User) {
         validateGameNotStarted()
-        validateHostPermission(userId)
-        this._players = _players.remove(Player(id = targetId))
+        validateHostPermission(user)
+        this._players = _players.remove(Player(targetUser))
     }
 
-    fun updateSubject(userId: Long, subject: GameSubject) {
+    fun updateSubject(user: User, subject: GameSubject) {
         validateGameNotStarted()
-        validateHostPermission(userId)
+        validateHostPermission(user)
         this._setting = _setting.updateSubject(subject)
     }
 
-    fun updateLevel(userId: Long, level: GameLevel) {
+    fun updateLevel(user: User, level: GameLevel) {
         validateGameNotStarted()
-        validateHostPermission(userId)
+        validateHostPermission(user)
         this._setting = _setting.updateLevel(level)
     }
 
-    fun updateQuizCount(userId: Long, quizCount: Int) {
+    fun updateQuizCount(user: User, quizCount: Int) {
         validateGameNotStarted()
-        validateHostPermission(userId)
+        validateHostPermission(user)
         this._setting = _setting.updateQuizCount(quizCount)
     }
 
-    private fun validateHostPermission(userId: Long) {
-        val player = players.findPlayerById(userId)
+    private fun validateHostPermission(user: User) {
+        val player = players.findPlayer(user)
         if (player.isGuest()) {
             throw GameHostPermissionException
         }
@@ -122,8 +123,8 @@ class Game(
         }
     }
 
-    private fun validatePlayerCount(userIds: List<Long>) {
-        if (userIds.size != 5) {
+    private fun validatePlayerCount(users: List<User>) {
+        if (users.size != 5) {
             throw GameException.GameMisMatchNumberOfPlayersException
         }
     }

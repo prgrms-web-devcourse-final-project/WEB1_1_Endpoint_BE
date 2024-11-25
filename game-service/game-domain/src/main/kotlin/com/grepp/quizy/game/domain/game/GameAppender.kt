@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain.game
 
+import com.grepp.quizy.game.domain.user.User
 import org.springframework.stereotype.Component
 
 @Component
@@ -9,7 +10,7 @@ class GameAppender(
 ) {
 
     fun append(
-        userId: Long,
+        user: User,
         subject: GameSubject,
         level: GameLevel,
         quizCount: Int,
@@ -20,19 +21,19 @@ class GameAppender(
                 subject = subject,
                 quizCount = quizCount,
                 level = level,
-                userId = userId,
+                user = user,
             )
         return gameRepository.save(game)
     }
 
     fun appendRandomGame(
-        userIds: List<Long>,
+        users: List<User>,
         subject: GameSubject
     ): Game {
         val game = Game.random(
             id = idGenerator.generate("game"),
             subject = subject,
-            userIds = userIds
+            users = users
         )
         return gameRepository.save(game)
     }

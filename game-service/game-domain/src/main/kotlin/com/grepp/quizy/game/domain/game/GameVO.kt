@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.exception.GameException
+import com.grepp.quizy.game.domain.user.User
 
 enum class GameType(
     val description: String
@@ -86,7 +87,7 @@ enum class PlayerStatus {
 }
 
 data class Player(
-    val id: Long,
+    val user: User,
     private var _role: PlayerRole = PlayerRole.GUEST,
     private var _status: PlayerStatus = PlayerStatus.JOINED
 ) {
@@ -122,11 +123,11 @@ data class Player(
 
         other as Player
 
-        return id == other.id
+        return user == other.user
     }
 
     override fun hashCode(): Int {
-        return id.hashCode()
+        return user.hashCode()
     }
 
 }
@@ -162,25 +163,25 @@ data class Players(
         return Players(players - player)
     }
 
-    fun findPlayerById(userId: Long): Player {
-        return players.find { it.id == userId }
+    fun findPlayer(user: User): Player {
+        return players.find { it.user == user }
             ?: throw GameException.GameNotParticipatedException
     }
 
-    fun joinRandomGame(userId: Long): Players =
-        findPlayerById(userId)
+    fun joinRandomGame(user: User): Players =
+        findPlayer(user)
             .takeIf {
                 it.isWaiting()
             }
             ?.let {
-                Players(updatePlayerStatus(userId))
+                Players(updatePlayerStatus(user))
             }
             ?: throw GameException.GameAlreadyParticipatedException
 
-    private fun updatePlayerStatus(userId: Long): List<Player> =
+    private fun updatePlayerStatus(user: User): List<Player> =
         players.map { player ->
-            when (player.id) {
-                userId -> player.apply { join() }
+            when (player.user) {
+                user -> player.apply { join() }
                 else -> player
             }
         }
