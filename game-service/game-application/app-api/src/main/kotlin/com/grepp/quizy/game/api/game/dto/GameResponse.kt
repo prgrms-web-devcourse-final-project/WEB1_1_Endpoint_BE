@@ -1,6 +1,6 @@
 package com.grepp.quizy.game.api.game.dto
 
-import com.grepp.quizy.game.domain.Game
+import com.grepp.quizy.game.domain.game.Game
 
 class GameResponse(
     private val id: Long,

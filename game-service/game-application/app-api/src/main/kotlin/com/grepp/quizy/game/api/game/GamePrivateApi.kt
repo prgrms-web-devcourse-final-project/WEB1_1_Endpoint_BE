@@ -2,7 +2,7 @@ package com.grepp.quizy.game.api.game
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.*
-import com.grepp.quizy.game.domain.GamePrivateService
+import com.grepp.quizy.game.domain.game.GamePrivateService
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
