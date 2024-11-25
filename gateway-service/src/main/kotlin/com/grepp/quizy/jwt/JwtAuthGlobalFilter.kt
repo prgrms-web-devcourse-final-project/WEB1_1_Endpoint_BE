@@ -3,6 +3,7 @@ package com.grepp.quizy.jwt
 import com.grepp.quizy.exception.CustomJwtException
 import com.grepp.quizy.user.RedisTokenRepository
 import com.grepp.quizy.user.api.global.util.CookieUtils
+import com.grepp.quizy.web.UserClient
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
 import org.springframework.core.annotation.Order
@@ -20,6 +21,7 @@ class JwtAuthGlobalFilter(
     private val jwtProvider: JwtProvider,
     private val redisTokenRepository: RedisTokenRepository,
     private val jwtValidator: JwtValidator,
+    private val userClient: UserClient,
 ) : GlobalFilter {
 
     override fun filter(
@@ -64,35 +66,29 @@ class JwtAuthGlobalFilter(
         chain: GatewayFilterChain,
     ): Mono<Void> {
         jwtValidator.validateToken(token)
+        val userId = jwtProvider.getUserIdFromToken(token).value
 
-
-        try {
-            // 새로운 헤더 맵 생성
-            val headers = HttpHeaders()
-            // 기존 헤더 복사
-            exchange.request.headers.forEach { name, values ->
-                headers[name] = values
-            }
-            // 새로운 헤더 추가
-            headers["X-Auth-Id"] = jwtProvider.getUserIdFromToken(token).value.toString()
-
-            // 새로운 요청 객체 생성
-            val mutatedRequest = object : ServerHttpRequestDecorator(exchange.request) {
-                override fun getHeaders(): HttpHeaders {
-                    return headers
+        // 유저 검증을 Mono chain으로 변경
+        return userClient.validateUser(userId)
+            .then(Mono.defer {
+                // 검증이 성공하면 헤더를 추가하고 체인 실행
+                val headers = HttpHeaders()
+                exchange.request.headers.forEach { name, values ->
+                    headers[name] = values
                 }
-            }
+                headers["X-Auth-Id"] = userId.toString()
 
-            // 수정된 요청으로 교체한 exchange로 체인 실행
-            return chain.filter(
-                exchange
-                    .mutate()
-                    .request(mutatedRequest)
-                    .build()
-            )
-        } catch (ex: Exception) {
-            throw CustomJwtException.JwtNotValidateException
-        }
+                val mutatedRequest = object : ServerHttpRequestDecorator(exchange.request) {
+                    override fun getHeaders(): HttpHeaders = headers
+                }
+
+                chain.filter(
+                    exchange
+                        .mutate()
+                        .request(mutatedRequest)
+                        .build()
+                )
+            })
     }
 }
 
