@@ -80,6 +80,11 @@ spring:
     host: ${REDIS_HOST}
     port: 6379
 
+feign:
+  client:
+    url:
+      quiz-service: http://dev-quiz-service:8080
+
 ---
 spring:
   config:

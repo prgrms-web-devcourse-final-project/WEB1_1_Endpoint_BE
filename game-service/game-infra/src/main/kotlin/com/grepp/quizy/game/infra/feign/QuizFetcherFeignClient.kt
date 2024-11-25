@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 // TODO: 퀴즈 서비스의 url 정해지면 추가
-@FeignClient(name = "quiz-fetcher", url = "\${quiz-service.url}")
+@FeignClient(name = "quiz-fetcher", url = "\${feign.client.url.quiz-service}")
 interface QuizFetcherFeignClient : QuizFetcher {
 
     @GetMapping("/api/internal/search/quiz/game-set")
