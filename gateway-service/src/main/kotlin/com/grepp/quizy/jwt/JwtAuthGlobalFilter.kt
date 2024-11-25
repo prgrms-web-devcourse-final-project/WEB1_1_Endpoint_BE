@@ -64,9 +64,7 @@ class JwtAuthGlobalFilter(
         chain: GatewayFilterChain,
     ): Mono<Void> {
         jwtValidator.validateToken(token)
-        if (!redisTokenRepository.isAlreadyLogin(token)) {
-            throw CustomJwtException.JwtLoggedOutException
-        }
+
 
         try {
             // 새로운 헤더 맵 생성

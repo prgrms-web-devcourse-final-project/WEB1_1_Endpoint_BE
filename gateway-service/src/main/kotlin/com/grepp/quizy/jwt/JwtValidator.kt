@@ -1,7 +1,6 @@
 package com.grepp.quizy.jwt
 
 import com.grepp.quizy.exception.CustomJwtException
-import com.grepp.quizy.global.RedisUtil
 import com.grepp.quizy.user.RedisTokenRepository
 import com.grepp.quizy.user.api.global.jwt.JwtProperties
 import io.jsonwebtoken.ExpiredJwtException
@@ -17,7 +16,6 @@ import javax.crypto.SecretKey
 class JwtValidator(
     private val jwtProperties: JwtProperties,
     private val jwtProvider: JwtProvider,
-    private val redisUtil: RedisUtil,
     private val redisRepository: RedisTokenRepository
 ) {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(
@@ -25,6 +23,9 @@ class JwtValidator(
     )
 
     fun validateToken(token: String) {
+        if (!redisRepository.isAlreadyLogin(token)) {
+            throw CustomJwtException.JwtLoggedOutException
+        }
         try {
             Jwts.parserBuilder()
                 .setSigningKey(secretKey)
