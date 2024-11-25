@@ -28,10 +28,12 @@ class JwtAuthGlobalFilter(
     ): Mono<Void> {
         val request = exchange.request
 
+        // 보안이 필요 없는 경로인 경우 필터를 건너뜁니다.
         if (!routeValidator.isSecured(request)) {
             return chain.filter(exchange)
         }
 
+        // 헤더에 Authorization이 없는 경우 쿠키에서 토큰을 가져옵니다.
         if (!request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             CookieUtils.getCookieValue(request, "refreshToken").let {
                 it ?: throw CustomJwtException.JwtNotFountException
@@ -40,8 +42,10 @@ class JwtAuthGlobalFilter(
             }
         }
 
+        // 헤더에 Authorization이 있는 경우 토큰을 가져옵니다.
         val token = resolveToken(request) ?: throw CustomJwtException.JwtUnsupportedException
 
+        // 토큰을 검증하고 새로운 헤더를 추가합니다.
         return addHeader(token, exchange, chain)
     }
 

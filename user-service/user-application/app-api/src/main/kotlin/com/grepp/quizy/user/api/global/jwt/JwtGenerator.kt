@@ -47,8 +47,8 @@ class JwtGenerator(
         val expiration = Date(now.time + expirationTime)
 
         return Jwts.builder()
-            .setSubject(subject.value.toString())
             .setClaims(claims)
+            .setSubject(subject.value.toString())
             .setIssuedAt(now)
             .setExpiration(expiration)
             .signWith(secretKey)

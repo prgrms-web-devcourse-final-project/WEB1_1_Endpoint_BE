@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.common.exception.CustomException
+import io.jsonwebtoken.JwtException
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
@@ -28,6 +29,7 @@ class GlobalErrorExceptionHandler : ErrorWebExceptionHandler {
 
         val errorResponse = when (ex) {
             is CustomException -> {
+                ex.printStackTrace()
                 exchange.response.statusCode = HttpStatusCode.valueOf(ex.status)
                 ApiResponse.error(
                     ex.errorCode.errorReason,
@@ -36,7 +38,14 @@ class GlobalErrorExceptionHandler : ErrorWebExceptionHandler {
                 )
             }
 
+            is JwtException -> {
+                ex.printStackTrace()
+                exchange.response.statusCode = HttpStatus.UNAUTHORIZED
+                ApiResponse.error(HttpStatus.UNAUTHORIZED.name, ex.message ?: "토큰이 유효하지 않습니다")
+            }
+
             else -> {
+                ex.printStackTrace()
                 exchange.response.statusCode = HttpStatus.BAD_GATEWAY
                 ApiResponse.error(HttpStatus.BAD_GATEWAY.name, "게이트웨이 오류")
             }
