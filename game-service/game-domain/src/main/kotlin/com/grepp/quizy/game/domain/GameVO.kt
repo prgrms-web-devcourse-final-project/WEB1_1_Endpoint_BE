@@ -2,6 +2,14 @@ package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.exception.GameException
 
+enum class GameType(
+    val description: String
+) {
+    PRIVATE("사설 게임"),
+    RANDOM("랜덤 매칭 게임"),
+    ;
+}
+
 enum class GameStatus(
     val description: String
 ) {
@@ -16,8 +24,8 @@ enum class GameStatus(
 
 data class GameSetting(
     val subject: GameSubject,
-    val level: GameLevel,
-    val quizCount: Int,
+    val level: GameLevel = GameLevel.RANDOM,
+    val quizCount: Int = 10,
 ) {
     fun updateSubject(subject: GameSubject): GameSetting {
         return copy(subject = subject)
@@ -50,6 +58,7 @@ enum class GameLevel(
     EASY("쉬움"),
     NORMAL("보통"),
     HARD("어려움"),
+    RANDOM("랜덤")
 
     ;
 }
@@ -71,12 +80,29 @@ data class InviteCode(
     }
 }
 
+enum class PlayerStatus {
+    WAITING,
+    JOINED,
+}
+
 data class Player(
     val id: Long,
-    private var _role: PlayerRole = PlayerRole.GUEST
+    private var _role: PlayerRole = PlayerRole.GUEST,
+    private var _status: PlayerStatus = PlayerStatus.JOINED
 ) {
     val role: PlayerRole
         get() = _role
+
+    val status: PlayerStatus
+        get() = _status
+
+    fun join() {
+        _status = PlayerStatus.JOINED
+    }
+
+    fun grantHost() {
+        _role = PlayerRole.HOST
+    }
 
     fun isGuest(): Boolean {
         return _role == PlayerRole.GUEST
@@ -86,8 +112,8 @@ data class Player(
         return role == PlayerRole.HOST
     }
 
-    fun grantHost() {
-        _role = PlayerRole.HOST
+    fun isWaiting(): Boolean {
+        return status == PlayerStatus.WAITING
     }
 
     override fun equals(other: Any?): Boolean {
@@ -141,8 +167,33 @@ data class Players(
             ?: throw GameException.GameNotParticipatedException
     }
 
+    fun joinRandomGame(userId: Long): Players =
+        findPlayerById(userId)
+            .takeIf {
+                it.isWaiting()
+            }
+            ?.let {
+                Players(updatePlayerStatus(userId))
+            }
+            ?: throw GameException.GameAlreadyParticipatedException
+
+    private fun updatePlayerStatus(userId: Long): List<Player> =
+        players.map { player ->
+            when (player.id) {
+                userId -> player.apply { join() }
+                else -> player
+            }
+        }
+
+
     fun isEmpty(): Boolean {
         return players.isEmpty()
+    }
+
+    fun isAllParticipated(): Boolean {
+        return players.map {
+            it.isWaiting()
+        }.all { !it }
     }
 
 

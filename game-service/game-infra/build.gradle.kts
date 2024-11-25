@@ -13,6 +13,9 @@ dependencies {
     api(project(":infrastructure:kafka"))
     // Game Domain Module
     implementation(project(":game-service:game-domain"))
+    //open feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3")
+    implementation ("org.springframework.cloud:spring-cloud-commons:4.1.4")
     // H2 Database
     runtimeOnly("com.h2database:h2")
     // MySQL

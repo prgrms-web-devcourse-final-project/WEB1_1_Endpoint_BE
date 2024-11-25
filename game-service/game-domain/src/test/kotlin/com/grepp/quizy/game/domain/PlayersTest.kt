@@ -151,7 +151,94 @@ class PlayersTest() : DescribeSpec({
                 players.isEmpty() shouldBe true
             }
         }
+    }
 
+    describe("랜덤 게임 플레이어가") {
+        context("사용자가 게임에 참여하면") {
+            it("참여 상태로 변경한다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.WAITING),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                val updatedPlayers = players.joinRandomGame(1)
+
+                updatedPlayers.players[0].status shouldBe PlayerStatus.JOINED
+                updatedPlayers.players[1].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[2].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[3].status shouldBe PlayerStatus.WAITING
+                updatedPlayers.players[4].status shouldBe PlayerStatus.WAITING
+            }
+        }
+        context("이미 참여한 사용자가 참여하면") {
+            it("예외를 발생시킨다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.JOINED),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                shouldThrow<GameAlreadyParticipatedException> { players.joinRandomGame(1) }
+            }
+        }
+        context("참여목록에 없는 사용자가 참여하면") {
+            it("예외를 발생시킨다.") {
+                val players = Players(
+                    listOf(
+                        Player(1, GUEST, PlayerStatus.WAITING),
+                        Player(2, GUEST, PlayerStatus.WAITING),
+                        Player(3, GUEST, PlayerStatus.WAITING),
+                        Player(4, GUEST, PlayerStatus.WAITING),
+                        Player(5, GUEST, PlayerStatus.WAITING)
+                    )
+                )
+
+                shouldThrow<GameNotParticipatedException> { players.joinRandomGame(6) }
+            }
+        }
+        context("참여자의 참여여부를 확인하면") {
+            context("모두 참여했다면") {
+                it("참을 반환한다.") {
+                    val players = Players(
+                        listOf(
+                            Player(1, GUEST, PlayerStatus.JOINED),
+                            Player(2, GUEST, PlayerStatus.JOINED),
+                            Player(3, GUEST, PlayerStatus.JOINED),
+                            Player(4, GUEST, PlayerStatus.JOINED),
+                            Player(5, GUEST, PlayerStatus.JOINED)
+                        )
+                    )
+
+                    val isParticipated = players.isAllParticipated()
+                    isParticipated shouldBe true
+                }
+            }
+            context("대기중인 참여자가 있다면") {
+                it("거짓을 반환한다.") {
+                    val players = Players(
+                        listOf(
+                            Player(1, GUEST, PlayerStatus.JOINED),
+                            Player(2, GUEST, PlayerStatus.JOINED),
+                            Player(3, GUEST, PlayerStatus.JOINED),
+                            Player(4, GUEST, PlayerStatus.WAITING),
+                            Player(5, GUEST, PlayerStatus.JOINED)
+                        )
+                    )
+
+                    val isParticipated = players.isAllParticipated()
+                    isParticipated shouldBe false
+                }
+            }
+        }
     }
 }) {
 }

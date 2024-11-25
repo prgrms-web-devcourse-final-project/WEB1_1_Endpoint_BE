@@ -15,18 +15,21 @@ class GameRedisEntity(
     @TimeToLive
     private val ttl: Long = HOURS_IN_SECOND,
 
+    val type: GameType,
+
     val setting: GameSetting,
 
     val status: GameStatus,
 
     val players: Players,
 
-    val inviteCode: InviteCode
+    val inviteCode: InviteCode?
 ) {
     companion object {
         fun from(game: Game): GameRedisEntity {
             return GameRedisEntity(
                 id = game.id,
+                type = game.type,
                 setting = game.setting,
                 status = game.status,
                 players = game.players,
@@ -39,6 +42,7 @@ class GameRedisEntity(
     fun toDomain(): Game {
         return Game(
             id = id,
+            type = type,
             _setting = setting,
             _status = status,
             _players = players,

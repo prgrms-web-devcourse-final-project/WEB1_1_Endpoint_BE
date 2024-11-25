@@ -1,6 +1,8 @@
 package com.grepp.quizy.game.domain
 
-import com.grepp.quizy.game.domain.PlayerRole.*
+import com.grepp.quizy.game.domain.GameType.PRIVATE
+import com.grepp.quizy.game.domain.PlayerRole.GUEST
+import com.grepp.quizy.game.domain.PlayerRole.HOST
 import com.grepp.quizy.game.domain.exception.GameException
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -31,7 +33,7 @@ class GameTest() : DescribeSpec({
             it("게임의 초대 코드는 6자리 문자열이다.") {
                 val game = Game.create(1L, GameSubject.JAVASCRIPT, 10, GameLevel.EASY, 1)
 
-                game.inviteCode.value.length shouldBe 6
+                game.inviteCode!!.value.length shouldBe 6
             }
         }
 
@@ -39,9 +41,11 @@ class GameTest() : DescribeSpec({
             it("참가한 유저를 게임에 추가한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    inviteCode = InviteCode("ABC123")
                 )
 
                 game.join(3)
@@ -51,9 +55,11 @@ class GameTest() : DescribeSpec({
             it("참가한 유저의 역할은 게스트이다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 game.join(3)
@@ -68,9 +74,11 @@ class GameTest() : DescribeSpec({
             it("게임에서 나간 유저를 게임에서 제거한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 game.quit(2)
@@ -82,9 +90,11 @@ class GameTest() : DescribeSpec({
             it("방장의 권한을 위임한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 game.quit(1)
@@ -99,9 +109,11 @@ class GameTest() : DescribeSpec({
             it("게임을 삭제한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 game.quit(1)
@@ -114,9 +126,11 @@ class GameTest() : DescribeSpec({
             it("강퇴된 사용자를 게임에서 제거한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 game.kick(1, 2)
@@ -129,9 +143,11 @@ class GameTest() : DescribeSpec({
             it("예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameHostPermissionException> {
@@ -145,9 +161,11 @@ class GameTest() : DescribeSpec({
             it("원하는 주제로 변경한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 game.updateSubject(1, GameSubject.SPRING)
@@ -160,9 +178,11 @@ class GameTest() : DescribeSpec({
             it("원하는 난이도로 변경한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 game.updateLevel(1, GameLevel.HARD)
@@ -175,9 +195,11 @@ class GameTest() : DescribeSpec({
             it("원하는 수로 변경한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 game.updateQuizCount(1, 20)
@@ -190,9 +212,11 @@ class GameTest() : DescribeSpec({
             it("게임에 참가하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.PLAYING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameAlreadyStartedException> {
@@ -203,9 +227,11 @@ class GameTest() : DescribeSpec({
             it("강퇴하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.PLAYING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameAlreadyStartedException> {
@@ -216,9 +242,11 @@ class GameTest() : DescribeSpec({
             it("주제를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.PLAYING,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameAlreadyStartedException> {
@@ -228,9 +256,11 @@ class GameTest() : DescribeSpec({
             it("난이도를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.FINISHED,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameAlreadyStartedException> {
@@ -240,9 +270,11 @@ class GameTest() : DescribeSpec({
             it("퀴즈 수를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.DELETED,
-                    Players(listOf(Player(1, HOST)))
+                    Players(listOf(Player(1, HOST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameAlreadyStartedException> {
@@ -251,37 +283,43 @@ class GameTest() : DescribeSpec({
             }
         }
 
-        context("호스트가 아니면"){
-            it("주제를 변경하면 예외가 발생한다."){
+        context("호스트가 아니면") {
+            it("주제를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameHostPermissionException> {
                     game.updateSubject(2, GameSubject.SPRING)
                 }
             }
-            it("난이도를 변경하면 예외가 발생한다."){
+            it("난이도를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameHostPermissionException> {
                     game.updateLevel(2, GameLevel.HARD)
                 }
             }
-            it("퀴즈 수를 변경하면 예외가 발생한다."){
+            it("퀴즈 수를 변경하면 예외가 발생한다.") {
                 val game = Game(
                     1L,
+                    type = PRIVATE,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
-                    Players(listOf(Player(1, HOST), Player(2, GUEST)))
+                    Players(listOf(Player(1, HOST), Player(2, GUEST))),
+                    InviteCode("ABC123")
                 )
 
                 shouldThrow<GameException.GameHostPermissionException> {
@@ -289,7 +327,103 @@ class GameTest() : DescribeSpec({
                 }
             }
         }
+        context("모든 플레이어가 준비되었는지 확인하면") {
+            context("대기 상태인 플레이어가 없으면") {
+                it("true를 반환한다.") {
+                    val game = Game(
+                        1L,
+                        type = PRIVATE,
+                        GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                        GameStatus.WAITING,
+                        Players(
+                            listOf(
+                                Player(1, HOST, PlayerStatus.JOINED),
+                                Player(2, GUEST, PlayerStatus.JOINED),
+                                Player(3, GUEST, PlayerStatus.JOINED),
+                                Player(4, GUEST, PlayerStatus.JOINED),
+                                Player(5, GUEST, PlayerStatus.JOINED)
+                            )
+                        ),
+                        InviteCode("ABC123")
+                    )
 
+                    game.isReady() shouldBe true
+                }
+            }
+            context("대기중인 사용자가 존재하면") {
+                it("false를 반환한다.") {
+                    val game = Game(
+                        1L,
+                        type = PRIVATE,
+                        GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
+                        GameStatus.WAITING,
+                        Players(
+                            listOf(
+                                Player(1, HOST, PlayerStatus.JOINED),
+                                Player(2, GUEST, PlayerStatus.JOINED),
+                                Player(3, GUEST, PlayerStatus.JOINED),
+                                Player(4, GUEST, PlayerStatus.WAITING),
+                                Player(5, GUEST, PlayerStatus.JOINED)
+                            )
+                        ),
+                        InviteCode("ABC123")
+                    )
+
+                    game.isReady() shouldBe false
+                }
+            }
+        }
+        context("랜덤 게임을 생성하면") {
+            it("랜덤 게임을 생성한다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.type shouldBe GameType.RANDOM
+                game.setting.subject shouldBe GameSubject.JAVASCRIPT
+                game.players shouldBe Players(listOf(Player(1), Player(2), Player(3), Player(4), Player(5)))
+            }
+            it("랜덤 게임은 초대 코드가 없다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.inviteCode shouldBe null
+            }
+            it("랜덤 게임은 초기 설정이 있다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.setting.level shouldBe GameLevel.RANDOM
+            }
+            it("랜덤 게임의 사용자는 대기 상태이다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.players.players[0].status shouldBe PlayerStatus.WAITING
+                game.players.players[1].status shouldBe PlayerStatus.WAITING
+                game.players.players[2].status shouldBe PlayerStatus.WAITING
+                game.players.players[3].status shouldBe PlayerStatus.WAITING
+                game.players.players[4].status shouldBe PlayerStatus.WAITING
+            }
+            context("일정 인원이 아니라면") {
+                it("게임을 생성할 수 없다.") {
+                    shouldThrow<GameException.GameMisMatchNumberOfPlayersException> {
+                        Game.random(1L, GameSubject.JAVASCRIPT, listOf(1))
+                    }
+                }
+            }
+        }
+
+    }
+    describe("랜덤 게임에서") {
+        context("게임에 참가하면") {
+            it("참가상태로 변경한다.") {
+                val game = Game.random(1L, GameSubject.JAVASCRIPT, listOf(1, 2, 3, 4, 5))
+
+                game.joinRandomGame(1)
+
+                game.players.players[0].status shouldBe PlayerStatus.JOINED
+                game.players.players[1].status shouldBe PlayerStatus.WAITING
+                game.players.players[2].status shouldBe PlayerStatus.WAITING
+                game.players.players[3].status shouldBe PlayerStatus.WAITING
+                game.players.players[4].status shouldBe PlayerStatus.WAITING
+            }
+        }
     }
 
 }) {

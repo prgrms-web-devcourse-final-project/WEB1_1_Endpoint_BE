@@ -50,6 +50,15 @@ class PlayerTest() : DescribeSpec({
                 player1 shouldBe player2
             }
         }
+        context("게임에 참여하면") {
+            it("참여 상태로 변경한다.") {
+                val player = Player(1)
+
+                player.join()
+
+                player.status shouldBe PlayerStatus.JOINED
+            }
+        }
     }
 }) {
 }

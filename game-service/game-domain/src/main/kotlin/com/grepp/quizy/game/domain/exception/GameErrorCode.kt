@@ -4,9 +4,9 @@ import com.grepp.quizy.common.exception.BaseErrorCode
 import com.grepp.quizy.common.exception.ErrorReason
 
 enum class GameErrorCode(
-        private val status: Int,
-        private val errorCode: String,
-        private val message: String,
+    private val status: Int,
+    private val errorCode: String,
+    private val message: String,
 ) : BaseErrorCode {
 
     GAME_NOT_FOUND(404, "G001", "해당 게임을 찾지 못했습니다."),
@@ -27,19 +27,22 @@ enum class GameErrorCode(
     GAME_INVALID_PLAYER_RANK(409, "G016", "유효하지 않은 참가자 순위입니다."),
     GAME_INVALID_PLAYER_RANKING(409, "G017", "유효하지 않은 참가자 순위 목록입니다."),
     GAME_INVALID_PLAYER_RANKING_SIZE(
-            409,
-            "G018",
-            "유효하지 않은 참가자 순위 목록 크기입니다.",
+        409,
+        "G018",
+        "유효하지 않은 참가자 순위 목록 크기입니다.",
     ),
     GAME_INVALID_PLAYER_RANKING_SCORE(
-            409,
-            "G019",
-            "유효하지 않은 참가자 순위 목록 점수입니다.",
+        409,
+        "G019",
+        "유효하지 않은 참가자 순위 목록 점수입니다.",
     ),
     GAME_ALREADY_PARTICIPATED(409, "G020", "이미 참가한 게임입니다."),
     GAME_PARTICIPANT_ALREADY_FULL(409, "G021", "게임 대기 인원이 꽉 찼습니다."),
     GAME_NOT_PARTICIPATED(409, "G022", "참가하지 않은 게임입니다."),
-    GAME_HOST_PERMISSION(409, "G023", "게임 방장만 가능한 작업입니다.");
+    GAME_HOST_PERMISSION(409, "G023", "게임 방장만 가능한 작업입니다."),
+    GAME_MISMATCH_NUMBER_OF_PLAYERS(409, "G024", "참가자 수가 일치하지 않습니다."),
+
+    ;
 
     override val errorReason: ErrorReason
         get() = ErrorReason.of(status, errorCode, message)
