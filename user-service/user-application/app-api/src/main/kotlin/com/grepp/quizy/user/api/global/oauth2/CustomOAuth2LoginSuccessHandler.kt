@@ -9,6 +9,7 @@ import com.grepp.quizy.user.api.global.jwt.JwtProvider
 import com.grepp.quizy.user.api.global.jwt.dto.TokenResponse
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.user.domain.user.RedisTokenRepository
+import com.grepp.quizy.user.domain.user.UserLoginManager
 import com.grepp.quizy.user.domain.user.UserReader
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -25,6 +26,7 @@ class CustomOAuth2LoginSuccessHandler(
     private val jwtProvider: JwtProvider,
     private val userReader: UserReader,
     private val redisTokenRepository: RedisTokenRepository,
+    private val userLoginManager: UserLoginManager
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     private val objectMapper = ObjectMapper()
@@ -45,6 +47,9 @@ class CustomOAuth2LoginSuccessHandler(
 
         val customOAuth2User = authentication.principal as CustomOAuth2User
         val user = userReader.read(customOAuth2User.getEmail())
+
+        userLoginManager.login(user.id)
+
         val accessToken = jwtGenerator.generateAccessToken(user)
         val refreshToken = jwtGenerator.generateRefreshToken(user)
         val refreshTokenExpirationTime = jwtProvider.getExpiration(refreshToken)

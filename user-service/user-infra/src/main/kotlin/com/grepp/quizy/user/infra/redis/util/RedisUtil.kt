@@ -30,4 +30,8 @@ class RedisUtil(
     fun isExistSet(key: String, value: String): Boolean {
         return operationSet.isMember(key, value)!!
     }
+
+    fun deleteSet(key: String, value: String) {
+        operationSet.remove(key, value)
+    }
 }

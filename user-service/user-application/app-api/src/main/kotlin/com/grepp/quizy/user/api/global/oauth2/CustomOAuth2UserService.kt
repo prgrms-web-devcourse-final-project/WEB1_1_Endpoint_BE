@@ -1,7 +1,7 @@
 package com.grepp.quizy.user.api.global.oauth2
 
 import com.grepp.quizy.user.domain.user.*
-import com.grepp.quizy.user.domain.user.exception.UserNotFoundException
+import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -47,7 +47,7 @@ class CustomOAuth2UserService(
                 throw IllegalArgumentException("User already exists with email: $email")
                 // TODO: 예외 처리하기
             }
-        } catch (e: UserNotFoundException) {
+        } catch (e: CustomUserException.UserNotFoundException) {
             createNewUser(attributes)
         }
     }

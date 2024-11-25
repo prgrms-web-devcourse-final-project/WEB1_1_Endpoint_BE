@@ -15,10 +15,10 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
-  data:
-    redis:
-      host: localhost
-      port: 6379
+
+redis:
+  host: localhost
+  port: 6379
 
 kafka:
   topic:
@@ -140,7 +140,6 @@ spring:
     console:
       enabled: true
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
+redis:
+  host: ${REDIS_HOST}
+  port: 6379
