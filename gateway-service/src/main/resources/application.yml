@@ -85,6 +85,10 @@ jwt:
   access-token-validity: 3600000  # 1시간
   refresh-token-validity: 604800000  # 7일
 
+service:
+  user:
+    url: http://localhost:8085
+
 logging:
   level:
     org:
@@ -146,6 +150,10 @@ springdoc:
     urls[3]:
       name: User API
       url: http://${GATEWAY_HOST}/api/user/api-docs
+
+service:
+  user:
+    url: http://dev-user-service:8080
 
 jwt:
   secret: ${JWT_SECRET}
