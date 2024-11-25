@@ -48,10 +48,6 @@ spring:
           uri: http://localhost:8083
           predicates:
             - Path=/api/quiz/**
-        - id: search
-          uri: http://localhost:8084
-          predicates:
-            - Path=/api/search/**
         - id: user
           uri: http://localhost:8085
           predicates:
@@ -114,10 +110,6 @@ spring:
           uri: http://dev-matching-service:8080
           predicates:
             - Path=/api/matching/**
-        - id: search
-          uri: http://dev-search-service:8080
-          predicates:
-            - Path=/api/search/**
 
     kubernetes:
       discovery:
@@ -147,9 +139,6 @@ springdoc:
       name: Matching API
       url: http://${GATEWAY_HOST}/api/matching/api-docs
     urls[3]:
-      name: Search API
-      url: http://${GATEWAY_HOST}/api/search/api-docs
-    urls[4]:
       name: User API
       url: http://${GATEWAY_HOST}/api/user/api-docs
 
