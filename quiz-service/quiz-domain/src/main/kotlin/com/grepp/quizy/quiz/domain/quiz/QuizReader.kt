@@ -18,4 +18,8 @@ class QuizReader(private val quizRepository: QuizRepository) {
     fun readTags(ids: List<QuizTagId>): List<QuizTag> {
         return quizRepository.findTagsByInId(ids)
     }
+
+    fun readCounts(ids: List<QuizId>): QuizCountPackage {
+        TODO("퀴즈별 댓글, 좋아요 수 조회")
+    }
 }

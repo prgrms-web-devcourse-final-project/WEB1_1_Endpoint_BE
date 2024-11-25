@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.domain.quizread
 
+import com.grepp.quizy.quiz.domain.quiz.QuizCount
 import kotlin.math.round
 
 sealed interface QuizWithDetail
@@ -18,7 +19,7 @@ data class NotAnsweredQuizWithoutAnswer(
 ) : QuizWithDetail, NotAnswerableQuizDetail {
 
     companion object {
-        fun from(quiz: QuizForRead, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
+        fun from(quiz: QuizForRead, count: QuizCount, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
                 with(quiz) {
                     val totalSelection =
                             options.sumOf { it.selectionCount }
@@ -53,6 +54,7 @@ data class AnsweredQuizWithoutAnswer(
     companion object {
         fun from(
             quiz: QuizForRead,
+            count: QuizCount,
             answeredOption: String,
             isLiked: Boolean
         ): AnsweredQuizWithoutAnswer =
@@ -91,6 +93,7 @@ data class NotAnsweredQuizWithAnswer(
     companion object {
         fun from(
                 quiz: AnswerableQuiz,
+                count: QuizCount,
                 isLiked: Boolean,
         ): NotAnsweredQuizWithAnswer =
                 with(quiz) {
@@ -133,6 +136,7 @@ data class AnsweredQuizWithAnswer(
     companion object {
         fun from(
                 quiz: AnswerableQuiz,
+                count: QuizCount,
                 answeredOption: String,
                 isLiked: Boolean,
         ): AnsweredQuizWithAnswer =
@@ -169,9 +173,7 @@ data class QuizDetailCount(
 ) {
 
     companion object {
-        fun from(count: QuizCount?) =
-                count?.let { QuizDetailCount(it.like, it.comment) }
-                        ?: QuizDetailCount()
+        fun from(count: QuizCount) = QuizDetailCount(count.like, count.comment)
     }
 }
 

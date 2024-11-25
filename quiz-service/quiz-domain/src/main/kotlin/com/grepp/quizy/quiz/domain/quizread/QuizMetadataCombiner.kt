@@ -1,13 +1,20 @@
 package com.grepp.quizy.quiz.domain.quizread
 
 import com.grepp.quizy.quiz.domain.global.dto.Slice
+import com.grepp.quizy.quiz.domain.like.LikeReader
+import com.grepp.quizy.quiz.domain.like.QuizLikePackage
+import com.grepp.quizy.quiz.domain.quiz.QuizId
+import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.user.UserId
+import com.grepp.quizy.quiz.domain.useranswer.UserAnswerPackage
+import com.grepp.quizy.quiz.domain.useranswer.UserAnswerReader
 import org.springframework.stereotype.Component
 
 @Component
 class QuizMetadataCombiner(
-        private val quizSearcher: QuizSearcher,
-        private val quizFetcher: QuizFetcher,
+    private val quizReader: QuizReader,
+    private val likeReader: LikeReader,
+    private val userAnswerReader: UserAnswerReader,
 ) {
 
     fun combine(
@@ -15,35 +22,25 @@ class QuizMetadataCombiner(
         searchedQuizzes: Slice<QuizForRead>,
     ): List<QuizWithDetail> {
         val quizIds = parseQuizIds(searchedQuizzes.content)
-        val likeStatus = quizFetcher.fetchUserLikeStatus(quizIds)
+        val counts = quizReader.readCounts(quizIds)
 
-        val answerableQuiz = filterAnswerableQuiz(searchedQuizzes)
-        val userAnswer =
-                userId?.let { id ->
-                    getUserAnswer(id, answerableQuiz)
-                } ?: UserAnswer()
+        val likeStatus = userId?.let { id ->
+            likeReader.isLikedBy(com.grepp.quizy.quiz.domain.useranswer.UserId(id.id), quizIds)
+        } ?: QuizLikePackage()
+        val userAnswer = userId?.let { id ->
+            userAnswerReader.read(com.grepp.quizy.quiz.domain.useranswer.UserId(id.id), quizIds)
+        } ?: UserAnswerPackage()
 
         return searchedQuizzes.content.map { quiz ->
             QuizDTOFactory.QuizWithDetail(
                     quiz,
-                    likeStatus.isLikedBy(quiz.id),
-                    userAnswer.getAnswerOf(quiz.id),
+                    counts.getCountOf(QuizId(quiz.id.value)),
+                    likeStatus.isLikedBy(QuizId(quiz.id.value)),
+                    userAnswer.getChoiceOf(QuizId(quiz.id.value)),
             )
         }
     }
 
-    private fun getUserAnswer(
-        userId: UserId,
-        answerableQuiz: List<QuizForRead>,
-    ) =
-            quizSearcher.searchUserAnswer(
-                    userId,
-                    parseQuizIds(answerableQuiz),
-            )
-
     private fun parseQuizIds(quizzes: List<QuizForRead>) =
-            quizzes.map { it.id }
-
-    private fun filterAnswerableQuiz(quizSlice: Slice<QuizForRead>) =
-            quizSlice.content.filter { it is Answerable }
+            quizzes.map { QuizId(it.id.value) }
 }
