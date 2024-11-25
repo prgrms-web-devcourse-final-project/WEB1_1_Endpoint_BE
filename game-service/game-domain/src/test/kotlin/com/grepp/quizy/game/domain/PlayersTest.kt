@@ -1,8 +1,11 @@
 package com.grepp.quizy.game.domain
 
-import com.grepp.quizy.game.domain.PlayerRole.GUEST
-import com.grepp.quizy.game.domain.PlayerRole.HOST
 import com.grepp.quizy.game.domain.exception.GameException.*
+import com.grepp.quizy.game.domain.game.Player
+import com.grepp.quizy.game.domain.game.PlayerRole.GUEST
+import com.grepp.quizy.game.domain.game.PlayerRole.HOST
+import com.grepp.quizy.game.domain.game.PlayerStatus
+import com.grepp.quizy.game.domain.game.Players
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

@@ -1,5 +1,7 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
+import com.grepp.quizy.game.domain.GameMessage
+import com.grepp.quizy.game.domain.RoomPayload
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 

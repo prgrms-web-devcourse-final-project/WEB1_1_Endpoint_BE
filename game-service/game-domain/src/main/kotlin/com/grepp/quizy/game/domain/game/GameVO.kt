@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.exception.GameException
 

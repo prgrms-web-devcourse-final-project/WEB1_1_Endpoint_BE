@@ -1,10 +1,10 @@
-package com.grepp.quizy.game.infra.repository
+package com.grepp.quizy.game.infra.game.repository
 
-import com.grepp.quizy.game.infra.game.GameRedisEntity
+import com.grepp.quizy.game.infra.game.entity.GameRedisEntity
 import org.springframework.data.repository.CrudRepository
 
 interface GameRedisRepository :
-        CrudRepository<GameRedisEntity, Long> {
+    CrudRepository<GameRedisEntity, Long> {
 
     fun findTopByInviteCode(inviteCode: String): GameRedisEntity?
 }

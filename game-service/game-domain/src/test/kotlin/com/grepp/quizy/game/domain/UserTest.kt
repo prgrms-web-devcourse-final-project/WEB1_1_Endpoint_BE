@@ -1,5 +1,7 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.user.User
+import com.grepp.quizy.game.domain.user.UserCreatedEvent
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 

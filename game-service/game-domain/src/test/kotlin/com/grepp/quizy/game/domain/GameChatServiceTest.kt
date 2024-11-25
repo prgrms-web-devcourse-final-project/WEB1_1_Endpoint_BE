@@ -1,5 +1,6 @@
 package com.grepp.quizy.game.domain
 
+import com.grepp.quizy.game.domain.game.GameChatService
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 

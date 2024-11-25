@@ -1,5 +1,6 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
+import com.grepp.quizy.game.domain.GameMessage
 import java.security.Principal
 
 interface GameMessageSender {

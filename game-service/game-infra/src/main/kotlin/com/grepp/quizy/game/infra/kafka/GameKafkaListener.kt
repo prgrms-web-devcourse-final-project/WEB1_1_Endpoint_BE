@@ -1,7 +1,7 @@
 package com.grepp.quizy.game.infra.kafka
 
-import com.grepp.quizy.game.domain.User
-import com.grepp.quizy.game.domain.UserCreatedEvent
+import com.grepp.quizy.game.domain.user.User
+import com.grepp.quizy.game.domain.user.UserCreatedEvent
 import com.grepp.quizy.game.infra.user.repository.UserRepositoryAdaptor
 import com.grepp.quizy.kafka.consumer.KafkaConsumer
 import org.apache.kafka.clients.consumer.ConsumerRecord

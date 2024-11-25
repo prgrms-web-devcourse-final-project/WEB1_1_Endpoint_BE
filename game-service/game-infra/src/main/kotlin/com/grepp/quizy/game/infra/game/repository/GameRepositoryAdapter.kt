@@ -1,20 +1,20 @@
-package com.grepp.quizy.game.infra.game
+package com.grepp.quizy.game.infra.game.repository
 
-import com.grepp.quizy.game.domain.Game
-import com.grepp.quizy.game.domain.GameRepository
-import com.grepp.quizy.game.infra.repository.GameRedisRepository
+import com.grepp.quizy.game.domain.game.Game
+import com.grepp.quizy.game.domain.game.GameRepository
+import com.grepp.quizy.game.infra.game.entity.GameRedisEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class GameRepositoryAdapter(
-        private val gameRedisRepository: GameRedisRepository
+    private val gameRedisRepository: GameRedisRepository
 ) : GameRepository {
 
     override fun save(game: Game): Game {
         return gameRedisRepository
-                .save(GameRedisEntity.from(game))
-                .toDomain()
+            .save(GameRedisEntity.from(game))
+            .toDomain()
     }
 
     override fun findById(id: Long): Game? {
@@ -23,7 +23,7 @@ class GameRepositoryAdapter(
 
     override fun findByInviteCode(code: String): Game? {
         return gameRedisRepository
-                .findTopByInviteCode(code)
-                ?.toDomain()
+            .findTopByInviteCode(code)
+            ?.toDomain()
     }
 }

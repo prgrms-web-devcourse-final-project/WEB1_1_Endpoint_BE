@@ -1,7 +1,7 @@
 package com.grepp.quizy.game.infra.user.repository
 
-import com.grepp.quizy.game.domain.User
-import com.grepp.quizy.game.domain.UserRepository
+import com.grepp.quizy.game.domain.user.User
+import com.grepp.quizy.game.domain.user.UserRepository
 import com.grepp.quizy.game.infra.user.entity.UserEntity
 import org.springframework.stereotype.Repository
 

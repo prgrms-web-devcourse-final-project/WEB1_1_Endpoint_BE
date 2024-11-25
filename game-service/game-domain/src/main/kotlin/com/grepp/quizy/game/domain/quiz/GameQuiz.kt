@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.quiz
 
 data class GameQuiz(
     val id: Long,

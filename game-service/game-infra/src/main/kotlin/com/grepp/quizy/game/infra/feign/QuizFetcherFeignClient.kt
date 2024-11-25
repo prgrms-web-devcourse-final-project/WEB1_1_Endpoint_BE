@@ -1,9 +1,9 @@
 package com.grepp.quizy.game.infra.feign
 
-import com.grepp.quizy.game.domain.GameLevel
-import com.grepp.quizy.game.domain.GameQuiz
-import com.grepp.quizy.game.domain.GameSubject
-import com.grepp.quizy.game.domain.QuizFetcher
+import com.grepp.quizy.game.domain.game.GameLevel
+import com.grepp.quizy.game.domain.game.GameSubject
+import com.grepp.quizy.game.domain.quiz.GameQuiz
+import com.grepp.quizy.game.domain.quiz.QuizFetcher
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam

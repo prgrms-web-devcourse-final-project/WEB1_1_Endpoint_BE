@@ -1,6 +1,6 @@
 package com.grepp.quizy.game.infra.user.entity
 
-import com.grepp.quizy.game.domain.User
+import com.grepp.quizy.game.domain.user.User
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 

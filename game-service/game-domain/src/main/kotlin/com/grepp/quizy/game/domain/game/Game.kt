@@ -1,10 +1,10 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.GameStatus.DELETED
-import com.grepp.quizy.game.domain.GameStatus.WAITING
 import com.grepp.quizy.game.domain.exception.GameException
 import com.grepp.quizy.game.domain.exception.GameException.GameAlreadyStartedException
 import com.grepp.quizy.game.domain.exception.GameException.GameHostPermissionException
+import com.grepp.quizy.game.domain.game.GameStatus.DELETED
+import com.grepp.quizy.game.domain.game.GameStatus.WAITING
 
 class Game(
     val id: Long = 0,
