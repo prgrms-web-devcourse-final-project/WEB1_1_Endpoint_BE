@@ -133,6 +133,7 @@ redis:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+    root: DEBUG
 
 springdoc:
   swagger-ui:
