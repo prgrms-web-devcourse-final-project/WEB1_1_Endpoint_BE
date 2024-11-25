@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.domain.useranswer
 
 import com.grepp.quizy.quiz.domain.quiz.QuizId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
 @Component

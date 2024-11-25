@@ -2,7 +2,7 @@ package com.grepp.quizy.quiz.domain.quiz
 
 import com.grepp.quizy.common.dto.DateTime
 import com.grepp.quizy.quiz.domain.quiz.exception.QuizException
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 
 sealed class Quiz(
         val userId: UserId,

@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.domain.quiz
 
 import com.grepp.quizy.common.dto.DateTime
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 
 class ABTest
 private constructor(

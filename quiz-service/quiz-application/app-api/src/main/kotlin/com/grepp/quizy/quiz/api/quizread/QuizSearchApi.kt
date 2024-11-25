@@ -4,7 +4,7 @@ import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quizread.dto.UserSearchParams
 import com.grepp.quizy.quiz.api.quizread.dto.SearchedQuizResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizSearchUseCase
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping

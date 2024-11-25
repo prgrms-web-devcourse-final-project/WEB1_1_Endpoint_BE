@@ -8,7 +8,7 @@ import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerPackage
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerReader
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
 @Component
@@ -26,10 +26,10 @@ class QuizMetadataCombiner(
         val counts = quizReader.readCounts(quizIds)
 
         val likeStatus = userId?.let { id ->
-            likeManager.isLikedIn(UserId(id.value), quizIds)
+            likeManager.isLikedIn(id, quizIds)
         } ?: QuizLikePackage()
         val userAnswer = userId?.let { id ->
-            userAnswerReader.read(UserId(id.value), quizIds)
+            userAnswerReader.read(id, quizIds)
         } ?: UserAnswerPackage()
 
         return searchedQuizzes.content.map { quiz ->
