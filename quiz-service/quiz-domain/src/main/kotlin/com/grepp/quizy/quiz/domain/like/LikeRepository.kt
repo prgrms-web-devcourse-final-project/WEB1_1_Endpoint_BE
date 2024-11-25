@@ -6,6 +6,4 @@ interface LikeRepository {
     fun delete(like: Like)
 
     fun exists(like: Like): Boolean
-
-    fun existsAll(likes: List<Like>): QuizLikePackage
 }

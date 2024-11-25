@@ -28,11 +28,7 @@ class LikeManager(
     fun isLikedIn(
             userId: UserId,
             quizIds: List<QuizId>,
-    ): List<LikeStatus> {
-        return quizIds.map {
-            LikeStatus(it, isLiked(Like(userId, it)))
-        }
-    }
+    ) = QuizLikePackage(quizIds.associateWith { isLiked(Like(userId, it)) })
 
     private fun isLiked(like: Like): Boolean =
             quizCache.isLikeCached(like)
