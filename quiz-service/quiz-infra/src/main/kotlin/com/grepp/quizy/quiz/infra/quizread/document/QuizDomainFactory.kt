@@ -39,11 +39,6 @@ class QuizDomainFactory {
                                                         ?: 0,
                                         )
                                     },
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
-                                    ),
                     )
                 }
 
@@ -69,11 +64,6 @@ class QuizDomainFactory {
                                     QuizAnswer(
                                             answer!!.value,
                                             answer.explanation,
-                                    ),
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
                                     ),
                     )
                 }
@@ -102,11 +92,6 @@ class QuizDomainFactory {
                                     QuizAnswer(
                                             answer!!.value,
                                             answer.explanation,
-                                    ),
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
                                     ),
                     )
                 }

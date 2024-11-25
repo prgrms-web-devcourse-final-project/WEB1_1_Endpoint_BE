@@ -21,8 +21,6 @@ class QuizDocument(
         val selectionPerOption: Map<Int, Int>,
         @Field(type = FieldType.Integer) val totalAnsweredUser: Int,
         @Field(type = FieldType.Double) val difficulty: String,
-        @Field(type = FieldType.Integer) val totalLikeCount: Int,
-        @Field(type = FieldType.Integer) val totalCommentCount: Int,
         @Field(
                 type = FieldType.Date,
                 format =
