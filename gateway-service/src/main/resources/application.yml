@@ -115,6 +115,23 @@ spring:
           uri: http://dev-matching-service:8080
           predicates:
             - Path=/api/matching/**
+        - id: oauth2
+          uri: http://dev-user-service:8080
+          predicates:
+            - Path=/oauth2/**
+        - id: auth
+          uri: http://dev-user-service:8080
+          predicates:
+            - Path=/api/auth/**
+        - id: websocket
+          uri: ws://dev-game-service:8080
+          predicates:
+            - Path=/ws/**
+        - id: sockjs
+          uri: http://dev-game-service:8080
+          predicates:
+            - Path=/ws/**
+            - Query=transport, websocket
 
     kubernetes:
       discovery:
@@ -128,25 +145,25 @@ spring:
       host: ${REDIS_HOST}
       port: 6379
 
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    root: DEBUG
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    root: DEBUG
 
 springdoc:
   swagger-ui:
     urls[0]:
       name: Game API
-      url: http://${GATEWAY_HOST}/api/game/api-docs
+      url: /api/game/api-docs
     urls[1]:
       name: Quiz API
-      url: http://${GATEWAY_HOST}/api/quiz/api-docs
+      url: /api/quiz/api-docs
     urls[2]:
       name: Matching API
-      url: http://${GATEWAY_HOST}/api/matching/api-docs
+      url: /api/matching/api-docs
     urls[3]:
       name: User API
-      url: http://${GATEWAY_HOST}/api/user/api-docs
+      url: /api/user/api-docs
 
 jwt:
   secret: ${JWT_SECRET}
