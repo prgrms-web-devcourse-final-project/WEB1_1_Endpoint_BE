@@ -13,8 +13,6 @@ import org.springframework.stereotype.Repository
 @Repository
 class QuizSearchRepositoryAdapter(
         private val quizElasticRepository: QuizElasticRepository,
-        private val userAnswerElasticRepository:
-                UserAnswerElasticRepository,
 ) : QuizSearchRepository {
 
     override fun search(condition: UserSearchCondition): Slice<QuizForRead> {
@@ -38,22 +36,6 @@ class QuizSearchRepositoryAdapter(
         return quizElasticRepository
             .searchAnswerableQuiz(condition.category, condition.difficulty, pageable)
             .map { QuizDomainFactory.toAnswerableQuiz(it) }
-    }
-
-    override fun searchUserAnswer(
-            userId: UserId,
-            quizIds: List<QuizId>,
-    ): UserAnswer {
-        val userAnswer =
-                userAnswerElasticRepository.findByIdOrNull(userId.id)
-        return userAnswer?.let { answer ->
-            UserAnswer(
-                    quizIds.mapNotNull { id ->
-                                answer.getOptionNumber(id)
-                            }
-                            .toMap()
-            )
-        } ?: UserAnswer()
     }
 
     private fun convertPageable(condition: SearchCondition) =
