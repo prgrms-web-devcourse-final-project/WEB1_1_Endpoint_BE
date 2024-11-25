@@ -27,6 +27,11 @@ class RedisUtil(
         operationSet.add(key, value)
     }
 
+    fun saveSet(key: String, value: String, expirationTime: Long) {
+        operationSet.add(key, value)
+        redisTemplate.expire(key, expirationTime, TimeUnit.MICROSECONDS)
+    }
+
     fun isExistSet(key: String, value: String): Boolean {
         return operationSet.isMember(key, value)!!
     }

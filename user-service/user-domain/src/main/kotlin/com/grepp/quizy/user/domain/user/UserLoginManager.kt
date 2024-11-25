@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component
 class UserLoginManager(
     private val redisTokenRepository: RedisTokenRepository
 ) {
-    fun login(userId: UserId) {
+    fun login(userId: UserId, expirationTime: Long) {
         // 이미 로그인 한 사용자가 있는 경우 예외 발생
         if (redisTokenRepository.hasLoggedInUser(userId)) {
             throw CustomUserException.DuplicateLoginException
         }
-        redisTokenRepository.saveSession(userId)
+        redisTokenRepository.saveSession(userId, expirationTime)
     }
 }

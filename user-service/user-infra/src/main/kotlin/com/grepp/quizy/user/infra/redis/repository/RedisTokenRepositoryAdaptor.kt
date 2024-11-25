@@ -13,6 +13,7 @@ class RedisTokenRepositoryAdaptor(
         private const val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
         private const val LOGOUT_TOKEN_KEY = "logout"
         private const val USER_SESSION_KEY = "session"
+        private const val USER_KEY = "user"
     }
 
 
@@ -39,8 +40,8 @@ class RedisTokenRepositoryAdaptor(
         return !redisUtil.isExistSet(LOGOUT_TOKEN_KEY, accessToken)
     }
 
-    override fun saveSession(userId: UserId) {
-        redisUtil.saveSet(USER_SESSION_KEY, userId.value.toString())
+    override fun saveSession(userId: UserId, expirationTime: Long) {
+        redisUtil.saveSet(USER_SESSION_KEY, userId.value.toString(), expirationTime)
     }
 
     override fun hasLoggedInUser(userId: UserId): Boolean {
@@ -49,6 +50,18 @@ class RedisTokenRepositoryAdaptor(
 
     override fun removeSession(userId: UserId) {
         redisUtil.deleteSet(USER_SESSION_KEY, userId.value.toString())
+    }
+
+    override fun saveUser(userId: UserId) {
+        redisUtil.saveSet(USER_KEY, userId.value.toString())
+    }
+
+    override fun isExistUser(userId: UserId): Boolean {
+        return redisUtil.isExistSet(USER_KEY, userId.value.toString())
+    }
+
+    override fun removeUser(userId: UserId) {
+        redisUtil.deleteSet(USER_KEY, userId.value.toString())
     }
 
     private fun generateRefreshTokenKey(userId: UserId): String = "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"

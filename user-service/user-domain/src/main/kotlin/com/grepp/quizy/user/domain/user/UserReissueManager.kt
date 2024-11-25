@@ -12,9 +12,12 @@ class UserReissueManager(
     fun reissue(userId: UserId): ReissueToken {
         val user = userReader.read(userId)
 
+
         val accessToken = tokenGenerator.generateAccessToken(user)
         val refreshToken = tokenGenerator.generateRefreshToken(user)
         val refreshTokenExpirationTime = tokenProvider.getExpiration(refreshToken)
+
+        redisTokenRepository.saveSession(user.id, refreshTokenExpirationTime)
 
         return ReissueToken(
             accessToken = accessToken,
