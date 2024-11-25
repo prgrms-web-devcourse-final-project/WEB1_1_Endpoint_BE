@@ -1,6 +1,8 @@
 package com.grepp.quizy.web
 
 import com.grepp.quizy.exception.CustomJwtException
+import com.grepp.quizy.user.RedisTokenRepository
+import com.grepp.quizy.user.UserId
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
@@ -9,15 +11,19 @@ import reactor.core.publisher.Mono
 
 @Component
 class UserClientImpl(
-    private val webClient: WebClient
+    private val webClient: WebClient,
+    private val redisTokenRepository: RedisTokenRepository
 ) : UserClient {
 
     @Value("\${service.user.url}")
     private lateinit var BASE_URL: String
 
 
-    // status code를 체크하고 예외를 던지는 방식 유지
     override fun validateUser(userId: Long): Mono<Unit> {
+        if (redisTokenRepository.isExistUser(UserId(userId))) {
+            return Mono.just(Unit)
+        }
+
         return webClient.get()
             .uri("$BASE_URL/api/internal/user/validate/$userId")
             .retrieve()

@@ -97,7 +97,7 @@ class AuthGlobalFilter(
 @Component
 class RouteValidator {
     private val openApiEndpoints = listOf(
-        "/oauth2/",
+        "/oauth2",
         "/api/quiz/feed",
         "/api/search"
     )
@@ -106,7 +106,7 @@ class RouteValidator {
         if (request.uri.path.endsWith("api-docs")) {
             return true
         }
-        return openApiEndpoints.none { path ->
+        return openApiEndpoints.any { path ->
             request.uri.path.contains(path)
         }
     }

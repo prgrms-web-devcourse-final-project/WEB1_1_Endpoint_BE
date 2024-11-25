@@ -9,12 +9,10 @@ class UserValidator(
 ) {
     // 유저가 실제로 존재하는지 확인
     fun isValid(userId: UserId): Boolean {
-        if (!redisTokenRepository.isExistUser(userId)) {
-            if (!userRepository.existsById(userId.value)) {
-                return false
-            }
-            redisTokenRepository.saveUser(userId)
+        if (!userRepository.existsById(userId.value)) {
+            return false
         }
+        redisTokenRepository.saveUser(userId)
         return true
     }
 
