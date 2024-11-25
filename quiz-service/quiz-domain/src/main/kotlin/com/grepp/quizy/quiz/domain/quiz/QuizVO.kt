@@ -49,7 +49,7 @@ data class QuizAnswer(val value: String, val explanation: String) {
     }
 }
 
-data class QuizCount(val like: Int = 0, val comment: Int = 0)
+data class QuizCount(val like: Long = 0, val comment: Long = 0)
 
 enum class QuizType {
     AB_TEST,

@@ -168,8 +168,8 @@ data class AnsweredQuizWithAnswer(
 }
 
 data class QuizDetailCount(
-        val like: Int = 0,
-        val comment: Int = 0,
+        val like: Long = 0,
+        val comment: Long = 0,
 ) {
 
     companion object {

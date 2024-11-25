@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserAnswerReader(private val repository: UserAnswerRepository) {
-    fun read(userId: UserId?, quizIds: List<QuizId>): UserAnswerPackage {
-        TODO("퀴즈별 사용자가 선택한 답 조회")
-    }
+    fun read(userId: UserId, quizIds: List<QuizId>) =
+        repository.findAllByUserAnswerId(quizIds.map { UserAnswerId(userId, it) })
 }
