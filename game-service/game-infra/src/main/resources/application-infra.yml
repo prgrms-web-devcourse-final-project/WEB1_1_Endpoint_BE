@@ -21,6 +21,11 @@ spring:
     host: localhost
     port: 6379
 
+feign:
+  client:
+    url:
+      quiz-service: http://localhost:8083
+
 kafka:
   topic:
     user: user
