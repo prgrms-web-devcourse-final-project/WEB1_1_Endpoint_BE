@@ -33,7 +33,7 @@ class AuthGlobalFilter(
         val request = exchange.request
 
         // 보안이 필요 없는 경로인 경우 필터를 건너뜁니다.
-        if (!routeValidator.isSecured(request)) {
+        if (routeValidator.isUnsecured(request)) {
             return chain.filter(exchange)
         }
 
@@ -96,18 +96,16 @@ class AuthGlobalFilter(
 
 @Component
 class RouteValidator {
-    private val openApiEndpoints =
-        listOf(
-            "/oauth2/",
-            "/api/quiz/feed",
-            "/api/quiz/search",
-            "/api-docs",
-        )
+    private val openApiEndpoints = listOf(
+        "/oauth2/",
+        "/api/quiz/feed",
+        "/api/search"
+    )
 
-    fun isSecured(
-        request:
-        ServerHttpRequest
-    ): Boolean {
+    fun isUnsecured(request: ServerHttpRequest): Boolean {
+        if (request.uri.path.endsWith("api-docs")) {
+            return true
+        }
         return openApiEndpoints.none { path ->
             request.uri.path.contains(path)
         }
