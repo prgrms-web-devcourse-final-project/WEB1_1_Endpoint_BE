@@ -1,23 +1,24 @@
 package com.grepp.quizy.quiz.domain.quizread
 
-import com.grepp.quizy.quiz.domain.quiz.QuizCount
+import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.useranswer.Choice
 
 class QuizDTOFactory {
     companion object {
         fun QuizWithDetail(
-            quiz: QuizForRead,
+            quiz: Quiz,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
         ): QuizWithDetail =
                 when (quiz) {
                     is ABTest -> NotAnswerableQuizDetail(quiz, count, isLiked, answered)
-                    is AnswerableQuiz -> AnswerableQuizDetail(quiz, count, isLiked, answered,)
+                    is OXQuiz -> AnswerableQuizDetail(quiz, count, isLiked, answered)
+                    is MultipleChoiceQuiz -> AnswerableQuizDetail(quiz, count, isLiked, answered)
                 }
 
         private fun NotAnswerableQuizDetail(
-            quiz: QuizForRead,
+            quiz: Quiz,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
@@ -31,12 +32,12 @@ class QuizDTOFactory {
                 )
             } ?: NotAnsweredQuizWithoutAnswer.from(quiz, count, isLiked)
 
-        private fun AnswerableQuizDetail(
-            quiz: AnswerableQuiz,
+        private fun <T> AnswerableQuizDetail(
+            quiz: T,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
-        ): AnswerableQuizDetail =
+        ): AnswerableQuizDetail where T : Quiz, T : Answerable =
                 answered?.let {
                     AnsweredQuizWithAnswer.from(
                         quiz,

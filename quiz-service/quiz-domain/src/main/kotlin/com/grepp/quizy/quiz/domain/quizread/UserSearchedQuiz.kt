@@ -1,6 +1,9 @@
 package com.grepp.quizy.quiz.domain.quizread
 
+import com.grepp.quizy.quiz.domain.quiz.Answerable
+import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quiz.QuizCount
+import com.grepp.quizy.quiz.domain.quiz.QuizOption
 import kotlin.math.round
 
 sealed interface QuizWithDetail
@@ -19,16 +22,16 @@ data class NotAnsweredQuizWithoutAnswer(
 ) : QuizWithDetail, NotAnswerableQuizDetail {
 
     companion object {
-        fun from(quiz: QuizForRead, count: QuizCount, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
+        fun from(quiz: Quiz, count: QuizCount, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
                 with(quiz) {
                     val totalSelection =
-                            options.sumOf { it.selectionCount }
+                            content.options.sumOf { it.selectionCount }
                     return NotAnsweredQuizWithoutAnswer(
-                            id = id(),
-                            content = content(),
-                            type = typeName(),
+                            id = id.value,
+                            content = content.content,
+                            type = type.value,
                             options =
-                                    options.map {
+                                    content.options.map {
                                         QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
@@ -53,25 +56,25 @@ data class AnsweredQuizWithoutAnswer(
 
     companion object {
         fun from(
-            quiz: QuizForRead,
+            quiz: Quiz,
             count: QuizCount,
             answeredOption: String,
             isLiked: Boolean
         ): AnsweredQuizWithoutAnswer =
             with(quiz) {
                 val totalSelection =
-                    options.sumOf { it.selectionCount }
+                    content.options.sumOf { it.selectionCount }
                 return AnsweredQuizWithoutAnswer(
-                    id = id(),
-                    content = content(),
-                    type = typeName(),
+                    id = id.value,
+                    content = content.content,
+                    type = type.value,
                     options =
-                    options.map {
-                        QuizDetailOption.from(
-                            it,
-                            totalSelection,
-                        )
-                    },
+                        content.options.map {
+                            QuizDetailOption.from(
+                                it,
+                                totalSelection,
+                            )
+                        },
                     count = QuizDetailCount.from(count),
                     answeredOption = answeredOption,
                     isLiked = isLiked,
@@ -91,20 +94,20 @@ data class NotAnsweredQuizWithAnswer(
 ) : QuizWithDetail, AnswerableQuizDetail {
 
     companion object {
-        fun from(
-                quiz: AnswerableQuiz,
+        fun <T> from(
+                quiz: T,
                 count: QuizCount,
                 isLiked: Boolean,
-        ): NotAnsweredQuizWithAnswer =
+        ): NotAnsweredQuizWithAnswer where T : Quiz, T : Answerable =
                 with(quiz) {
                     val totalSelection =
-                            options.sumOf { it.selectionCount }
+                            content.options.sumOf { it.selectionCount }
                     return NotAnsweredQuizWithAnswer(
-                            id = id(),
-                            content = content(),
-                            type = typeName(),
+                            id = id.value,
+                            content = content.content,
+                            type = type.value,
                             options =
-                                    options.map {
+                                    content.options.map {
                                         QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
@@ -112,8 +115,8 @@ data class NotAnsweredQuizWithAnswer(
                                     },
                             answer =
                                     QuizDetailAnswer(
-                                            answer(),
-                                            explanation(),
+                                            getCorrectAnswer(),
+                                            getAnswerExplanation(),
                                     ),
                             count = QuizDetailCount.from(count),
                             isLiked = isLiked,
@@ -134,21 +137,21 @@ data class AnsweredQuizWithAnswer(
 ) : QuizWithDetail, AnswerableQuizDetail {
 
     companion object {
-        fun from(
-                quiz: AnswerableQuiz,
+        fun <T> from(
+                quiz: T,
                 count: QuizCount,
                 answeredOption: String,
                 isLiked: Boolean,
-        ): AnsweredQuizWithAnswer =
+        ): AnsweredQuizWithAnswer where T : Quiz, T : Answerable =
                 with(quiz) {
                     val totalSelection =
-                            options.sumOf { it.selectionCount }
+                            content.options.sumOf { it.selectionCount }
                     return AnsweredQuizWithAnswer(
-                            id = id(),
-                            content = content(),
-                            type = typeName(),
+                            id = id.value,
+                            content = content.content,
+                            type = type.value,
                             options =
-                                    options.map {
+                                    content.options.map {
                                         QuizDetailOption.from(
                                                 it,
                                                 totalSelection,
@@ -156,8 +159,8 @@ data class AnsweredQuizWithAnswer(
                                     },
                             answer =
                                     QuizDetailAnswer(
-                                            answer(),
-                                            explanation(),
+                                            getCorrectAnswer(),
+                                            getAnswerExplanation(),
                                     ),
                             answeredOption = answeredOption,
                             count = QuizDetailCount.from(count),

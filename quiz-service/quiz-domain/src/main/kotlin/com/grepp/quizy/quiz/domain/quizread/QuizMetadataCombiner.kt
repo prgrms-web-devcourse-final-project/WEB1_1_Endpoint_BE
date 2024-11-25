@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.domain.quizread
 import com.grepp.quizy.quiz.domain.global.dto.Slice
 import com.grepp.quizy.quiz.domain.like.LikeManager
 import com.grepp.quizy.quiz.domain.like.QuizLikePackage
+import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerPackage
@@ -19,7 +20,7 @@ class QuizMetadataCombiner(
 
     fun combine(
         userId: UserId?,
-        searchedQuizzes: Slice<QuizForRead>,
+        searchedQuizzes: Slice<Quiz>,
     ): List<QuizWithDetail> {
         val quizIds = parseQuizIds(searchedQuizzes.content)
         val counts = quizReader.readCounts(quizIds)
@@ -34,13 +35,13 @@ class QuizMetadataCombiner(
         return searchedQuizzes.content.map { quiz ->
             QuizDTOFactory.QuizWithDetail(
                     quiz,
-                    counts.getCountOf(QuizId(quiz.id.value)),
-                    likeStatus.isLikedBy(QuizId(quiz.id.value)),
-                    userAnswer.getChoiceOf(QuizId(quiz.id.value)),
+                    counts.getCountOf(quiz.id),
+                    likeStatus.isLikedBy(quiz.id),
+                    userAnswer.getChoiceOf(quiz.id),
             )
         }
     }
 
-    private fun parseQuizIds(quizzes: List<QuizForRead>) =
+    private fun parseQuizIds(quizzes: List<Quiz>) =
             quizzes.map { QuizId(it.id.value) }
 }

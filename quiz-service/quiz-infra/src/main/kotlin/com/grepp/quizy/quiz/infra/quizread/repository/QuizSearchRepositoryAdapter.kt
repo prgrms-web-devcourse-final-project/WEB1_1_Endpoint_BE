@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.infra.quizread.repository
 
 import com.grepp.quizy.quiz.domain.global.dto.Slice
+import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quizread.*
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDomainFactory
 import com.grepp.quizy.quiz.infra.quizread.document.SortField
@@ -13,7 +14,7 @@ class QuizSearchRepositoryAdapter(
         private val quizElasticRepository: QuizElasticRepository,
 ) : QuizSearchRepository {
 
-    override fun search(condition: UserSearchCondition): Slice<QuizForRead> {
+    override fun search(condition: UserSearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
@@ -28,7 +29,7 @@ class QuizSearchRepositoryAdapter(
                 }
     }
 
-    override fun search(condition: GameQuizSearchCondition): List<AnswerableQuiz> {
+    override fun search(condition: GameQuizSearchCondition): List<Quiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository

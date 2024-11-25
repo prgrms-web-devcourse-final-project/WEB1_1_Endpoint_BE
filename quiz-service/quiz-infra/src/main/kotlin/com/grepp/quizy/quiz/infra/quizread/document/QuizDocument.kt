@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.infra.quizread.document
 
-import com.grepp.quizy.quiz.domain.quizread.QuizCategory
-import com.grepp.quizy.quiz.domain.quizread.QuizType
+import com.grepp.quizy.quiz.domain.quiz.QuizCategory
+import com.grepp.quizy.quiz.domain.quiz.QuizType
 import java.time.LocalDateTime
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.*
 @Setting(settingPath = "elastic/es-settings.json")
 class QuizDocument(
         @Id @Field(type = FieldType.Long) val id: Long,
+        @Field(type = FieldType.Long) val userId: Long,
         @Field(type = FieldType.Keyword) val category: QuizCategory,
         @Field(type = FieldType.Keyword) val type: QuizType,
         @Field(type = FieldType.Text) val content: String,
