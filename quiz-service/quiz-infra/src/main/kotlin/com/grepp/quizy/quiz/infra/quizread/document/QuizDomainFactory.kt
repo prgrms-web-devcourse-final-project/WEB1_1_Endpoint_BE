@@ -25,7 +25,7 @@ class QuizDomainFactory {
                 with(document) {
                     return ABTest(
                             id = QuizId(id),
-                            category = QuizCategory(category),
+                            category = category,
                             content = QuizContent(type, content),
                             tags = tags.map { QuizTag(it) },
                             options =
@@ -46,7 +46,7 @@ class QuizDomainFactory {
                 with(document) {
                     return OXQuiz(
                             id = QuizId(id),
-                            category = QuizCategory(category),
+                            category = category,
                             content = QuizContent(type, content),
                             tags = tags.map { QuizTag(it) },
                             options =
@@ -74,7 +74,7 @@ class QuizDomainFactory {
                 with(document) {
                     return MultipleOptionQuiz(
                             id = QuizId(id),
-                            category = QuizCategory(category),
+                            category = category,
                             content = QuizContent(type, content),
                             tags = tags.map { QuizTag(it) },
                             options =
