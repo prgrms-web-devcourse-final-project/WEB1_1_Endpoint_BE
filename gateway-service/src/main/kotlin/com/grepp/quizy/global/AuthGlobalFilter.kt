@@ -1,6 +1,8 @@
-package com.grepp.quizy.jwt
+package com.grepp.quizy.global
 
 import com.grepp.quizy.exception.CustomJwtException
+import com.grepp.quizy.jwt.JwtProvider
+import com.grepp.quizy.jwt.JwtValidator
 import com.grepp.quizy.user.RedisTokenRepository
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.web.UserClient
@@ -16,7 +18,7 @@ import reactor.core.publisher.Mono
 
 @Component
 @Order(-1) // 높은 우선순위
-class JwtAuthGlobalFilter(
+class AuthGlobalFilter(
     private val routeValidator: RouteValidator,
     private val jwtProvider: JwtProvider,
     private val redisTokenRepository: RedisTokenRepository,
@@ -98,7 +100,8 @@ class RouteValidator {
         listOf(
             "/oauth2/",
             "/api/quiz/feed",
-            "/api/search",
+            "/api/quiz/search",
+            "/api-docs",
         )
 
     fun isSecured(
