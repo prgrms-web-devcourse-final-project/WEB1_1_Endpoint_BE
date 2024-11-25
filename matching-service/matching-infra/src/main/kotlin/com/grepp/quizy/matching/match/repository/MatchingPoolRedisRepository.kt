@@ -12,7 +12,7 @@ class MatchingPoolRedisRepository(
     private val redisTemplate: RedisTemplate<String, Any>,
 ) : MatchingPoolRepository {
 
-    override fun save(userId: UserId, userVector: UserVector) {
+    override fun saveVector(userId: UserId, userVector: UserVector) {
         val key = "vector:${userId.value}"
         redisTemplate.opsForHash<String, Any>().putAll(
             key, mapOf(

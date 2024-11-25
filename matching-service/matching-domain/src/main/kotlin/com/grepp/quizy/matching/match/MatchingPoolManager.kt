@@ -7,10 +7,14 @@ import org.springframework.stereotype.Component
 @Component
 class MatchingPoolManager(
     private val userVectorizer: UserVectorizer,
-    private val poolRepository: MatchingPoolRepository
+    private val poolRepository: MatchingPoolRepository,
+    private val queueRepository: MatchingQueueRepository
 ) {
 
     fun save(userId: UserId) {
-        poolRepository.save(userId, userVectorizer.vectorizeUser(userId))
+        val vector = userVectorizer.vectorizeUser(userId)
+        poolRepository.saveVector(userId, vector)
+        queueRepository.enqueue(UserStatus(userId, vector))
+        queueRepository.saveSet(userId)
     }
 }
