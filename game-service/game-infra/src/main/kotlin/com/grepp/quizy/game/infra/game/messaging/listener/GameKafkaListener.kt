@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.infra.kafka
+package com.grepp.quizy.game.infra.game.messaging.listener
 
 import com.grepp.quizy.game.domain.user.User
 import com.grepp.quizy.game.domain.user.UserCreatedEvent
