@@ -1,6 +1,6 @@
 package com.grepp.quizy.user.api.global.jwt
 
-import com.grepp.quizy.user.domain.user.Role
+import com.grepp.quizy.user.domain.user.TokenGenerator
 import com.grepp.quizy.user.domain.user.User
 import com.grepp.quizy.user.domain.user.UserId
 import io.jsonwebtoken.Jwts
@@ -13,12 +13,12 @@ import javax.crypto.SecretKey
 class JwtGenerator(
     private val jwtProperties: JwtProperties,
     private val jwtProvider: JwtProvider
-) {
+) : TokenGenerator {
     private val secretKey: SecretKey = Keys.hmacShaKeyFor(
         jwtProperties.secret.toByteArray()
     )
 
-    fun generateAccessToken(user: User): String {
+    override fun generateAccessToken(user: User): String {
         return generateToken(
             claims = mutableMapOf(
                 "role" to user.role
@@ -28,20 +28,7 @@ class JwtGenerator(
         )
     }
 
-    fun generateAccessToken(refreshToken: String): String {
-        val userId = jwtProvider.getUserIdFromToken(refreshToken)
-        val role = jwtProvider.getUserRoleFromToken(refreshToken)
-
-        return generateToken(
-            claims = mutableMapOf(
-                "role" to role
-            ),
-            subject = userId,
-            expirationTime = jwtProperties.accessTokenValidity
-        )
-    }
-
-    fun generateRefreshToken(user: User): String {
+    override fun generateRefreshToken(user: User): String {
         return generateToken(
             claims = mutableMapOf(
                 "role" to user.role
@@ -60,8 +47,8 @@ class JwtGenerator(
         val expiration = Date(now.time + expirationTime)
 
         return Jwts.builder()
-            .setSubject(subject.value.toString())
             .setClaims(claims)
+            .setSubject(subject.value.toString())
             .setIssuedAt(now)
             .setExpiration(expiration)
             .signWith(secretKey)

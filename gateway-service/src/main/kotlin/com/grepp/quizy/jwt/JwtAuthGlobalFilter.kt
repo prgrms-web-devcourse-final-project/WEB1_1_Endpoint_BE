@@ -16,22 +16,24 @@ import reactor.core.publisher.Mono
 @Component
 @Order(-1) // 높은 우선순위
 class JwtAuthGlobalFilter(
-        private val routeValidator: RouteValidator,
-        private val jwtProvider: JwtProvider,
-        private val redisTokenRepository: RedisTokenRepository,
-        private val jwtValidator: JwtValidator,
+    private val routeValidator: RouteValidator,
+    private val jwtProvider: JwtProvider,
+    private val redisTokenRepository: RedisTokenRepository,
+    private val jwtValidator: JwtValidator,
 ) : GlobalFilter {
 
     override fun filter(
-            exchange: ServerWebExchange,
-            chain: GatewayFilterChain,
+        exchange: ServerWebExchange,
+        chain: GatewayFilterChain,
     ): Mono<Void> {
         val request = exchange.request
 
+        // 보안이 필요 없는 경로인 경우 필터를 건너뜁니다.
         if (!routeValidator.isSecured(request)) {
             return chain.filter(exchange)
         }
 
+        // 헤더에 Authorization이 없는 경우 쿠키에서 토큰을 가져옵니다.
         if (!request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             CookieUtils.getCookieValue(request, "refreshToken").let {
                 it ?: throw CustomJwtException.JwtNotFountException
@@ -40,18 +42,15 @@ class JwtAuthGlobalFilter(
             }
         }
 
-        val token =
-                resolveToken(request)
-                        ?: throw CustomJwtException
-                                .JwtUnsupportedException
+        // 헤더에 Authorization이 있는 경우 토큰을 가져옵니다.
+        val token = resolveToken(request) ?: throw CustomJwtException.JwtUnsupportedException
 
+        // 토큰을 검증하고 새로운 헤더를 추가합니다.
         return addHeader(token, exchange, chain)
     }
 
     private fun resolveToken(request: ServerHttpRequest): String? {
-        val authHeader =
-                request.headers[HttpHeaders.AUTHORIZATION]?.get(0)
-                        ?: ""
+        val authHeader = request.headers[HttpHeaders.AUTHORIZATION]?.get(0) ?: ""
         return if (authHeader.startsWith("Bearer ")) {
             authHeader.substring(7)
         } else {
@@ -60,14 +59,12 @@ class JwtAuthGlobalFilter(
     }
 
     private fun addHeader(
-            token: String,
-            exchange: ServerWebExchange,
-            chain: GatewayFilterChain,
+        token: String,
+        exchange: ServerWebExchange,
+        chain: GatewayFilterChain,
     ): Mono<Void> {
         jwtValidator.validateToken(token)
-        if (!redisTokenRepository.isAlreadyLogin(token)) {
-            throw CustomJwtException.JwtLoggedOutException
-        }
+
 
         try {
             // 새로운 헤더 맵 생성
@@ -77,26 +74,21 @@ class JwtAuthGlobalFilter(
                 headers[name] = values
             }
             // 새로운 헤더 추가
-            headers["X-Auth-Id"] =
-                    jwtProvider
-                            .getUserIdFromToken(token)
-                            .value
-                            .toString()
+            headers["X-Auth-Id"] = jwtProvider.getUserIdFromToken(token).value.toString()
 
             // 새로운 요청 객체 생성
-            val mutatedRequest =
-                    object :
-                            ServerHttpRequestDecorator(
-                                    exchange.request
-                            ) {
-                        override fun getHeaders(): HttpHeaders {
-                            return headers
-                        }
-                    }
+            val mutatedRequest = object : ServerHttpRequestDecorator(exchange.request) {
+                override fun getHeaders(): HttpHeaders {
+                    return headers
+                }
+            }
 
             // 수정된 요청으로 교체한 exchange로 체인 실행
             return chain.filter(
-                    exchange.mutate().request(mutatedRequest).build()
+                exchange
+                    .mutate()
+                    .request(mutatedRequest)
+                    .build()
             )
         } catch (ex: Exception) {
             throw CustomJwtException.JwtNotValidateException
@@ -107,14 +99,16 @@ class JwtAuthGlobalFilter(
 @Component
 class RouteValidator {
     private val openApiEndpoints =
-            listOf(
-                    "/oauth2/",
-                    "/api/auth/",
-                    "/api/quiz/feed",
-                    "/api/search",
-            )
+        listOf(
+            "/oauth2/",
+            "/api/quiz/feed",
+            "/api/search",
+        )
 
-    fun isSecured(request: ServerHttpRequest): Boolean {
+    fun isSecured(
+        request:
+        ServerHttpRequest
+    ): Boolean {
         return openApiEndpoints.none { path ->
             request.uri.path.contains(path)
         }

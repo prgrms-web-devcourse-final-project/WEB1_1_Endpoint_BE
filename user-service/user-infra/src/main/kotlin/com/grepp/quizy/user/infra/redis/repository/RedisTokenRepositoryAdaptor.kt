@@ -23,7 +23,12 @@ class RedisTokenRepositoryAdaptor(
         return redisUtil.getValue(key)
     }
 
-    fun saveLogoutToken(accessToken: String) {
+    override fun deleteRefreshToken(userId: UserId) {
+        val key = generateRefreshTokenKey(userId)
+        redisUtil.deleteValue(key)
+    }
+
+    override fun saveLogoutToken(accessToken: String) {
         redisUtil.saveSet(LOGOUT_TOKEN_KEY, accessToken)
     }
 

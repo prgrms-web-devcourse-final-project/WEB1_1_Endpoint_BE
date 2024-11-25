@@ -56,6 +56,10 @@ spring:
           uri: http://localhost:8085
           predicates:
             - Path=/oauth2/**
+        - id: auth
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/auth/**
         - id: websocket
           uri: ws://localhost:8081
           predicates:
@@ -105,7 +109,7 @@ spring:
         - id: user
           uri: http://dev-user-service:8080
           predicates:
-              - Path=/api/user/**
+            - Path=/api/user/**
         - id: matching
           uri: http://dev-matching-service:8080
           predicates:
@@ -118,9 +122,10 @@ spring:
         primary-port-name: http
 
 
-redis:
-  host: ${REDIS_HOST}
-  port: 6379
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
 
 logging:
   level:

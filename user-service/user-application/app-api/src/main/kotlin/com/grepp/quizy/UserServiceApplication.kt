@@ -1,9 +1,10 @@
-package com.grepp.quizy.user
+package com.grepp.quizy
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
-@SpringBootApplication class UserServiceApplication {}
+@SpringBootApplication
+class UserServiceApplication {}
 
 fun main(args: Array<String>) {
     runApplication<UserServiceApplication>(*args)
