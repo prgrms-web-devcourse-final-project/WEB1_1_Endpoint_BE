@@ -19,18 +19,4 @@ class LikeApi(private val likeService: LikeService) {
             ApiResponse.success(
                     likeService.toggleLike(request.toLike())
             )
-
-    @GetMapping("/status")
-    fun isLiked(
-            @RequestParam userId: Long,
-            @RequestParam quizIds: List<Long>,
-    ): ApiResponse<List<LikeStatusResponse>> =
-            ApiResponse.success(
-                    likeService
-                            .isLikedIn(
-                                    UserId(userId),
-                                    quizIds.map { QuizId(it) },
-                            )
-                            .map { LikeStatusResponse.from(it) }
-            )
 }
