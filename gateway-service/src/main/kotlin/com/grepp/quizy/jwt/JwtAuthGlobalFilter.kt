@@ -102,7 +102,7 @@ class RouteValidator {
         listOf(
             "/oauth2/",
             "/api/quiz/feed",
-            "/api/search",
+            "/api/quiz/search",
         )
 
     fun isSecured(
