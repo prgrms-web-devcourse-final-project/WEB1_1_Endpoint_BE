@@ -1,6 +1,6 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.GameMessagePublisher
+import com.grepp.quizy.game.domain.GameMessage
 
 class FakeGameMessagePublisher() : GameMessagePublisher {
 

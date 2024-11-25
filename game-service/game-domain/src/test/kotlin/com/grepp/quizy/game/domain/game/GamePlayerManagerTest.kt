@@ -1,8 +1,7 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.GamePlayerManagerTest.Companion.guestUser1
-import com.grepp.quizy.game.domain.GamePlayerManagerTest.Companion.hostUser
-import com.grepp.quizy.game.domain.game.*
+import com.grepp.quizy.game.domain.game.GamePlayerManagerTest.Companion.guestUser1
+import com.grepp.quizy.game.domain.game.GamePlayerManagerTest.Companion.hostUser
 import com.grepp.quizy.game.domain.game.GameType.PRIVATE
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.core.spec.style.DescribeSpec
@@ -93,6 +92,5 @@ private fun generateGameFixture(gameRepository: FakeGameRepository): Game {
         ),
         inviteCode = InviteCode("ABC123")
     )
-    gameRepository.save(game)
-    return game
+    return gameRepository.save(game)
 }

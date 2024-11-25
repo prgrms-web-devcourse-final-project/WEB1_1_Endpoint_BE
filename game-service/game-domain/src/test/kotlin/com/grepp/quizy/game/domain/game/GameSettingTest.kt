@@ -1,8 +1,5 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.GameLevel
-import com.grepp.quizy.game.domain.game.GameSetting
-import com.grepp.quizy.game.domain.game.GameSubject
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 

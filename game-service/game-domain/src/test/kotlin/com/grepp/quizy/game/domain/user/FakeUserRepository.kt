@@ -1,7 +1,5 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.user
 
-import com.grepp.quizy.game.domain.user.User
-import com.grepp.quizy.game.domain.user.UserRepository
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong
 

@@ -1,11 +1,6 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.exception.GameException.*
-import com.grepp.quizy.game.domain.game.Player
-import com.grepp.quizy.game.domain.game.PlayerRole.GUEST
-import com.grepp.quizy.game.domain.game.PlayerRole.HOST
-import com.grepp.quizy.game.domain.game.PlayerStatus
-import com.grepp.quizy.game.domain.game.Players
+import com.grepp.quizy.game.domain.exception.GameException
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -15,22 +10,22 @@ class PlayersTest() : DescribeSpec({
     describe("Players") {
         context("플레이어 목록을 생성하면") {
             it("플레이어 목록을 생성한다.") {
-                val players = Players(listOf(Player(user1, HOST), Player(user2, GUEST)))
+                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
 
-                players shouldBe Players(listOf(Player(user1, HOST), Player(user2, GUEST)))
+                players shouldBe Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
             }
         }
         context("플레이어를 추가하면") {
             it("플레이어를 추가한다.") {
-                val players = Players(listOf(Player(user1, HOST), Player(user2, GUEST)))
+                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
 
-                val updatedPlayers = players.add(Player(user3, GUEST))
+                val updatedPlayers = players.add(Player(user3, PlayerRole.GUEST))
 
                 updatedPlayers shouldBe Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user2, GUEST),
-                        Player(user3, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user2, PlayerRole.GUEST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
             }
@@ -39,21 +34,28 @@ class PlayersTest() : DescribeSpec({
             it("예외를 발생시킨다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user2, GUEST),
-                        Player(user3, GUEST),
-                        Player(user4, GUEST),
-                        Player(user5, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user2, PlayerRole.GUEST),
+                        Player(user3, PlayerRole.GUEST),
+                        Player(user4, PlayerRole.GUEST),
+                        Player(user5, PlayerRole.GUEST)
                     )
                 )
-                shouldThrow<GameAlreadyFullException> { players.add(Player(user5, GUEST)) }
+                shouldThrow<GameException.GameAlreadyFullException> { players.add(Player(user5, PlayerRole.GUEST)) }
             }
         }
         context("이미 참가한 인원을 추가하면") {
             it("예외를 발생시킨다.") {
-                val players = Players(listOf(Player(user1, HOST), Player(user2, GUEST)))
+                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
 
-                shouldThrow<GameAlreadyParticipatedException> { players.add(Player(user2, GUEST)) }
+                shouldThrow<GameException.GameAlreadyParticipatedException> {
+                    players.add(
+                        Player(
+                            user2,
+                            PlayerRole.GUEST
+                        )
+                    )
+                }
             }
         }
 
@@ -61,29 +63,29 @@ class PlayersTest() : DescribeSpec({
             it("플레이어를 제거한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user2, GUEST),
-                        Player(user3, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user2, PlayerRole.GUEST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
 
-                val updatedPlayers = players.remove(Player(user2, GUEST))
+                val updatedPlayers = players.remove(Player(user2, PlayerRole.GUEST))
 
                 updatedPlayers shouldBe Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user3, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
             }
             it("플레이어 목록이 모두 제거되면 빈 리스트를 반환한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST)
+                        Player(user1, PlayerRole.HOST)
                     )
                 )
 
-                val updatedPlayers = players.remove(Player(user1, HOST))
+                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
 
                 updatedPlayers shouldBe Players(listOf())
             }
@@ -92,38 +94,45 @@ class PlayersTest() : DescribeSpec({
             it("가장 첫번째 플레이어를 호스트로 변경한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user2, GUEST),
-                        Player(user3, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user2, PlayerRole.GUEST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
 
-                val updatedPlayers = players.remove(Player(user1, HOST))
+                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
 
                 updatedPlayers shouldBe Players(
                     listOf(
-                        Player(user2, HOST),
-                        Player(user3, GUEST)
+                        Player(user2, PlayerRole.HOST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
             }
             it("이어 받을 플레이어가 없으면 빈 리스트를 반환한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST)
+                        Player(user1, PlayerRole.HOST)
                     )
                 )
 
-                val updatedPlayers = players.remove(Player(user1, HOST))
+                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
 
                 updatedPlayers shouldBe Players(listOf())
             }
         }
         context("플레이어 목록에 존재하지않는 플레이어를 제거하면") {
             it("예외를 발생시킨다.") {
-                val players = Players(listOf(Player(user1, HOST)))
+                val players = Players(listOf(Player(user1, PlayerRole.HOST)))
 
-                shouldThrow<GameNotParticipatedException> { players.remove(Player(user2, GUEST)) }
+                shouldThrow<GameException.GameNotParticipatedException> {
+                    players.remove(
+                        Player(
+                            user2,
+                            PlayerRole.GUEST
+                        )
+                    )
+                }
             }
         }
 
@@ -131,20 +140,20 @@ class PlayersTest() : DescribeSpec({
             it("찾은 플레이어를 반환한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, HOST),
-                        Player(user2, GUEST),
-                        Player(user3, GUEST)
+                        Player(user1, PlayerRole.HOST),
+                        Player(user2, PlayerRole.GUEST),
+                        Player(user3, PlayerRole.GUEST)
                     )
                 )
 
                 val player = players.findPlayer(user2)
 
-                player shouldBe Player(user2, GUEST)
+                player shouldBe Player(user2, PlayerRole.GUEST)
             }
             it("플레이어 목록에 존재하지 않는 플레이어를 찾으면") {
-                val players = Players(listOf(Player(user1, HOST)))
+                val players = Players(listOf(Player(user1, PlayerRole.HOST)))
 
-                shouldThrow<GameNotParticipatedException> { players.findPlayer(user2) }
+                shouldThrow<GameException.GameNotParticipatedException> { players.findPlayer(user2) }
             }
         }
 
@@ -162,11 +171,11 @@ class PlayersTest() : DescribeSpec({
             it("참여 상태로 변경한다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, GUEST, PlayerStatus.WAITING),
-                        Player(user2, GUEST, PlayerStatus.WAITING),
-                        Player(user3, GUEST, PlayerStatus.WAITING),
-                        Player(user4, GUEST, PlayerStatus.WAITING),
-                        Player(user5, GUEST, PlayerStatus.WAITING)
+                        Player(user1, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
                     )
                 )
 
@@ -183,30 +192,30 @@ class PlayersTest() : DescribeSpec({
             it("예외를 발생시킨다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, GUEST, PlayerStatus.JOINED),
-                        Player(user2, GUEST, PlayerStatus.WAITING),
-                        Player(user3, GUEST, PlayerStatus.WAITING),
-                        Player(user4, GUEST, PlayerStatus.WAITING),
-                        Player(user5, GUEST, PlayerStatus.WAITING)
+                        Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
+                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
                     )
                 )
 
-                shouldThrow<GameAlreadyParticipatedException> { players.joinRandomGame(user1) }
+                shouldThrow<GameException.GameAlreadyParticipatedException> { players.joinRandomGame(user1) }
             }
         }
         context("참여목록에 없는 사용자가 참여하면") {
             it("예외를 발생시킨다.") {
                 val players = Players(
                     listOf(
-                        Player(user1, GUEST, PlayerStatus.WAITING),
-                        Player(user2, GUEST, PlayerStatus.WAITING),
-                        Player(user3, GUEST, PlayerStatus.WAITING),
-                        Player(user4, GUEST, PlayerStatus.WAITING),
-                        Player(user5, GUEST, PlayerStatus.WAITING)
+                        Player(user1, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
+                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
                     )
                 )
 
-                shouldThrow<GameNotParticipatedException> { players.joinRandomGame(user6) }
+                shouldThrow<GameException.GameNotParticipatedException> { players.joinRandomGame(user6) }
             }
         }
         context("참여자의 참여여부를 확인하면") {
@@ -214,11 +223,11 @@ class PlayersTest() : DescribeSpec({
                 it("참을 반환한다.") {
                     val players = Players(
                         listOf(
-                            Player(user1, GUEST, PlayerStatus.JOINED),
-                            Player(user2, GUEST, PlayerStatus.JOINED),
-                            Player(user3, GUEST, PlayerStatus.JOINED),
-                            Player(user4, GUEST, PlayerStatus.JOINED),
-                            Player(user5, GUEST, PlayerStatus.JOINED)
+                            Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user2, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user3, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user4, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user5, PlayerRole.GUEST, PlayerStatus.JOINED)
                         )
                     )
 
@@ -230,11 +239,11 @@ class PlayersTest() : DescribeSpec({
                 it("거짓을 반환한다.") {
                     val players = Players(
                         listOf(
-                            Player(user1, GUEST, PlayerStatus.JOINED),
-                            Player(user2, GUEST, PlayerStatus.JOINED),
-                            Player(user3, GUEST, PlayerStatus.JOINED),
-                            Player(user4, GUEST, PlayerStatus.WAITING),
-                            Player(user5, GUEST, PlayerStatus.JOINED)
+                            Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user2, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user3, PlayerRole.GUEST, PlayerStatus.JOINED),
+                            Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
+                            Player(user5, PlayerRole.GUEST, PlayerStatus.JOINED)
                         )
                     )
 

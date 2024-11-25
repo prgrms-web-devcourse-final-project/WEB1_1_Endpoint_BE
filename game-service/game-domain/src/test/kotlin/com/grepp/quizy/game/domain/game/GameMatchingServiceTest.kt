@@ -1,14 +1,13 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user1
-import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user2
-import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user3
-import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user4
-import com.grepp.quizy.game.domain.GameMatchingServiceTest.Companion.user5
-import com.grepp.quizy.game.domain.game.*
-import com.grepp.quizy.game.domain.game.GameType.RANDOM
-import com.grepp.quizy.game.domain.game.PlayerRole.GUEST
-import com.grepp.quizy.game.domain.game.PlayerRole.HOST
+import com.grepp.quizy.game.domain.MessageType
+import com.grepp.quizy.game.domain.RoomPayload
+import com.grepp.quizy.game.domain.game.GameMatchingServiceTest.Companion.user1
+import com.grepp.quizy.game.domain.game.GameMatchingServiceTest.Companion.user2
+import com.grepp.quizy.game.domain.game.GameMatchingServiceTest.Companion.user3
+import com.grepp.quizy.game.domain.game.GameMatchingServiceTest.Companion.user4
+import com.grepp.quizy.game.domain.game.GameMatchingServiceTest.Companion.user5
+import com.grepp.quizy.game.domain.user.FakeUserRepository
 import com.grepp.quizy.game.domain.user.User
 import com.grepp.quizy.game.domain.user.UserReader
 import io.kotest.core.spec.style.DescribeSpec
@@ -81,34 +80,34 @@ class GameMatchingServiceTest() : DescribeSpec({
             it("GameStartEvent를 발행한다") {
                 val game = Game(
                     1L,
-                    type = RANDOM,
+                    type = GameType.RANDOM,
                     GameSetting(GameSubject.JAVASCRIPT, GameLevel.EASY, 10),
                     GameStatus.WAITING,
                     Players(
                         listOf(
                             Player(
                                 user1,
-                                HOST,
+                                PlayerRole.HOST,
                                 PlayerStatus.JOINED
                             ),
                             Player(
                                 user2,
-                                GUEST,
+                                PlayerRole.GUEST,
                                 PlayerStatus.JOINED
                             ),
                             Player(
                                 user3,
-                                GUEST,
+                                PlayerRole.GUEST,
                                 PlayerStatus.JOINED
                             ),
                             Player(
                                 user4,
-                                GUEST,
+                                PlayerRole.GUEST,
                                 PlayerStatus.WAITING
                             ),
                             Player(
                                 user5,
-                                GUEST,
+                                PlayerRole.GUEST,
                                 PlayerStatus.JOINED
                             )
                         )

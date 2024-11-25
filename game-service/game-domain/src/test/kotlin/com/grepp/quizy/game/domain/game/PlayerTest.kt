@@ -1,9 +1,5 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.Player
-import com.grepp.quizy.game.domain.game.PlayerRole.GUEST
-import com.grepp.quizy.game.domain.game.PlayerRole.HOST
-import com.grepp.quizy.game.domain.game.PlayerStatus
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -15,13 +11,13 @@ class PlayerTest() : DescribeSpec({
                 val player = Player(user)
 
                 player.user.id shouldBe 1
-                player.role shouldBe GUEST
+                player.role shouldBe PlayerRole.GUEST
             }
             it("호스트로 생성한다.") {
-                val player = Player(user, HOST)
+                val player = Player(user, PlayerRole.HOST)
 
                 player.user.id shouldBe 1
-                player.role shouldBe HOST
+                player.role shouldBe PlayerRole.HOST
             }
         }
         context("플레이어의 역할을 변경하면") {
@@ -30,25 +26,25 @@ class PlayerTest() : DescribeSpec({
 
                 player.grantHost()
 
-                player.role shouldBe HOST
+                player.role shouldBe PlayerRole.HOST
             }
         }
         context("역할을 확인하면") {
             it("호스트인지 확인 할 수 있다.") {
-                val player = Player(user, HOST)
+                val player = Player(user, PlayerRole.HOST)
 
                 player.isHost() shouldBe true
             }
             it("게스트인지 확인 할 수 있다.") {
-                val player = Player(user, GUEST)
+                val player = Player(user, PlayerRole.GUEST)
 
                 player.isGuest() shouldBe true
             }
         }
         context("플레이어의 정보가 같다면") {
             it("같은 플레이어로 판단한다.") {
-                val player1 = Player(user, HOST)
-                val player2 = Player(user, GUEST)
+                val player1 = Player(user, PlayerRole.HOST)
+                val player2 = Player(user, PlayerRole.GUEST)
 
                 player1 shouldBe player2
             }
@@ -68,4 +64,3 @@ class PlayerTest() : DescribeSpec({
         val user = User(1, "프로게이머", "imgPath")
     }
 }
-

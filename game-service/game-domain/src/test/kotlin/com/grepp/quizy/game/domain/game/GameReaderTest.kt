@@ -1,8 +1,6 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.exception.GameException
-import com.grepp.quizy.game.domain.game.*
-import com.grepp.quizy.game.domain.game.GameType.PRIVATE
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -15,7 +13,7 @@ class GameReaderTest() : DescribeSpec({
 
     beforeTest {
         val game = Game(
-            type = PRIVATE,
+            type = GameType.PRIVATE,
             _setting = GameSetting(
                 subject = GameSubject.SPRING,
                 level = GameLevel.EASY,

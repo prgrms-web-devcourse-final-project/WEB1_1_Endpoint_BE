@@ -1,6 +1,4 @@
-package com.grepp.quizy.game.domain
-
-import com.grepp.quizy.game.domain.game.IdGenerator
+package com.grepp.quizy.game.domain.game
 
 class FakeIdGenerator() : IdGenerator {
 

@@ -1,6 +1,5 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.*
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe

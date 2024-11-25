@@ -1,9 +1,11 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.GamePrivateServiceTest.Companion.guestUser1
-import com.grepp.quizy.game.domain.GamePrivateServiceTest.Companion.hostUser
-import com.grepp.quizy.game.domain.game.*
+import com.grepp.quizy.game.domain.MessageType
+import com.grepp.quizy.game.domain.RoomPayload
+import com.grepp.quizy.game.domain.game.GamePrivateServiceTest.Companion.guestUser1
+import com.grepp.quizy.game.domain.game.GamePrivateServiceTest.Companion.hostUser
 import com.grepp.quizy.game.domain.game.GameType.PRIVATE
+import com.grepp.quizy.game.domain.user.FakeUserRepository
 import com.grepp.quizy.game.domain.user.User
 import com.grepp.quizy.game.domain.user.UserReader
 import io.kotest.core.spec.style.DescribeSpec

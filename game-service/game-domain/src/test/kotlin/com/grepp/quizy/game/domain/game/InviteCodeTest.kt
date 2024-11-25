@@ -1,6 +1,5 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.InviteCode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -40,14 +39,14 @@ class InviteCodeTest() : DescribeSpec({
 
         context("generate 함수를 호출하면") {
             it("매번 다른 코드를 생성한다.") {
-                val code1 = InviteCode.Companion.generate()
-                val code2 = InviteCode.Companion.generate()
+                val code1 = InviteCode.generate()
+                val code2 = InviteCode.generate()
 
                 code1 shouldNotBe code2
             }
 
             it("지정된 문자로만 구성된 코드를 생성한다.") {
-                val code = InviteCode.Companion.generate()
+                val code = InviteCode.generate()
                 val allowedChars = ('A'..'Z') + ('0'..'9')
 
                 code.all { it in allowedChars } shouldBe true

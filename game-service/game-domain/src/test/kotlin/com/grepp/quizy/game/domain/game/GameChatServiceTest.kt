@@ -1,6 +1,7 @@
-package com.grepp.quizy.game.domain
+package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.game.GameChatService
+import com.grepp.quizy.game.domain.ChatPayload
+import com.grepp.quizy.game.domain.MessageType
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
 
