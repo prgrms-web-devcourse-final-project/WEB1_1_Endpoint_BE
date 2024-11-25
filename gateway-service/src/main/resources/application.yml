@@ -69,10 +69,11 @@ spring:
           predicates:
             - Path=/ws/**
             - Query=transport, websocket
-  data:
-    redis:
-      host: localhost
-      port: 6379
+        -
+
+redis:
+  host: localhost
+  port: 6379
 
 springdoc:
   swagger-ui:
