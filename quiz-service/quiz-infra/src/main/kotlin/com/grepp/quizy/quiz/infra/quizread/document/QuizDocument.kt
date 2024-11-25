@@ -21,7 +21,7 @@ class QuizDocument(
         @Field(type = FieldType.Flattened)
         val selectionPerOption: Map<Int, Int>,
         @Field(type = FieldType.Integer) val totalAnsweredUser: Int,
-        @Field(type = FieldType.Double) val difficulty: String,
+        @Field(type = FieldType.Keyword) val difficulty: QuizDifficulty,
         @Field(
                 type = FieldType.Date,
                 format =
