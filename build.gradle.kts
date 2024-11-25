@@ -66,27 +66,9 @@ subprojects {
 		enabled = false
 	}
 
-	spotless {
-		kotlin {
-			targetExclude("build/generated/**/*.kt")
-			targetExclude("bin/**/*.kt")
-			ktfmt("0.51").googleStyle().configure {
-				it.setMaxWidth(70)
-				it.setBlockIndent(4)
-				it.setContinuationIndent(8)
-				it.setRemoveUnusedImports(true)
-			}
-		}
-	}
-
 	tasks.withType<Test> {
 		useJUnitPlatform()
 	}
-}
-
-tasks.register<Copy>("addGitPreCommitHook") {
-	from("script/pre-commit")
-	into(".git/hooks")
 }
 
 kotlin {

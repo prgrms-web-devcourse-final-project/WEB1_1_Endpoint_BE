@@ -103,3 +103,7 @@ springdoc:
     enabled: true
     path: /api-docs
   enable-spring-security: true
+
+logging:
+  level:
+    root: DEBUG
