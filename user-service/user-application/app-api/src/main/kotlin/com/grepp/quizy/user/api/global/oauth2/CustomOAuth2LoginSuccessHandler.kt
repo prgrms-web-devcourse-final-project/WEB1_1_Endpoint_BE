@@ -9,7 +9,9 @@ import com.grepp.quizy.user.api.global.jwt.JwtProvider
 import com.grepp.quizy.user.api.global.jwt.dto.TokenResponse
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.user.domain.user.RedisTokenRepository
+import com.grepp.quizy.user.domain.user.UserLoginManager
 import com.grepp.quizy.user.domain.user.UserReader
+import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
@@ -25,6 +27,7 @@ class CustomOAuth2LoginSuccessHandler(
     private val jwtProvider: JwtProvider,
     private val userReader: UserReader,
     private val redisTokenRepository: RedisTokenRepository,
+    private val userLoginManager: UserLoginManager
 ) : SimpleUrlAuthenticationSuccessHandler() {
 
     private val objectMapper = ObjectMapper()
@@ -45,9 +48,25 @@ class CustomOAuth2LoginSuccessHandler(
 
         val customOAuth2User = authentication.principal as CustomOAuth2User
         val user = userReader.read(customOAuth2User.getEmail())
+
+
         val accessToken = jwtGenerator.generateAccessToken(user)
         val refreshToken = jwtGenerator.generateRefreshToken(user)
         val refreshTokenExpirationTime = jwtProvider.getExpiration(refreshToken)
+
+        // 이미 로그인 되어있는 유저는 로그인 X
+        try {
+            userLoginManager.login(user.id, refreshTokenExpirationTime)
+        } catch (e: CustomUserException) {
+            logger.error("Failed to login user", e)
+            val apiResponse =
+                ApiResponse.error(e.errorCode.errorReason.errorCode, e.message)
+
+            response.contentType = MediaType.APPLICATION_JSON_VALUE
+            response.characterEncoding = StandardCharsets.UTF_8.name()
+            response.writer.write(objectMapper.writeValueAsString(apiResponse))
+            return
+        }
 
         redisTokenRepository.saveRefreshToken(user.id, refreshToken, refreshTokenExpirationTime)
 
