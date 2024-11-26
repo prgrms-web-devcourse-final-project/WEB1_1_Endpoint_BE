@@ -9,6 +9,6 @@ interface QuizFetcher {
         subject: GameSubject,
         quizCount: Int,
         level: GameLevel
-    ): GameQuiz
+    ): List<GameQuiz>
 
 }

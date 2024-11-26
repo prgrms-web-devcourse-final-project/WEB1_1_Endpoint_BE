@@ -17,6 +17,6 @@ interface QuizFetcherFeignClient : QuizFetcher {
         @RequestParam subject: GameSubject,
         @RequestParam quizCount: Int,
         @RequestParam level: GameLevel
-    ): GameQuiz
+    ): List<GameQuiz>
 
 }

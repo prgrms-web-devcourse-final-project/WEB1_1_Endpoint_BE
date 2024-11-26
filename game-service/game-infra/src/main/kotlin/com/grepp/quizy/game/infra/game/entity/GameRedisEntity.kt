@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.TimeToLive
 
 private const val HOURS_IN_SECOND = 3600L
 
-@RedisHash
+@RedisHash("game")
 class GameRedisEntity(
     @Id
     val id: Long = 0,
