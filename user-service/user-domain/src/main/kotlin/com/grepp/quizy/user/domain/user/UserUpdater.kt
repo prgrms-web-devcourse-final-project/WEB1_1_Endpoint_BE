@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserUpdater(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val userMessageSender: UserMessageSender
 ) {
     fun updateProfile(userId: UserId, name: String?, profileImageUrl: String?) {
         val user = userRepository.findById(userId.value) ?: throw CustomUserException.UserNotFoundException
@@ -17,5 +18,6 @@ class UserUpdater(
             )
         )
         userRepository.save(user)
+        userMessageSender.send(UpdateUserEvent.from(user))
     }
 }
