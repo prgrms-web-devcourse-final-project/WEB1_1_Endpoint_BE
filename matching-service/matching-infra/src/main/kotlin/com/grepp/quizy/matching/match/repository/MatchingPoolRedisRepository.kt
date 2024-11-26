@@ -1,6 +1,7 @@
 package com.grepp.quizy.matching.match.repository
 
 import com.grepp.quizy.matching.match.MATCHING_K
+import com.grepp.quizy.matching.match.MATCHING_THRESHOLD
 import com.grepp.quizy.matching.match.MatchingPoolRepository
 import com.grepp.quizy.matching.match.UserStatus
 import com.grepp.quizy.matching.match.converter.toByteArray
@@ -42,7 +43,9 @@ class MatchingPoolRedisRepository(
             } else null
         }
 
-        return results.sortedByDescending { it.third } // score를 기준으로 정렬
+        return results
+            .filter { it.third >= MATCHING_THRESHOLD }
+            .sortedByDescending { it.third } // score를 기준으로 정렬
             .take(MATCHING_K) // 상위 K개 선택
             .map { (id, vector, _) ->
                 UserStatus(

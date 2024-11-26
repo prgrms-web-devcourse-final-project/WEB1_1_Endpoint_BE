@@ -12,10 +12,21 @@ interface UserFetcher {
 @Component
 class UserFetcherTempImpl : UserFetcher {
     override fun requestUserRating(userId: UserId): GameRating {
-        return GameRating.BRONZE
+        return when (userId) {
+            UserId(1) -> GameRating.BRONZE
+            UserId(2) -> GameRating.SILVER
+            UserId(3) -> GameRating.GOLD
+            else -> GameRating.MASTER
+        }
     }
 
+    // 테스트용
     override fun requestUserInterests(userId: UserId): List<InterestCategory> {
-        return listOf(InterestCategory.DEV_OPS, InterestCategory.WEB_DEVELOPMENT)
+        return when (userId) {
+            UserId(1) -> listOf(InterestCategory.ALGORITHM, InterestCategory.DATABASE)
+            UserId(2) -> listOf(InterestCategory.ALGORITHM, InterestCategory.WEB_DEVELOPMENT)
+            UserId(3) -> listOf(InterestCategory.ALGORITHM, InterestCategory.DATABASE, InterestCategory.DEV_OPS)
+            else -> listOf(InterestCategory.MOBILE, InterestCategory.NETWORK)
+        }
     }
 }
