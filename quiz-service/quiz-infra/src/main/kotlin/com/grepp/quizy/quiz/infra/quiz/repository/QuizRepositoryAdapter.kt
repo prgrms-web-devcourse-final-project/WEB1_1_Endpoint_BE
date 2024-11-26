@@ -37,6 +37,13 @@ class QuizRepositoryAdapter(
                 .map { it.toDomain() }
     }
 
+    override fun findCountsByInId(ids: List<QuizId>): QuizCountPackage {
+        val quizCounts = quizJpaRepository
+            .findAllById(ids.map { it.value })
+            .associate { QuizId(it.id) to QuizCount(it.likeCount, it.commentCount) }
+        return QuizCountPackage(quizCounts)
+    }
+
     override fun findTagsByNameIn(
             names: List<String>
     ): List<QuizTag> {

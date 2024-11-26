@@ -1,9 +1,9 @@
 package com.grepp.quizy.user.infra.user.entity
 
+import com.grepp.quizy.jpa.BaseTimeEntity
 import com.grepp.quizy.user.domain.user.Role
 import com.grepp.quizy.user.domain.user.User
 import com.grepp.quizy.user.domain.user.UserId
-import com.grepp.quizy.jpa.BaseTimeEntity
 import jakarta.persistence.*
 
 @Entity
@@ -31,7 +31,7 @@ class UserEntity(
     fun toDomain(): User {
         return User(
             id = UserId(id),
-            userProfile = userProfile.toDomain(),
+            _userProfile = userProfile.toDomain(),
             provider = provider.toDomain(),
             _role = role
         )

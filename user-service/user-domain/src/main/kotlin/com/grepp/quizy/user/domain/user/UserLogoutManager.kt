@@ -9,6 +9,7 @@ class UserLogoutManager(
     fun logout(userId: UserId, accessToken: String) {
         redisRepository.saveLogoutToken(accessToken)
         redisRepository.deleteRefreshToken(userId)
+        redisRepository.removeSession(userId)
     }
 
 }

@@ -20,6 +20,15 @@ spring:
 #    org.hibernate.SQL: debug
 #    org.hibernate.type.descriptor.sql: trace
 
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
+
 shedlock:
   name: like_sync_lock
 

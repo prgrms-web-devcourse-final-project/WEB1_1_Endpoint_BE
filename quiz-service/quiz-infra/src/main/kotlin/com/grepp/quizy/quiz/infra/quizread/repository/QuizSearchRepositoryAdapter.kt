@@ -1,23 +1,20 @@
 package com.grepp.quizy.quiz.infra.quizread.repository
 
 import com.grepp.quizy.quiz.domain.global.dto.Slice
+import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quizread.*
-import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDomainFactory
 import com.grepp.quizy.quiz.infra.quizread.document.SortField
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class QuizSearchRepositoryAdapter(
         private val quizElasticRepository: QuizElasticRepository,
-        private val userAnswerElasticRepository:
-                UserAnswerElasticRepository,
 ) : QuizSearchRepository {
 
-    override fun search(condition: UserSearchCondition): Slice<QuizForRead> {
+    override fun search(condition: UserSearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
@@ -32,28 +29,12 @@ class QuizSearchRepositoryAdapter(
                 }
     }
 
-    override fun search(condition: GameQuizSearchCondition): List<AnswerableQuiz> {
+    override fun search(condition: GameQuizSearchCondition): List<Quiz> {
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
             .searchAnswerableQuiz(condition.category, condition.difficulty, pageable)
             .map { QuizDomainFactory.toAnswerableQuiz(it) }
-    }
-
-    override fun searchUserAnswer(
-            userId: UserId,
-            quizIds: List<QuizId>,
-    ): UserAnswer {
-        val userAnswer =
-                userAnswerElasticRepository.findByIdOrNull(userId.id)
-        return userAnswer?.let { answer ->
-            UserAnswer(
-                    quizIds.mapNotNull { id ->
-                                answer.getOptionNumber(id)
-                            }
-                            .toMap()
-            )
-        } ?: UserAnswer()
     }
 
     private fun convertPageable(condition: SearchCondition) =

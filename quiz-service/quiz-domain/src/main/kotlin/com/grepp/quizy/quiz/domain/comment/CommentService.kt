@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.domain.comment
 
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

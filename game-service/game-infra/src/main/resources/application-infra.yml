@@ -25,6 +25,7 @@ feign:
   client:
     url:
       quiz-service: http://localhost:8083
+
 kafka:
   topic:
     user: user
@@ -125,7 +126,6 @@ feign:
   client:
     url:
       quiz-service: http://dev-quiz-service:8080
-
 ---
 spring:
   config:
@@ -149,8 +149,3 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
-feign:
-  client:
-    url:
-      quiz-service: http://dev-quiz-service:8080

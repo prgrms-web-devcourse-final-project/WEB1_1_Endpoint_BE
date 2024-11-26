@@ -8,9 +8,12 @@ class UserService(
     private val userReader: UserReader,
     private val userRemover: UserRemover,
     private val userLogoutManager: UserLogoutManager,
-    private val userReissueManager: UserReissueManager
+    private val userReissueManager: UserReissueManager,
+    private val userValidator: UserValidator,
+    private val userUpdater: UserUpdater
 
-) : UserCreateUseCase, UserReadUseCase, UserDeleteUseCase, UserLogoutUseCase, UserReissueUseCase {
+) : UserCreateUseCase, UserReadUseCase, UserDeleteUseCase, UserLogoutUseCase, UserReissueUseCase, UserValidUseCase,
+    UserUpdateUseCase {
     override fun appendUser(user: User): User {
         return userAppender.append(user)
     }
@@ -31,5 +34,11 @@ class UserService(
         return userReissueManager.reissue(userId)
     }
 
+    override fun updateProfile(userId: UserId, name: String?, imageFile: ImageFile?) {
+        userUpdater.updateProfile(userId, name, imageFile)
+    }
 
+    override fun isValidUser(userId: UserId): Boolean {
+        return userValidator.isValid(userId)
+    }
 }

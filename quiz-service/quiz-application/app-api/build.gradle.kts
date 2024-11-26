@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
+    implementation(project(":common:common-web"))
     implementation(project(":quiz-service:quiz-domain"))
     implementation(project(":quiz-service:quiz-infra"))
 

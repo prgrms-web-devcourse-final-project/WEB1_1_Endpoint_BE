@@ -5,13 +5,17 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class RedisTokenRepository(private val redisUtil: RedisUtil) {
-    private val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
-    private val LOGOUT_TOKEN_KEY = "logout"
+    companion object {
+        private const val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
+        private const val LOGOUT_TOKEN_KEY = "logout"
+        private const val USER_KEY = "user"
+    }
+
 
     fun saveRefreshToken(
-            userId: UserId,
-            refreshToken: String,
-            expirationTime: Long,
+        userId: UserId,
+        refreshToken: String,
+        expirationTime: Long,
     ) {
         val key = generateRefreshTokenKey(userId)
         redisUtil.saveValue(key, refreshToken, expirationTime)
@@ -35,6 +39,10 @@ class RedisTokenRepository(private val redisUtil: RedisUtil) {
         return !redisUtil.isExistSet(LOGOUT_TOKEN_KEY, accessToken)
     }
 
+    fun isExistUser(userId: UserId): Boolean {
+        return redisUtil.isExistSet(USER_KEY, userId.value.toString())
+    }
+
     private fun generateRefreshTokenKey(userId: UserId): String =
-            "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
+        "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
 }

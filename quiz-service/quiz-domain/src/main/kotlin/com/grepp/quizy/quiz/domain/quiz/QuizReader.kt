@@ -18,4 +18,6 @@ class QuizReader(private val quizRepository: QuizRepository) {
     fun readTags(ids: List<QuizTagId>): List<QuizTag> {
         return quizRepository.findTagsByInId(ids)
     }
+
+    fun readCounts(ids: List<QuizId>) = quizRepository.findCountsByInId(ids)
 }

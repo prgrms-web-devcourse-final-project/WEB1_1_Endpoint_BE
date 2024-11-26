@@ -1,4 +1,4 @@
-package com.grepp.quizy.user.infra.redis.config
+package com.grepp.quizy.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

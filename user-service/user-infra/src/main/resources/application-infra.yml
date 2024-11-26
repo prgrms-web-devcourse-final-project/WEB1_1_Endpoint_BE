@@ -4,21 +4,29 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306/quizy?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 1234
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show-sql: true
         format_sql: true
-  data:
-    redis:
-      host: localhost
-      port: 6379
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
+
+redis:
+  host: localhost
+  port: 6379
 
 kafka:
   topic:
@@ -74,6 +82,14 @@ spring:
       hibernate:
         show-sql: false
         format_sql: false
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 redis:
   host: ${REDIS_HOST}
@@ -119,7 +135,7 @@ kafka-consumer-config:
 spring:
   config:
     activate:
-      on-profile: text
+      on-profile: test
 
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -140,7 +156,6 @@ spring:
     console:
       enabled: true
 
-  data:
-    redis:
-      host: localhost
-      port: 6379
+redis:
+  host: localhost
+  port: 6379

@@ -10,6 +10,10 @@ data class QuizOptionVO(val optionNumber: Int, val content: String) :
 data class QuizAnswerVO(val value: String, val explanation: String) :
         QuizDocumentVo
 
+enum class QuizDifficulty {
+        EASY, MEDIUM, HARD, NONE
+}
+
 enum class SortField(val fieldName: String) {
         TRENDING("totalAnsweredUser"),
         NEW("createdAt");
