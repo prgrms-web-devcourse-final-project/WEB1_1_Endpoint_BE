@@ -17,7 +17,7 @@ import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
 @Component
-@Order(-1) // 높은 우선순위
+@Order(-1)
 class AuthGlobalFilter(
     private val routeValidator: RouteValidator,
     private val jwtProvider: JwtProvider,
@@ -32,25 +32,33 @@ class AuthGlobalFilter(
     ): Mono<Void> {
         val request = exchange.request
 
-        // 보안이 필요 없는 경로인 경우 필터를 건너뜁니다.
-        if (routeValidator.isUnsecured(request)) {
-            return chain.filter(exchange)
-        }
+        // JWT 토큰 추출 시도
+        val token = extractToken(request)
 
-        // 헤더에 Authorization이 없는 경우 쿠키에서 토큰을 가져옵니다.
-        if (!request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
-            CookieUtils.getCookieValue(request, "refreshToken").let {
-                it ?: throw CustomJwtException.JwtNotFountException
-                jwtValidator.validateRefreshToken(it)
-                return addHeader(it, exchange, chain)
+        return when {
+            // 토큰이 있는 경우 - 경로와 관계없이 무조건 검증
+            token != null -> {
+                addHeader(token, exchange, chain)
+            }
+            // 토큰이 없고 Unsecured 경로인 경우
+            routeValidator.isUnsecured(request) -> {
+                chain.filter(exchange)
+            }
+            // 토큰이 없고 Secured 경로인 경우
+            else -> {
+                Mono.error(CustomJwtException.JwtNotFountException)
             }
         }
+    }
 
-        // 헤더에 Authorization이 있는 경우 토큰을 가져옵니다.
-        val token = resolveToken(request) ?: throw CustomJwtException.JwtUnsupportedException
-
-        // 토큰을 검증하고 새로운 헤더를 추가합니다.
-        return addHeader(token, exchange, chain)
+    private fun extractToken(request: ServerHttpRequest): String? = try {
+        if (request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
+            resolveToken(request)
+        } else {
+            CookieUtils.getCookieValue(request, "refreshToken")
+        }
+    } catch (e: Exception) {
+        null
     }
 
     private fun resolveToken(request: ServerHttpRequest): String? {
@@ -70,10 +78,9 @@ class AuthGlobalFilter(
         jwtValidator.validateToken(token)
         val userId = jwtProvider.getUserIdFromToken(token).value
 
-        // 유저 검증을 Mono chain으로 변경
+        // 실제로 존재하는 유저인지 검증이 성공하면 헤더를 추가하고 체인 실행
         return userClient.validateUser(userId)
             .then(Mono.defer {
-                // 검증이 성공하면 헤더를 추가하고 체인 실행
                 val headers = HttpHeaders()
                 exchange.request.headers.forEach { name, values ->
                     headers[name] = values
@@ -99,7 +106,7 @@ class RouteValidator {
     private val openApiEndpoints = listOf(
         "/oauth2",
         "/api/quiz/feed",
-        "/api/search"
+        "/api/quiz/search",
     )
 
     fun isUnsecured(request: ServerHttpRequest): Boolean {
