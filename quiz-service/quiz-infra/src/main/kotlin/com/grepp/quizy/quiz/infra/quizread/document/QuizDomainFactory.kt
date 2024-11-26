@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.infra.quizread.document
 
 import com.grepp.quizy.common.dto.DateTime
+import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.user.UserId
 
@@ -32,14 +33,15 @@ class QuizDomainFactory {
                             content,
                             tags.map {QuizTag(it)},
                             options.map { option ->
-                                QuizOption(
+                                QuizOption.ABTestOption(
                                     option.optionNumber,
                                     option.content,
-                                    option.content,
+                                    QuizImageId.from(
+                                        option.imageId
+                                    ),
                                     selectionPerOption[
-                                        option
-                                            .optionNumber]
-                                        ?: 0,
+                                        option.optionNumber]
+                                        ?: 0
                                 )
                             }),
                         id = QuizId(id),
@@ -57,15 +59,13 @@ class QuizDomainFactory {
                             content,
                             tags.map {QuizTag(it)},
                             options = options.map { option ->
-                                        QuizOption(
-                                                option.optionNumber,
-                                                option.content,
-                                                option.content,
-                                                selectionPerOption[
-                                                        option
-                                                                .optionNumber]
-                                                        ?: 0,
-                                        )
+                                    QuizOption.OXOption(
+                                        option.optionNumber,
+                                        option.content,
+                                        selectionPerOption[
+                                            option.optionNumber]
+                                            ?: 0,
+                                    )
                                     },
                         ),
                         id = QuizId(id),
@@ -86,13 +86,11 @@ class QuizDomainFactory {
                             content,
                             tags.map {QuizTag(it)},
                             options = options.map { option ->
-                                QuizOption(
+                                QuizOption.MultipleChoiceOption(
                                     option.optionNumber,
                                     option.content,
-                                    option.content,
                                     selectionPerOption[
-                                        option
-                                            .optionNumber]
+                                        option.optionNumber]
                                         ?: 0,
                                 )
                             },

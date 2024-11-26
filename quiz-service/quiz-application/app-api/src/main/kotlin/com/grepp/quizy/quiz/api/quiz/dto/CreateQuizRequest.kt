@@ -22,7 +22,7 @@ data class CreateQuizRequest(
 
     fun toAnswer(): QuizAnswer =
             when (type) {
-                QuizType.AB_TEST -> QuizAnswer.EMPTY
+                QuizType.AB_TEST -> QuizAnswer.NONE
                 else ->
                         answer?.let {
                             QuizAnswer(

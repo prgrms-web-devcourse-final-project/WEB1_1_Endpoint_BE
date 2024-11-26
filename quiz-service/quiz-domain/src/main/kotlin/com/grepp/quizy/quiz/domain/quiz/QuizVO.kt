@@ -24,23 +24,26 @@ data class QuizTag(
 sealed class QuizOption(
         val optionNumber: Int,
         val content: String,
-        val selectionCount: Int = 0,
+        val selectionCount: Int,
 ) {
     class ABTestOption(
             optionNumber: Int,
             content: String,
-            imageId: QuizImageId
-    ) : QuizOption(optionNumber, content)
+            val imageId: QuizImageId?,
+            selectionCount: Int = 0
+    ) : QuizOption(optionNumber, content, selectionCount)
 
     class MultipleChoiceOption(
             optionNumber: Int,
             content: String,
-    ) : QuizOption(optionNumber, content)
+            selectionCount: Int = 0
+    ) : QuizOption(optionNumber, content, selectionCount)
 
     class OXOption(
             optionNumber: Int,
             content: String,
-    ) : QuizOption(optionNumber, content)
+            selectionCount: Int = 0,
+    ) : QuizOption(optionNumber, content, selectionCount)
 }
 
 data class QuizContent(
@@ -63,7 +66,7 @@ data class QuizAnswer(val value: String, val explanation: String) {
     fun isCorrect(userAnswer: String): Boolean = value == userAnswer
 
     companion object {
-        val EMPTY: QuizAnswer = QuizAnswer("", "")
+        val NONE: QuizAnswer = QuizAnswer("", "")
     }
 }
 

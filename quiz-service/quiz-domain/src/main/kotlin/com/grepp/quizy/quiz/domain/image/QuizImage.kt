@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.domain.image
 
 @JvmInline
-value class QuizImageId(val value: Long) {
+value class QuizImageId private constructor(val value: Long) {
     companion object {
         val NOT_ASSIGNED = QuizImageId(0)
 

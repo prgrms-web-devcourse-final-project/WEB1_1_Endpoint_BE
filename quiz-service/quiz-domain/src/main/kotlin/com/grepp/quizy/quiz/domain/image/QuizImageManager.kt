@@ -11,7 +11,7 @@ class QuizImageManager(
         return quizImageRepository.save(image)
     }
 
-    fun read(id: Long): QuizImage {
+    fun read(id: QuizImageId): QuizImage {
         return quizImageRepository.findById(id) ?: throw QuizImageDomainException.NotFound
     }
 
