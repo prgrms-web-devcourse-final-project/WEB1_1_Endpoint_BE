@@ -2,7 +2,7 @@ package com.grepp.quizy.quiz.infra.useranswer.entity
 
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import jakarta.persistence.Embeddable
 import java.io.Serializable
 import java.util.*

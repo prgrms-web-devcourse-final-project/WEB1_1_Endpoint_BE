@@ -6,7 +6,7 @@ import com.grepp.quizy.quiz.domain.comment.Comment
 import com.grepp.quizy.quiz.domain.comment.CommentContent
 import com.grepp.quizy.quiz.domain.comment.CommentId
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType

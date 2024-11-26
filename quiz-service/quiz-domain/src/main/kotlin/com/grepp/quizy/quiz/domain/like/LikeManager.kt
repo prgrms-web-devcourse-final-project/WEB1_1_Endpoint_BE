@@ -2,7 +2,7 @@ package com.grepp.quizy.quiz.domain.like
 
 import com.grepp.quizy.quiz.domain.quiz.QuizCache
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
 @Component
@@ -28,11 +28,7 @@ class LikeManager(
     fun isLikedIn(
             userId: UserId,
             quizIds: List<QuizId>,
-    ): List<LikeStatus> {
-        return quizIds.map {
-            LikeStatus(it, isLiked(Like(userId, it)))
-        }
-    }
+    ) = QuizLikePackage(quizIds.associateWith { isLiked(Like(userId, it)) })
 
     private fun isLiked(like: Like): Boolean =
             quizCache.isLikeCached(like)

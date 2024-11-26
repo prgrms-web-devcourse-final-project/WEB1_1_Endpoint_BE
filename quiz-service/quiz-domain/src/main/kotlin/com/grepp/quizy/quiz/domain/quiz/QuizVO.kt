@@ -23,6 +23,7 @@ data class QuizOption(
         val optionNumber: Int,
         val title: String,
         val content: String,
+        val selectionCount: Int = 0,
 )
 
 data class QuizContent(
@@ -49,10 +50,12 @@ data class QuizAnswer(val value: String, val explanation: String) {
     }
 }
 
-enum class QuizType {
-    AB_TEST,
-    OX,
-    MULTIPLE_CHOICE,
+data class QuizCount(val like: Long = 0, val comment: Long = 0)
+
+enum class QuizType(val value: String) {
+    AB_TEST("AB 테스트"),
+    OX("OX 퀴즈"),
+    MULTIPLE_CHOICE("객관식"),
 }
 
 enum class QuizCategory(val description: String) {

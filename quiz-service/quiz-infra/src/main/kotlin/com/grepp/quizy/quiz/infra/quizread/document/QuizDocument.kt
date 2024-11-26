@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.infra.quizread.document
 
-import com.grepp.quizy.quiz.domain.quizread.QuizType
+import com.grepp.quizy.quiz.domain.quiz.QuizCategory
+import com.grepp.quizy.quiz.domain.quiz.QuizType
 import java.time.LocalDateTime
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
@@ -10,7 +11,8 @@ import org.springframework.data.elasticsearch.annotations.*
 @Setting(settingPath = "elastic/es-settings.json")
 class QuizDocument(
         @Id @Field(type = FieldType.Long) val id: Long,
-        @Field(type = FieldType.Keyword) val category: String,
+        @Field(type = FieldType.Long) val userId: Long,
+        @Field(type = FieldType.Keyword) val category: QuizCategory,
         @Field(type = FieldType.Keyword) val type: QuizType,
         @Field(type = FieldType.Text) val content: String,
         @Field(type = FieldType.Text) val tags: List<String>,
@@ -20,9 +22,7 @@ class QuizDocument(
         @Field(type = FieldType.Flattened)
         val selectionPerOption: Map<Int, Int>,
         @Field(type = FieldType.Integer) val totalAnsweredUser: Int,
-        @Field(type = FieldType.Double) val difficulty: String,
-        @Field(type = FieldType.Integer) val totalLikeCount: Int,
-        @Field(type = FieldType.Integer) val totalCommentCount: Int,
+        @Field(type = FieldType.Keyword) val difficulty: QuizDifficulty,
         @Field(
                 type = FieldType.Date,
                 format =

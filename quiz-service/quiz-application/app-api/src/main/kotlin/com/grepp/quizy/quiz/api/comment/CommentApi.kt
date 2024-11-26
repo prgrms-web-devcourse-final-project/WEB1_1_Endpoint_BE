@@ -5,7 +5,7 @@ import com.grepp.quizy.quiz.api.comment.dto.CommentResponse
 import com.grepp.quizy.quiz.api.comment.dto.CreateCommentRequest
 import com.grepp.quizy.quiz.domain.comment.*
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.web.bind.annotation.*
 
 @RestController

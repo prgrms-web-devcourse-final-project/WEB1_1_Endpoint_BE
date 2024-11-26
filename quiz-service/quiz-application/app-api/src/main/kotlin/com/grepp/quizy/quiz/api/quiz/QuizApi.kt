@@ -5,7 +5,7 @@ import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
 import com.grepp.quizy.quiz.domain.quiz.*
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

@@ -1,63 +1,65 @@
 package com.grepp.quizy.quiz.infra.quizread.document
 
-import com.grepp.quizy.quiz.domain.quizread.*
+import com.grepp.quizy.common.dto.DateTime
+import com.grepp.quizy.quiz.domain.quiz.*
+import com.grepp.quizy.quiz.domain.user.UserId
 
 class QuizDomainFactory {
     companion object {
-        fun toQuiz(document: QuizDocument): QuizForRead {
+        fun toQuiz(document: QuizDocument): Quiz {
             return when (document.type) {
-                QuizType.AB -> ABTest(document)
+                QuizType.AB_TEST -> ABTest(document)
                 QuizType.OX -> OXQuiz(document)
                 QuizType.MULTIPLE_CHOICE ->
-                        MultipleOptionQuiz(document)
+                        MultipleChoiceQuiz(document)
             }
         }
 
-        fun toAnswerableQuiz(document: QuizDocument): AnswerableQuiz {
+        fun toAnswerableQuiz(document: QuizDocument): Quiz {
             return when (document.type) {
                 QuizType.OX -> OXQuiz(document)
-                QuizType.MULTIPLE_CHOICE -> MultipleOptionQuiz(document)
-                QuizType.AB -> throw IllegalArgumentException("Unexpected QuizType ${document.type}")
+                QuizType.MULTIPLE_CHOICE -> MultipleChoiceQuiz(document)
+                QuizType.AB_TEST -> throw IllegalArgumentException("Unexpected QuizType ${document.type}")
             }
         }
 
         private fun ABTest(document: QuizDocument): ABTest =
                 with(document) {
-                    return ABTest(
-                            id = QuizId(id),
-                            category = QuizCategory(category),
-                            content = QuizContent(type, content),
-                            tags = tags.map { QuizTag(it) },
-                            options =
-                                    options.map { option ->
-                                        QuizOption(
-                                                option.optionNumber,
-                                                option.content,
-                                                selectionPerOption[
-                                                        option
-                                                                .optionNumber]
-                                                        ?: 0,
-                                        )
-                                    },
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
-                                    ),
+                    return ABTest.of(
+                        userId = UserId(userId),
+                        content = QuizContent(
+                            category,
+                            content,
+                            tags.map {QuizTag(it)},
+                            options.map { option ->
+                                QuizOption(
+                                    option.optionNumber,
+                                    option.content,
+                                    option.content,
+                                    selectionPerOption[
+                                        option
+                                            .optionNumber]
+                                        ?: 0,
+                                )
+                            }),
+                        id = QuizId(id),
+                        dateTime = DateTime(createdAt, updatedAt),
+                        commentCount = 0
                     )
                 }
 
         private fun OXQuiz(document: QuizDocument): OXQuiz =
                 with(document) {
-                    return OXQuiz(
-                            id = QuizId(id),
-                            category = QuizCategory(category),
-                            content = QuizContent(type, content),
-                            tags = tags.map { QuizTag(it) },
-                            options =
-                                    options.map { option ->
+                    return OXQuiz.of(
+                        userId = UserId(userId),
+                        content = QuizContent(
+                            category,
+                            content,
+                            tags.map {QuizTag(it)},
+                            options = options.map { option ->
                                         QuizOption(
                                                 option.optionNumber,
+                                                option.content,
                                                 option.content,
                                                 selectionPerOption[
                                                         option
@@ -65,49 +67,40 @@ class QuizDomainFactory {
                                                         ?: 0,
                                         )
                                     },
-                            answer =
-                                    QuizAnswer(
-                                            answer!!.value,
-                                            answer.explanation,
-                                    ),
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
-                                    ),
+                        ),
+                        id = QuizId(id),
+                        dateTime = DateTime(createdAt, updatedAt),
+                        answer = QuizAnswer(answer!!.value, answer.explanation),
+                        commentCount = 0
                     )
                 }
 
-        private fun MultipleOptionQuiz(
+        private fun MultipleChoiceQuiz(
                 document: QuizDocument
-        ): MultipleOptionQuiz =
+        ): MultipleChoiceQuiz =
                 with(document) {
-                    return MultipleOptionQuiz(
-                            id = QuizId(id),
-                            category = QuizCategory(category),
-                            content = QuizContent(type, content),
-                            tags = tags.map { QuizTag(it) },
-                            options =
-                                    options.map { option ->
-                                        QuizOption(
-                                                option.optionNumber,
-                                                option.content,
-                                                selectionPerOption[
-                                                        option
-                                                                .optionNumber]
-                                                        ?: 0,
-                                        )
-                                    },
-                            answer =
-                                    QuizAnswer(
-                                            answer!!.value,
-                                            answer.explanation,
-                                    ),
-                            count =
-                                    QuizCount(
-                                            totalLikeCount,
-                                            totalCommentCount,
-                                    ),
+                    return MultipleChoiceQuiz.of(
+                        userId = UserId(userId),
+                        content = QuizContent(
+                            category,
+                            content,
+                            tags.map {QuizTag(it)},
+                            options = options.map { option ->
+                                QuizOption(
+                                    option.optionNumber,
+                                    option.content,
+                                    option.content,
+                                    selectionPerOption[
+                                        option
+                                            .optionNumber]
+                                        ?: 0,
+                                )
+                            },
+                        ),
+                        id = QuizId(id),
+                        dateTime = DateTime(createdAt, updatedAt),
+                        answer = QuizAnswer(answer!!.value, answer.explanation),
+                        commentCount = 0
                     )
                 }
     }

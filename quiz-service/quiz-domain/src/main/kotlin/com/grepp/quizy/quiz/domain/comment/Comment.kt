@@ -3,7 +3,7 @@ package com.grepp.quizy.quiz.domain.comment
 import com.grepp.quizy.common.dto.DateTime
 import com.grepp.quizy.quiz.domain.comment.exception.CommentException
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserId
+import com.grepp.quizy.quiz.domain.user.UserId
 
 class Comment(
         val quizId: QuizId,

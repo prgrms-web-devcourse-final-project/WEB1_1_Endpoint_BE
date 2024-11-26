@@ -16,4 +16,6 @@ interface QuizRepository {
     fun saveTags(newTags: List<QuizTag>): List<QuizTag>
 
     fun findTagsByInId(ids: List<QuizTagId>): List<QuizTag>
+
+    fun findCountsByInId(ids: List<QuizId>): QuizCountPackage
 }
