@@ -29,7 +29,17 @@ class GameRepositoryAdapter(
             ?.toDomain()
     }
 
-    override fun saveQuiz(gameId: Long, quizId: Long) {
-        redisTemplate.opsForSet().add("game:$gameId:quizzes", quizId.toString())
+    override fun saveQuiz(gameId: Long, quizId: Long): Long? {
+        val quizSetKey = "game:$gameId:quizzes"
+        return redisTemplate.opsForSet().add(quizSetKey, quizId.toString())
     }
+
+    override fun findQuizzes(gameId: Long): Set<Long> {
+        val quizSetKey = "game:$gameId:quizzes"
+        return redisTemplate.opsForSet().members(quizSetKey)
+            ?.map { it.toLong() }
+            ?.toSet()
+            ?: emptySet()
+    }
+
 }

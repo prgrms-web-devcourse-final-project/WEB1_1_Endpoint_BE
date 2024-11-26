@@ -1,6 +1,8 @@
 package com.grepp.quizy.game.domain
 
 import com.grepp.quizy.game.domain.game.*
+import com.grepp.quizy.game.domain.quiz.GameQuiz
+import com.grepp.quizy.game.domain.quiz.GameQuizOption
 
 enum class MessageType {
     GAME_ROOM,
@@ -35,6 +37,18 @@ data class GameMessage(
                 payload = payload,
             )
         }
+
+        fun quiz(
+            gameId: Long,
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.QUIZ_TRANSMITTED,
+                payload = payload,
+            )
+        }
+
     }
 }
 
@@ -69,5 +83,34 @@ data class ChatPayload(
         }
     }
 }
+
+data class QuizPayload(
+    val quiz: List<QuizInfo>,
+) : MessagePayload {
+    companion object {
+        fun from(quiz: List<GameQuiz>): QuizPayload {
+            return QuizPayload(
+                quiz = quiz.map { QuizInfo.from(it) },
+            )
+        }
+    }
+}
+
+data class QuizInfo(
+    val id: Long,
+    val content: String,
+    val option: List<GameQuizOption>,
+) {
+    companion object {
+        fun from(quiz: GameQuiz): QuizInfo {
+            return QuizInfo(
+                id = quiz.id,
+                content = quiz.content,
+                option = quiz.option,
+            )
+        }
+    }
+}
+
 
 // TODO: Implement other message payloads

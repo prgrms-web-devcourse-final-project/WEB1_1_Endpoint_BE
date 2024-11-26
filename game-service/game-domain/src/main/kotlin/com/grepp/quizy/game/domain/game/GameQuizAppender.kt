@@ -11,7 +11,7 @@ class GameQuizAppender(
         gameId: Long,
         quizId: Long
     ) {
-        gameRepository.saveQuiz(gameId, quizId)
+        gameRepository.saveQuiz(gameId, quizId) ?: throw IllegalStateException("퀴즈 추가 실패")
     }
 
 }

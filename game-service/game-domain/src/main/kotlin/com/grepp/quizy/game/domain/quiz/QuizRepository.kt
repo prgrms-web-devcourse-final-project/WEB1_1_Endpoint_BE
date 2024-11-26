@@ -4,4 +4,6 @@ interface QuizRepository {
 
     fun saveAll(quizzes: List<GameQuiz>): List<GameQuiz>
 
+    fun findById(id: Long): GameQuiz?
+
 }
