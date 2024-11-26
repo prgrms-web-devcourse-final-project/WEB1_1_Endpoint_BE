@@ -21,7 +21,7 @@ class UserPrincipalArgumentResolver : HandlerMethodArgumentResolver {
         mavContainer: ModelAndViewContainer?,
         webRequest: NativeWebRequest,
         binderFactory: WebDataBinderFactory?
-    ): Any? {
+    ): Any {
         val request = webRequest.getNativeRequest(HttpServletRequest::class.java)
         val userId = request?.getHeader("X-Auth-Id")
             ?: throw RuntimeException("Authorization header is missing")

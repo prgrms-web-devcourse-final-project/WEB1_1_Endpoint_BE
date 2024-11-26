@@ -1,4 +1,4 @@
-package com.grepp.quizy.matching.config
+package com.grepp.quizy.user.api.global.config
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.models.Components
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration
 @OpenAPIDefinition(
         info =
                 io.swagger.v3.oas.annotations.info.Info(
-                        title = "Matching API",
+                        title = "User API",
                         version = "v1",
                 )
 )

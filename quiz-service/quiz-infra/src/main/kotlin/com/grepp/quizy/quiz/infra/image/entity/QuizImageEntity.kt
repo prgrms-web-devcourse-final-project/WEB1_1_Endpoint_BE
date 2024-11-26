@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.infra.image.entity
 
 import com.grepp.quizy.quiz.domain.image.QuizImage
+import com.grepp.quizy.quiz.domain.image.QuizImageId
 import jakarta.persistence.*
 
 @Entity
@@ -14,7 +15,7 @@ class QuizImageEntity(
     companion object {
         fun from(domain: QuizImage): QuizImageEntity{
             return QuizImageEntity(
-                id = domain.id,
+                id = domain.id.value,
                 url = domain.url
             )
         }
@@ -22,7 +23,7 @@ class QuizImageEntity(
 
     fun toDomain(): QuizImage {
         return QuizImage(
-            id = id,
+            id = QuizImageId.from(id),
             url = url
         )
     }

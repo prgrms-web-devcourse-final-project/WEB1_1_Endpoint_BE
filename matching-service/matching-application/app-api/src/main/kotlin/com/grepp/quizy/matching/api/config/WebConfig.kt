@@ -1,4 +1,4 @@
-package com.grepp.quizy.matching.config
+package com.grepp.quizy.matching.api.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.CorsRegistry

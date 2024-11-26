@@ -1,5 +1,7 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.quiz.domain.image.QuizImageId
+
 @JvmInline value class QuizId(val value: Long) {}
 
 @JvmInline value class QuizTagId(val value: Long)
@@ -19,12 +21,27 @@ data class QuizTag(
     }
 }
 
-data class QuizOption(
+sealed class QuizOption(
         val optionNumber: Int,
-        val title: String,
         val content: String,
         val selectionCount: Int = 0,
-)
+) {
+    class ABTestOption(
+            optionNumber: Int,
+            content: String,
+            imageId: QuizImageId
+    ) : QuizOption(optionNumber, content)
+
+    class MultipleChoiceOption(
+            optionNumber: Int,
+            content: String,
+    ) : QuizOption(optionNumber, content)
+
+    class OXOption(
+            optionNumber: Int,
+            content: String,
+    ) : QuizOption(optionNumber, content)
+}
 
 data class QuizContent(
         val category: QuizCategory,
