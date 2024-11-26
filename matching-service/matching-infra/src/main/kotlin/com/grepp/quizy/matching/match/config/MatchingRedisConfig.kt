@@ -1,7 +1,6 @@
 package com.grepp.quizy.matching.match.config
 
-import com.grepp.quizy.matching.match.UserStatus
-import com.grepp.quizy.matching.user.UserId
+import com.grepp.quizy.matching.match.dto.RedisUserStatus
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.redis.connection.RedisConnectionFactory
@@ -11,15 +10,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer
 
 @Configuration
 class MatchingRedisConfig(
-    private val redisConnectionFactory: RedisConnectionFactory
+    private val redisConnectionFactory: RedisConnectionFactory,
 ) {
 
     @Bean
-    fun userStatusTemplate(): RedisTemplate<String, UserStatus> {
-        val redisTemplate = RedisTemplate<String, UserStatus>()
+    fun userStatusTemplate(): RedisTemplate<String, RedisUserStatus> {
+        val redisTemplate = RedisTemplate<String, RedisUserStatus>()
         redisTemplate.connectionFactory = redisConnectionFactory
         redisTemplate.keySerializer = StringRedisSerializer()
-        redisTemplate.valueSerializer = Jackson2JsonRedisSerializer(UserStatus::class.java)
+        redisTemplate.valueSerializer = Jackson2JsonRedisSerializer(RedisUserStatus::class.java)
         return redisTemplate
     }
 

@@ -32,8 +32,8 @@ class SseSender(
         }
     }
 
-    private fun closeEmitter(userId: UserId) {
+    private fun closeEmitter(userId: Long) {
         emitterRepository.remove(userId)
-        matchingPoolManager.remove(userId)
+        matchingPoolManager.remove(UserId(userId))
     }
 }

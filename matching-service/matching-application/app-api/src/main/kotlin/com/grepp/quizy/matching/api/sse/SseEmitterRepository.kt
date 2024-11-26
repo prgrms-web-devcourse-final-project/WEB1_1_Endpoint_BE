@@ -9,13 +9,13 @@ import java.util.concurrent.ConcurrentHashMap
 class SseEmitterRepository {
     private val emitters = ConcurrentHashMap<Long, SseEmitter>()
 
-    fun save(userId: UserId, emitter: SseEmitter) {
-        emitters[userId.value] = emitter
+    fun save(userId: Long, emitter: SseEmitter) {
+        emitters[userId] = emitter
     }
 
-    fun findById(userId: UserId) = emitters[userId.value]
+    fun findById(userId: Long) = emitters[userId]
 
-    fun remove(userId: UserId) {
-        emitters.remove(userId.value)
+    fun remove(userId: Long) {
+        emitters.remove(userId)
     }
 }

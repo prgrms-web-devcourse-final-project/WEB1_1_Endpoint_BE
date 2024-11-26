@@ -22,7 +22,7 @@ class MatchingManager(
                 parseCommonInterestCategory(candidates.map { it.vector.value })
             )
         candidates.forEach {
-            matchingEventPublisher.publish(PersonalMatchingSucceedEvent(it.userId, gameRoodId))
+            matchingEventPublisher.publish(PersonalMatchingSucceedEvent(it.userId.value, gameRoodId.value, candidates.map {it.userId.value}))
         }
     }
 
@@ -32,7 +32,7 @@ class MatchingManager(
             if (matchingQueueRepository.isValid(it.userId)) final.add(it)
         }
 
-        if (final.size < candidates.size) {
+        if (final.size < candidates.size || candidates.size < MATCHING_K) {
             final.forEach { matchingQueueRepository.enqueue(it) }
             return false
         }

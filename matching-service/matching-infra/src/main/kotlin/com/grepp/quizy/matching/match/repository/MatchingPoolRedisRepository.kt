@@ -1,5 +1,6 @@
 package com.grepp.quizy.matching.match.repository
 
+import com.grepp.quizy.matching.match.MATCHING_K
 import com.grepp.quizy.matching.match.MatchingPoolRepository
 import com.grepp.quizy.matching.match.UserStatus
 import com.grepp.quizy.matching.match.converter.toByteArray
@@ -28,28 +29,24 @@ class MatchingPoolRedisRepository(
     }
 
     override fun findNearestUser(userStatus: UserStatus): List<UserStatus> {
-        val queryVector = userStatus.vector.value
-        val k = 5
-
         val keyPattern = "$MATCHING_POOL_KEY:*"
         val keys = redisTemplate.keys(keyPattern) ?: return emptyList()
 
         val results = keys.mapNotNull { key ->
             val vectorBytes = redisTemplate.opsForHash<String, Any>().get(key, "vector") as ByteArray?
-            val id = redisTemplate.opsForHash<String, Any>().get(key, "id") as String?
+            val id = redisTemplate.opsForHash<String, Any>().get(key, "id") as Long?
             if (vectorBytes != null && id != null) {
                 val vector = vectorBytes.toFloatArray()
-                val score = cosineSimilarity(queryVector, vector)
+                val score = cosineSimilarity(userStatus.vector.value, vector)
                 Triple(id, vector, score) // score도 포함
             } else null
         }
 
         return results.sortedByDescending { it.third } // score를 기준으로 정렬
-            .take(k) // 상위 K개 선택
+            .take(MATCHING_K) // 상위 K개 선택
             .map { (id, vector, _) ->
-                // UserStatus 생성
                 UserStatus(
-                    userId = UserId(id.toLong()),
+                    userId = UserId(id),
                     vector = UserVector(vector)
                 )
             }
