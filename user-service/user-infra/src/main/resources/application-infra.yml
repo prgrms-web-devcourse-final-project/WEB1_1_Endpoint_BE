@@ -15,6 +15,14 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 redis:
   host: localhost
@@ -74,6 +82,14 @@ spring:
       hibernate:
         show-sql: false
         format_sql: false
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 redis:
   host: ${REDIS_HOST}

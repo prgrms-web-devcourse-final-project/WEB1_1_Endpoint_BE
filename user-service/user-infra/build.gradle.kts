@@ -26,5 +26,9 @@ dependencies {
 
     // H2 Database
     runtimeOnly("com.h2database:h2")
+
+    // GCS
+    implementation("org.springframework.cloud", "spring-cloud-gcp-starter", "1.2.5.RELEASE")
+    implementation("org.springframework.cloud", "spring-cloud-gcp-storage", "1.2.5.RELEASE")
 }
 

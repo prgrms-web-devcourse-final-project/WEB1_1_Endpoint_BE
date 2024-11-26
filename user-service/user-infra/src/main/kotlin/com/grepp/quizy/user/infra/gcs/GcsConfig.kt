@@ -1,4 +1,4 @@
-package com.grepp.quizy.user.api.global.gcs
+package com.grepp.quizy.user.infra.gcs
 
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.storage.Storage
