@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
+    implementation(project(":common:common-web"))
     implementation(project(":matching-service:matching-domain"))
     implementation(project(":matching-service:matching-infra"))
 

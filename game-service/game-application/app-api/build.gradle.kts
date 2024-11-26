@@ -1,7 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
-
+    implementation(project(":common:common-web"))
     implementation(project(":game-service:game-domain"))
     implementation(project(":game-service:game-infra"))
 
