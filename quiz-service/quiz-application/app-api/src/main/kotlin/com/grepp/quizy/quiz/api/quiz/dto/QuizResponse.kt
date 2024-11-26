@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonInclude.Include
+import com.grepp.quizy.quiz.api.quiz.dto.QuizOptionResponse
 import com.grepp.quizy.quiz.domain.quiz.*
 import java.time.LocalDateTime
 
@@ -10,7 +11,7 @@ sealed class QuizResponse {
     abstract val type: QuizType
     abstract val content: String
     abstract val tags: List<String>
-    abstract val options: List<QuizOption>
+    abstract val options: List<QuizOptionResponse>
     abstract val createdAt: LocalDateTime
     abstract val modifiedAt: LocalDateTime
 
@@ -20,7 +21,7 @@ sealed class QuizResponse {
             override val type: QuizType,
             override val content: String,
             override val tags: List<String>,
-            override val options: List<QuizOption>,
+            override val options: List<QuizOptionResponse>,
             override val createdAt: LocalDateTime,
             override val modifiedAt: LocalDateTime,
     ) : QuizResponse()
@@ -31,7 +32,7 @@ sealed class QuizResponse {
             override val type: QuizType,
             override val content: String,
             override val tags: List<String>,
-            override val options: List<QuizOption>,
+            override val options: List<QuizOptionResponse>,
             override val createdAt: LocalDateTime,
             override val modifiedAt: LocalDateTime,
             val answer: String,
@@ -44,7 +45,7 @@ sealed class QuizResponse {
             override val type: QuizType,
             override val content: String,
             override val tags: List<String>,
-            override val options: List<QuizOption>,
+            override val options: List<QuizOptionResponse>,
             override val createdAt: LocalDateTime,
             override val modifiedAt: LocalDateTime,
             val answer: String,
@@ -64,7 +65,7 @@ sealed class QuizResponse {
                                         quiz.content.tags.map {
                                             it.name
                                         },
-                                options = quiz.content.options,
+                                options = quiz.content.options.map { QuizOptionResponse.from(it) },
                                 createdAt = quiz.dateTime.createdAt!!,
                                 modifiedAt = quiz.dateTime.updatedAt!!,
                         )
@@ -79,7 +80,7 @@ sealed class QuizResponse {
                                         quiz.content.tags.map {
                                             it.name
                                         },
-                                options = quiz.content.options,
+                                options = quiz.content.options.map { QuizOptionResponse.from(it) },
                                 answer = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),
@@ -97,7 +98,7 @@ sealed class QuizResponse {
                                         quiz.content.tags.map {
                                             it.name
                                         },
-                                options = quiz.content.options,
+                                options = quiz.content.options.map { QuizOptionResponse.from(it) },
                                 answer = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),

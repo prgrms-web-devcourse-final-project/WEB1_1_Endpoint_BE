@@ -31,7 +31,7 @@ class ABTestEntity(
                                                 .toList(),
                                 options =
                                         this.options.map {
-                                            it.toDomain()
+                                            it.toDomain(type)
                                         },
                         ),
                 id = QuizId(this.id),

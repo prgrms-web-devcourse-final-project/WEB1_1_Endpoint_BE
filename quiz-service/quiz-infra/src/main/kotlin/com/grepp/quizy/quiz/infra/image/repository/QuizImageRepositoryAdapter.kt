@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.infra.image.repository
 
 import com.grepp.quizy.quiz.domain.image.QuizImage
+import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.image.QuizImageRepository
 import com.grepp.quizy.quiz.infra.image.entity.QuizImageEntity
 import jakarta.transaction.Transactional
@@ -17,8 +18,8 @@ class QuizImageRepositoryAdapter(
         return quizImageJpaRepository.save(QuizImageEntity.from(image)).toDomain()
     }
 
-    override fun findById(id: Long): QuizImage? {
-        return quizImageJpaRepository.findByIdOrNull(id)?.toDomain()
+    override fun findById(id: QuizImageId): QuizImage? {
+        return quizImageJpaRepository.findByIdOrNull(id.value)?.toDomain()
     }
 
     override fun deleteById(id: Long) {

@@ -4,7 +4,7 @@ interface QuizImageRepository {
 
     fun save(image: QuizImage): QuizImage
 
-    fun findById(id: Long): QuizImage?
+    fun findById(id: QuizImageId): QuizImage?
 
     fun deleteById(id: Long)
 

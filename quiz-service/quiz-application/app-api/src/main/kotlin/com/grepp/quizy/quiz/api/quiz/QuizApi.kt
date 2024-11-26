@@ -6,6 +6,9 @@ import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
 import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.user.UserId
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
+import io.swagger.v3.oas.annotations.Parameter
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -26,13 +29,13 @@ class QuizApi(
 
     @PostMapping
     fun createQuiz(
-            @RequestBody request: CreateQuizRequest,
-            userId: Long,
+        @AuthUser userPrincipal: UserPrincipal,
+        @RequestBody request: CreateQuizRequest,
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
                             quizCreateUseCase.create(
-                                    UserId(userId),
+                                    UserId(userPrincipal.value),
                                     request.type,
                                     request.toContent(),
                                     request.toAnswer(),

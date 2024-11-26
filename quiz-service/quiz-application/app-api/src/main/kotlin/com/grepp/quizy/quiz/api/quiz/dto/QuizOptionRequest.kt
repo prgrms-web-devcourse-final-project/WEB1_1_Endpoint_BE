@@ -14,7 +14,7 @@ data class QuizOptionRequest(
             QuizType.AB_TEST -> QuizOption.ABTestOption(
                 optionNumber = optionNumber,
                 content = content,
-                imageId = imageId?.let { QuizImageId.from(it) } ?: throw IllegalArgumentException("AB 테스트 문제는 이미지가 필수입니다")
+                imageId = imageId?.let { QuizImageId.from(it) }
             )
             QuizType.MULTIPLE_CHOICE -> QuizOption.MultipleChoiceOption(
                 optionNumber = optionNumber,

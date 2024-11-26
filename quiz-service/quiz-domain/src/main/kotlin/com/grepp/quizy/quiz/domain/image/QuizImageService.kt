@@ -12,4 +12,8 @@ class QuizImageService(
         val quizImage = quizImageUploader.upload(imageFile)
         return quizImageAppender.append(quizImage)
     }
+
+    fun getImage(id: QuizImageId): QuizImage {
+        return quizImageAppender.read(id)
+    }
 }

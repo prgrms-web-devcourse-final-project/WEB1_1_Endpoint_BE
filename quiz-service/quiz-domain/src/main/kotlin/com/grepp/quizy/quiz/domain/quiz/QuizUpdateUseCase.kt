@@ -9,6 +9,4 @@ interface QuizUpdateUseCase {
             updatedContent: QuizContent,
             updatedAnswer: QuizAnswer?,
     ): Quiz
-
-    fun toggleLike(id: QuizId, userId: UserId)
 }

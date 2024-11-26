@@ -32,7 +32,7 @@ class MultipleChoiceQuizEntity(
                                                 .toList(),
                                 options =
                                         this.options.map {
-                                            it.toDomain()
+                                            it.toDomain(type)
                                         },
                         ),
                 answer = this.answer.toDomain(),
