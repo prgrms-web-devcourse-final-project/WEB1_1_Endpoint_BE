@@ -23,6 +23,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("mysql:mysql-connector-java:8.0.28")
 
+    //gcs
+    implementation("org.springframework.cloud", "spring-cloud-gcp-starter", "1.2.5.RELEASE")
+    implementation("org.springframework.cloud", "spring-cloud-gcp-storage", "1.2.5.RELEASE")
+
     implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 
     //redis
