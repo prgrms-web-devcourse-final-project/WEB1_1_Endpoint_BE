@@ -4,13 +4,13 @@ spring:
     activate:
       on-profile: local
   datasource:
-    url: jdbc:mysql://localhost:3306/quizy?useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    password: 1234
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show-sql: true
