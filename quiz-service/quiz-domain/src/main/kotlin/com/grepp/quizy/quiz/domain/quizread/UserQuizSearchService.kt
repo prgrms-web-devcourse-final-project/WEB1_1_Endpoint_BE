@@ -19,4 +19,11 @@ class UserQuizSearchService(
                 quizMetadataCombiner.combine(userId, searchedQuizzes)
         return Slice(content, searchedQuizzes.hasNext)
     }
+
+    override fun searchUnansweredByKeyword(userId: UserId, condition: UserSearchCondition): Slice<QuizWithDetail> {
+        val searchedQuizzes = quizSearcher.searchUnanswered(userId, condition)
+        val content =
+            quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
+        return Slice(content, searchedQuizzes.hasNext)
+    }
 }

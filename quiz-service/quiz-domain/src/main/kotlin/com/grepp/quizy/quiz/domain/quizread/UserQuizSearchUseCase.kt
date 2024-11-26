@@ -8,4 +8,6 @@ interface UserQuizSearchUseCase {
         userId: UserId?,
         condition: UserSearchCondition,
     ): Slice<QuizWithDetail>
+
+    fun searchUnansweredByKeyword(userId: UserId, condition: UserSearchCondition): Slice<QuizWithDetail>
 }
