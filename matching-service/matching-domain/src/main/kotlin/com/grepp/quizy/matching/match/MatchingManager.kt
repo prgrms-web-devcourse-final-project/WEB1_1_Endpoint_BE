@@ -44,7 +44,7 @@ class MatchingManager(
         val common = (1 until size).filter { index ->
             vectors.all { array -> array[index] == 1f }
         }
-        return InterestCategory.of(common.random())
+        return InterestCategory.commonInterest(common)
     }
 
     private fun removeFromPool(candidates: List<UserStatus>) {

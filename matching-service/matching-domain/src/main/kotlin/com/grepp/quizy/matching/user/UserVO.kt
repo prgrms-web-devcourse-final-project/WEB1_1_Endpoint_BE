@@ -14,6 +14,17 @@ enum class GameRating(val index: Float) {
 
     companion object {
         const val VECTOR_INDEX = 0
+
+        fun fromRatingValue(rating: Int): GameRating {
+            return when {
+                rating < 500 -> BRONZE
+                rating in 501..1000 -> SILVER
+                rating in 1001..1500 -> GOLD
+                rating in 1501..2000 -> PLATINUM
+                rating in 2001..2500 -> DIAMOND
+                else -> MASTER
+            }
+        }
     }
 }
 
@@ -29,10 +40,9 @@ enum class InterestCategory(val index: Int) {
     SOFTWARE_ENGINEERING(9);
 
     companion object {
-        const val NUM_CATEGORIES = 9
+        fun commonInterest(indexes: List<Int>) =
+            if (indexes.isEmpty()) entries.random() else InterestCategory.of(indexes.random())
 
-        fun of(index: Int): InterestCategory {
-            return entries.first { it.index == index }
-        }
+        fun of(index: Int) = entries.first { it.index == index }
     }
 }
