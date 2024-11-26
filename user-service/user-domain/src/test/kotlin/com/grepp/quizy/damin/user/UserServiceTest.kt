@@ -14,11 +14,21 @@ class UserServiceTest :
         val userRemover = mockk<UserRemover>()
         val userLogoutManager = mockk<UserLogoutManager>()
         val userReissueManager = mockk<UserReissueManager>()
+        val userValidator: UserValidator = mockk<UserValidator>()
+        val userUpdater: UserUpdater = mockk<UserUpdater>()
 
 
         // System Under Test
         val userService =
-            UserService(userAppender, userReader, userRemover, userLogoutManager, userReissueManager)
+            UserService(
+                userAppender,
+                userReader,
+                userRemover,
+                userLogoutManager,
+                userReissueManager,
+                userValidator,
+                userUpdater
+            )
 
         // Test Data
         val userId = UserId(1)
@@ -38,7 +48,7 @@ class UserServiceTest :
         val user =
             User(
                 id = userId,
-                userProfile = userProfile,
+                _userProfile = userProfile,
                 provider = providerVO,
                 _role = Role.USER,
             )
@@ -110,15 +120,15 @@ class UserServiceTest :
         describe("remove 에서") {
             context("삭제할 유저가 주어졌을 때") {
                 // Context
-                every { userRemover.remove(user) } just runs
+                every { userRemover.remove(user.id) } just runs
 
                 it("userRemover를 통해 유저를 삭제한다") {
                     // Execute
-                    userService.removeUser(user)
+                    userService.removeUser(user.id)
 
                     // Verify
                     verify(exactly = 1) {
-                        userRemover.remove(user)
+                        userRemover.remove(user.id)
                     }
                 }
             }

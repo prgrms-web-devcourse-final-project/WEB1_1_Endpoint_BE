@@ -22,8 +22,8 @@ class UserService(
         return userReader.read(userId)
     }
 
-    override fun removeUser(user: User) {
-        userRemover.remove(user)
+    override fun removeUser(userId: UserId) {
+        userRemover.remove(userId)
     }
 
     override fun logout(userId: UserId, accessToken: String) {
