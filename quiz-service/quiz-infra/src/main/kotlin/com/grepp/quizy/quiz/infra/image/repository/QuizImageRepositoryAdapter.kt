@@ -1,0 +1,27 @@
+package com.grepp.quizy.quiz.infra.image.repository
+
+import com.grepp.quizy.quiz.domain.image.QuizImage
+import com.grepp.quizy.quiz.domain.image.QuizImageRepository
+import com.grepp.quizy.quiz.infra.image.entity.QuizImageEntity
+import jakarta.transaction.Transactional
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.stereotype.Repository
+
+@Repository
+@Transactional
+class QuizImageRepositoryAdapter(
+    private val quizImageJpaRepository: QuizImageJpaRepository
+) : QuizImageRepository {
+
+    override fun save(image: QuizImage): QuizImage {
+        return quizImageJpaRepository.save(QuizImageEntity.from(image)).toDomain()
+    }
+
+    override fun findById(id: Long): QuizImage? {
+        return quizImageJpaRepository.findByIdOrNull(id)?.toDomain()
+    }
+
+    override fun deleteById(id: Long) {
+        quizImageJpaRepository.deleteById(id)
+    }
+}
