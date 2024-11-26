@@ -9,9 +9,10 @@ class UserService(
     private val userRemover: UserRemover,
     private val userLogoutManager: UserLogoutManager,
     private val userReissueManager: UserReissueManager,
-    private val userValidator: UserValidator
+    private val userValidator: UserValidator,
+    private val userUpdater: UserUpdater
 
-) : UserCreateUseCase, UserReadUseCase, UserDeleteUseCase, UserLogoutUseCase, UserReissueUseCase, UserValidUseCase {
+) : UserCreateUseCase, UserReadUseCase, UserDeleteUseCase, UserLogoutUseCase, UserReissueUseCase, UserValidUseCase, UserUpdateUseCase {
     override fun appendUser(user: User): User {
         return userAppender.append(user)
     }
@@ -30,6 +31,13 @@ class UserService(
 
     override fun reissue(userId: UserId): ReissueToken {
         return userReissueManager.reissue(userId)
+    }
+
+    override fun updateProfile(userId: UserId, name: String?, profileImageUrl: String?) {
+        if (name == null && profileImageUrl == null) {
+            throw IllegalArgumentException("변경 할 프로필 정보가 없습니다.")
+        }
+        userUpdater.updateProfile(userId, name, profileImageUrl)
     }
 
     override fun isValidUser(userId: UserId): Boolean {

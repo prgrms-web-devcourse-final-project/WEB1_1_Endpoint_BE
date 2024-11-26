@@ -119,7 +119,7 @@ kafka-consumer-config:
 spring:
   config:
     activate:
-      on-profile: text
+      on-profile: test
 
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -141,5 +141,5 @@ spring:
       enabled: true
 
 redis:
-  host: ${REDIS_HOST}
+  host: localhost
   port: 6379

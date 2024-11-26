@@ -77,8 +77,17 @@ spring:
 springdoc:
   swagger-ui:
     urls[0]:
+      name: Game API
+      url: http://localhost:8080/api/game/api-docs
+    urls[1]:
       name: Quiz API
       url: http://localhost:8080/api/quiz/api-docs
+    urls[2]:
+      name: Matching API
+      url: http://localhost:8080/api/matching/api-docs
+    urls[3]:
+      name: User API
+      url: http://localhost:8080/api/user/api-docs
 
 jwt:
   secret: ${JWT_SECRET}

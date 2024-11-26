@@ -21,6 +21,10 @@ dependencies {
 
     // OAuth2
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+
+    // gcs
+    implementation("com.google.cloud:google-cloud-storage:2.32.1")
+    implementation("org.springframework.cloud:spring-cloud-gcp-starter-storage:1.2.8.RELEASE")
 }
 
 tasks.named<BootJar>("bootJar") {

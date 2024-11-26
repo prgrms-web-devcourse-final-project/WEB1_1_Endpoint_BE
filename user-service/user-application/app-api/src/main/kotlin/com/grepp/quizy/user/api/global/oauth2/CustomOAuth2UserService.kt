@@ -55,7 +55,7 @@ class CustomOAuth2UserService(
     private fun createNewUser(attributes: OAuth2Attributes) {
         val newUser = User(
             id = UserId(0),
-            userProfile = UserProfile(
+            _userProfile = UserProfile(
                 name = attributes.name,
                 email = attributes.email,
                 profileImageUrl = attributes.profileImageUrl

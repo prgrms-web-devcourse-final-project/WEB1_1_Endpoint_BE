@@ -44,6 +44,14 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 jwt:
   secret: ${JWT_SECRET}
@@ -91,6 +99,15 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 jwt:
   secret: ${JWT_SECRET}
