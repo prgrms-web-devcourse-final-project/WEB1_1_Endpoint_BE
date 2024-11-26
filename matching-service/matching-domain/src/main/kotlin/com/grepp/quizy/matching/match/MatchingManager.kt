@@ -14,7 +14,7 @@ class MatchingManager(
 
     fun match(pivot: UserStatus) {
         val candidates = matchingPoolRepository.findNearestUser(pivot)
-        if (!validateCandidates(candidates)) return
+        if (!validateCandidates(pivot, candidates)) return
 
         removeFromPool(candidates)
         val gameRoodId = gameFetcher.requestGameRoomId(
@@ -26,14 +26,14 @@ class MatchingManager(
         }
     }
 
-    private fun validateCandidates(candidates: List<UserStatus>): Boolean {
+    private fun validateCandidates(pivot: UserStatus, candidates: List<UserStatus>): Boolean {
         val final = mutableListOf<UserStatus>()
         candidates.forEach {
             if (matchingQueueRepository.isValid(it.userId)) final.add(it)
         }
 
         if (final.size < candidates.size || candidates.size < MATCHING_K) {
-            final.forEach { matchingQueueRepository.enqueue(it) }
+            matchingQueueRepository.enqueue(pivot)
             return false
         }
         return true

@@ -19,9 +19,8 @@ class MatchingQueueRedisRepository(
         userStatusTemplate.opsForList().leftPush(matchingQueueKey, RedisUserStatus.from(status))
     }
 
-    override fun dequeue(): UserStatus? {
-        return userStatusTemplate.opsForList().rightPop(matchingQueueKey)?.UserStatus()
-    }
+    override fun dequeue(): UserStatus? =
+        userStatusTemplate.opsForList().rightPop(matchingQueueKey)?.UserStatus()
 
     override fun saveSet(userId: UserId) {
         userIdTemplate.opsForSet().add(matchingSetKey, userId.value.toString())
