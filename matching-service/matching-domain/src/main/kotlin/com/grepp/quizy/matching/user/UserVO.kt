@@ -5,7 +5,12 @@ package com.grepp.quizy.matching.user
 @JvmInline value class UserVector(val value: FloatArray)
 
 enum class GameRating(val index: Float) {
-    BRONZE(1.0f), SILVER(2.0f), GOLD(3.0f), PLATINUM(4.0f), DIAMOND(5.0f), MASTER(6.0f);
+    BRONZE(1.0f),
+    SILVER(2.0f),
+    GOLD(3.0f),
+    PLATINUM(4.0f),
+    DIAMOND(5.0f),
+    MASTER(6.0f);
 
     companion object {
         const val VECTOR_INDEX = 0
@@ -25,5 +30,9 @@ enum class InterestCategory(val index: Int) {
 
     companion object {
         const val NUM_CATEGORIES = 9
+
+        fun of(index: Int): InterestCategory {
+            return entries.first { it.index == index }
+        }
     }
 }

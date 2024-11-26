@@ -17,4 +17,9 @@ class MatchingPoolManager(
         queueRepository.enqueue(UserStatus(userId, vector))
         queueRepository.saveSet(userId)
     }
+
+    fun findPivot(): UserStatus? {
+        val pivot = queueRepository.dequeue() ?: return null
+        return if (queueRepository.isValid(pivot.userId)) pivot else null
+    }
 }

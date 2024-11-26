@@ -4,8 +4,12 @@ import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Component
 
 @Component
-class MatchingEventPublisher(private val eventPublisher: ApplicationEventPublisher) {
+class MatchingEventInternalPublisher(private val eventPublisher: ApplicationEventPublisher) {
     fun publish(event: UserWaitingRegisteredEvent) {
         eventPublisher.publishEvent(event)
     }
+}
+
+interface MatchingEventPublisher {
+    fun publish(event: MatchingSucceedEvent)
 }
