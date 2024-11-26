@@ -5,4 +5,4 @@ import com.grepp.quizy.matching.user.UserId
 
 data class UserWaitingRegisteredEvent(val userId: UserId)
 
-data class MatchingSucceedEvent(val userIds: List<UserId>, val gameRoomId: GameRoomId)
+data class PersonalMatchingSucceedEvent(val userId: UserId, val gameRoomId: GameRoomId)

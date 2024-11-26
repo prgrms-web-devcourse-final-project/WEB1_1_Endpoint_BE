@@ -21,7 +21,9 @@ class MatchingManager(
                 candidates.map { it.userId },
                 parseCommonInterestCategory(candidates.map { it.vector.value })
             )
-        matchingEventPublisher.publish(MatchingSucceedEvent(candidates.map { it.userId }, gameRoodId))
+        candidates.forEach {
+            matchingEventPublisher.publish(PersonalMatchingSucceedEvent(it.userId, gameRoodId))
+        }
     }
 
     private fun validateCandidates(candidates: List<UserStatus>): Boolean {

@@ -11,5 +11,9 @@ class MatchingEventInternalPublisher(private val eventPublisher: ApplicationEven
 }
 
 interface MatchingEventPublisher {
-    fun publish(event: MatchingSucceedEvent)
+    fun publish(event: PersonalMatchingSucceedEvent)
+}
+
+interface MatchingEventSender {
+    fun send(event: PersonalMatchingSucceedEvent)
 }
