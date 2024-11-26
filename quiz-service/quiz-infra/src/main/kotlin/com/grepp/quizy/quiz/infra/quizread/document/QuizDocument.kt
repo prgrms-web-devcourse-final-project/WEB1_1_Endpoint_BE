@@ -45,6 +45,7 @@ class QuizDocument(
         val updatedAt: LocalDateTime,
 ) {
         companion object {
+                const val ID_FIELD = "id"
                 const val CONTENT_FIELD = "content"
                 const val CATEGORY_FIELD = "category.keyword"
                 const val TAG_FIELD = "tags"

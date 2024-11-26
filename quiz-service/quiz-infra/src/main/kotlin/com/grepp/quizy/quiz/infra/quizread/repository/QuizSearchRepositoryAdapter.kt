@@ -2,6 +2,7 @@ package com.grepp.quizy.quiz.infra.quizread.repository
 
 import com.grepp.quizy.quiz.domain.global.dto.Slice
 import com.grepp.quizy.quiz.domain.quiz.Quiz
+import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quizread.*
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDomainFactory
 import com.grepp.quizy.quiz.infra.quizread.document.SortField
@@ -35,6 +36,20 @@ class QuizSearchRepositoryAdapter(
         return quizElasticRepository
             .searchAnswerableQuiz(condition.category, condition.difficulty, pageable)
             .map { QuizDomainFactory.toAnswerableQuiz(it) }
+    }
+
+    override fun searchNotIn(answeredQuizIds: List<QuizId>, condition: UserSearchCondition): Slice<Quiz> {
+        val pageable = convertPageable(condition)
+
+        return quizElasticRepository.searchNotIn(condition.field, pageable, answeredQuizIds.map { it.value })
+            .let { slice ->
+                Slice(
+                    slice.content.map {
+                        QuizDomainFactory.toQuiz(it)
+                    },
+                    slice.hasNext(),
+                )
+            }
     }
 
     private fun convertPageable(condition: SearchCondition) =

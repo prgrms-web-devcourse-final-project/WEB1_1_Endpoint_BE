@@ -2,6 +2,7 @@ package com.grepp.quizy.quiz.infra.useranswer.repository
 
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quiz.QuizType
+import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.quiz.domain.useranswer.*
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntity
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntityId
@@ -33,4 +34,7 @@ class UserAnswerRepositoryAdapter(
 
         return UserAnswerPackage(userAnswers)
     }
+
+    override fun findAllByUserId(userId: UserId): List<QuizId> =
+        userAnswerJpaRepository.findAllQuizIdByUserId(userId.value).map { QuizId(it) }
 }
