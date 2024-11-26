@@ -50,6 +50,13 @@ jwt:
   access-token-validity: 3600000  # 1시간
   refresh-token-validity: 604800000  # 7일
 
+springdoc:
+  api-docs:
+    version: openapi_3_1
+    enabled: true
+    path: api/user/api-docs
+  enable-spring-security: true
+
 server:
   port: 8085
 
@@ -101,7 +108,7 @@ springdoc:
   api-docs:
     version: openapi_3_1
     enabled: true
-    path: /api-docs
+    path: api/user/api-docs
   enable-spring-security: true
 
 logging:
