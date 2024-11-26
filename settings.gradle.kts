@@ -4,6 +4,7 @@ include("gateway-service")
 
 include("common")
 include("common:common-jpa")
+include("common:common-web")
 
 include("quiz-service")
 include("quiz-service:quiz-infra")
@@ -28,12 +29,6 @@ include("matching-service:matching-infra")
 include("matching-service:matching-domain")
 include("matching-service:matching-application")
 include("matching-service:matching-application:app-api")
-
-include("search-service")
-include("search-service:search-infra")
-include("search-service:search-domain")
-include("search-service:search-application")
-include("search-service:search-application:app-api")
 
 include("infrastructure:kafka")
 
