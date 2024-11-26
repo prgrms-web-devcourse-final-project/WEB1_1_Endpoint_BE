@@ -22,4 +22,9 @@ class MatchingPoolManager(
         val pivot = queueRepository.dequeue() ?: return null
         return if (queueRepository.isValid(pivot.userId)) pivot else null
     }
+
+    fun remove(userId: UserId) {
+        poolRepository.remove(userId)
+        queueRepository.removeSet(userId)
+    }
 }
