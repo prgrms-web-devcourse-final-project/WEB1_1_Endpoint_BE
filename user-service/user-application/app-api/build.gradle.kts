@@ -1,6 +1,7 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 dependencies {
+    implementation(project(":common:common-web"))
     implementation(project(":user-service:user-domain"))
     implementation(project(":user-service:user-infra"))
 
@@ -21,7 +22,7 @@ dependencies {
 
     // OAuth2
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-    
+
 }
 
 tasks.named<BootJar>("bootJar") {
