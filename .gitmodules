@@ -1,0 +1,3 @@
+[submodule "quizy-helm-charts"]
+	path = quizy-helm-charts
+	url = https://github.com/quizy-web/quizy-helm-charts
