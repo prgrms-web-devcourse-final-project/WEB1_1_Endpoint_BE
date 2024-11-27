@@ -1,9 +1,10 @@
 package com.grepp.quizy.matching.api.game
 
 import com.grepp.quizy.matching.api.sse.SseConnector
-import com.grepp.quizy.matching.match.MatchingPoolManager
 import com.grepp.quizy.matching.match.MatchingUseCase
 import com.grepp.quizy.matching.user.UserId
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -20,9 +21,9 @@ class GameMatchingApi(
         value = ["/subscribe"],
         produces = [MediaType.TEXT_EVENT_STREAM_VALUE]
     )
-    fun subscribe(@RequestHeader("X-Auth-Id") userId: UserId): ResponseEntity<SseEmitter> {
-        val emitter = sseConnector.connect(userId)
-        matchingUseCase.registerWaiting(userId)
+    fun subscribe(@AuthUser principal: UserPrincipal): ResponseEntity<SseEmitter> {
+        val emitter = sseConnector.connect(UserId(principal.value))
+        matchingUseCase.registerWaiting(UserId(principal.value))
         return ResponseEntity.ok(emitter)
     }
 }
