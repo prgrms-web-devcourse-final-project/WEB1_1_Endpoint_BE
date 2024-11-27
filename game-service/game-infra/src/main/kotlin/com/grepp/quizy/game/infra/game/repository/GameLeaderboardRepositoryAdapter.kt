@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class GameLeaderboardRepositoryAdapter(
-    private val redisTemplate: RedisTemplate<String, String>
+    private val redisTemplate: RedisTemplate<String, String>,
 ) : GameLeaderboardRepository {
 
     companion object {
@@ -26,5 +26,26 @@ class GameLeaderboardRepositoryAdapter(
         }.toSet()
 
         redisTemplate.opsForZSet().add(leaderboardKey, users)
+    }
+
+    override fun increaseScore(gameId: Long, userId: Long, score: Double) {
+        val leaderboardKey = String.format(LEADERBOARD_KEY, gameId)
+
+        redisTemplate.opsForZSet().incrementScore(leaderboardKey, userId.toString(), score)
+    }
+
+    override fun findAll(gameId: Long): Map<Long, Double> {
+        val leaderboardKey = String.format(LEADERBOARD_KEY, gameId)
+
+        return redisTemplate.opsForZSet().reverseRangeWithScores(leaderboardKey, 0, -1)
+            ?.mapNotNull {
+                it.value?.toLong()?.let { value ->
+                    it.score?.let { score ->
+                        value to score
+                    }
+                }
+            }
+            ?.toMap()
+            ?: emptyMap()
     }
 }

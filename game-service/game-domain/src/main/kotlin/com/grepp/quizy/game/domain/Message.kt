@@ -49,6 +49,27 @@ data class GameMessage(
             )
         }
 
+        fun quizAnswer(
+            gameId: Long,
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.ANSWER_SUBMITTED,
+                payload = payload,
+            )
+        }
+
+        fun leaderboard(
+            gameId: Long,
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.SCORE_BOARD,
+                payload = payload,
+            )
+        }
     }
 }
 
@@ -112,5 +133,49 @@ data class QuizInfo(
     }
 }
 
+data class QuizAnswerPayload(
+    val score: Double,
+    val correct: Boolean,
+    val answer: String,
+    val explanation: String,
+) : MessagePayload {
+    companion object {
+        fun of(gameQuiz: GameQuiz, score: Double, correct: Boolean): QuizAnswerPayload {
+            return QuizAnswerPayload(
+                score = score,
+                correct = correct,
+                answer = gameQuiz.answer.content,
+                explanation = gameQuiz.answer.explanation,
+            )
+        }
+    }
+}
+
+data class LeaderboardPayload(
+    val leaderboard: List<LeaderboardInfo>
+) : MessagePayload {
+    companion object {
+        fun from(leaderboard: List<LeaderboardInfo>): LeaderboardPayload {
+            return LeaderboardPayload(
+                leaderboard = leaderboard
+            )
+        }
+    }
+
+}
+
+data class LeaderboardInfo(
+    val userId: Long,
+    val score: Double
+) {
+    companion object {
+        fun of(userId: Long, score: Double): LeaderboardInfo {
+            return LeaderboardInfo(
+                userId = userId,
+                score = score
+            )
+        }
+    }
+}
 
 // TODO: Implement other message payloads
