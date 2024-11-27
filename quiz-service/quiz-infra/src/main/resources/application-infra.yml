@@ -35,7 +35,12 @@ shedlock:
 kafka:
   topic:
     quiz: quiz
-
+    cdc_quizzes: quizy.quiz.quizzes
+    cdc_quiz_options: quizy.quiz.quiz_options
+    cdc_quiz_tags: quizy.quiz.quiz_tags_mapping
+  consumer-group:
+    quiz: quiz_read
+    cdc_quiz: cdc_quizzes
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   num-of-partitions: 3
@@ -53,7 +58,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true
@@ -66,6 +71,7 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
 
 redis:
   host: localhost
@@ -76,6 +82,16 @@ elasticsearch:
     host: ${ELASTICSEARCH_HOST}
   host: ${ELASTICSEARCH_HOST_PORT:localhost:9200}
   port: 9200
+
+logging:
+  level:
+    tracer: trace
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            client:
+              WIRE: trace
 
 # 슬로우 쿼리 로그
 index:
@@ -104,6 +120,14 @@ spring:
       hibernate:
         show-sql: false
         format_sql: false
+  cloud:
+    gcp:
+      storage:
+        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        credentials:
+          encoded-key: ${GCS_KEY}
+        project-id: ${GCP_PROJECT_ID}
+        bucket: ${BUCKET_NAME}
 
 shedlock:
   name: like_sync_lock

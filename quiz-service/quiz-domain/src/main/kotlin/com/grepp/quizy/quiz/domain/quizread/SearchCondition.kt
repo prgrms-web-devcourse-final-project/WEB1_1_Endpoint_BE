@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.domain.quizread
 
 import com.grepp.quizy.common.dto.Page
+import com.grepp.quizy.quiz.domain.quiz.QuizDifficulty
 
 sealed interface SearchCondition {
     fun page(): Int
@@ -29,7 +30,7 @@ data class UserSearchCondition(
 
 data class GameQuizSearchCondition(
     val category: String,
-    val difficulty: QuizDifficultyType,
+    val difficulty: QuizDifficulty,
     val size: Int,
 ) : SearchCondition {
     override fun page() = 0
@@ -39,6 +40,4 @@ data class GameQuizSearchCondition(
     override fun sort() = null
 }
 
-enum class QuizDifficultyType {
-    EASY, MEDIUM, HARD, RANDOM
-}
+

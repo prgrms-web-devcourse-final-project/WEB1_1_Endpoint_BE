@@ -9,14 +9,14 @@ data class UpdateQuizRequest(
         val answer: String?,
         val explanation: String?,
         val tags: List<String>,
-        val options: List<QuizOption>,
+        val options: List<QuizOptionRequest>,
 ) {
     fun toContent(): QuizContent =
             QuizContent(
                     category = category,
                     content = content,
                     tags = tags.map { QuizTag.create(it) },
-                    options = options,
+                    options = options.map { it.toOption(type) },
             )
 
     fun toAnswer(): QuizAnswer? =

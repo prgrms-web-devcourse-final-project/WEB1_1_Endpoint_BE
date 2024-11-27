@@ -22,19 +22,19 @@ class ElasticSearchConfig : ElasticsearchConfiguration() {
     override fun clientConfiguration(): ClientConfiguration =
             ClientConfiguration.builder().connectedTo(host).build()
 
-    override fun elasticsearchCustomConversions():
-            ElasticsearchCustomConversions {
-        return ElasticsearchCustomConversions(
-                listOf(
-                        QuizDocumentWritingConverter<QuizOptionVO>(),
-                        QuizDocumentReadingConverter(
-                                QuizOptionVO::class.java
-                        ),
-                        QuizDocumentWritingConverter<QuizAnswerVO>(),
-                        QuizDocumentReadingConverter(
-                                QuizAnswerVO::class.java
-                        ),
-                )
-        )
-    }
+//    override fun elasticsearchCustomConversions():
+//            ElasticsearchCustomConversions {
+//        return ElasticsearchCustomConversions(
+//                listOf(
+//                        QuizDocumentWritingConverter<QuizOptionVO>(),
+//                        QuizDocumentReadingConverter(
+//                                QuizOptionVO::class.java
+//                        ),
+//                        QuizDocumentWritingConverter<QuizAnswerVO>(),
+//                        QuizDocumentReadingConverter(
+//                                QuizAnswerVO::class.java
+//                        ),
+//                )
+//        )
+//    }
 }

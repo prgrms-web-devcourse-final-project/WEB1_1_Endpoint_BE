@@ -49,7 +49,7 @@ class ABTestEntity(
     companion object {
         fun from(quiz: ABTest): ABTestEntity {
             return ABTestEntity(
-                            userId = quiz.userId.value,
+                            userId = quiz.creatorId.value,
                             category = quiz.content.category,
                             content = quiz.content.content,
                             tags =

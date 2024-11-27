@@ -4,7 +4,9 @@ import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
 @Component
-class QuizUpdater(private val quizRepository: QuizRepository) {
+class QuizUpdater(
+    private val quizRepository: QuizRepository,
+) {
 
     fun update(
             quiz: Quiz,
@@ -21,7 +23,9 @@ class QuizUpdater(private val quizRepository: QuizRepository) {
         return quizRepository.save(quiz)
     }
 
-    fun update(quiz: Quiz) {
+    fun increaseCommentCount(quiz: Quiz) {
+        quiz.increaseCommentCount()
         quizRepository.save(quiz)
     }
+
 }

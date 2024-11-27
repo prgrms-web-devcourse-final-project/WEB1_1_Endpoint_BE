@@ -5,15 +5,16 @@ import com.grepp.quizy.quiz.domain.user.UserId
 
 class MultipleChoiceQuiz
 private constructor(
-        userId: UserId,
-        content: QuizContent,
-        private var _answer: QuizAnswer,
-        dateTime: DateTime = DateTime.init(),
-        type: QuizType = QuizType.MULTIPLE_CHOICE,
-        id: QuizId = QuizId(0),
-        commentCount: Long = 0,
+    creatorId: UserId,
+    content: QuizContent,
+    private var _answer: QuizAnswer,
+    dateTime: DateTime = DateTime.init(),
+    type: QuizType = QuizType.MULTIPLE_CHOICE,
+    id: QuizId = QuizId(0),
+    commentCount: Long = 0,
+    likeCount: Long = 0,
 ) :
-        Quiz(userId, type, content, id, dateTime, commentCount),
+        Quiz(creatorId, type, content, id, dateTime, commentCount, likeCount),
         Answerable {
 
     val answer: QuizAnswer
@@ -40,9 +41,10 @@ private constructor(
                 id: QuizId,
                 dateTime: DateTime,
                 commentCount: Long,
+                likeCount: Long = 0,
         ): MultipleChoiceQuiz {
             return MultipleChoiceQuiz(
-                    userId = userId,
+                    creatorId = userId,
                     content = content,
                     _answer = answer,
                     id = id,
@@ -69,4 +71,23 @@ private constructor(
         _answer = newAnswer
         return this
     }
+
+    override fun getCorrectRate(): Double {
+        val correctOption = content.options.first { it.content == answer.value }
+        return correctOption.selectionCount.toDouble() / getTotalAnsweredCount()
+    }
+
+    override fun getDifficulty(): QuizDifficulty {
+        if (getTotalAnsweredCount() == 0) {
+            return QuizDifficulty.NONE
+        }
+
+        return when (getCorrectRate()) {
+            in 0.0..0.3 -> QuizDifficulty.EASY
+            in 0.3..0.7 -> QuizDifficulty.MEDIUM
+            else -> QuizDifficulty.HARD
+        }
+    }
+
+
 }

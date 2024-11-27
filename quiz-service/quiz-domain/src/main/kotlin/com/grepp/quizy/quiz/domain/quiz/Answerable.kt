@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+
 interface Answerable {
 
     fun getQuizAnswer(): QuizAnswer
@@ -14,4 +15,8 @@ interface Answerable {
 
     fun isCorrect(userAnswer: String): Boolean =
             getCorrectAnswer() == userAnswer
+
+    fun getCorrectRate(): Double
+
+    fun getDifficulty(): QuizDifficulty
 }

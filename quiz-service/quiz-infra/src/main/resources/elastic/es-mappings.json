@@ -34,6 +34,15 @@
         }
       }
     },
+    "options": {
+      "type": "nested",
+      "properties": {
+        "optionNumber": { "type": "integer" },
+        "content": { "type": "text" },
+        "selectionCount": { "type": "integer" },
+        "imageId": { "type": "long" }
+      }
+    },
     "totalAnsweredUser": { "type":  "integer" },
     "createdAt": {
       "type": "date",
