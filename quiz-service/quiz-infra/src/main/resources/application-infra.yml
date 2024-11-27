@@ -1,3 +1,12 @@
+kafka:
+  topic:
+    quiz: quiz
+    cdc_quizzes: quizy.quiz.quizzes
+    cdc_quiz_options: quizy.quiz.quiz_options
+    cdc_quiz_tags: quizy.quiz.quiz_tags_mapping
+  consumer-group:
+    quiz: quiz_read
+    cdc_quiz: cdc_quizzes
 ---
 spring:
   config:
@@ -32,15 +41,6 @@ spring:
 shedlock:
   name: like_sync_lock
 
-kafka:
-  topic:
-    quiz: quiz
-    cdc_quizzes: quizy.quiz.quizzes
-    cdc_quiz_options: quizy.quiz.quiz_options
-    cdc_quiz_tags: quizy.quiz.quiz_tags_mapping
-  consumer-group:
-    quiz: quiz_read
-    cdc_quiz: cdc_quizzes
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   num-of-partitions: 3
@@ -72,6 +72,7 @@ kafka-consumer-config:
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
+  ack-mode: MANUAL
 
 redis:
   host: localhost
@@ -132,10 +133,6 @@ spring:
 shedlock:
   name: like_sync_lock
 
-kafka:
-  topic:
-    quiz: quiz
-
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
   num-of-partitions: 3
@@ -166,6 +163,9 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
+  ack-mode: MANUAL
+
 
 redis:
   host: ${REDIS_HOST}

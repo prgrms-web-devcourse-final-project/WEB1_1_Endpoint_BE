@@ -36,7 +36,7 @@ class MultipleChoiceQuizEntity(
                                         },
                         ),
                 answer = this.answer.toDomain(),
-                id = QuizId(this.id),
+                id = QuizId(this.quizId),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
                 commentCount = this.commentCount,
         )

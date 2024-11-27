@@ -4,6 +4,7 @@ import com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
+import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
 
 private val log = KotlinLogging.logger {}
@@ -14,7 +15,7 @@ class CDCEventListener(
 ) {
 
     @KafkaListener(topics = ["\${kafka.topic.cdc_quizzes}", "\${kafka.topic.cdc_quiz_options}", "\${kafka.topic.cdc_quiz_tags}"] , groupId = "\${kafka.consumer-group.cdc_quiz}")
-    fun receive(records: List<ConsumerRecord<String, DebeziumEvent>>) {
+    fun receive(records: List<ConsumerRecord<String, DebeziumEvent>>, acknowledgment: Acknowledgment) {
         val sortedRecords: List<ConsumerRecord<String, DebeziumEvent>> = records.stream()
             .filter { shouldProcessEvent(it.value().payload) }
             .sorted(Comparator.comparing { r -> r.value().payload.date })
@@ -29,18 +30,12 @@ class CDCEventListener(
             }
             eventHandlerFactory.getHandler(record.topic()).process(record.value())
         }
+        acknowledgment.acknowledge()
     }
 
     private fun shouldProcessEvent(payload: DebeziumEvent.DebeziumEventPayload): Boolean {
-        // READ 이벤트 아니고
-        // quizzes 테이블의 CREATE 이벤트가 아닐 때만 처리
-        return !isQuizzesCreateEvent(payload) && payload.operation != DebeziumEvent.DebeziumEventPayloadOperation.READ
+        // READ 이벤트 처리하지 않음
+        return payload.operation != DebeziumEvent.DebeziumEventPayloadOperation.READ
 
-    }
-
-    private fun isQuizzesCreateEvent(payload: DebeziumEvent.DebeziumEventPayload): Boolean {
-        val isQuizzesTable = payload.source["table"] == "quizzes"
-        val isCreateOperation = payload.operation == DebeziumEvent.DebeziumEventPayloadOperation.CREATE
-        return isQuizzesTable && isCreateOperation
     }
 }

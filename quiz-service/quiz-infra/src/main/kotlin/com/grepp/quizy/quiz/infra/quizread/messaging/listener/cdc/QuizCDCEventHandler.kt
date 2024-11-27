@@ -18,6 +18,10 @@ class QuizCDCEventHandler(
 
 
     final override fun initActions() {
+        actions.put(DebeziumEvent.DebeziumEventPayloadOperation.CREATE) { _, after ->
+            after?.let { quizSynchronizer.createQuiz(it) }
+        }
+
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.UPDATE) { _, after ->
             after?.let { quizSynchronizer.updateQuiz(it) }
         }

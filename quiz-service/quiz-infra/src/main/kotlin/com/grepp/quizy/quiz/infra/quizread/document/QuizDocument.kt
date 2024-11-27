@@ -6,6 +6,7 @@ import com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc.QuizCDCEvent
 import java.time.LocalDateTime
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
+import org.threeten.bp.DateTimeUtils.toLocalDateTime
 import java.time.Instant
 import java.time.ZoneId
 
@@ -78,23 +79,26 @@ class QuizDocument(
                         )
                 }
 
-                fun from(createdQuiz: QuizCreatedEvent): QuizDocument {
+                fun from(quizCDCEvent: QuizCDCEvent): QuizDocument {
                         return QuizDocument(
-                                id = createdQuiz.getQuizId(),
-                                userId = createdQuiz.creatorId,
-                                category = createdQuiz.category,
-                                type = createdQuiz.type,
-                                content = createdQuiz.content,
-                                tags = createdQuiz.tags.map { it.name },
-                                options = createdQuiz.options.map { QuizOptionVO.from(it) },
+                                id = quizCDCEvent.id,
+                                userId = quizCDCEvent.userId,
+                                category = quizCDCEvent.category,
+                                type = quizCDCEvent.type,
+                                content = quizCDCEvent.content,
+                                tags = emptyList(),
+                                options = emptyList(),
                                 totalAnsweredUsers = 0,
-                                answer = QuizAnswerVO(
-                                        value = createdQuiz.answer?.value ?: "",
-                                        explanation = createdQuiz.answer?.explanation ?: ""
-                                ),
+                                answer = when(quizCDCEvent.answer != null && quizCDCEvent.explanation != null) {
+                                        true -> QuizAnswerVO(
+                                                value = quizCDCEvent.answer,
+                                                explanation = quizCDCEvent.explanation
+                                        )
+                                        false -> null
+                                },
                                 difficulty = QuizDifficulty.NONE,
-                                createdAt = createdQuiz.createdAt,
-                                updatedAt = createdQuiz.updatedAt,
+                                createdAt = quizCDCEvent.getCreatedAt(),
+                                updatedAt = quizCDCEvent.getUpdatedAt(),
                         )
                 }
         }

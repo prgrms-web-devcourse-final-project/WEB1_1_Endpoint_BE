@@ -15,9 +15,10 @@ class QuizSynchronizer(
     private val quizTagJpaRepository: QuizTagJpaRepository
 ) {
 
-    fun createQuiz(createdQuizzes: List<QuizCreatedEvent>) {
-        val quizDocs = createdQuizzes.map { QuizDocument.from(it) }
-        quizElasticRepository.saveAll(quizDocs)
+    fun createQuiz(quizCDCEvent: QuizCDCEvent) {
+        val quizDoc = QuizDocument.from(quizCDCEvent)
+        quizElasticRepository.save(quizDoc)
+
     }
 
     fun updateQuiz(updateQuiz: QuizCDCEvent) {
