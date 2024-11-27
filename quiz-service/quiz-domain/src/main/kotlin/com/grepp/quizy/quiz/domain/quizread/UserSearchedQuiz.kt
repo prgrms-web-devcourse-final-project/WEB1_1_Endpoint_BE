@@ -14,6 +14,7 @@ sealed interface AnswerableQuizDetail : QuizWithDetail
 
 data class NotAnsweredQuizWithoutAnswer(
     val id: Long,
+    val author: QuizAuthor?,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
@@ -22,12 +23,18 @@ data class NotAnsweredQuizWithoutAnswer(
 ) : QuizWithDetail, NotAnswerableQuizDetail {
 
     companion object {
-        fun from(quiz: Quiz, count: QuizCount, isLiked: Boolean): NotAnsweredQuizWithoutAnswer =
+        fun from(
+            quiz: Quiz,
+            author: QuizAuthor?,
+            count: QuizCount,
+            isLiked: Boolean
+        ): NotAnsweredQuizWithoutAnswer =
                 with(quiz) {
                     val totalSelection =
                             content.options.sumOf { it.selectionCount }
                     return NotAnsweredQuizWithoutAnswer(
                             id = id.value,
+                            author = author,
                             content = content.content,
                             type = type.value,
                             options =
@@ -46,6 +53,7 @@ data class NotAnsweredQuizWithoutAnswer(
 
 data class AnsweredQuizWithoutAnswer(
     val id: Long,
+    val author: QuizAuthor?,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
@@ -57,6 +65,7 @@ data class AnsweredQuizWithoutAnswer(
     companion object {
         fun from(
             quiz: Quiz,
+            author: QuizAuthor?,
             count: QuizCount,
             answeredOption: String,
             isLiked: Boolean
@@ -66,6 +75,7 @@ data class AnsweredQuizWithoutAnswer(
                     content.options.sumOf { it.selectionCount }
                 return AnsweredQuizWithoutAnswer(
                     id = id.value,
+                    author = author,
                     content = content.content,
                     type = type.value,
                     options =
@@ -85,6 +95,7 @@ data class AnsweredQuizWithoutAnswer(
 
 data class NotAnsweredQuizWithAnswer(
     val id: Long,
+    val author: QuizAuthor?,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
@@ -96,6 +107,7 @@ data class NotAnsweredQuizWithAnswer(
     companion object {
         fun <T> from(
                 quiz: T,
+                author: QuizAuthor?,
                 count: QuizCount,
                 isLiked: Boolean,
         ): NotAnsweredQuizWithAnswer where T : Quiz, T : Answerable =
@@ -104,6 +116,7 @@ data class NotAnsweredQuizWithAnswer(
                             content.options.sumOf { it.selectionCount }
                     return NotAnsweredQuizWithAnswer(
                             id = id.value,
+                            author = author,
                             content = content.content,
                             type = type.value,
                             options =
@@ -127,6 +140,7 @@ data class NotAnsweredQuizWithAnswer(
 
 data class AnsweredQuizWithAnswer(
     val id: Long,
+    val author: QuizAuthor?,
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
@@ -139,6 +153,7 @@ data class AnsweredQuizWithAnswer(
     companion object {
         fun <T> from(
                 quiz: T,
+                author: QuizAuthor?,
                 count: QuizCount,
                 answeredOption: String,
                 isLiked: Boolean,
@@ -148,6 +163,7 @@ data class AnsweredQuizWithAnswer(
                             content.options.sumOf { it.selectionCount }
                     return AnsweredQuizWithAnswer(
                             id = id.value,
+                            author = author,
                             content = content.content,
                             type = type.value,
                             options =
@@ -169,6 +185,8 @@ data class AnsweredQuizWithAnswer(
                 }
     }
 }
+
+data class QuizAuthor(val name: String, val imagePath: String)
 
 data class QuizDetailCount(
         val like: Long = 0,

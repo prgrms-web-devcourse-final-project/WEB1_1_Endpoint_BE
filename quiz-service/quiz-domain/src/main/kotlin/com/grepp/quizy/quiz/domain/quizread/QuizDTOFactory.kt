@@ -7,18 +7,20 @@ class QuizDTOFactory {
     companion object {
         fun QuizWithDetail(
             quiz: Quiz,
+            author: QuizAuthor?,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
         ): QuizWithDetail =
                 when (quiz) {
-                    is ABTest -> NotAnswerableQuizDetail(quiz, count, isLiked, answered)
-                    is OXQuiz -> AnswerableQuizDetail(quiz, count, isLiked, answered)
-                    is MultipleChoiceQuiz -> AnswerableQuizDetail(quiz, count, isLiked, answered)
+                    is ABTest -> NotAnswerableQuizDetail(quiz, author, count, isLiked, answered)
+                    is OXQuiz -> AnswerableQuizDetail(quiz, author, count, isLiked, answered)
+                    is MultipleChoiceQuiz -> AnswerableQuizDetail(quiz, author, count, isLiked, answered)
                 }
 
         private fun NotAnswerableQuizDetail(
             quiz: Quiz,
+            author: QuizAuthor?,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
@@ -26,14 +28,16 @@ class QuizDTOFactory {
             answered?.let {
                 AnsweredQuizWithoutAnswer.from(
                     quiz,
+                    author,
                     count,
                     answered.value,
                     isLiked,
                 )
-            } ?: NotAnsweredQuizWithoutAnswer.from(quiz, count, isLiked)
+            } ?: NotAnsweredQuizWithoutAnswer.from(quiz, author, count, isLiked)
 
         private fun <T> AnswerableQuizDetail(
             quiz: T,
+            author: QuizAuthor?,
             count: QuizCount,
             isLiked: Boolean,
             answered: Choice?,
@@ -41,10 +45,11 @@ class QuizDTOFactory {
                 answered?.let {
                     AnsweredQuizWithAnswer.from(
                         quiz,
+                        author,
                         count,
                         answered.value,
                         isLiked,
                     )
-                } ?: NotAnsweredQuizWithAnswer.from(quiz, count, isLiked)
+                } ?: NotAnsweredQuizWithAnswer.from(quiz, author, count, isLiked)
     }
 }
