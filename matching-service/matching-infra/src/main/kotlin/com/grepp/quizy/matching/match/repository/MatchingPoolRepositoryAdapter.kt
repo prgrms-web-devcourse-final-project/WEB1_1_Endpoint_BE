@@ -1,7 +1,6 @@
 package com.grepp.quizy.matching.match.repository
 
 import com.grepp.quizy.matching.match.MATCHING_K
-import com.grepp.quizy.matching.match.MATCHING_THRESHOLD
 import com.grepp.quizy.matching.match.MatchingPoolRepository
 import com.grepp.quizy.matching.match.UserStatus
 import com.grepp.quizy.matching.match.converter.toByteArray
@@ -12,6 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import kotlin.math.sqrt
 
+private const val MATCHING_THRESHOLD = 0.5
 private const val MATCHING_POOL_KEY = "MATCHING_POOL"
 
 @Repository

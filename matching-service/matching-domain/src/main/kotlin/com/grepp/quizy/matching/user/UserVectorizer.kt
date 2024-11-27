@@ -8,11 +8,12 @@ class UserVectorizer(private val userFetcher: UserFetcher) {
     fun vectorizeUser(userId: UserId): UserVector {
         val rating = userFetcher.requestUserRating(userId)
         val interests = userFetcher.requestUserInterests(userId)
+        val vectorSize = GameRating.entries.size + InterestCategory.entries.size
 
         return UserVector(
-            FloatArray(10).apply {
-                this[GameRating.VECTOR_INDEX] = rating.index
-                interests.forEach { this[it.index] = 1.0f }
+            FloatArray(vectorSize).apply {
+                this[rating.index] = 1.0f
+                interests.forEach { this[it.index + GameRating.entries.size] = 1.0f }
             }
         )
     }

@@ -4,16 +4,15 @@ package com.grepp.quizy.matching.user
 
 @JvmInline value class UserVector(val value: FloatArray)
 
-enum class GameRating(val index: Float) {
-    BRONZE(1.0f),
-    SILVER(2.0f),
-    GOLD(3.0f),
-    PLATINUM(4.0f),
-    DIAMOND(5.0f),
-    MASTER(6.0f);
+enum class GameRating(val index: Int) {
+    BRONZE(0),
+    SILVER(1),
+    GOLD(2),
+    PLATINUM(3),
+    DIAMOND(4),
+    MASTER(5);
 
     companion object {
-        const val VECTOR_INDEX = 0
 
         fun fromRatingValue(rating: Int): GameRating {
             return when {
@@ -29,15 +28,15 @@ enum class GameRating(val index: Float) {
 }
 
 enum class InterestCategory(val index: Int) {
-    ALGORITHM(1),
-    PROGRAMMING_LANGUAGE(2),
-    NETWORK(3),
-    OPERATING_SYSTEM(4),
-    WEB_DEVELOPMENT(5),
-    MOBILE(6),
-    DEV_OPS(7),
-    DATABASE(8),
-    SOFTWARE_ENGINEERING(9);
+    ALGORITHM(0),
+    PROGRAMMING_LANGUAGE(1),
+    NETWORK(2),
+    OPERATING_SYSTEM(3),
+    WEB_DEVELOPMENT(4),
+    MOBILE(5),
+    DEV_OPS(6),
+    DATABASE(7),
+    SOFTWARE_ENGINEERING(8);
 
     companion object {
         fun commonInterest(indexes: List<Int>) =
