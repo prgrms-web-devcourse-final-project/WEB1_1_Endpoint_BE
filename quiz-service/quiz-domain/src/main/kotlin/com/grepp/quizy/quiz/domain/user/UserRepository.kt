@@ -8,4 +8,5 @@ interface UserRepository {
 
     fun findByIdIn(userIds: List<UserId>): List<User>
 
+    fun delete(user: User)
 }

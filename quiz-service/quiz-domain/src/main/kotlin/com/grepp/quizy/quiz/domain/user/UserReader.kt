@@ -1,6 +1,6 @@
 package com.grepp.quizy.quiz.domain.user
 
-import com.grepp.quizy.quiz.domain.user.exception.UserException
+import com.grepp.quizy.quiz.domain.user.exception.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
@@ -9,8 +9,7 @@ class UserReader(
 ) {
 
     fun read(userId: UserId): User =
-        userRepository.findById(userId)
-            ?: throw UserException.UserNotFoundException
+        userRepository.findById(userId) ?: throw UserNotFoundException
 
     fun readIn(userIds: List<UserId>): List<User> =
         userRepository.findByIdIn(userIds)

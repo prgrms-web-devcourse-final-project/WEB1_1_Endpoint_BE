@@ -11,13 +11,8 @@ class User(
     val imgPath: String
         get() = _imgPath
 
-    companion object {
-        fun from(event: UserCreatedEvent): User {
-            return User(
-                id = UserId(event.userId),
-                _name = event.name,
-                _imgPath = event.profileImageUrl
-            )
-        }
+    fun update(name: String, imgPath: String) {
+        _name = name
+        _imgPath = imgPath
     }
 }
