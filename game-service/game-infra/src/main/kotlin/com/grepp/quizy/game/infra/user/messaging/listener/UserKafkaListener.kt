@@ -9,7 +9,7 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 
 @Component
-class GameKafkaListener(
+class UserKafkaListener(
     private val userRepository: UserRepositoryAdaptor
 ) : KafkaConsumer<Long, UserCreatedEvent> {
 
