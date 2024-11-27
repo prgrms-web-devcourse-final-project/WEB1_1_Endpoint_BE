@@ -1,16 +1,20 @@
 package com.grepp.quizy.quiz.infra.quizread.repository
 
+import co.elastic.clients.elasticsearch._types.FieldValue
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
+import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField
 import com.grepp.quizy.quiz.domain.quizread.QuizDifficultyType
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.CATEGORY_FIELD
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.CONTENT_FIELD
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.DIFFICULTY_FIELD
+import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.ID_FIELD
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.TAG_FIELD
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.TYPE_FIELD
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.domain.SliceImpl
+import org.springframework.data.elasticsearch.client.elc.NativeQuery
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations
 import org.springframework.data.elasticsearch.core.SearchHit
@@ -46,18 +50,35 @@ class CustomQuizSearchRepositoryImpl(
                         .withPageable(pageable)
                         .build()
 
-        val searchHits =
-                elasticSearchOperations.search(
-                        nativeQuery,
-                        QuizDocument::class.java,
-                )
-        val content =
-                searchHits
-                        .map(SearchHit<QuizDocument>::getContent)
-                        .toList()
-        val hasNext = hasNext(searchHits.totalHits, pageable)
+        return convertToSlice(nativeQuery, pageable)
+    }
 
-        return SliceImpl(content, pageable, hasNext)
+    override fun searchNotIn(keyword: String, pageable: Pageable, quizIds: List<Long>): Slice<QuizDocument> {
+        val query = QueryBuilders.bool()
+            .must(
+                QueryBuilders.multiMatch()
+                    .query(keyword)
+                    .fields(keywordSearchFields)
+                    .build()
+                    ._toQuery()
+            )
+            .mustNot(
+                QueryBuilders.terms().field(ID_FIELD).terms(TermsQueryField.of { tqf ->
+                    tqf.value(quizIds.map { FieldValue.of(it) })
+                })
+                    .build()
+                    ._toQuery()
+            )
+            .build()
+            ._toQuery()
+
+        val nativeQuery =
+            NativeQueryBuilder()
+                .withQuery(query)
+                .withPageable(pageable)
+                .build()
+
+        return convertToSlice(nativeQuery, pageable)
     }
 
     override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficultyType, pageable: Pageable): List<QuizDocument> {
@@ -92,6 +113,21 @@ class CustomQuizSearchRepositoryImpl(
             quizIds: List<Long>,
     ): Map<Long, Int> {
         TODO("Not yet implemented")
+    }
+
+    private fun convertToSlice(nativeQuery: NativeQuery, pageable: Pageable): Slice<QuizDocument> {
+        val searchHits =
+            elasticSearchOperations.search(
+                nativeQuery,
+                QuizDocument::class.java,
+            )
+        val content =
+            searchHits
+                .map(SearchHit<QuizDocument>::getContent)
+                .toList()
+        val hasNext = hasNext(searchHits.totalHits, pageable)
+
+        return SliceImpl(content, pageable, hasNext)
     }
 
     private fun hasNext(

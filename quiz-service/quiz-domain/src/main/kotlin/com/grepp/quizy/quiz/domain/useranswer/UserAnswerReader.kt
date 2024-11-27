@@ -8,4 +8,6 @@ import org.springframework.stereotype.Component
 class UserAnswerReader(private val repository: UserAnswerRepository) {
     fun read(userId: UserId, quizIds: List<QuizId>) =
         repository.findAllByUserAnswerId(quizIds.map { UserAnswerId(userId, it) })
+
+    fun readAnswered(userId: UserId) = repository.findAllByUserId(userId)
 }

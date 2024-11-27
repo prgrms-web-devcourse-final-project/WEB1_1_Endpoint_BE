@@ -42,6 +42,22 @@ class QuizMetadataCombiner(
         }
     }
 
+    fun combineWithoutUserAnswer(userId: UserId, searchedQuizzes: Slice<Quiz>): List<QuizWithDetail> {
+        val quizIds = parseQuizIds(searchedQuizzes.content)
+        val counts = quizReader.readCounts(quizIds)
+
+        val likeStatus = likeManager.isLikedIn(userId, quizIds)
+
+        return searchedQuizzes.content.map { quiz ->
+            QuizDTOFactory.QuizWithDetail(
+                quiz,
+                counts.getCountOf(QuizId(quiz.id.value)),
+                likeStatus.isLikedBy(QuizId(quiz.id.value)),
+                null,
+            )
+        }
+    }
+
     private fun parseQuizIds(quizzes: List<Quiz>) =
             quizzes.map { QuizId(it.id.value) }
 }

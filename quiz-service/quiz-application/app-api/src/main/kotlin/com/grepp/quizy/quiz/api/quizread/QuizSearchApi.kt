@@ -29,4 +29,18 @@ class QuizSearchApi(
                             )
                     )
             )
+
+    @GetMapping("/unanswered")
+    fun searchUnansweredByKeyword(
+        @RequestHeader("X-Auth-Id") userId: UserId,
+        params: UserSearchParams,
+    ): ApiResponse<SearchedQuizResponse> =
+        ApiResponse.success(
+            SearchedQuizResponse.from(
+                userQuizSearchUseCase.searchUnansweredByKeyword(
+                    userId,
+                    params.UserSearchCondition(),
+                )
+            )
+        )
 }
