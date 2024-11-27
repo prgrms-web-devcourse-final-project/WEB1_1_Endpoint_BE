@@ -91,11 +91,12 @@ class GamePlayService(
 
         val score = if (isCorrect) {
             val baseScore = 10.0
-            val deductionPerMillis = 0.0005 //
+            val deductionPerMillis = 0.0005
             val calculatedScore = baseScore - (timeTakenMillis * deductionPerMillis)
 
-            // 소수점 세번째 자리에서 반올림
-            (calculatedScore * 1000).roundToInt().toDouble() / 1000
+            val finalScore = maxOf(calculatedScore, 5.0)
+
+            (finalScore * 1000).roundToInt().toDouble() / 1000
         } else {
             0.0
         }
