@@ -14,8 +14,9 @@ class GameManageService(
     private val quizAppender: QuizAppender,
     private val quizFetcher: QuizFetcher,
     private val gameQuizAppender: GameQuizAppender,
-    private val quizGameReader: GameQuizReader,
+    private val gameQuizReader: GameQuizReader,
     private val quizReader: QuizReader,
+    private val gameLeaderboardManager: GameLeaderboardManager,
     private val messagePublisher: GameMessagePublisher,
 ) {
 
@@ -30,14 +31,17 @@ class GameManageService(
             gameQuizAppender.appendQuiz(event.game.id, quiz.id)
         }
         // 랭킹 리더보드 초기화
-
+        gameLeaderboardManager.initializeLeaderboard(
+            event.game.id,
+            event.game.players.players.map { it.user.id }
+        )
         // 게임에서 사용할 퀴즈 전송
         publishQuiz(event.game.id)
     }
 
     fun publishQuiz(gameId: Long) {
         val game = gameReader.read(gameId)
-        val quizIds = quizGameReader.read(gameId)
+        val quizIds = gameQuizReader.read(gameId)
         val quizzes = quizIds.map { quizId ->
             quizReader.read(quizId)
         }
