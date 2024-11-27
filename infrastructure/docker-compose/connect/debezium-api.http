@@ -8,7 +8,6 @@ Content-Type: application/json
   "config": {
     "connector.class": "io.debezium.connector.mysql.MySqlConnector",
     "database.hostname": "host.docker.internal",
-    "message.key.columns": "quiz.quizzes:id;quiz.quiz_options:quiz_id;quiz.quiz_tags_mapping:quiz_id",
     "database.port": "3306",
     "database.user": "mysqluser",
     "database.password": "mysqlpw",
@@ -22,15 +21,21 @@ Content-Type: application/json
     "include.schema.changes": "true",
     "database.ssl.mode": "disabled",
     "database.allowPublicKeyRetrieval": "true",
-    "transforms": "addTopicPrefix",
+    "tombstones.on.delete": "false",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "key.converter.schemas.enable": "false",
+    "message.key.columns": "quiz.quizzes:quiz_id;quiz.quiz_options:quiz_id;quiz.quiz_tags_mapping:quiz_id",
+    "transforms": "addTopicPrefix,extractKeyField",
     "transforms.addTopicPrefix.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.addTopicPrefix.regex": "(.*)",
     "transforms.addTopicPrefix.replacement": "$1",
+    "transforms.extractKeyField.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
+    "transforms.extractKeyField.field": "quiz_id",
     "schema.history.internal.kafka.topic": "schemahistory.fullfillment",
-    "schema.history.internal.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092",
-    "tombstones.on.delete": "false"
+    "schema.history.internal.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092"
   }
 }
+
 
 ###
 # 설정 삭제 API
