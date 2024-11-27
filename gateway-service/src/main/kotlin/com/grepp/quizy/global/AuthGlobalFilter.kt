@@ -107,6 +107,7 @@ class RouteValidator {
         "/oauth2",
         "/api/quiz/feed",
         "/api/quiz/search",
+        "/api/user/info/"
     )
 
     fun isUnsecured(request: ServerHttpRequest): Boolean {

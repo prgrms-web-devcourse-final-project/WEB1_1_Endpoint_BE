@@ -27,4 +27,10 @@ class UserUpdater(
         userRepository.save(user)
         userMessageSender.send(UpdateUserEvent.from(user))
     }
+
+    fun updateRole(userId: UserId) {
+        val user = userRepository.findById(userId.value) ?: throw CustomUserException.UserNotFoundException
+        user.changeRole()
+        userRepository.save(user)
+    }
 }

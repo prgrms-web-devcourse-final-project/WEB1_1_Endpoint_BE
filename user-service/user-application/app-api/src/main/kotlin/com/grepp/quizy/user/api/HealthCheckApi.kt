@@ -1,8 +1,9 @@
 package com.grepp.quizy.user.api
 
 import com.grepp.quizy.common.api.ApiResponse
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -12,10 +13,10 @@ class HealthCheckApi {
 
     @GetMapping("/health")
     fun healthCheck(
-            @RequestHeader("X-Auth-Id") userId: String
+        @AuthUser principal: UserPrincipal
     ): ApiResponse<Unit> {
         return ApiResponse.success(
-                "I'm USER service. UserId : ${userId.toLong()}"
+            "I'm USER service. UserId : ${principal.value}"
         )
     }
 

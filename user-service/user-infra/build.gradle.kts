@@ -22,7 +22,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
     // Feign
-    //implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3")
+    implementation("org.springframework.cloud:spring-cloud-commons:4.1.4")
 
     // H2 Database
     runtimeOnly("com.h2database:h2")
