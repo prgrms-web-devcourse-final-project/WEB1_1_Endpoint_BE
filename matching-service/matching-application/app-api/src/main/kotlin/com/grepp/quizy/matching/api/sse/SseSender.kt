@@ -24,7 +24,7 @@ class SseSender(
                 SseEmitter.event()
                     .id("")
                     .name("MATCHING")
-                    .data(objectMapper.writeValueAsString(event))
+                    .data(objectMapper.writeValueAsString(MatchingSucceed(event.gameRoomId)))
             )
         } catch (e: IOException) {
             closeEmitter(event.userId)
@@ -37,3 +37,5 @@ class SseSender(
         matchingPoolManager.remove(UserId(userId))
     }
 }
+
+private data class MatchingSucceed(val roomId: Long)
