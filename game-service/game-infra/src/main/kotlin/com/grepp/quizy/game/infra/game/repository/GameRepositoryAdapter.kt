@@ -3,12 +3,14 @@ package com.grepp.quizy.game.infra.game.repository
 import com.grepp.quizy.game.domain.game.Game
 import com.grepp.quizy.game.domain.game.GameRepository
 import com.grepp.quizy.game.infra.game.entity.GameRedisEntity
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class GameRepositoryAdapter(
-    private val gameRedisRepository: GameRedisRepository
+    private val gameRedisRepository: GameRedisRepository,
+    private val redisTemplate: RedisTemplate<String, String>
 ) : GameRepository {
 
     override fun save(game: Game): Game {
@@ -26,4 +28,18 @@ class GameRepositoryAdapter(
             .findTopByInviteCode(code)
             ?.toDomain()
     }
+
+    override fun saveQuiz(gameId: Long, quizId: Long): Long? {
+        val quizSetKey = "game:$gameId:quizzes"
+        return redisTemplate.opsForSet().add(quizSetKey, quizId.toString())
+    }
+
+    override fun findQuizzes(gameId: Long): Set<Long> {
+        val quizSetKey = "game:$gameId:quizzes"
+        return redisTemplate.opsForSet().members(quizSetKey)
+            ?.map { it.toLong() }
+            ?.toSet()
+            ?: emptySet()
+    }
+
 }

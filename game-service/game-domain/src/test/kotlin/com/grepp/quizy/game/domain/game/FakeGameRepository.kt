@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicLong
 class FakeGameRepository : GameRepository {
 
     private val games = ConcurrentHashMap<Long, Game>()
+    private val gameSet = ConcurrentHashMap<Long,MutableSet<Long>>()
     private var sequence = AtomicLong(0)
 
     override fun save(game: Game): Game {
@@ -31,6 +32,22 @@ class FakeGameRepository : GameRepository {
 
     override fun findByInviteCode(code: String): Game? {
         return games.values.find { it.inviteCode?.value == code }
+    }
+
+    override fun saveQuiz(gameId: Long, quizId: Long): Long? {
+        val game = games[gameId] ?: return null
+        gameSet.putIfAbsent(gameId, mutableSetOf())
+        if(gameSet[gameId]?.contains(quizId) == true) {
+            return 0
+        }
+        else {
+            gameSet[gameId]?.add(quizId)
+            return 1
+        }
+    }
+
+    override fun findQuizzes(gameId: Long): Set<Long> {
+        return gameSet[gameId] ?: emptySet()
     }
 
     fun clear() {
