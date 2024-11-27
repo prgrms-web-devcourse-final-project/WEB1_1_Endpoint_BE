@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show-sql: true
@@ -27,6 +27,13 @@ spring:
 redis:
   host: localhost
   port: 6379
+
+feign:
+  client:
+    url:
+      game-service: http://localhost:8081
+      quiz-service: http://localhost:8083
+
 
 kafka:
   topic:
@@ -99,11 +106,21 @@ redis:
   host: ${REDIS_HOST}
   port: 6379
 
+feign:
+  client:
+    url:
+      game-service: http://dev-game-service:8080
+      quiz-service: http://dev-quiz-service:8080
+
 kafka:
   topic:
     user: user
+    game: game
+    quiz: quiz
   consumer-group:
     user: user
+    game: game
+    quiz: quiz
 
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

@@ -21,17 +21,17 @@ class UserApi(
     private val userDeleteUseCase: UserDeleteUseCase
 ) {
     @GetMapping("/me")
-    fun getMe(
+    suspend fun getMe(
         @AuthUser principal: UserPrincipal,
     ): ApiResponse<UserResponse> {
-        return ApiResponse.success(UserResponse.from(userReadUseCase.getUser(UserId(principal.value))))
+        return ApiResponse.success(UserResponse.from(userReadUseCase.getUserInfo(UserId(principal.value))))
     }
 
     @GetMapping("/info/{userId}")
-    fun getUser(
+    suspend fun getUser(
         @PathVariable userId: Long,
     ): ApiResponse<UserResponse> {
-        return ApiResponse.success(UserResponse.from(userReadUseCase.getUser(UserId(userId))))
+        return ApiResponse.success(UserResponse.from(userReadUseCase.getUserInfo(UserId(userId))))
     }
 
     @PutMapping("/me")
