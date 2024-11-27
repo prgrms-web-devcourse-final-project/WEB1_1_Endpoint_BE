@@ -62,6 +62,10 @@ spring:
           uri: http://localhost:8085
           predicates:
             - Path=/api/auth/**
+        - id: login
+          uri: http://localhost:8085
+          predicates:
+            - Path=/login/**
         - id: websocket
           uri: ws://localhost:8081
           predicates:
@@ -138,6 +142,10 @@ spring:
           uri: http://dev-user-service:8080
           predicates:
             - Path=/api/auth/**
+        - id: login
+          uri: http://dev-user-service:8080
+          predicates:
+            - Path=/login/**
         - id: websocket
           uri: ws://dev-game-service:8080
           predicates:

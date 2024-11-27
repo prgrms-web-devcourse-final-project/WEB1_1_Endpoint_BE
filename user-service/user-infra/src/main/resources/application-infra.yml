@@ -43,7 +43,7 @@ kafka:
   consumer-group:
     user: user
     game: game
-    quiz: quiz
+    onboarding: onboarding
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
