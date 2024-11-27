@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 @Component
 class MatchingPoolManager(
     private val userVectorizer: UserVectorizer,
+    private val matchingValidator: MatchingValidator,
     private val poolRepository: MatchingPoolRepository,
     private val queueRepository: MatchingQueueRepository
 ) {
@@ -19,8 +20,11 @@ class MatchingPoolManager(
     }
 
     fun findPivot(): UserStatus? {
-        val pivot = queueRepository.dequeue() ?: return null
-        return if (queueRepository.isValid(pivot.userId)) pivot else null
+        var pivot = queueRepository.dequeue() ?: return null
+        while (matchingValidator.isPivotInvalid(pivot)) {
+            pivot = queueRepository.dequeue() ?: return null
+        }
+        return pivot
     }
 
     fun remove(userId: UserId) {

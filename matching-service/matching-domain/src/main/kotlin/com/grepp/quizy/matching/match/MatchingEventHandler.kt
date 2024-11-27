@@ -8,21 +8,12 @@ import org.springframework.stereotype.Component
 class MatchingEventHandler(
     private val matchingPoolManager: MatchingPoolManager,
     private val matchingManager: MatchingManager,
-    private val matchingValidator: MatchingValidator
 ) {
 
     @Async
     @EventListener(UserWaitingRegisteredEvent::class)
     fun handleUserWaitingRegistered(event: UserWaitingRegisteredEvent) {
-        val pivot = getPivot() ?: return
+        val pivot = matchingPoolManager.findPivot() ?: return
         matchingManager.match(pivot)
-    }
-
-    fun getPivot(): UserStatus? {
-        var pivot = matchingPoolManager.findPivot() ?: return null
-        while (matchingValidator.isPivotInvalid(pivot)) {
-            pivot = matchingPoolManager.findPivot() ?: return null
-        }
-        return pivot
     }
 }
