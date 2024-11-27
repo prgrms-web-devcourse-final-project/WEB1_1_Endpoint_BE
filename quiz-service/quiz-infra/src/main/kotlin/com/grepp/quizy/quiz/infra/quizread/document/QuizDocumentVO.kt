@@ -4,7 +4,7 @@ import com.grepp.quizy.quiz.domain.quizread.QuizSortType
 
 sealed interface QuizDocumentVo
 
-data class QuizOptionVO(val optionNumber: Int, val content: String, val imageId: Long) :
+data class QuizOptionVO(val optionNumber: Int, val content: String, val imageId: Long? = null) :
         QuizDocumentVo
 
 data class QuizAnswerVO(val value: String, val explanation: String) :

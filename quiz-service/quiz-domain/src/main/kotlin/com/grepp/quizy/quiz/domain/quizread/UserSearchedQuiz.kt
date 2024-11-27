@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.domain.quizread
 
+import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.quiz.Answerable
 import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quiz.QuizCount
@@ -27,7 +28,8 @@ data class NotAnsweredQuizWithoutAnswer(
             quiz: Quiz,
             author: QuizAuthor?,
             count: QuizCount,
-            isLiked: Boolean
+            isLiked: Boolean,
+            optionImages: Map<QuizImageId, String>
         ): NotAnsweredQuizWithoutAnswer =
                 with(quiz) {
                     val totalSelection =
@@ -40,8 +42,9 @@ data class NotAnsweredQuizWithoutAnswer(
                             options =
                                     content.options.map {
                                         QuizDetailOption.from(
-                                                it,
-                                                totalSelection,
+                                            it,
+                                            totalSelection,
+                                            optionImages[(it as QuizOption.ABTestOption).imageId]
                                         )
                                     },
                             count = QuizDetailCount.from(count),
@@ -68,7 +71,8 @@ data class AnsweredQuizWithoutAnswer(
             author: QuizAuthor?,
             count: QuizCount,
             answeredOption: String,
-            isLiked: Boolean
+            isLiked: Boolean,
+            optionImages: Map<QuizImageId, String>
         ): AnsweredQuizWithoutAnswer =
             with(quiz) {
                 val totalSelection =
@@ -83,6 +87,7 @@ data class AnsweredQuizWithoutAnswer(
                             QuizDetailOption.from(
                                 it,
                                 totalSelection,
+                                optionImages[(it as QuizOption.ABTestOption).imageId]
                             )
                         },
                     count = QuizDetailCount.from(count),
@@ -202,10 +207,11 @@ data class QuizDetailOption(
         val no: Int,
         val content: String,
         val selectionRatio: Double,
+        val imagePath: String?
 ) {
 
     companion object {
-        fun from(option: QuizOption, total: Int) =
+        fun from(option: QuizOption, total: Int, imagePath: String? = null) =
                 QuizDetailOption(
                         option.optionNumber,
                         option.content,
@@ -213,6 +219,7 @@ data class QuizDetailOption(
                                 option.selectionCount.toDouble() /
                                         total.toDouble()
                         ),
+                        imagePath = imagePath
                 )
 
         private fun roundUp(value: Double) =

@@ -8,4 +8,5 @@ interface QuizImageRepository {
 
     fun deleteById(id: Long)
 
+    fun findAllById(ids: List<QuizImageId>): List<QuizImage>
 }

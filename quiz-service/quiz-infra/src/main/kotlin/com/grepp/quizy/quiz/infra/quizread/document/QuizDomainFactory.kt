@@ -36,9 +36,7 @@ class QuizDomainFactory {
                                 QuizOption.ABTestOption(
                                     option.optionNumber,
                                     option.content,
-                                    QuizImageId.from(
-                                        option.imageId
-                                    ),
+                                    option.imageId?.let { QuizImageId.from(option.imageId) },
                                     selectionPerOption[
                                         option.optionNumber]
                                         ?: 0
