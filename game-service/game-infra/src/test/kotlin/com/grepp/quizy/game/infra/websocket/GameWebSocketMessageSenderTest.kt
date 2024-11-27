@@ -54,7 +54,7 @@ class GameWebSocketMessageSenderTest :
                         any(),
                     )
                 }
-                messageSender.send(principal, message)
+                messageSender.send("minhyeok", message)
                 it("메시지가 사용자에게 전달된다.") {
                     verify {
                         messageTemplate.convertAndSendToUser(

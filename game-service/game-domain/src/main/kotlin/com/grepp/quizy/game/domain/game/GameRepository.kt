@@ -8,8 +8,4 @@ interface GameRepository {
 
     fun findByInviteCode(code: String): Game?
 
-    fun saveQuiz(gameId: Long, quizId: Long): Long?
-
-    fun findQuizzes(gameId: Long): Set<Long>
-
 }
