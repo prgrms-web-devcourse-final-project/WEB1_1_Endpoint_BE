@@ -1,12 +1,7 @@
 package com.grepp.quizy.user.api.global.oauth2
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.user.api.global.jwt.JwtGenerator
 import com.grepp.quizy.user.api.global.jwt.JwtProvider
-import com.grepp.quizy.user.api.global.jwt.dto.TokenResponse
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.user.domain.user.RedisTokenRepository
 import com.grepp.quizy.user.domain.user.UserLoginManager
@@ -14,12 +9,11 @@ import com.grepp.quizy.user.domain.user.UserReader
 import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.MediaType
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
-import java.nio.charset.StandardCharsets
-import java.text.SimpleDateFormat
+import java.net.URLEncoder
 
 @Component
 class CustomOAuth2LoginSuccessHandler(
@@ -27,13 +21,10 @@ class CustomOAuth2LoginSuccessHandler(
     private val jwtProvider: JwtProvider,
     private val userReader: UserReader,
     private val redisTokenRepository: RedisTokenRepository,
-    private val userLoginManager: UserLoginManager
+    private val userLoginManager: UserLoginManager,
+    @Value("\${frontend.url}")
+    private val frontendUrl: String,
 ) : SimpleUrlAuthenticationSuccessHandler() {
-
-    private val objectMapper = ObjectMapper()
-        .registerModule(JavaTimeModule())
-        .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-        .setDateFormat(SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ"))
 
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
@@ -49,7 +40,6 @@ class CustomOAuth2LoginSuccessHandler(
         val customOAuth2User = authentication.principal as CustomOAuth2User
         val user = userReader.read(customOAuth2User.getEmail())
 
-
         val accessToken = jwtGenerator.generateAccessToken(user)
         val refreshToken = jwtGenerator.generateRefreshToken(user)
         val refreshTokenExpirationTime = jwtProvider.getExpiration(refreshToken)
@@ -59,12 +49,12 @@ class CustomOAuth2LoginSuccessHandler(
             userLoginManager.login(user.id, refreshTokenExpirationTime)
         } catch (e: CustomUserException) {
             logger.error("Failed to login user", e)
-            val apiResponse =
-                ApiResponse.error(e.errorCode.errorReason.errorCode, e.message)
-
-            response.contentType = MediaType.APPLICATION_JSON_VALUE
-            response.characterEncoding = StandardCharsets.UTF_8.name()
-            response.writer.write(objectMapper.writeValueAsString(apiResponse))
+            val errorMessage = URLEncoder.encode(e.message, "UTF-8")
+            response.sendRedirect(
+                "${frontendUrl}/oauth/${
+                    customOAuth2User.getProvider().toString().lowercase()
+                }/callback?error=${errorMessage}"
+            )
             return
         }
 
@@ -72,14 +62,12 @@ class CustomOAuth2LoginSuccessHandler(
 
         CookieUtils.addCookie(response, "refreshToken", refreshToken, refreshTokenExpirationTime.toInt())
 
-        clearAuthenticationAttributes(request)
-
-        val apiResponse =
-            ApiResponse.success(TokenResponse(accessToken, refreshToken, refreshTokenExpirationTime, user.isGuest()))
-
-        response.contentType = MediaType.APPLICATION_JSON_VALUE
-        response.characterEncoding = StandardCharsets.UTF_8.name()
-        response.writer.write(objectMapper.writeValueAsString(apiResponse))
+        response.sendRedirect(
+            "${frontendUrl}/oauth/${
+                customOAuth2User.getProvider().toString().lowercase()
+            }/callback?token=${accessToken}&guest=${user.isGuest()}&refreshTokenExpirationTime=${refreshTokenExpirationTime}"
+        )
+        logger.info("User ${user.id} logged in successfully")
     }
 
 }

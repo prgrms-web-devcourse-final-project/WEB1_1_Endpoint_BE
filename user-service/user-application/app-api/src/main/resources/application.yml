@@ -60,6 +60,9 @@ springdoc:
 server:
   port: 8085
 
+frontend:
+  url: http://localhost:5173
+
 #logging:
 #  level:
 #    root: debug
@@ -111,6 +114,9 @@ springdoc:
     path: api/user/api-docs
   enable-spring-security: true
 
-logging:
-  level:
-    root: DEBUG
+frontend:
+  url: http://localhost:5173
+
+#logging:
+#  level:
+#    root: DEBUG
