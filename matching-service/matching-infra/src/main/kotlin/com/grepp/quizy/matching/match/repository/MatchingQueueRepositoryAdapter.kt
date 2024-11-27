@@ -8,7 +8,7 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
 @Repository
-class MatchingQueueRedisRepository(
+class MatchingQueueRepositoryAdapter(
     private val userStatusTemplate: RedisTemplate<String, RedisUserStatus>,
     private val userIdTemplate: RedisTemplate<String, String>,
 ) : MatchingQueueRepository {

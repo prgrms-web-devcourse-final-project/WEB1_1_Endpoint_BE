@@ -15,7 +15,7 @@ import kotlin.math.sqrt
 private const val MATCHING_POOL_KEY = "MATCHING_POOL"
 
 @Repository
-class MatchingPoolRedisRepository(
+class MatchingPoolRepositoryAdapter(
     private val redisTemplate: RedisTemplate<String, Any>,
 ) : MatchingPoolRepository {
 
