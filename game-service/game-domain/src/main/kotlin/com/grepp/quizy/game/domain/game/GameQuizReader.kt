@@ -4,10 +4,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class GameQuizReader(
-    private val gameRepository: GameRepository,
+    private val gameQuizRepository: GameQuizRepository,
 ) {
 
     fun read(gameId: Long) =
-        gameRepository.findQuizzes(gameId)
+        gameQuizRepository.findQuizzes(gameId)
 
 }

@@ -4,14 +4,14 @@ import org.springframework.stereotype.Component
 
 @Component
 class GameQuizAppender(
-    private val gameRepository: GameRepository,
+    private val gameQuizRepository: GameQuizRepository,
 ) {
 
     fun appendQuiz(
         gameId: Long,
         quizId: Long
     ) {
-        gameRepository.saveQuiz(gameId, quizId) ?: throw IllegalStateException("퀴즈 추가 실패")
+        gameQuizRepository.saveQuiz(gameId, quizId) ?: throw IllegalStateException("퀴즈 추가 실패")
     }
 
 }
