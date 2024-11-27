@@ -11,6 +11,7 @@ enum class MessageType {
     QUIZ_TRANSMITTED,
     SCORE_BOARD,
     GAME_END,
+    ERROR,
 }
 
 sealed interface MessagePayload
@@ -67,6 +68,17 @@ data class GameMessage(
             return GameMessage(
                 gameId = gameId,
                 type = MessageType.SCORE_BOARD,
+                payload = payload,
+            )
+        }
+
+        fun error(
+            gameId: Long = 0, // 안쓰는 값이라서 0으로 초기화
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.ERROR,
                 payload = payload,
             )
         }
@@ -173,6 +185,20 @@ data class LeaderboardInfo(
             return LeaderboardInfo(
                 userId = userId,
                 score = score
+            )
+        }
+    }
+}
+
+data class ErrorPayload(
+    val errorCode: String,
+    val message: String,
+) : MessagePayload {
+    companion object {
+        fun of(errorCode: String = "INTERNAL_SERVER_ERROR", message: String): ErrorPayload {
+            return ErrorPayload(
+                errorCode = errorCode,
+                message = message
             )
         }
     }
