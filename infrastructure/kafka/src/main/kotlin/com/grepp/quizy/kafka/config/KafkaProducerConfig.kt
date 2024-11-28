@@ -46,6 +46,7 @@ class KafkaProducerConfig<K : Serializable, V : Serializable>(
         return DefaultKafkaProducerFactory(producerConfig())
     }
 
+
     @Bean
     fun kafkaTemplate(): KafkaTemplate<K, V> {
         return KafkaTemplate(producerFactory())

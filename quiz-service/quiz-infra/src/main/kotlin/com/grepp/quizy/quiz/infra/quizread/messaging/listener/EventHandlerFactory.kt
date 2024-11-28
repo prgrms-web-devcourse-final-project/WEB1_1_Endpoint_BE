@@ -26,19 +26,14 @@ class EventHandlerFactory(
         handlers[QUIZ_TAGS] = quizTagMappingCDCEventHandler
     }
 
-    fun getHandler(topicName: String): EventHandler {
-        val tableName = substringAfterLast(topicName).lowercase(Locale.getDefault())
+    fun getHandler(tableName: String): EventHandler {
 
         return Optional.ofNullable(handlers[tableName])
             .orElseThrow {
                 IllegalArgumentException(
-                    "$topicName 토픽에 대한 핸들러가 없습니다."
+                    "$tableName 토픽에 대한 핸들러가 없습니다."
                 )
             }
     }
 
-    private fun substringAfterLast(input: String): String {
-        val lastIndex = input.lastIndexOf(".")
-        return input.substring(lastIndex + 1)
-    }
 }

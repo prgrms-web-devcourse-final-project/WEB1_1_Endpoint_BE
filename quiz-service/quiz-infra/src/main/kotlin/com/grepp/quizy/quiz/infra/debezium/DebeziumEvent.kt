@@ -32,7 +32,7 @@ data class DebeziumEvent(
         val source: Map<String, Any>,
         @JsonProperty("op")
         val operation: DebeziumEventPayloadOperation,
-        @JsonProperty("ts_ms")
-        val date: Date,
+        @JsonProperty("ts_ns")
+        val date: Long,
     )
 }

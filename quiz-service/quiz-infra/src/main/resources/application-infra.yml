@@ -1,12 +1,10 @@
 kafka:
   topic:
     quiz: quiz
-    cdc_quizzes: quizy.quiz.quizzes
-    cdc_quiz_options: quizy.quiz.quiz_options
-    cdc_quiz_tags: quizy.quiz.quiz_tags_mapping
+    cdc_events: quiz.events
   consumer-group:
     quiz: quiz_read
-    cdc_quiz: cdc_quizzes
+    cdc_events: quiz_cdc_events
 ---
 spring:
   config:
@@ -63,7 +61,7 @@ kafka-consumer-config:
   auto-offset-reset: earliest
   batch-listener: true
   auto-startup: true
-  concurrency-level: 3
+  concurrency-level: 1
   session-timeout-ms: 10000
   heartbeat-interval-ms: 3000
   max-poll-interval-ms: 300000

@@ -1,6 +1,5 @@
 package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
-import com.grepp.quizy.kafka.consumer.KafkaConsumer
 import com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -15,7 +14,7 @@ class CDCEventListener(
     private val eventHandlerFactory: EventHandlerFactory
 ) {
 
-    @KafkaListener(topics = ["\${kafka.topic.cdc_quizzes}", "\${kafka.topic.cdc_quiz_options}", "\${kafka.topic.cdc_quiz_tags}"] , groupId = "\${kafka.consumer-group.cdc_quiz}")
+    @KafkaListener(topics = ["\${kafka.topic.cdc_events}"] , groupId = "\${kafka.consumer-group.cdc_events}")
     fun receive(records: List<ConsumerRecord<String, DebeziumEvent>>, acknowledgment: Acknowledgment) {
         val sortedRecords: List<ConsumerRecord<String, DebeziumEvent>> = records.stream()
             .filter { shouldProcessEvent(it.value().payload) }
@@ -29,7 +28,7 @@ class CDCEventListener(
             log.info {
                 "${record.value().payload.operation} 이벤트를 ${record.topic()} 토픽에 처리 요청"
             }
-            eventHandlerFactory.getHandler(record.topic()).process(record.value())
+            eventHandlerFactory.getHandler(getTableName(record)).process(record.value())
         }
         acknowledgment.acknowledge()
     }
@@ -37,6 +36,9 @@ class CDCEventListener(
     private fun shouldProcessEvent(payload: DebeziumEvent.DebeziumEventPayload): Boolean {
         // READ 이벤트 처리하지 않음
         return payload.operation != DebeziumEvent.DebeziumEventPayloadOperation.READ
+    }
 
+    private fun getTableName(record: ConsumerRecord<String, DebeziumEvent>): String {
+        return record.value().payload.source["table"] as String
     }
 }
