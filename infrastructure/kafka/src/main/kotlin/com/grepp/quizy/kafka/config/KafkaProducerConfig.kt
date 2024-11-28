@@ -38,6 +38,7 @@ class KafkaProducerConfig<K : Serializable, V : Serializable>(
                 kafkaProducerConfigData.requestTimeoutMs
         props[ProducerConfig.RETRIES_CONFIG] =
                 kafkaProducerConfigData.retryCount
+
         return props
     }
 
