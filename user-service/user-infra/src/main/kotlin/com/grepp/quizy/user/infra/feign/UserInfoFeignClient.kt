@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @FeignClient(name = "quiz-service", url = "\${feign.client.url.quiz-service}")
 interface QuizServiceClient : QuizClient {
-    @GetMapping("/api/quiz/{userId}")
+    @GetMapping("/api/internal/quiz/{userId}")
     override fun getUserQuizScore(@PathVariable userId: Long): UserQuizScore
 }
 
 @FeignClient(name = "game-service", url = "\${feign.client.url.quiz-service}")
 interface GameServiceClient : GameClient {
-    @GetMapping("/api/game/rating/{userId}")
+    @GetMapping("/api/internal/user/rating/{userId}")
     override fun getUserRating(@PathVariable userId: Long): UserRating
 }
