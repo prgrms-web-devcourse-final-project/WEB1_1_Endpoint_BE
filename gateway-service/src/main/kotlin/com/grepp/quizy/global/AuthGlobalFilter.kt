@@ -4,6 +4,7 @@ import com.grepp.quizy.exception.CustomJwtException
 import com.grepp.quizy.jwt.JwtProvider
 import com.grepp.quizy.jwt.JwtValidator
 import com.grepp.quizy.user.RedisTokenRepository
+import com.grepp.quizy.user.UserId
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.web.UserClient
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
@@ -51,16 +52,20 @@ class AuthGlobalFilter(
         }
     }
 
+    // 토큰 추출
     private fun extractToken(request: ServerHttpRequest): String? = try {
         if (request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             resolveToken(request)
         } else {
-            CookieUtils.getCookieValue(request, "refreshToken")
+            val refreshToken = CookieUtils.getCookieValue(request, "refreshToken") ?: ""
+            jwtValidator.validateRefreshToken(refreshToken)
+            refreshToken
         }
     } catch (e: Exception) {
         null
     }
 
+    // 토큰 가공
     private fun resolveToken(request: ServerHttpRequest): String? {
         val authHeader = request.headers[HttpHeaders.AUTHORIZATION]?.get(0) ?: ""
         return if (authHeader.startsWith("Bearer ")) {
@@ -70,13 +75,19 @@ class AuthGlobalFilter(
         }
     }
 
+    // 검증 후 헤더에 추가
     private fun addHeader(
         token: String,
         exchange: ServerWebExchange,
         chain: GatewayFilterChain,
     ): Mono<Void> {
         jwtValidator.validateToken(token)
+
         val userId = jwtProvider.getUserIdFromToken(token).value
+
+        if (!redisTokenRepository.isAlreadyLogin(UserId(userId), token)) {
+            throw CustomJwtException.JwtLoggedOutException
+        }
 
         // 실제로 존재하는 유저인지 검증이 성공하면 헤더를 추가하고 체인 실행
         return userClient.validateUser(userId)

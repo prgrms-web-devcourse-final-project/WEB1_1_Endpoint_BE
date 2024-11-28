@@ -6,14 +6,12 @@ import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.user.domain.user.RedisTokenRepository
 import com.grepp.quizy.user.domain.user.UserLoginManager
 import com.grepp.quizy.user.domain.user.UserReader
-import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.Authentication
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler
 import org.springframework.stereotype.Component
-import java.net.URLEncoder
 
 @Component
 class CustomOAuth2LoginSuccessHandler(
@@ -42,21 +40,23 @@ class CustomOAuth2LoginSuccessHandler(
 
         val accessToken = jwtGenerator.generateAccessToken(user)
         val refreshToken = jwtGenerator.generateRefreshToken(user)
+        val accessTokenExpirationTime = jwtProvider.getExpiration(accessToken)
         val refreshTokenExpirationTime = jwtProvider.getExpiration(refreshToken)
 
         // 이미 로그인 되어있는 유저는 로그인 X
-        try {
-            userLoginManager.login(user.id, refreshTokenExpirationTime)
-        } catch (e: CustomUserException) {
-            logger.error("Failed to login user", e)
-            val errorMessage = URLEncoder.encode(e.message, "UTF-8")
-            response.sendRedirect(
-                "${frontendUrl}/oauth/${
-                    customOAuth2User.getProvider().toString().lowercase()
-                }/callback?error=${errorMessage}"
-            )
-            return
-        }
+//        try {
+//            userLoginManager.login(user.id, accessTokenExpirationTime)
+//        } catch (e: CustomUserException) {
+//            logger.error("Failed to login user", e)
+//            val errorMessage = URLEncoder.encode(e.message, "UTF-8")
+//            response.sendRedirect(
+//                "${frontendUrl}/oauth/${
+//                    customOAuth2User.getProvider().toString().lowercase()
+//                }/callback?error=${errorMessage}"
+//            )
+//            return
+//        }
+        // TODO: 로그인 중복 처리 일단 막아놓음
 
         redisTokenRepository.saveRefreshToken(user.id, refreshToken, refreshTokenExpirationTime)
 

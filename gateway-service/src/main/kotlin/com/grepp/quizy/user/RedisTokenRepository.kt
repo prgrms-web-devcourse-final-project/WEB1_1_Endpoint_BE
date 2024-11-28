@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository
 class RedisTokenRepository(private val redisUtil: RedisUtil) {
     companion object {
         private const val REFRESH_TOKEN_KEY_PREFIX = "refresh_token:"
-        private const val LOGOUT_TOKEN_KEY = "logout"
-        private const val USER_KEY = "user"
+        private const val LOGOUT_TOKEN_KEY_PREFIX = "logout:"
+        private const val USER_KEY_PREFIX = "user:"
     }
 
 
@@ -17,32 +17,30 @@ class RedisTokenRepository(private val redisUtil: RedisUtil) {
         refreshToken: String,
         expirationTime: Long,
     ) {
-        val key = generateRefreshTokenKey(userId)
-        redisUtil.saveValue(key, refreshToken, expirationTime)
+        redisUtil.saveValue(generateRefreshTokenKey(userId), refreshToken, expirationTime)
     }
 
     fun getRefreshToken(userId: UserId): String? {
-        val key = generateRefreshTokenKey(userId)
-        return redisUtil.getValue(key)
+        return redisUtil.getValue(generateRefreshTokenKey(userId))
     }
 
     fun deleteRefreshToken(userId: UserId) {
-        val key = generateRefreshTokenKey(userId)
-        redisUtil.deleteValue(key)
+        redisUtil.deleteValue(generateRefreshTokenKey(userId))
     }
 
-    fun saveLogoutToken(accessToken: String) {
-        redisUtil.saveSet(LOGOUT_TOKEN_KEY, accessToken)
+    fun saveLogoutToken(userId: UserId, accessToken: String) {
+        redisUtil.saveSet(generateLogoutTokenKey(userId), accessToken)
     }
 
-    fun isAlreadyLogin(accessToken: String): Boolean {
-        return !redisUtil.isExistSet(LOGOUT_TOKEN_KEY, accessToken)
+    fun isAlreadyLogin(userId: UserId, accessToken: String): Boolean {
+        return !redisUtil.isExistSet(generateLogoutTokenKey(userId), accessToken)
     }
 
     fun isExistUser(userId: UserId): Boolean {
-        return redisUtil.isExistSet(USER_KEY, userId.value.toString())
+        return redisUtil.isExistSet(generateUserKey(userId), userId.value.toString())
     }
 
-    private fun generateRefreshTokenKey(userId: UserId): String =
-        "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
+    private fun generateRefreshTokenKey(userId: UserId): String = "$REFRESH_TOKEN_KEY_PREFIX${userId.value}"
+    private fun generateLogoutTokenKey(userId: UserId): String = "$LOGOUT_TOKEN_KEY_PREFIX${userId.value}"
+    private fun generateUserKey(userId: UserId): String = "$USER_KEY_PREFIX${userId.value}"
 }
