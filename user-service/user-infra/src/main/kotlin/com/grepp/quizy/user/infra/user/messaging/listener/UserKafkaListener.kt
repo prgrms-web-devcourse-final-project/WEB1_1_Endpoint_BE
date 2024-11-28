@@ -14,8 +14,8 @@ class UserKafkaListener(
 ) : KafkaConsumer<Long, InterestOnboardingEvent> {
 
     @KafkaListener(
-        id = "\${kafka.topic.user}",
-        topics = ["\${kafka.consumer-group.onboarding}"]
+        groupId = "\${kafka.consumer-group.user}",
+        topics = ["\${kafka.topic.onboarding}"]
     )
     override fun receive(
         records: List<ConsumerRecord<Long, InterestOnboardingEvent>>
