@@ -7,6 +7,7 @@ import com.grepp.quizy.user.RedisTokenRepository
 import com.grepp.quizy.user.UserId
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.web.UserClient
+import org.slf4j.LoggerFactory
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
 import org.springframework.core.annotation.Order
@@ -26,12 +27,14 @@ class AuthGlobalFilter(
     private val jwtValidator: JwtValidator,
     private val userClient: UserClient,
 ) : GlobalFilter {
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     override fun filter(
         exchange: ServerWebExchange,
         chain: GatewayFilterChain,
     ): Mono<Void> {
         val request = exchange.request
+        log.info("Incoming request: ${request.method} ${request.uri}")
 
         // JWT 토큰 추출 시도
         val token = extractToken(request)
@@ -47,6 +50,7 @@ class AuthGlobalFilter(
             }
             // 토큰이 없고 Secured 경로인 경우
             else -> {
+                log.warn("Access denied: No token found for secured path ${request.uri.path}")
                 Mono.error(CustomJwtException.JwtNotFountException)
             }
         }
@@ -86,6 +90,7 @@ class AuthGlobalFilter(
         val userId = jwtProvider.getUserIdFromToken(token).value
 
         if (!redisTokenRepository.isAlreadyLogin(UserId(userId), token)) {
+            log.warn("Token validation failed: User $userId is not logged in")
             throw CustomJwtException.JwtLoggedOutException
         }
 
