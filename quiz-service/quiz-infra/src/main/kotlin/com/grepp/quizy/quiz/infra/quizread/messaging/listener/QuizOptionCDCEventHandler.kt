@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc
+package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.grepp.quizy.quiz.infra.debezium.AbstractSimpleEventHandler

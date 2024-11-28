@@ -2,11 +2,10 @@ package com.grepp.quizy.quiz.infra.quizread.document
 
 import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.quiz.QuizDifficulty
-import com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc.QuizCDCEvent
+import com.grepp.quizy.quiz.infra.quizread.messaging.listener.QuizCDCEvent
 import java.time.LocalDateTime
 import org.springframework.data.annotation.Id
 import org.springframework.data.elasticsearch.annotations.*
-import org.threeten.bp.DateTimeUtils.toLocalDateTime
 import java.time.Instant
 import java.time.ZoneId
 

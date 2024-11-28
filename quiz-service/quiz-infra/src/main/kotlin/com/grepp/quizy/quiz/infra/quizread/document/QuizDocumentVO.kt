@@ -2,7 +2,7 @@ package com.grepp.quizy.quiz.infra.quizread.document
 
 import com.grepp.quizy.quiz.domain.quiz.QuizOption
 import com.grepp.quizy.quiz.domain.quizread.QuizSortType
-import com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc.QuizOptionCDCEvent
+import com.grepp.quizy.quiz.infra.quizread.messaging.listener.QuizOptionCDCEvent
 import kotlinx.serialization.Serializable
 import org.springframework.data.elasticsearch.annotations.Field
 import org.springframework.data.elasticsearch.annotations.FieldType

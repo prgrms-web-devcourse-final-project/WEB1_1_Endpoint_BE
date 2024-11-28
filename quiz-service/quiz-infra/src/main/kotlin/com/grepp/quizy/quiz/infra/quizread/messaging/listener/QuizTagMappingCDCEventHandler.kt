@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc
+package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.grepp.quizy.quiz.infra.debezium.AbstractSimpleEventHandler
@@ -7,26 +7,22 @@ import com.grepp.quizy.quiz.infra.debezium.EventHandler
 import org.springframework.stereotype.Component
 
 @Component
-class QuizCDCEventHandler(
+class QuizTagMappingCDCEventHandler(
     mapper: ObjectMapper,
-    private val quizSynchronizer: QuizSynchronizer,
-) : AbstractSimpleEventHandler<QuizCDCEvent>(mapper), EventHandler {
+    private val quizSynchronizer: QuizSynchronizer
+) : AbstractSimpleEventHandler<QuizTagMappingCDCEvent>(mapper), EventHandler {
 
     init {
         initActions()
     }
 
-
-    final override fun initActions() {
+    override fun initActions() {
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.CREATE) { _, after ->
-            after?.let { quizSynchronizer.createQuiz(it) }
+            after?.let { quizSynchronizer.addQuizTag(it) }
         }
 
-        actions.put(DebeziumEvent.DebeziumEventPayloadOperation.UPDATE) { _, after ->
-            after?.let { quizSynchronizer.updateQuiz(it) }
-        }
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.DELETE) { before, _ ->
-            before?.let { quizSynchronizer.removeQuiz(it.id) }
+            before?.let { quizSynchronizer.removeQuizTag(it.quizId, it.tagId) }
         }
     }
 }

@@ -1,5 +1,6 @@
-package com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc
+package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
+import com.grepp.quizy.kafka.consumer.KafkaConsumer
 import com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerRecord

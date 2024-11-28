@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc
+package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.grepp.quizy.quiz.domain.quiz.QuizCategory

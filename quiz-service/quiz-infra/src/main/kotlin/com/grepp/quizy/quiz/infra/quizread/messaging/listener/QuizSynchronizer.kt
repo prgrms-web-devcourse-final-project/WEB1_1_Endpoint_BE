@@ -1,6 +1,5 @@
-package com.grepp.quizy.quiz.infra.quizread.messaging.listener.cdc
+package com.grepp.quizy.quiz.infra.quizread.messaging.listener
 
-import com.grepp.quizy.quiz.domain.quiz.QuizCreatedEvent
 import com.grepp.quizy.quiz.domain.quiz.exception.QuizException
 import com.grepp.quizy.quiz.infra.quiz.repository.QuizTagJpaRepository
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
