@@ -86,18 +86,22 @@ data class GameMessage(
 }
 
 data class RoomPayload(
-    val setting: GameSetting,
-    val status: GameStatus,
+    val subject: String,
+    val level: String,
+    val quizCount: Int,
+    val status: String,
     val players: Players,
-    val inviteCode: InviteCode?,
+    val inviteCode: String?,
 ) : MessagePayload {
     companion object {
         fun from(game: Game): RoomPayload {
             return RoomPayload(
-                game.setting,
-                game.status,
-                game.players,
-                game.inviteCode,
+                subject = game.setting.subject.description,
+                level = game.setting.level.description,
+                quizCount = game.setting.quizCount,
+                status = game.status.description,
+                players = game.players,
+                inviteCode = game.inviteCode?.value,
             )
         }
     }

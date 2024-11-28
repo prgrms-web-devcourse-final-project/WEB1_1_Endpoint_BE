@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.api.game
+package com.grepp.quizy.game.controller.game
 
 import com.grepp.quizy.game.domain.game.GameMatchingService
 import org.springframework.messaging.handler.annotation.DestinationVariable

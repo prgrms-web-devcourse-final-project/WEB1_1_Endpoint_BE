@@ -41,6 +41,8 @@ enum class GameErrorCode(
     GAME_NOT_PARTICIPATED(409, "G022", "참가하지 않은 게임입니다."),
     GAME_HOST_PERMISSION(409, "G023", "게임 방장만 가능한 작업입니다."),
     GAME_MISMATCH_NUMBER_OF_PLAYERS(409, "G024", "참가자 수가 일치하지 않습니다."),
+    GAME_SUBJECT_NOT_FOUND(409, "G025", "해당 주제를 찾지 못했습니다."),
+    GAME_LEVEL_NOT_FOUND(409, "G026", "해당 난이도를 찾지 못했습니다."),
 
     ;
 

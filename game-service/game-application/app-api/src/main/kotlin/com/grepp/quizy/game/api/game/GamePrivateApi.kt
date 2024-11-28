@@ -1,13 +1,14 @@
 package com.grepp.quizy.game.api.game
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.game.api.game.dto.*
+import com.grepp.quizy.game.api.game.dto.GameCreateRequest
+import com.grepp.quizy.game.api.game.dto.GameResponse
+import com.grepp.quizy.game.domain.game.GameLevel
 import com.grepp.quizy.game.domain.game.GamePrivateService
-import org.springframework.messaging.handler.annotation.DestinationVariable
-import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.Payload
+import com.grepp.quizy.game.domain.game.GameSubject
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.*
-import java.security.Principal
 
 @RestController
 @RequestMapping("/api/game/private")
@@ -17,15 +18,15 @@ class GamePrivateApi(
 
     @PostMapping
     fun createGame(
-        @RequestHeader("X-AUTH-ID") userId: String,
+        @AuthUser userPrincipal: UserPrincipal,
         @RequestBody request: GameCreateRequest
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
                 gamePrivateService.create(
-                    userId.toLong(),
-                    request.subject,
-                    request.level,
+                    userPrincipal.value,
+                    GameSubject.fromString(request.subject),
+                    GameLevel.fromString(request.level),
                     request.quizCount
                 )
             )
@@ -33,13 +34,13 @@ class GamePrivateApi(
 
     @PostMapping("/join")
     fun join(
-        @RequestHeader("X-AUTH-ID") userId: String,
+        @AuthUser userPrincipal: UserPrincipal,
         @RequestParam code: String
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
                 gamePrivateService.join(
-                    userId.toLong(),
+                    userPrincipal.value,
                     code
                 )
             )

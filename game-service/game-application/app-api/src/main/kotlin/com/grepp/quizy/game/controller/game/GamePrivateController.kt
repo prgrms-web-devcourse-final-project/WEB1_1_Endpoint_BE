@@ -1,11 +1,13 @@
-package com.grepp.quizy.game.api.game
+package com.grepp.quizy.game.controller.game
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.KickUserPayloadRequest
 import com.grepp.quizy.game.api.game.dto.UpdateLevelPayloadRequest
 import com.grepp.quizy.game.api.game.dto.UpdateQuizCountPayloadRequest
 import com.grepp.quizy.game.api.game.dto.UpdateSubjectPayloadRequest
+import com.grepp.quizy.game.domain.game.GameLevel
 import com.grepp.quizy.game.domain.game.GamePrivateService
+import com.grepp.quizy.game.domain.game.GameSubject
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Controller
 import java.security.Principal
 
 @Controller
-class GamePrivateController (
+class GamePrivateController(
     private val gamePrivateService: GamePrivateService
 ) {
 
@@ -38,7 +40,7 @@ class GamePrivateController (
         gamePrivateService.updateSubject(
             principal.name.toLong(),
             gameId,
-            request.subject
+            GameSubject.fromString(request.subject)
         )
     }
 
@@ -51,7 +53,7 @@ class GamePrivateController (
         gamePrivateService.updateLevel(
             principal.name.toLong(),
             gameId,
-            request.level
+            GameLevel.fromString(request.level)
         )
     }
 
