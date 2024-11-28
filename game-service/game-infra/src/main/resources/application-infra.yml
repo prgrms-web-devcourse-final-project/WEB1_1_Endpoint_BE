@@ -122,6 +122,7 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  type-mappings: com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.game.domain.user.UserCreatedEvent
 
 feign:
   client:
