@@ -9,8 +9,9 @@ class UserAppender(
     private val redisTokenRepository: RedisTokenRepository
 ) {
     fun append(user: User): User {
-        userMessageSender.send(CreateUserEvent.from(user))
-        redisTokenRepository.saveUser(user.id)
-        return userRepository.save(user)
+        val newUser = userRepository.save(user)
+        userMessageSender.send(CreateUserEvent.from(newUser))
+        redisTokenRepository.saveUser(newUser.id)
+        return newUser
     }
 }

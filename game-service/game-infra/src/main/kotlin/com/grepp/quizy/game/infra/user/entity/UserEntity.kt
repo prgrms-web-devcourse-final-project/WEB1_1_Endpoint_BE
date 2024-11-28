@@ -10,8 +10,8 @@ import jakarta.persistence.Table
 class UserEntity(
     @Id
     val id: Long = 0,
-    val name: String,
-    val imgPath: String,
+    val name: String = "",
+    val imgPath: String = "",
     val rating: Int = 1500,
 ) {
     companion object {

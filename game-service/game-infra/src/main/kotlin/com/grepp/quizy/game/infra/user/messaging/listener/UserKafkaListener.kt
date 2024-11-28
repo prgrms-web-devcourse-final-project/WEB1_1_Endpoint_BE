@@ -14,8 +14,8 @@ class UserKafkaListener(
 ) : KafkaConsumer<Long, UserCreatedEvent> {
 
     @KafkaListener(
-        id = "\${kafka.topic.user}",
-        topics = ["\${kafka.consumer-group.game}"]
+        groupId = "\${kafka.consumer-group.game}",
+        topics = ["\${kafka.topic.user}"]
     )
     override fun receive(
         records: List<ConsumerRecord<Long, UserCreatedEvent>>
