@@ -10,11 +10,11 @@ import org.hibernate.annotations.BatchSize
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "quiz_type")
 abstract class QuizEntity(
-        val userId: Long,
-        @Enumerated(EnumType.STRING) var category: QuizCategory,
-        @Enumerated(EnumType.STRING) val type: QuizType,
-        var content: String,
-        @BatchSize(size = 100)
+    val userId: Long,
+    @Enumerated(EnumType.STRING) var category: QuizCategory,
+    @Enumerated(EnumType.STRING) val type: QuizType,
+    var content: String,
+    @BatchSize(size = 100)
         @ManyToMany(
                 fetch = FetchType.EAGER,
                 cascade = [CascadeType.MERGE],
@@ -25,7 +25,7 @@ abstract class QuizEntity(
                 inverseJoinColumns = [JoinColumn(name = "tag_id")],
         )
         val tags: MutableSet<QuizTagEntity> = mutableSetOf(),
-        @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.EAGER)
         @CollectionTable(
                 name = "quiz_options",
                 joinColumns =
@@ -37,11 +37,11 @@ abstract class QuizEntity(
                         ],
         )
         val options: MutableList<QuizOptionVO>,
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        val id: Long = 0L,
-        val likeCount: Long = 0,
-        var commentCount: Long = 0,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val quizId: Long = 0L,
+    val likeCount: Long = 0,
+    var commentCount: Long = 0,
 ) : BaseTimeEntity() {
 
     abstract fun toDomain(): Quiz

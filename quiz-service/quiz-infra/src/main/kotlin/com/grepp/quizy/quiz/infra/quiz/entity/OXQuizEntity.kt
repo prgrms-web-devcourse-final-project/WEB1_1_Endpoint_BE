@@ -36,7 +36,7 @@ class OXQuizEntity(
                                         },
                         ),
                 answer = answer.toDomain(),
-                id = QuizId(this.id),
+                id = QuizId(this.quizId),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
                 commentCount = this.commentCount,
         )
@@ -53,7 +53,7 @@ class OXQuizEntity(
     companion object {
         fun from(quiz: OXQuiz): OXQuizEntity {
             return OXQuizEntity(
-                            userId = quiz.userId.value,
+                            userId = quiz.creatorId.value,
                             category = quiz.content.category,
                             content = quiz.content.content,
                             tags =

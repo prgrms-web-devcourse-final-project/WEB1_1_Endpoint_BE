@@ -1,15 +1,18 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.NoArg
 import java.time.LocalDateTime
 
+@NoArg
 class QuizCreatedEvent(
         private val quizId: Long,
-        val type: String,
+        val creatorId: Long,
+        val type: QuizType,
         val category: QuizCategory,
         val content: String,
-        val tags: List<String>,
+        val tags: List<QuizTag>,
         val options: List<QuizOption>,
-        val answer: String?,
+        val answer: QuizAnswer?,
         val createdAt: LocalDateTime,
         val updatedAt: LocalDateTime,
 ) : QuizEvent {
@@ -24,12 +27,13 @@ class QuizCreatedEvent(
                 is Answerable ->
                         QuizCreatedEvent(
                                 quiz.id.value,
-                                quiz.type.name,
+                                quiz.creatorId.value,
+                                quiz.type,
                                 quiz.content.category,
                                 quiz.content.content,
-                                quiz.content.tags.map { it.name },
+                                quiz.content.tags,
                                 quiz.content.options,
-                                quiz.getCorrectAnswer(),
+                                quiz.getQuizAnswer(),
                                 quiz.dateTime.createdAt!!,
                                 quiz.dateTime.updatedAt!!,
                         )
@@ -37,10 +41,11 @@ class QuizCreatedEvent(
                 else ->
                         QuizCreatedEvent(
                                 quiz.id.value,
-                                quiz.type.name,
+                                quiz.creatorId.value,
+                                quiz.type,
                                 quiz.content.category,
                                 quiz.content.content,
-                                quiz.content.tags.map { it.name },
+                                quiz.content.tags,
                                 quiz.content.options,
                                 null,
                                 quiz.dateTime.createdAt!!,

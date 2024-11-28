@@ -1,6 +1,6 @@
 package com.grepp.quizy.quiz.infra.quizread.repository
 
-import com.grepp.quizy.quiz.domain.quizread.QuizDifficultyType
+import com.grepp.quizy.quiz.domain.quiz.QuizDifficulty
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
@@ -16,7 +16,7 @@ interface CustomQuizSearchRepository {
 
     fun searchAnswerableQuiz(
         category: String,
-        difficulty: QuizDifficultyType,
+        difficulty: QuizDifficulty,
         pageable: Pageable,
     ): List<QuizDocument>
 

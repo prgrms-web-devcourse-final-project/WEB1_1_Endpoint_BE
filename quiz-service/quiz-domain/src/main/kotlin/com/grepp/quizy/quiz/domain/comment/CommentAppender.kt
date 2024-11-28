@@ -26,8 +26,7 @@ class CommentAppender(
                         _content = content,
                 )
         val quiz = quizReader.readWithLock(quizId)
-        quiz.increaseCommentCount()
-        quizUpdater.update(quiz)
+        quizUpdater.increaseCommentCount(quiz)
         return commentRepository.save(comment)
     }
 }

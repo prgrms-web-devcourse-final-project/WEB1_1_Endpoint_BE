@@ -16,7 +16,7 @@ abstract class BaseTimeEntity {
     @CreatedDate
     var createdAt: LocalDateTime? = null
 
-    @Column(name = "modified_at")
+    @Column(name = "updated_at")
     @LastModifiedDate
     var updatedAt: LocalDateTime? = null
 }

@@ -36,7 +36,7 @@ class MultipleChoiceQuizEntity(
                                         },
                         ),
                 answer = this.answer.toDomain(),
-                id = QuizId(this.id),
+                id = QuizId(this.quizId),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
                 commentCount = this.commentCount,
         )
@@ -53,7 +53,7 @@ class MultipleChoiceQuizEntity(
     companion object {
         fun from(quiz: MultipleChoiceQuiz): MultipleChoiceQuizEntity {
             return MultipleChoiceQuizEntity(
-                            userId = quiz.userId.value,
+                            userId = quiz.creatorId.value,
                             category = quiz.content.category,
                             content = quiz.content.content,
                             tags =

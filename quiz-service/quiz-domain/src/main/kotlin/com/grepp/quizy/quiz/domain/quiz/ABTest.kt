@@ -5,13 +5,14 @@ import com.grepp.quizy.quiz.domain.user.UserId
 
 class ABTest
 private constructor(
-        userId: UserId,
-        content: QuizContent,
-        dateTime: DateTime = DateTime.init(),
-        type: QuizType = QuizType.AB_TEST,
-        id: QuizId = QuizId(0),
-        commentCount: Long = 0,
-) : Quiz(userId, type, content, id, dateTime, commentCount) {
+    creatorId: UserId,
+    content: QuizContent,
+    dateTime: DateTime = DateTime.init(),
+    type: QuizType = QuizType.AB_TEST,
+    id: QuizId = QuizId(0),
+    commentCount: Long = 0,
+    likeCount: Long = 0,
+) : Quiz(creatorId, type, content, id, dateTime, commentCount, likeCount) {
 
     init {
         validateOptions(2)
@@ -28,13 +29,15 @@ private constructor(
                 id: QuizId,
                 dateTime: DateTime,
                 commentCount: Long,
+                likeCount: Long = 0,
         ): ABTest {
             return ABTest(
-                    userId = userId,
+                    creatorId = userId,
                     content = content,
                     id = id,
                     dateTime = dateTime,
                     commentCount = commentCount,
+                    likeCount = likeCount,
             )
         }
     }

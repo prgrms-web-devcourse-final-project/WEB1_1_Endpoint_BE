@@ -4,16 +4,35 @@ import com.grepp.quizy.quiz.domain.global.dto.Slice
 import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quizread.*
+import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDomainFactory
 import com.grepp.quizy.quiz.infra.quizread.document.SortField
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
 class QuizSearchRepositoryAdapter(
         private val quizElasticRepository: QuizElasticRepository,
 ) : QuizSearchRepository {
+
+    override fun save(quiz: Quiz) {
+        quizElasticRepository.save(QuizDocument.from(quiz))
+    }
+
+    override fun saveAll(quizList: List<Quiz>) {
+        val map = quizList.map { QuizDocument.from(it) }
+        quizElasticRepository.saveAll(map)
+    }
+
+
+
+    override fun findById(quizId: QuizId): Quiz? {
+        return quizElasticRepository.findByIdOrNull(quizId.value)?.let {
+            QuizDomainFactory.toQuiz(it)
+        }
+    }
 
     override fun search(condition: UserSearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
