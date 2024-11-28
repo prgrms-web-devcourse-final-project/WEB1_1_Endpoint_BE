@@ -15,8 +15,8 @@ class SseConnector(
     fun connect(userId: UserId): SseEmitter {
         val emitter = SseEmitter(TIME_OUT)
         emitterRepository.save(userId.value, emitter)
-        emitter.onTimeout { closeEmitter(userId) }
-        emitter.onCompletion { closeEmitter(userId) }
+        emitter.onTimeout { disconnect(userId) }
+        emitter.onCompletion { disconnect(userId) }
         
         try {
             emitter.send(
@@ -33,7 +33,7 @@ class SseConnector(
         return emitter
     }
 
-    private fun closeEmitter(userId: UserId) {
+    fun disconnect(userId: UserId) {
         emitterRepository.remove(userId.value)
         matchingPoolManager.remove(userId)
     }

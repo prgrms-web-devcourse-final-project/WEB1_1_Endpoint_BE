@@ -1,5 +1,6 @@
 package com.grepp.quizy.matching.api.game
 
+import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.matching.api.sse.SseConnector
 import com.grepp.quizy.matching.match.MatchingUseCase
 import com.grepp.quizy.matching.user.UserId
@@ -25,5 +26,11 @@ class GameMatchingApi(
         val emitter = sseConnector.connect(UserId(principal.value))
         matchingUseCase.registerWaiting(UserId(principal.value))
         return ResponseEntity.ok(emitter)
+    }
+
+    @DeleteMapping("/unsubscribe")
+    fun unsubscribe(@AuthUser principal: UserPrincipal): ApiResponse<Unit> {
+        sseConnector.disconnect(UserId(principal.value))
+        return ApiResponse.success()
     }
 }
