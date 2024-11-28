@@ -40,9 +40,11 @@ kafka:
     user: user
     game: game
     quiz: quiz
+    onboarding: onboarding
   consumer-group:
     user: user
     game: game
+    quiz: quiz
     onboarding: onboarding
 
 kafka-config:
@@ -117,9 +119,11 @@ kafka:
     user: user
     game: game
     quiz: quiz
+    onboarding: onboarding
   consumer-group:
     user: user
     game: game
+    quiz: quiz
     onboarding: onboarding
 
 kafka-config:
