@@ -3,7 +3,9 @@ package com.grepp.quizy.game.infra.user.entity
 import com.grepp.quizy.game.domain.user.User
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
+import jakarta.persistence.Table
 
+@Table(name = "users")
 @Entity
 class UserEntity(
     @Id
