@@ -3,7 +3,6 @@ package com.grepp.quizy.game.controller.global.exception
 import com.grepp.quizy.common.exception.CustomException
 import com.grepp.quizy.game.domain.ErrorPayload
 import com.grepp.quizy.game.domain.GameMessage
-import com.grepp.quizy.game.domain.exception.GameException
 import com.grepp.quizy.game.domain.game.GameMessageSender
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -17,7 +16,7 @@ class GlobalWebSocketExceptionHandler(
     @MessageExceptionHandler(CustomException::class)
     fun handleGameException(
         principal: Principal,
-        exception: GameException
+        exception: CustomException
     ) {
         gameMessageSender.send(
             principal.name,
