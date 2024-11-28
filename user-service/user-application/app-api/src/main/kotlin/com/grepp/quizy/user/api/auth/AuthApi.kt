@@ -21,7 +21,7 @@ class AuthApi(
 
     @GetMapping("/logout")
     fun logout(
-        @RequestHeader("Authorization") accessToken: String,
+        @RequestHeader("Authorization") accessToken: String = "1234567",
         @AuthUser principal: UserPrincipal,
         request: HttpServletRequest,
         response: HttpServletResponse

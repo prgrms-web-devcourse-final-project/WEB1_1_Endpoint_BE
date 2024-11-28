@@ -23,9 +23,6 @@ class JwtValidator(
     )
 
     fun validateToken(token: String) {
-        if (!redisRepository.isAlreadyLogin(token)) {
-            throw CustomJwtException.JwtLoggedOutException
-        }
         try {
             Jwts.parserBuilder()
                 .setSigningKey(secretKey)

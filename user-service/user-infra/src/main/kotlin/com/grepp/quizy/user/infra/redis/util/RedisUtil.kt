@@ -12,7 +12,7 @@ class RedisUtil(
     private val operationSet = redisTemplate.opsForSet()
 
     fun saveValue(key: String, value: String, expirationTime: Long) {
-        operationValue.set(key, value, expirationTime, TimeUnit.MICROSECONDS)
+        operationValue.set(key, value, expirationTime, TimeUnit.MILLISECONDS)
     }
 
     fun getValue(key: String): String? {
@@ -29,7 +29,7 @@ class RedisUtil(
 
     fun saveSet(key: String, value: String, expirationTime: Long) {
         operationSet.add(key, value)
-        redisTemplate.expire(key, expirationTime, TimeUnit.MICROSECONDS)
+        redisTemplate.expire(key, expirationTime, TimeUnit.MILLISECONDS)
     }
 
     fun isExistSet(key: String, value: String): Boolean {
