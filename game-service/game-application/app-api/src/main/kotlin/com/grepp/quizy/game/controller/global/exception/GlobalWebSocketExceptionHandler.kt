@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.api.global.exception
+package com.grepp.quizy.game.controller.global.exception
 
 import com.grepp.quizy.common.exception.CustomException
 import com.grepp.quizy.game.domain.ErrorPayload

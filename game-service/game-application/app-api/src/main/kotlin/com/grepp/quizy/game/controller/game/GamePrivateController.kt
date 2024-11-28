@@ -1,4 +1,4 @@
-package com.grepp.quizy.game.api.game
+package com.grepp.quizy.game.controller.game
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.game.api.game.dto.KickUserPayloadRequest
