@@ -27,7 +27,7 @@ class AuthApi(
         response: HttpServletResponse
     ): ApiResponse<Unit> {
         userLogoutUseCase.logout(UserId(principal.value), accessToken.substring(7))
-        CookieUtils.deleteCookie(request, response, "refreshToken")
+        CookieUtils.deleteCookie(response, "refreshToken")
         return ApiResponse.success()
     }
 
