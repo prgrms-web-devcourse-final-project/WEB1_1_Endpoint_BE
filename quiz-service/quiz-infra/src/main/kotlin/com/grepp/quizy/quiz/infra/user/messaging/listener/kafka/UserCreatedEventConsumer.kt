@@ -1,19 +1,18 @@
-package com.grepp.quizy.quiz.infra.user.kafka
+package com.grepp.quizy.quiz.infra.user.messaging.listener.kafka
 
 import com.grepp.quizy.kafka.consumer.KafkaConsumer
-import com.grepp.quizy.quiz.domain.user.UserAppender
-import com.grepp.quizy.quiz.domain.user.UserCreatedEvent
+import com.grepp.quizy.quiz.infra.user.repository.UserJpaRepository
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 
 @Component
 class UserCreatedEventConsumer(
-    private val userAppender: UserAppender
+    private val userJpaRepository: UserJpaRepository
 ) : KafkaConsumer<Long, UserCreatedEvent> {
 
     @KafkaListener(
-        id = "\${kafka.topic.user}",
+        id = "user-created-event-consumer",
         topics = ["\${kafka.consumer-group.user}"]
     )
     override fun receive(
@@ -21,7 +20,7 @@ class UserCreatedEventConsumer(
     ) {
         records.forEach {
             val event = it.value()
-            userAppender.append(event.toDomain())
+            userJpaRepository.save(event.UserEntity())
         }
     }
 }

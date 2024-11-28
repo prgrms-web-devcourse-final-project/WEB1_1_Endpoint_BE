@@ -1,5 +1,6 @@
-package com.grepp.quizy.quiz.domain.user
+package com.grepp.quizy.quiz.infra.user.messaging.listener.kafka
 
+import com.grepp.quizy.quiz.infra.user.entity.UserEntity
 import java.io.Serializable
 
 data class UserCreatedEvent(
@@ -7,15 +8,13 @@ data class UserCreatedEvent(
     val name: String,
     val profileImageUrl: String,
 ) : Serializable {
-    fun toDomain() = User(UserId(userId), name, profileImageUrl)
+    fun UserEntity() = UserEntity(userId, name, profileImageUrl)
 }
 
 data class UserUpdatedEvent(
     val userId: Long,
     val name: String,
     val profileImageUrl: String,
-) : Serializable {
-    fun toDomain() = User(UserId(userId), name, profileImageUrl)
-}
+) : Serializable
 
 data class UserDeletedEvent(val userId: Long) : Serializable

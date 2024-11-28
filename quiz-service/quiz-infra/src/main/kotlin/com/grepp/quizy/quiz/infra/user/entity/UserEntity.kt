@@ -9,20 +9,31 @@ import jakarta.persistence.Id
 class UserEntity(
     @Id
     val id: Long = 0,
-    val name: String,
-    val imgPath: String,
+    private var _name: String,
+    private var _imgPath: String,
 ) {
+    val name: String
+        get() = _name
+
+    val imgPath: String
+        get() = _imgPath
+
     companion object {
         fun from(user: User): UserEntity {
             return UserEntity(
                 id = user.id.value,
-                name = user.name,
-                imgPath = user.imgPath,
+                _name = user.name,
+                _imgPath = user.imgPath,
             )
         }
     }
 
     fun toDomain(): User {
         return User(UserId(id), name, imgPath)
+    }
+
+    fun update(name: String, imgPath: String) {
+        _name = name
+        _imgPath = imgPath
     }
 }

@@ -34,7 +34,10 @@ shedlock:
 
 kafka:
   topic:
+    user: user
     quiz: quiz
+  consumer-group:
+    user: user
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
@@ -111,6 +114,8 @@ shedlock:
 kafka:
   topic:
     quiz: quiz
+  consumer-group:
+    user: user
 
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
