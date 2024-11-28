@@ -38,13 +38,14 @@ data class QuizTag(
     JsonSubTypes.Type(value = QuizOption.MultipleChoiceOption::class, name = "multipleChoice"),
     JsonSubTypes.Type(value = QuizOption.OXOption::class, name = "ox")
 )
-
 @NoArg
 sealed class QuizOption(
     val optionNumber: Int,
     val content: String,
     val selectionCount: Int,
 ) {
+
+    abstract fun update(newOption: QuizOption): QuizOption
 
     @NoArg
     class ABTestOption(
@@ -53,6 +54,16 @@ sealed class QuizOption(
         val imageId: QuizImageId?,
         selectionCount: Int = 0
     ) : QuizOption(optionNumber, content, selectionCount) {
+
+        override fun update(newOption: QuizOption): QuizOption {
+            require(newOption is ABTestOption) { "ABTestOption can only be updated with ABTestOption" }
+            return ABTestOption(
+                optionNumber,
+                newOption.content,
+                newOption.imageId,
+                selectionCount
+            )
+        }
     }
 
     @NoArg
@@ -61,6 +72,10 @@ sealed class QuizOption(
         content: String,
         selectionCount: Int = 0
     ) : QuizOption(optionNumber, content, selectionCount) {
+
+        override fun update(newOption: QuizOption): QuizOption {
+            return MultipleChoiceOption(optionNumber, newOption.content, selectionCount)
+        }
     }
 
     @NoArg
@@ -69,6 +84,10 @@ sealed class QuizOption(
         content: String,
         selectionCount: Int = 0,
     ) : QuizOption(optionNumber, content, selectionCount) {
+
+        override fun update(newOption: QuizOption): QuizOption {
+            return OXOption(optionNumber, newOption.content, selectionCount)
+        }
     }
 }
 
@@ -87,12 +106,15 @@ data class QuizContent(
     fun updateTags(tags: List<QuizTag>): QuizContent =
             copy(tags = tags)
 
-    fun update(content: QuizContent): QuizContent {
+    fun update(updateContent: QuizContent): QuizContent {
         return copy(
-            category = content.category.takeIf { it != category } ?: category,
-            content = content.content.takeIf { it.isNotBlank() } ?: this.content,
-            tags = content.tags.takeIf { it.isNotEmpty() } ?: tags,
-            options = content.options.takeIf { it.isNotEmpty() } ?: options
+            category = updateContent.category,
+            content = updateContent.content,
+            tags = updateContent.tags,
+            options = updateContent.options.map { newOption ->
+                options.find { it.optionNumber == newOption.optionNumber }?.update(newOption)
+                    ?: throw IllegalArgumentException("OptionNumber ${newOption.optionNumber} 를 찾을수 없습니다")
+            }
         )
     }
 }

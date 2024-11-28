@@ -15,7 +15,7 @@ class QuizImageManager(
         return quizImageRepository.findById(id) ?: throw QuizImageDomainException.NotFound
     }
 
-    fun delete(id: Long) {
-        quizImageRepository.deleteById(id)
+    fun remove(ids: List<QuizImageId>) {
+        quizImageRepository.deleteByIdIn(ids)
     }
 }

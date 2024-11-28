@@ -10,6 +10,7 @@ data class UpdateQuizRequest(
         val explanation: String?,
         val tags: List<String>,
         val options: List<QuizOptionRequest>,
+        val deleteImageIds: List<Long>,
 ) {
     fun toContent(): QuizContent =
             QuizContent(

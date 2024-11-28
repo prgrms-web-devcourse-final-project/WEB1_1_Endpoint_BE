@@ -20,7 +20,6 @@ abstract class AbstractSimpleEventHandler<T>(
         val payloadBefore = payload.before
         val payloadAfter = payload.after
 
-
         val entityClass = GenericTypeResolver.resolveTypeArgument(
             javaClass,
             AbstractSimpleEventHandler::class.java

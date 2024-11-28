@@ -5,8 +5,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class QuizAppender(
-        private val quizRepository: QuizRepository,
-        private val quizMessageSender: QuizMessageSender,
+        private val quizRepository: QuizRepository
 ) {
     fun append(
             creatorId: UserId,
@@ -28,7 +27,6 @@ class QuizAppender(
                             )
                 }
         val savedQuiz = quizRepository.save(quiz)
-        quizMessageSender.send(QuizCreatedEvent.from(savedQuiz))
         return savedQuiz
     }
 }

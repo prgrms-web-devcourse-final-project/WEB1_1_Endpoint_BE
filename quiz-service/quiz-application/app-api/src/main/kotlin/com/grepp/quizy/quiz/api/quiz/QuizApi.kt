@@ -4,6 +4,7 @@ import QuizResponse
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
+import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.web.annotation.AuthUser
@@ -53,19 +54,21 @@ class QuizApi(
                     )
             )
 
+    //TODO: 퀴즈 이미지 수정 반영
     @PutMapping("/{id}")
     fun updateQuiz(
             @PathVariable id: Long,
-            userId: Long,
+            @AuthUser userPrincipal: UserPrincipal,
             @RequestBody request: UpdateQuizRequest,
     ): ApiResponse<QuizResponse> =
             ApiResponse.success(
                     QuizResponse.from(
                             quizUpdateUseCase.update(
                                     QuizId(id),
-                                    UserId(userId),
+                                    UserId(userPrincipal.value),
                                     request.toContent(),
                                     request.toAnswer(),
+                                    request.deleteImageIds.map { QuizImageId.from(it) }
                             )
                     )
             )
