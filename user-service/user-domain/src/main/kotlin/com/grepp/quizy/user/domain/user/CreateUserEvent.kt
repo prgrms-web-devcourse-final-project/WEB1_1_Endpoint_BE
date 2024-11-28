@@ -1,13 +1,13 @@
 package com.grepp.quizy.user.domain.user
 
 class CreateUserEvent(
-    private val userId: Long,
-    val name: String,
-    val email: String,
-    val profileImageUrl: String,
-    val provider: AuthProvider,
-    val providerId: String,
-    val role: Role
+    private val userId: Long = 0,
+    val name: String = "",
+    val email: String = "",
+    val profileImageUrl: String = "",
+    val provider: AuthProvider = AuthProvider.DEFAULT,
+    val providerId: String = "",
+    val role: Role = Role.USER
 ) : UserEvent {
     override fun getUserId(): Long {
         return userId

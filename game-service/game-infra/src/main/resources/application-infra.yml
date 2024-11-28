@@ -5,17 +5,17 @@ spring:
       on-profile: local
 
   datasource:
-    url: jdbc:h2:mem:~/webQuiz
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: ${JPA_DDL_AUTO}
     properties:
       hibernate:
-        show-sql: true
-        format_sql: true
+        show-sql: false
+        format_sql: false
 
   redis:
     host: localhost
@@ -62,6 +62,7 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  type-mappings: com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.game.domain.user.UserCreatedEvent
 
 ---
 spring:
