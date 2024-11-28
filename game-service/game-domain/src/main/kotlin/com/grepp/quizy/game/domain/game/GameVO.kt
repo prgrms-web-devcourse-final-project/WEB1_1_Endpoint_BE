@@ -58,7 +58,7 @@ enum class GameSubject(
 
     companion object {
         fun fromString(value: String): GameSubject {
-            return entries.find { it.name == value }
+            return entries.find { it.description == value }
                 ?: throw GameException.GameSubjectNotFoundException
         }
     }
@@ -77,7 +77,7 @@ enum class GameLevel(
 
     companion object {
         fun fromString(value: String): GameLevel {
-            return entries.find { it.name == value }
+            return entries.find { it.description == value }
                 ?: throw GameException.GameLevelNotFoundException
         }
     }
