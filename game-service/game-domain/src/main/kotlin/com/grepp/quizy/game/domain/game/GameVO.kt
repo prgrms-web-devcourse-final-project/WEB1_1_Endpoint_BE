@@ -45,23 +45,42 @@ enum class GameSubject(
     val description: String
 ) {
 
-    JAVASCRIPT("자바스크립트"),
-    SPRING("스프링"),
-    // TODO: 정해진 형식의 주제 10개를 Enum으로 정의한다.
+    ALGORITHM("알고리즘"),
+    PROGRAMMING_LANGUAGE("프로그래밍 언어"),
+    NETWORK("네트워크"),
+    OPERATING_SYSTEM("운영체제"),
+    WEB_DEVELOPMENT("웹 개발"),
+    MOBILE_DEVELOPMENT("모바일 개발"),
+    DEV_OPS("데브옵스/인프라"),
+    DATABASE("데이터베이스"),
+    SOFTWARE_ENGINEERING("소프트웨어 공학"),
     ;
 
+    companion object {
+        fun fromString(value: String): GameSubject {
+            return entries.find { it.name == value }
+                ?: throw GameException.GameSubjectNotFoundException
+        }
+    }
 }
 
 enum class GameLevel(
     val description: String
 ) {
 
-    EASY("쉬움"),
-    NORMAL("보통"),
-    HARD("어려움"),
+    EASY("하"),
+    NORMAL("중"),
+    HARD("상"),
     RANDOM("랜덤")
 
     ;
+
+    companion object {
+        fun fromString(value: String): GameLevel {
+            return entries.find { it.name == value }
+                ?: throw GameException.GameLevelNotFoundException
+        }
+    }
 }
 
 data class InviteCode(
