@@ -2,9 +2,9 @@ package com.grepp.quizy.game.api.game.dto
 
 import com.grepp.quizy.game.domain.game.Game
 
-class GameResponse(
-    private val id: Long,
-    private val inviteCode: String?,
+data class GameResponse(
+    val id: Long,
+    val inviteCode: String?,
 ) {
     companion object {
         fun from(game: Game): GameResponse {

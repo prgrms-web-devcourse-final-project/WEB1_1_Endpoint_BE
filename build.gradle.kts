@@ -1,11 +1,11 @@
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25" apply false
-    id("org.springframework.boot") version "3.3.5" apply false
-    id("io.spring.dependency-management") version "1.1.6" apply false
-    id("com.diffplug.spotless") version "7.0.0.BETA4"
+	kotlin("jvm") version "1.9.25"
+	kotlin("plugin.spring") version "1.9.25" apply false
+	id("org.springframework.boot") version "3.3.5" apply false
+	id("io.spring.dependency-management") version "1.1.6" apply false
+    kotlin("plugin.serialization") version "1.9.25" apply false
 }
 
 group = "com.grepp"
@@ -36,16 +36,25 @@ java {
 }
 
 subprojects {
-    apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.kotlin.plugin.spring")
-    apply(plugin = "org.springframework.boot")
-    apply(plugin = "io.spring.dependency-management")
-    apply(plugin = "com.diffplug.spotless")
+	apply(plugin = "org.jetbrains.kotlin.jvm")
+	apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+	apply(plugin = "org.springframework.boot")
+	apply(plugin = "io.spring.dependency-management")
+    apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
-    dependencies {
-        implementation("org.springframework.boot:spring-boot-starter")
-        implementation("org.jetbrains.kotlin:kotlin-reflect")
-        annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url = uri("https://packages.confluent.io/maven")
+        }
+    }
+
+	dependencies {
+		implementation("org.springframework.boot:spring-boot-starter")
+		implementation("org.jetbrains.kotlin:kotlin-reflect")
+		implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+		annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
         testImplementation("org.springframework.boot:spring-boot-starter-test")
         testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -60,6 +69,9 @@ subprojects {
 
         //logging
         implementation("io.github.oshai:kotlin-logging-jvm:5.1.1")
+
+        //serialization
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
         // coroutines
         implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")

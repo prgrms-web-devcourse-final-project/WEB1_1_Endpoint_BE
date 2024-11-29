@@ -8,4 +8,6 @@ interface UserRepository {
 
     fun findByIdIn(userIds: List<Long>): List<User>
 
+    fun findRatingById(id: Long): Int?
+
 }

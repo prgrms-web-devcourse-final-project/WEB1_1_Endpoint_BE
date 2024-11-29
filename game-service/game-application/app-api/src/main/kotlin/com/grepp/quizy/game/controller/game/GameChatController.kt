@@ -1,17 +1,15 @@
-package com.grepp.quizy.game.api.game
+package com.grepp.quizy.game.controller.game
 
 import com.grepp.quizy.game.api.game.dto.ChatPayloadRequest
 import com.grepp.quizy.game.domain.game.GameChatService
 import org.springframework.messaging.handler.annotation.DestinationVariable
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.stereotype.Controller
 import java.security.Principal
 
-@RestController
-@RequestMapping("/api/game/chat")
-class GameChatApi(
+@Controller
+class GameChatController(
     private val gameChatService: GameChatService
 ) {
 
@@ -27,4 +25,5 @@ class GameChatApi(
             request.message
         )
     }
+
 }

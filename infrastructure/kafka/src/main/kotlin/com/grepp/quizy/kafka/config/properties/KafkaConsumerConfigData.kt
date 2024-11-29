@@ -19,4 +19,9 @@ class KafkaConsumerConfigData(
         val maxPollRecords: Int,
         val maxPartitionFetchBytesDefault: Int,
         val maxPartitionFetchBytesBoostFactor: Int,
+        // 옵셔널 필드 추가
+        val useTypeInfoHeaders: Boolean? = null,
+        val typeMappings: String? = null,
+        val defaultType: String? = null,
+        val ackMode: String? = null
 )

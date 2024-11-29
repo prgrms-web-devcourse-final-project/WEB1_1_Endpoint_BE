@@ -11,6 +11,7 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.kafka.listener.ContainerProperties
 import org.springframework.kafka.support.serializer.JsonDeserializer
 
 @Configuration
@@ -44,6 +45,19 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
                 kafkaConsumerConfigData.maxPollRecords
         props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = "true"
         props[JsonDeserializer.TRUSTED_PACKAGES] = "*"
+        // 옵셔널 설정들 조건부 추가
+        kafkaConsumerConfigData.useTypeInfoHeaders?.let {
+            props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = it.toString()
+        }
+
+        kafkaConsumerConfigData.typeMappings?.let {
+            props[JsonDeserializer.TYPE_MAPPINGS] = it
+        }
+
+        kafkaConsumerConfigData.defaultType?.let {
+            props[JsonDeserializer.VALUE_DEFAULT_TYPE] = it
+        }
+
         return props
     }
 
@@ -61,6 +75,10 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
         factory.consumerFactory = consumerFactory()
         factory.isBatchListener =
                 kafkaConsumerConfigData.batchListener
+        kafkaConsumerConfigData.ackMode?.let {
+            factory.containerProperties.ackMode =
+                    ContainerProperties.AckMode.valueOf(it)
+        }
         factory.setConcurrency(
                 kafkaConsumerConfigData.concurrencyLevel
         )

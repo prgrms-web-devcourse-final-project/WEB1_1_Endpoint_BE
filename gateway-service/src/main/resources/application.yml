@@ -17,16 +17,18 @@ spring:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "*"
+              - "http://localhost:3000"
+              - "http://localhost:5173"
             allowedMethods:
               - GET
               - POST
               - PUT
               - DELETE
               - PATCH
+              - OPTIONS
             allowedHeaders:
               - "*"
-            allowCredentials: false
+            allowCredentials: true
 
 ---
 spring:
@@ -60,6 +62,10 @@ spring:
           uri: http://localhost:8085
           predicates:
             - Path=/api/auth/**
+        - id: login
+          uri: http://localhost:8085
+          predicates:
+            - Path=/login/**
         - id: websocket
           uri: ws://localhost:8081
           predicates:
@@ -136,6 +142,10 @@ spring:
           uri: http://dev-user-service:8080
           predicates:
             - Path=/api/auth/**
+        - id: login
+          uri: http://dev-user-service:8080
+          predicates:
+            - Path=/login/**
         - id: websocket
           uri: ws://dev-game-service:8080
           predicates:

@@ -31,15 +31,4 @@ class GameMatchingApi(
         )
     )
 
-    @MessageMapping("/join/{gameId}")
-    fun joinRandomGame(
-        @DestinationVariable gameId: Long,
-        principal: Principal
-    ) {
-        gameMatchingService.join(
-            principal.name.toLong(),
-            gameId
-        )
-    }
-
 }

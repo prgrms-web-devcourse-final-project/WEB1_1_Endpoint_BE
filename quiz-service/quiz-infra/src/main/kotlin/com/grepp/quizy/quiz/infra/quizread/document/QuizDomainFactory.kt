@@ -31,15 +31,13 @@ class QuizDomainFactory {
                         content = QuizContent(
                             category,
                             content,
-                            tags.map {QuizTag(it)},
+                            tags.map { QuizTag(it) },
                             options.map { option ->
                                 QuizOption.ABTestOption(
                                     option.optionNumber,
                                     option.content,
-                                    option.imageId?.let { QuizImageId.from(option.imageId) },
-                                    selectionPerOption[
-                                        option.optionNumber]
-                                        ?: 0
+                                    option.imageId?.let { QuizImageId.from(it) },
+                                    option.selectionCount
                                 )
                             }),
                         id = QuizId(id),
@@ -55,20 +53,18 @@ class QuizDomainFactory {
                         content = QuizContent(
                             category,
                             content,
-                            tags.map {QuizTag(it)},
+                            tags.map { QuizTag(it) },
                             options = options.map { option ->
                                     QuizOption.OXOption(
                                         option.optionNumber,
                                         option.content,
-                                        selectionPerOption[
-                                            option.optionNumber]
-                                            ?: 0,
+                                        option.selectionCount
                                     )
                                     },
                         ),
                         id = QuizId(id),
                         dateTime = DateTime(createdAt, updatedAt),
-                        answer = QuizAnswer(answer!!.value, answer.explanation),
+                        answer = QuizAnswer(answer!!.value, answer!!.explanation),
                         commentCount = 0
                     )
                 }
@@ -82,20 +78,18 @@ class QuizDomainFactory {
                         content = QuizContent(
                             category,
                             content,
-                            tags.map {QuizTag(it)},
+                            tags.map { QuizTag(it) },
                             options = options.map { option ->
                                 QuizOption.MultipleChoiceOption(
                                     option.optionNumber,
                                     option.content,
-                                    selectionPerOption[
-                                        option.optionNumber]
-                                        ?: 0,
+                                    option.selectionCount
                                 )
                             },
                         ),
                         id = QuizId(id),
                         dateTime = DateTime(createdAt, updatedAt),
-                        answer = QuizAnswer(answer!!.value, answer.explanation),
+                        answer = QuizAnswer(answer!!.value, answer!!.explanation),
                         commentCount = 0
                     )
                 }

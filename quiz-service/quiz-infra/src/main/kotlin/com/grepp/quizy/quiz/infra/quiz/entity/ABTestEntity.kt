@@ -34,7 +34,7 @@ class ABTestEntity(
                                             it.toDomain(type)
                                         },
                         ),
-                id = QuizId(this.id),
+                id = QuizId(this.quizId),
                 dateTime = DateTime(this.createdAt, this.updatedAt),
                 commentCount = this.commentCount,
         )
@@ -49,7 +49,7 @@ class ABTestEntity(
     companion object {
         fun from(quiz: ABTest): ABTestEntity {
             return ABTestEntity(
-                            userId = quiz.userId.value,
+                            userId = quiz.creatorId.value,
                             category = quiz.content.category,
                             content = quiz.content.content,
                             tags =

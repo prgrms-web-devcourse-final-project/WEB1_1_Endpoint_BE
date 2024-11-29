@@ -1,9 +1,9 @@
 package com.grepp.quizy.user.domain.user
 
 class UpdateUserEvent(
-    private val userId: Long,
-    val name: String,
-    val profileImageUrl: String,
+    private val userId: Long = 0,
+    val name: String = "",
+    val profileImageUrl: String = "",
 ) : UserEvent {
     override fun getUserId(): Long {
         return userId

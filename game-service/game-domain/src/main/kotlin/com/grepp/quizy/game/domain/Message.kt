@@ -11,6 +11,7 @@ enum class MessageType {
     QUIZ_TRANSMITTED,
     SCORE_BOARD,
     GAME_END,
+    ERROR,
 }
 
 sealed interface MessagePayload
@@ -49,22 +50,58 @@ data class GameMessage(
             )
         }
 
+        fun quizAnswer(
+            gameId: Long,
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.ANSWER_SUBMITTED,
+                payload = payload,
+            )
+        }
+
+        fun leaderboard(
+            gameId: Long,
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.SCORE_BOARD,
+                payload = payload,
+            )
+        }
+
+        fun error(
+            gameId: Long = 0, // 안쓰는 값이라서 0으로 초기화
+            payload: MessagePayload
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.ERROR,
+                payload = payload,
+            )
+        }
     }
 }
 
 data class RoomPayload(
-    val setting: GameSetting,
-    val status: GameStatus,
+    val subject: String,
+    val level: String,
+    val quizCount: Int,
+    val status: String,
     val players: Players,
-    val inviteCode: InviteCode?,
+    val inviteCode: String?,
 ) : MessagePayload {
     companion object {
         fun from(game: Game): RoomPayload {
             return RoomPayload(
-                game.setting,
-                game.status,
-                game.players,
-                game.inviteCode,
+                subject = game.setting.subject.description,
+                level = game.setting.level.description,
+                quizCount = game.setting.quizCount,
+                status = game.status.description,
+                players = game.players,
+                inviteCode = game.inviteCode?.value,
             )
         }
     }
@@ -112,5 +149,63 @@ data class QuizInfo(
     }
 }
 
+data class QuizAnswerPayload(
+    val score: Double,
+    val correct: Boolean,
+    val answer: String,
+    val explanation: String,
+) : MessagePayload {
+    companion object {
+        fun of(gameQuiz: GameQuiz, score: Double, correct: Boolean): QuizAnswerPayload {
+            return QuizAnswerPayload(
+                score = score,
+                correct = correct,
+                answer = gameQuiz.answer.content,
+                explanation = gameQuiz.answer.explanation,
+            )
+        }
+    }
+}
+
+data class LeaderboardPayload(
+    val leaderboard: List<LeaderboardInfo>
+) : MessagePayload {
+    companion object {
+        fun from(leaderboard: List<LeaderboardInfo>): LeaderboardPayload {
+            return LeaderboardPayload(
+                leaderboard = leaderboard
+            )
+        }
+    }
+
+}
+
+data class LeaderboardInfo(
+    val userId: Long,
+    val score: Double
+) {
+    companion object {
+        fun of(userId: Long, score: Double): LeaderboardInfo {
+            return LeaderboardInfo(
+                userId = userId,
+                score = score
+            )
+        }
+    }
+}
+
+data class ErrorPayload(
+    val errorCode: String,
+    val message: String,
+) : MessagePayload {
+    companion object {
+        fun of(errorCode: String = "INTERNAL_SERVER_ERROR", message: String): ErrorPayload {
+            return ErrorPayload(
+                errorCode = errorCode,
+                message = message
+            )
+        }
+    }
+}
 
 // TODO: Implement other message payloads

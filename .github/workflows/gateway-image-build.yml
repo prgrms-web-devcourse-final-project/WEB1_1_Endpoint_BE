@@ -56,23 +56,6 @@ jobs:
           cd helm-chart
           git config --local user.email "githubaction@gmail.com"
           git config --local user.name "githubaction"
-          git pull origin ${{ env.HELM_BRANCH }}
-
-          for i in {1..5}; do
-            git add ${{ env.HELM_VALUE }}
-            git commit -m "Update ${SERVICE_NAME} image tag to ${{ env.BUILD_ID }}"
-
-            if git push origin ${{ env.HELM_BRANCH }}; then
-              echo "Successfully pushed changes"
-              break
-            else
-              echo "Push failed, attempt $i of 5"
-              if [ $i -lt 5 ]; then
-                git pull --rebase origin ${{ env.HELM_BRANCH }}
-                sleep $((RANDOM % 5))  # 랜덤 지연 추가
-              else
-                echo "Failed to push after 5 attempts"
-                exit 1
-              fi
-            fi
-          done
+          git add ${{ env.HELM_VALUE }}
+          git commit -m "Update ${SERVICE_NAME} image tag to ${{ env.BUILD_ID }}"
+          git push --force origin ${{ env.HELM_BRANCH }}

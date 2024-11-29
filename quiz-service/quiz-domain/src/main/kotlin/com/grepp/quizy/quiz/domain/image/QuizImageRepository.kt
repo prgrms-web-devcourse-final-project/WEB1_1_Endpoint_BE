@@ -6,7 +6,7 @@ interface QuizImageRepository {
 
     fun findById(id: QuizImageId): QuizImage?
 
-    fun deleteById(id: Long)
+    fun deleteByIdIn(ids: List<QuizImageId>)
 
     fun findAllById(ids: List<QuizImageId>): List<QuizImage>
 }

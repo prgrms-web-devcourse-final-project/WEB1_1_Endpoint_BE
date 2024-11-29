@@ -38,6 +38,7 @@ class KafkaProducerConfig<K : Serializable, V : Serializable>(
                 kafkaProducerConfigData.requestTimeoutMs
         props[ProducerConfig.RETRIES_CONFIG] =
                 kafkaProducerConfigData.retryCount
+
         return props
     }
 
@@ -45,6 +46,7 @@ class KafkaProducerConfig<K : Serializable, V : Serializable>(
     fun producerFactory(): ProducerFactory<K, V> {
         return DefaultKafkaProducerFactory(producerConfig())
     }
+
 
     @Bean
     fun kafkaTemplate(): KafkaTemplate<K, V> {

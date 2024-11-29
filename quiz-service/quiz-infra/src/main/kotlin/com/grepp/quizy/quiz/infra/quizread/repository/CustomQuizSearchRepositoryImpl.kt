@@ -3,7 +3,7 @@ package com.grepp.quizy.quiz.infra.quizread.repository
 import co.elastic.clients.elasticsearch._types.FieldValue
 import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders
 import co.elastic.clients.elasticsearch._types.query_dsl.TermsQueryField
-import com.grepp.quizy.quiz.domain.quizread.QuizDifficultyType
+import com.grepp.quizy.quiz.domain.quiz.QuizDifficulty
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.CATEGORY_FIELD
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument.Companion.CONTENT_FIELD
@@ -81,10 +81,10 @@ class CustomQuizSearchRepositoryImpl(
         return convertToSlice(nativeQuery, pageable)
     }
 
-    override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficultyType, pageable: Pageable): List<QuizDocument> {
+    override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficulty, pageable: Pageable): List<QuizDocument> {
         val mustQueries = mutableListOf(QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery())
 
-        if (difficulty != QuizDifficultyType.RANDOM) {
+        if (difficulty != QuizDifficulty.RANDOM) {
             mustQueries.add(
                 QueryBuilders.term().field(DIFFICULTY_FIELD).value(difficulty.name).build()._toQuery()
             )

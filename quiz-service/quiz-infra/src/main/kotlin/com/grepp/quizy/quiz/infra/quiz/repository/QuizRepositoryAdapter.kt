@@ -40,7 +40,7 @@ class QuizRepositoryAdapter(
     override fun findCountsByInId(ids: List<QuizId>): QuizCountPackage {
         val quizCounts = quizJpaRepository
             .findAllById(ids.map { it.value })
-            .associate { QuizId(it.id) to QuizCount(it.likeCount, it.commentCount) }
+            .associate { QuizId(it.quizId) to QuizCount(it.likeCount, it.commentCount) }
         return QuizCountPackage(quizCounts)
     }
 

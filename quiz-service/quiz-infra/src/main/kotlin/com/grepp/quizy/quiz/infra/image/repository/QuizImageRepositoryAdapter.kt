@@ -22,8 +22,8 @@ class QuizImageRepositoryAdapter(
         return quizImageJpaRepository.findByIdOrNull(id.value)?.toDomain()
     }
 
-    override fun deleteById(id: Long) {
-        quizImageJpaRepository.deleteById(id)
+    override fun deleteByIdIn(ids: List<QuizImageId>) {
+        quizImageJpaRepository.deleteByIdIn(ids.map { it.value })
     }
 
     override fun findAllById(ids: List<QuizImageId>): List<QuizImage> {

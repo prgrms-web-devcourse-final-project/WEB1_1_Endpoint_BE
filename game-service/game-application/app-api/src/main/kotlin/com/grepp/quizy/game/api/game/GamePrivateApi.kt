@@ -1,13 +1,14 @@
 package com.grepp.quizy.game.api.game
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.game.api.game.dto.*
+import com.grepp.quizy.game.api.game.dto.GameCreateRequest
+import com.grepp.quizy.game.api.game.dto.GameResponse
+import com.grepp.quizy.game.domain.game.GameLevel
 import com.grepp.quizy.game.domain.game.GamePrivateService
-import org.springframework.messaging.handler.annotation.DestinationVariable
-import org.springframework.messaging.handler.annotation.MessageMapping
-import org.springframework.messaging.handler.annotation.Payload
+import com.grepp.quizy.game.domain.game.GameSubject
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.*
-import java.security.Principal
 
 @RestController
 @RequestMapping("/api/game/private")
@@ -17,15 +18,15 @@ class GamePrivateApi(
 
     @PostMapping
     fun createGame(
-        @RequestHeader("X-AUTH-ID") userId: String,
+        @AuthUser userPrincipal: UserPrincipal,
         @RequestBody request: GameCreateRequest
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
                 gamePrivateService.create(
-                    userId.toLong(),
-                    request.subject,
-                    request.level,
+                    userPrincipal.value,
+                    GameSubject.fromString(request.subject),
+                    GameLevel.fromString(request.level),
                     request.quizCount
                 )
             )
@@ -33,80 +34,16 @@ class GamePrivateApi(
 
     @PostMapping("/join")
     fun join(
-        @RequestHeader("X-AUTH-ID") userId: String,
+        @AuthUser userPrincipal: UserPrincipal,
         @RequestParam code: String
     ): ApiResponse<GameResponse> =
         ApiResponse.success(
             GameResponse.from(
                 gamePrivateService.join(
-                    userId.toLong(),
+                    userPrincipal.value,
                     code
                 )
             )
         )
-
-    @MessageMapping("/quit/{gameId}")
-    fun quit(
-        @DestinationVariable gameId: Long,
-        principal: Principal
-    ): ApiResponse<Unit> =
-        ApiResponse.success(
-            gamePrivateService.quit(
-                principal.name.toLong(),
-                gameId
-            )
-        )
-
-    @MessageMapping("/update/{gameId}/subject")
-    fun updateSubject(
-        @DestinationVariable gameId: Long,
-        @Payload request: UpdateSubjectPayloadRequest,
-        principal: Principal
-    ) {
-        gamePrivateService.updateSubject(
-            principal.name.toLong(),
-            gameId,
-            request.subject
-        )
-    }
-
-    @MessageMapping("/update/{gameId}/level")
-    fun updateLevel(
-        @DestinationVariable gameId: Long,
-        @Payload request: UpdateLevelPayloadRequest,
-        principal: Principal
-    ) {
-        gamePrivateService.updateLevel(
-            principal.name.toLong(),
-            gameId,
-            request.level
-        )
-    }
-
-    @MessageMapping("/update/{gameId}/quiz-count")
-    fun updateQuizCount(
-        @DestinationVariable gameId: Long,
-        @Payload request: UpdateQuizCountPayloadRequest,
-        principal: Principal
-    ) {
-        gamePrivateService.updateQuizCount(
-            principal.name.toLong(),
-            gameId,
-            request.quizCount
-        )
-    }
-
-    @MessageMapping("/kick/{gameId}")
-    fun kickUser(
-        @DestinationVariable gameId: Long,
-        @Payload request: KickUserPayloadRequest,
-        principal: Principal
-    ) {
-        gamePrivateService.kickUser(
-            principal.name.toLong(),
-            gameId,
-            request.targetUserId
-        )
-    }
 
 }

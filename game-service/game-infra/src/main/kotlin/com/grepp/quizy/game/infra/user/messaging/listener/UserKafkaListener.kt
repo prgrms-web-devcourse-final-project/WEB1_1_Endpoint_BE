@@ -9,13 +9,13 @@ import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Component
 
 @Component
-class GameKafkaListener(
+class UserKafkaListener(
     private val userRepository: UserRepositoryAdaptor
 ) : KafkaConsumer<Long, UserCreatedEvent> {
 
     @KafkaListener(
-        id = "\${kafka.topic.user}",
-        topics = ["\${kafka.consumer-group.game}"]
+        groupId = "\${kafka.consumer-group.game}",
+        topics = ["\${kafka.topic.user}"]
     )
     override fun receive(
         records: List<ConsumerRecord<Long, UserCreatedEvent>>

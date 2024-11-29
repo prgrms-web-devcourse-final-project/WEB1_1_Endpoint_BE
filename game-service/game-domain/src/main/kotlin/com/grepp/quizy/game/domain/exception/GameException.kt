@@ -27,4 +27,10 @@ sealed class GameException(errorCode: GameErrorCode) :
 
     data object GameMisMatchNumberOfPlayersException :
         GameException(GameErrorCode.GAME_MISMATCH_NUMBER_OF_PLAYERS)
+
+    data object GameSubjectNotFoundException :
+        GameException(GameErrorCode.GAME_SUBJECT_NOT_FOUND)
+
+    data object GameLevelNotFoundException :
+        GameException(GameErrorCode.GAME_LEVEL_NOT_FOUND)
 }
