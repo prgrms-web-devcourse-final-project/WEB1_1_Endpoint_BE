@@ -6,7 +6,7 @@ data class UpdateQuizRequest(
         val category: QuizCategory,
         val type: QuizType,
         val content: String,
-        val answer: String?,
+        val answerNumber: Int?,
         val explanation: String?,
         val tags: List<String>,
         val options: List<QuizOptionRequest>,
@@ -24,7 +24,7 @@ data class UpdateQuizRequest(
             when (type) {
                 QuizType.AB_TEST -> null
                 else ->
-                        answer?.let {
+                        answerNumber?.let {
                             QuizAnswer(
                                     it,
                                     explanation

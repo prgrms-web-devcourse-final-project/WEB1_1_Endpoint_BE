@@ -9,21 +9,18 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 
 @Component
-class QuizLikeSynchronizer(
+class QuizLikeCountSynchronizer(
         private val redisTemplate: StringRedisTemplate,
         private val quizJpaRepository: QuizJpaRepository,
-) {
-    companion object {
-        private const val SCHEDULED_FIXED_RATE = 10000L // 10초
-    }
+) : AbstractCountSynchronizer() {
 
     @SchedulerLock(
-            name = "like_sync_lock",
-            lockAtMostFor = "PT9S",
-            lockAtLeastFor = "PT3S",
+        name = "like_sync_lock",
+        lockAtMostFor = "PT9S",
+        lockAtLeastFor = "PT3S",
     )
     @Scheduled(fixedRate = SCHEDULED_FIXED_RATE)
-    fun synchronizeLikeCounts() {
+    override fun synchronize() {
         val scanOptions =
                 ScanOptions.scanOptions()
                         .match("$QUIZ_LIKE_KEY*:count")
@@ -52,6 +49,6 @@ class QuizLikeSynchronizer(
                 }
             }
         }
-        quizJpaRepository.batchUpdate(quizIdToCountMap)
+        quizJpaRepository.likeCountBatchUpdate(quizIdToCountMap)
     }
 }

@@ -25,4 +25,4 @@ data class GameQuizDetail(
 
 data class GameQuizOption(val no: Int, val content: String)
 
-data class GameQuizAnswer(val content: String, val explanation: String)
+data class GameQuizAnswer(val content: Int, val explanation: String)

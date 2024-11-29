@@ -5,9 +5,8 @@ import com.grepp.quizy.quiz.domain.useranswer.UserAnswerId
 import com.grepp.quizy.quiz.domain.user.UserId
 
 data class UserAnswerRequest(
-        val userId: Long,
-        val quizId: Long,
-        val choice: String,
+    val quizId: Long,
+    val choiceNumber: Int,
 ) {
-    fun toId() = UserAnswerId(UserId(userId), QuizId(quizId))
+    fun toId(userId: Long) = UserAnswerId(UserId(userId), QuizId(quizId))
 }

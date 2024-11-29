@@ -1,29 +1,18 @@
 package com.grepp.quizy.quiz.domain.useranswer
 
-import com.grepp.quizy.quiz.domain.quiz.QuizType
-
-data class UserAnswer(val id: UserAnswerId, val choice: Choice) {
+data class UserAnswer(
+    val id: UserAnswerId,
+    val choice: Choice
+) {
     companion object {
-        fun createAnswerable(
-                quizType: QuizType,
+        fun create(
                 userAnswerId: UserAnswerId,
-                choice: String,
-                isCorrect: Boolean,
+                choice: Int,
+                isCorrect: Boolean? = null,
         ): UserAnswer {
             return UserAnswer(
                     userAnswerId,
-                    Choice.create(quizType, choice, isCorrect),
-            )
-        }
-
-        fun createNonAnswerable(
-                quizType: QuizType,
-                userAnswerId: UserAnswerId,
-                choice: String,
-        ): UserAnswer {
-            return UserAnswer(
-                    userAnswerId,
-                    Choice.create(quizType, choice),
+                    Choice.create(choice, isCorrect),
             )
         }
     }

@@ -12,7 +12,7 @@ allOpen {
 
 noArg {
     annotation("jakarta.persistence.Entity")
-    annotation("com.grepp.quizy.common.ValueObject")
+    annotation("com.grepp.quizy.common.NoArg")
 }
 
 dependencies {
