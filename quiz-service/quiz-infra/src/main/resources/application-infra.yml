@@ -78,6 +78,10 @@ kafka-consumer-config:
   poll-timeout-ms: 150
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
+  type-mappings:
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
 
 redis:
   host: localhost
@@ -140,6 +144,7 @@ shedlock:
 
 kafka:
   topic:
+    user: user
     quiz: quiz
   consumer-group:
     user: user
@@ -176,6 +181,10 @@ kafka-consumer-config:
   poll-timeout-ms: 150
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
+  type-mappings:
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
 
 
 redis:

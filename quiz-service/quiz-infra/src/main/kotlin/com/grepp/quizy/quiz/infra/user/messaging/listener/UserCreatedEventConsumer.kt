@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.infra.user.messaging.listener.kafka
+package com.grepp.quizy.quiz.infra.user.messaging.listener
 
 import com.grepp.quizy.kafka.consumer.KafkaConsumer
 import com.grepp.quizy.quiz.infra.user.repository.UserJpaRepository
@@ -12,8 +12,8 @@ class UserCreatedEventConsumer(
 ) : KafkaConsumer<Long, UserCreatedEvent> {
 
     @KafkaListener(
-        id = "user-created-event-consumer",
-        topics = ["\${kafka.consumer-group.user}"]
+        groupId = "\${kafka.consumer-group.user}",
+        topics = ["\${kafka.topic.user}"]
     )
     override fun receive(
         records: List<ConsumerRecord<Long, UserCreatedEvent>>
