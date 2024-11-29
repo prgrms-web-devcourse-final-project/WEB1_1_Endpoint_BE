@@ -4,8 +4,10 @@ import com.grepp.quizy.exception.CustomJwtException
 import com.grepp.quizy.jwt.JwtProvider
 import com.grepp.quizy.jwt.JwtValidator
 import com.grepp.quizy.user.RedisTokenRepository
+import com.grepp.quizy.user.UserId
 import com.grepp.quizy.user.api.global.util.CookieUtils
 import com.grepp.quizy.web.UserClient
+import org.slf4j.LoggerFactory
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
 import org.springframework.core.annotation.Order
@@ -25,12 +27,14 @@ class AuthGlobalFilter(
     private val jwtValidator: JwtValidator,
     private val userClient: UserClient,
 ) : GlobalFilter {
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     override fun filter(
         exchange: ServerWebExchange,
         chain: GatewayFilterChain,
     ): Mono<Void> {
         val request = exchange.request
+        log.info("Incoming request: ${request.method} ${request.uri}")
 
         // JWT 토큰 추출 시도
         val token = extractToken(request)
@@ -46,21 +50,26 @@ class AuthGlobalFilter(
             }
             // 토큰이 없고 Secured 경로인 경우
             else -> {
+                log.warn("Access denied: No token found for secured path ${request.uri.path}")
                 Mono.error(CustomJwtException.JwtNotFountException)
             }
         }
     }
 
+    // 토큰 추출
     private fun extractToken(request: ServerHttpRequest): String? = try {
         if (request.headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             resolveToken(request)
         } else {
-            CookieUtils.getCookieValue(request, "refreshToken")
+            val refreshToken = CookieUtils.getCookieValue(request, "refreshToken") ?: ""
+            jwtValidator.validateRefreshToken(refreshToken)
+            refreshToken
         }
     } catch (e: Exception) {
         null
     }
 
+    // 토큰 가공
     private fun resolveToken(request: ServerHttpRequest): String? {
         val authHeader = request.headers[HttpHeaders.AUTHORIZATION]?.get(0) ?: ""
         return if (authHeader.startsWith("Bearer ")) {
@@ -70,13 +79,20 @@ class AuthGlobalFilter(
         }
     }
 
+    // 검증 후 헤더에 추가
     private fun addHeader(
         token: String,
         exchange: ServerWebExchange,
         chain: GatewayFilterChain,
     ): Mono<Void> {
         jwtValidator.validateToken(token)
+
         val userId = jwtProvider.getUserIdFromToken(token).value
+
+        if (!redisTokenRepository.isAlreadyLogin(UserId(userId), token)) {
+            log.warn("Token validation failed: User $userId is not logged in")
+            throw CustomJwtException.JwtLoggedOutException
+        }
 
         // 실제로 존재하는 유저인지 검증이 성공하면 헤더를 추가하고 체인 실행
         return userClient.validateUser(userId)

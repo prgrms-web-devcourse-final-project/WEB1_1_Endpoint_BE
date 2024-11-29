@@ -15,9 +15,10 @@ class UserReissueManager(
 
         val accessToken = tokenGenerator.generateAccessToken(user)
         val refreshToken = tokenGenerator.generateRefreshToken(user)
+        val accessTokenExpirationTime = tokenProvider.getExpiration(accessToken)
         val refreshTokenExpirationTime = tokenProvider.getExpiration(refreshToken)
 
-        redisTokenRepository.saveSession(user.id, refreshTokenExpirationTime)
+        redisTokenRepository.saveSession(user.id, accessTokenExpirationTime)
 
         return ReissueToken(
             accessToken = accessToken,
