@@ -18,8 +18,6 @@ class QuizImageManager(
     fun readIn(ids: List<QuizImageId>): List<QuizImage> =
         quizImageRepository.findAllById(ids)
 
-    fun delete(id: Long) {
-        quizImageRepository.deleteById(id)
     fun remove(ids: List<QuizImageId>) {
         quizImageRepository.deleteByIdIn(ids)
     }

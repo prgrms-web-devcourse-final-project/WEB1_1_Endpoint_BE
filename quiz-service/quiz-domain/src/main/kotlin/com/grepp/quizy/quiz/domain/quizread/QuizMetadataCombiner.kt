@@ -35,13 +35,13 @@ class QuizMetadataCombiner(
             userAnswerReader.read(id, quizIds)
         } ?: UserAnswerPackage()
 
-        val quizAuthors = getQuizAuthors(searchedQuizzes.content.map { it.userId })
+        val quizAuthors = getQuizAuthors(searchedQuizzes.content.map { it.creatorId })
         val optionImages = getQuizOptionImages(searchedQuizzes.content)
 
         return searchedQuizzes.content.map { quiz ->
             QuizDTOFactory.QuizWithDetail(
                 quiz,
-                quizAuthors[quiz.userId],
+                quizAuthors[quiz.creatorId],
                 counts.getCountOf(quiz.id),
                 likeStatus.isLikedBy(quiz.id),
                 userAnswer.getChoiceOf(quiz.id),
@@ -55,13 +55,13 @@ class QuizMetadataCombiner(
         val counts = quizReader.readCounts(quizIds)
 
         val likeStatus = likeManager.isLikedIn(userId, quizIds)
-        val quizAuthors = getQuizAuthors(searchedQuizzes.content.map { it.userId })
+        val quizAuthors = getQuizAuthors(searchedQuizzes.content.map { it.creatorId })
         val optionImages = getQuizOptionImages(searchedQuizzes.content)
 
         return searchedQuizzes.content.map { quiz ->
             QuizDTOFactory.QuizWithDetail(
                 quiz,
-                quizAuthors[quiz.userId],
+                quizAuthors[quiz.creatorId],
                 counts.getCountOf(QuizId(quiz.id.value)),
                 likeStatus.isLikedBy(QuizId(quiz.id.value)),
                 null,
