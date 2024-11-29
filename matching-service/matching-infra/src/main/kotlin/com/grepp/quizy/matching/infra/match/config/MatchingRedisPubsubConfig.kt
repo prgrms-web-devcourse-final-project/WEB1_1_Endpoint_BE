@@ -1,6 +1,6 @@
 package com.grepp.quizy.matching.infra.match.config
 
-import com.grepp.quizy.matching.match.PersonalMatchingSucceedEvent
+import com.grepp.quizy.matching.domain.match.PersonalMatchingSucceedEvent
 import com.grepp.quizy.matching.infra.match.pubsub.MatchingRedisSubscriber
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

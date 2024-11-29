@@ -1,12 +1,12 @@
 package com.grepp.quizy.matching.infra.match.repository
 
-import com.grepp.quizy.matching.match.MATCHING_K
-import com.grepp.quizy.matching.match.MatchingPoolRepository
-import com.grepp.quizy.matching.match.UserStatus
+import com.grepp.quizy.matching.domain.match.MATCHING_K
+import com.grepp.quizy.matching.domain.match.MatchingPoolRepository
+import com.grepp.quizy.matching.domain.match.UserStatus
 import com.grepp.quizy.matching.infra.match.converter.toByteArray
 import com.grepp.quizy.matching.infra.match.converter.toFloatArray
-import com.grepp.quizy.matching.user.UserId
-import com.grepp.quizy.matching.user.UserVector
+import com.grepp.quizy.matching.domain.user.UserId
+import com.grepp.quizy.matching.domain.user.UserVector
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 import kotlin.math.sqrt

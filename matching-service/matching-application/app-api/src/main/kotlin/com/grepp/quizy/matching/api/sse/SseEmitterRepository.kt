@@ -1,6 +1,5 @@
 package com.grepp.quizy.matching.api.sse
 
-import com.grepp.quizy.matching.user.UserId
 import org.springframework.stereotype.Repository
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.util.concurrent.ConcurrentHashMap

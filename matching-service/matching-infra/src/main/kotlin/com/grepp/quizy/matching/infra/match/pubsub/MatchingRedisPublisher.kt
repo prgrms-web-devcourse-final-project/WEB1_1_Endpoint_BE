@@ -1,7 +1,7 @@
 package com.grepp.quizy.matching.infra.match.pubsub
 
-import com.grepp.quizy.matching.match.MatchingEventPublisher
-import com.grepp.quizy.matching.match.PersonalMatchingSucceedEvent
+import com.grepp.quizy.matching.domain.match.MatchingEventPublisher
+import com.grepp.quizy.matching.domain.match.PersonalMatchingSucceedEvent
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.listener.ChannelTopic
 import org.springframework.stereotype.Component

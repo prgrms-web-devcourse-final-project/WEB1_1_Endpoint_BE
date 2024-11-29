@@ -1,8 +1,8 @@
 package com.grepp.quizy.matching.infra.match.pubsub
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.grepp.quizy.matching.match.MatchingEventSender
-import com.grepp.quizy.matching.match.PersonalMatchingSucceedEvent
+import com.grepp.quizy.matching.domain.match.MatchingEventSender
+import com.grepp.quizy.matching.domain.match.PersonalMatchingSucceedEvent
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
 import org.springframework.stereotype.Component

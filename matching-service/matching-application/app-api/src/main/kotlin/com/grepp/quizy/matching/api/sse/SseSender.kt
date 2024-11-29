@@ -1,10 +1,10 @@
 package com.grepp.quizy.matching.api.sse
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.grepp.quizy.matching.match.MatchingEventSender
-import com.grepp.quizy.matching.match.MatchingPoolManager
-import com.grepp.quizy.matching.match.PersonalMatchingSucceedEvent
-import com.grepp.quizy.matching.user.UserId
+import com.grepp.quizy.matching.domain.match.MatchingEventSender
+import com.grepp.quizy.matching.domain.match.MatchingPoolManager
+import com.grepp.quizy.matching.domain.match.PersonalMatchingSucceedEvent
+import com.grepp.quizy.matching.domain.user.UserId
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.io.IOException

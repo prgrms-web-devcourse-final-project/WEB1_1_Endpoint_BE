@@ -3,10 +3,10 @@ package com.grepp.quizy.matching.infra.match.dto
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.grepp.quizy.matching.match.UserStatus
+import com.grepp.quizy.matching.domain.match.UserStatus
 import com.grepp.quizy.matching.infra.match.converter.FloatArrayDeserializer
-import com.grepp.quizy.matching.user.UserId
-import com.grepp.quizy.matching.user.UserVector
+import com.grepp.quizy.matching.domain.user.UserId
+import com.grepp.quizy.matching.domain.user.UserVector
 
 data class RedisUserStatus @JsonCreator constructor(
     @JsonProperty("userId") val userId: Long,

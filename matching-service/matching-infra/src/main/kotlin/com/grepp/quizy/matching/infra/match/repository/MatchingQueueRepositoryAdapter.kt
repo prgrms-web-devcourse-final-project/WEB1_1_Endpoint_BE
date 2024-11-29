@@ -1,9 +1,9 @@
 package com.grepp.quizy.matching.infra.match.repository
 
-import com.grepp.quizy.matching.match.MatchingQueueRepository
-import com.grepp.quizy.matching.match.UserStatus
+import com.grepp.quizy.matching.domain.match.MatchingQueueRepository
+import com.grepp.quizy.matching.domain.match.UserStatus
 import com.grepp.quizy.matching.infra.match.dto.RedisUserStatus
-import com.grepp.quizy.matching.user.UserId
+import com.grepp.quizy.matching.domain.user.UserId
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
 
