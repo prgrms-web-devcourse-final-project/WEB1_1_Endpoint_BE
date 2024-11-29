@@ -39,6 +39,13 @@ spring:
 shedlock:
   name: like_sync_lock
 
+kafka:
+  topic:
+    user: user
+    quiz: quiz
+  consumer-group:
+    user: user
+
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   num-of-partitions: 3
@@ -71,6 +78,10 @@ kafka-consumer-config:
   poll-timeout-ms: 150
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
+  type-mappings:
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
 
 redis:
   host: localhost
@@ -131,6 +142,13 @@ spring:
 shedlock:
   name: like_sync_lock
 
+kafka:
+  topic:
+    user: user
+    quiz: quiz
+  consumer-group:
+    user: user
+
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
   num-of-partitions: 3
@@ -163,6 +181,10 @@ kafka-consumer-config:
   poll-timeout-ms: 150
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
+  type-mappings:
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
 
 
 redis:
