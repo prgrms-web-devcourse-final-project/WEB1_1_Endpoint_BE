@@ -22,7 +22,7 @@ private constructor(
 
     init {
         validateOptions(4)
-        validateAnswer()
+        validateAnswer(4)
     }
 
     companion object {
@@ -54,15 +54,6 @@ private constructor(
         }
     }
 
-    override fun validateAnswer() {
-        require(
-                answer.value in
-                        content.options.indices.map { it.toString() }
-        ) {
-            "객관식 퀴즈의 답은 0부터 ${content.options.size - 1} 사이의 값이어야 합니다"
-        }
-    }
-
     override fun getQuizAnswer(): QuizAnswer {
         return answer
     }
@@ -73,12 +64,12 @@ private constructor(
     }
 
     override fun getCorrectRate(): Double {
-        val correctOption = content.options.first { it.content == answer.value }
+        val correctOption = content.options.first { it.optionNumber == answer.answerNumber }
         return correctOption.selectionCount.toDouble() / getTotalAnsweredCount()
     }
 
     override fun getDifficulty(): QuizDifficulty {
-        if (getTotalAnsweredCount() == 0) {
+        if (getTotalAnsweredCount() == 0L) {
             return QuizDifficulty.NONE
         }
 

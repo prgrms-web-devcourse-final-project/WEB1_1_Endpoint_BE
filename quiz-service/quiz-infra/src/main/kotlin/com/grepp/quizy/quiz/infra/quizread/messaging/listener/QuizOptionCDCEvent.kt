@@ -6,7 +6,7 @@ data class QuizOptionCDCEvent(
     @JsonProperty("quiz_id") val quizId: Long,
     @JsonProperty("option_number") val optionNumber: Int,
     @JsonProperty("content") val content: String,
-    @JsonProperty("selection_count") val selectionCount: Int,
+    @JsonProperty("selection_count") val selectionCount: Long,
     @JsonProperty("image_id") val imageId: Long? = null
 ) {
 }

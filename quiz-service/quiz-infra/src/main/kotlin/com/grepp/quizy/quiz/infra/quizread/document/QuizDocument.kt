@@ -20,7 +20,7 @@ class QuizDocument(
         @Field(type = FieldType.Text) var content: String,
         @Field(type = FieldType.Text) var tags: List<String>,
         @Field(type = FieldType.Nested) var options: List<QuizOptionVO>,
-        @Field(type = FieldType.Integer) val totalAnsweredUsers: Int,
+        @Field(type = FieldType.Integer) val totalAnsweredUsers: Long,
         @Field(type = FieldType.Object) var answer: QuizAnswerVO?,
         @Field(type = FieldType.Keyword) val difficulty: QuizDifficulty?,
         @Field(
@@ -64,7 +64,7 @@ class QuizDocument(
                                 totalAnsweredUsers = domain.getTotalAnsweredCount(),
                                 answer = when(domain is Answerable) {
                                         true -> QuizAnswerVO(
-                                                value = domain.getCorrectAnswer(),
+                                                answerNumber = domain.getCorrectAnswer(),
                                                 explanation = domain.getAnswerExplanation()
                                         )
                                         false -> null
@@ -88,9 +88,9 @@ class QuizDocument(
                                 tags = emptyList(),
                                 options = emptyList(),
                                 totalAnsweredUsers = 0,
-                                answer = when(quizCDCEvent.answer != null && quizCDCEvent.explanation != null) {
+                                answer = when(quizCDCEvent.answerNumber != null && quizCDCEvent.explanation != null) {
                                         true -> QuizAnswerVO(
-                                                value = quizCDCEvent.answer,
+                                                answerNumber = quizCDCEvent.answerNumber,
                                                 explanation = quizCDCEvent.explanation
                                         )
                                         false -> null
@@ -103,9 +103,9 @@ class QuizDocument(
         }
 
         fun update(updateQuiz: QuizCDCEvent) {
-                if (updateQuiz.answer != null && updateQuiz.explanation != null) {
+                if (updateQuiz.answerNumber != null && updateQuiz.explanation != null) {
                         this.answer = QuizAnswerVO(
-                                value = updateQuiz.answer,
+                                answerNumber = updateQuiz.answerNumber,
                                 explanation = updateQuiz.explanation
                         )
                 }

@@ -11,21 +11,16 @@ import jakarta.persistence.Table
 class UserEntity(
     @Id
     val id: Long = 0,
-    private var _name: String,
-    private var _imgPath: String,
+    var name: String,
+    var imgPath: String,
 ) {
-    val name: String
-        get() = _name
-
-    val imgPath: String
-        get() = _imgPath
 
     companion object {
         fun from(user: User): UserEntity {
             return UserEntity(
                 id = user.id.value,
-                _name = user.name,
-                _imgPath = user.imgPath,
+                name = user.name,
+                imgPath = user.imgPath,
             )
         }
     }
@@ -35,7 +30,7 @@ class UserEntity(
     }
 
     fun update(name: String, imgPath: String) {
-        _name = name
-        _imgPath = imgPath
+        this.name = name
+        this.imgPath = imgPath
     }
 }

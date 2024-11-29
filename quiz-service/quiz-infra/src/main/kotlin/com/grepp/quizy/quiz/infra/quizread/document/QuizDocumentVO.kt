@@ -15,8 +15,8 @@ data class QuizOptionVO(
         val optionNumber: Int,
         @Field(type = FieldType.Text)
         val content: String,
-        @Field(type = FieldType.Integer)
-        val selectionCount: Int = 0,
+        @Field(type = FieldType.Long)
+        val selectionCount: Long = 0,
         @Field(type = FieldType.Long)
         val imageId: Long? = null,
 ) : QuizDocumentVo {
@@ -63,7 +63,7 @@ data class QuizOptionVO(
 }
 
 @Serializable
-data class QuizAnswerVO(val value: String, val explanation: String) :
+data class QuizAnswerVO(val answerNumber: Int, val explanation: String) :
         QuizDocumentVo
 
 

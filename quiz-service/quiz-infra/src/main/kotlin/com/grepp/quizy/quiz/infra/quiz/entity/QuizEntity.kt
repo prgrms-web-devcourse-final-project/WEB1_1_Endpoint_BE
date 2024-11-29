@@ -90,4 +90,9 @@ abstract class QuizEntity(
         this.tags.addAll(tagsToAdd)
         this.tags.removeAll(tagsToRemove)
     }
+
+    fun updateOptionSelectionCount(optionNumber: Int, count: Long) {
+        options.find { it.optionNumber == optionNumber }
+                ?.increaseSelectionCount(count)
+    }
 }
