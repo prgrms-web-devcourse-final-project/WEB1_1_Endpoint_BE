@@ -20,5 +20,8 @@ class UserReader(
                 }
             }
 
+    fun readRating(userId: Long): Int =
+        userRepository.findRatingById(userId)
+            ?: throw UserException.UserNotFoundException
 
 }

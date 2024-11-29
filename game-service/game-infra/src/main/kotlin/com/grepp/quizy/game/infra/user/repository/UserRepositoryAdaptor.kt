@@ -24,4 +24,8 @@ class UserRepositoryAdaptor(
             .map(UserEntity::toDomain)
     }
 
+    override fun findRatingById(id: Long): Int? {
+        return userJpaRepository.findRatingById(id)
+    }
+
 }
