@@ -35,7 +35,7 @@ class MatchingManager(
 
     private fun parseCommonInterestCategory(vectors: List<FloatArray>): InterestCategory {
         val size = vectors.first().size
-        val common = (1 until size).filter { index ->
+        val common = (InterestCategory.VECTOR_START_INDEX until size).filter { index ->
             vectors.all { array -> array[index] == 1f }
         }
         return InterestCategory.commonInterest(common)

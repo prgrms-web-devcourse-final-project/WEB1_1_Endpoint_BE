@@ -39,6 +39,8 @@ enum class InterestCategory(val index: Int) {
     SOFTWARE_ENGINEERING(8);
 
     companion object {
+        const val VECTOR_START_INDEX = 6
+
         fun commonInterest(indexes: List<Int>) =
             if (indexes.isEmpty()) entries.random() else InterestCategory.of(indexes.random())
 
