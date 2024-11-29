@@ -18,6 +18,10 @@ class SecurityConfig() {
             .csrf { it.disable() }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
+            .cors { it.disable() }
+            .authorizeExchange {
+                it.anyExchange().permitAll()
+            }
             .build()
     }
 }

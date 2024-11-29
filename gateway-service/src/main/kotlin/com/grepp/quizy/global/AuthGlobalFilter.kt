@@ -132,7 +132,8 @@ class RouteValidator {
         "/api/quiz/feed",
         "/api/quiz/search",
         "/api/user/info/",
-        "/login/oauth2/code"
+        "/login/oauth2/code",
+        "/ws/info"
     )
 
     fun isUnsecured(request: ServerHttpRequest): Boolean {
