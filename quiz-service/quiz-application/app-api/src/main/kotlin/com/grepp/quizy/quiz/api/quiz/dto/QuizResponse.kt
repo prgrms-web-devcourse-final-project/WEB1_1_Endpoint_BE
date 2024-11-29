@@ -27,16 +27,16 @@ sealed class QuizResponse {
     ) : QuizResponse()
 
     data class OXQuizResponse(
-            override val id: Long,
-            override val category: QuizCategory,
-            override val type: QuizType,
-            override val content: String,
-            override val tags: List<String>,
-            override val options: List<QuizOptionResponse>,
-            override val createdAt: LocalDateTime,
-            override val modifiedAt: LocalDateTime,
-            val answer: String,
-            val explanation: String,
+        override val id: Long,
+        override val category: QuizCategory,
+        override val type: QuizType,
+        override val content: String,
+        override val tags: List<String>,
+        override val options: List<QuizOptionResponse>,
+        override val createdAt: LocalDateTime,
+        override val modifiedAt: LocalDateTime,
+        val answerNumber: Int,
+        val explanation: String,
     ) : QuizResponse()
 
     data class MultipleChoiceQuizResponse(
@@ -48,7 +48,7 @@ sealed class QuizResponse {
             override val options: List<QuizOptionResponse>,
             override val createdAt: LocalDateTime,
             override val modifiedAt: LocalDateTime,
-            val answer: String,
+            val answerNumber: Int,
             val explanation: String,
     ) : QuizResponse()
 
@@ -81,7 +81,7 @@ sealed class QuizResponse {
                                             it.name
                                         },
                                 options = quiz.content.options.map { QuizOptionResponse.from(it) },
-                                answer = quiz.getCorrectAnswer(),
+                                answerNumber = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),
                                 createdAt = quiz.dateTime.createdAt!!,
@@ -99,7 +99,7 @@ sealed class QuizResponse {
                                             it.name
                                         },
                                 options = quiz.content.options.map { QuizOptionResponse.from(it) },
-                                answer = quiz.getCorrectAnswer(),
+                                answerNumber = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),
                                 createdAt = quiz.dateTime.createdAt!!,

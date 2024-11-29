@@ -76,9 +76,9 @@ class QuizApi(
     @DeleteMapping("/{id}")
     fun deleteQuiz(
             @PathVariable id: Long,
-            userId: Long,
+            @AuthUser userPrincipal: UserPrincipal,
     ): ApiResponse<Unit> {
-        quizDeleteUseCase.delete(QuizId(id), UserId(userId))
+        quizDeleteUseCase.delete(QuizId(id), UserId(userPrincipal.value))
         return ApiResponse.success("퀴즈가 삭제되었습니다.")
     }
 }

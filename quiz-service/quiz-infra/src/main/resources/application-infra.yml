@@ -3,7 +3,6 @@ kafka:
     quiz: quiz
     cdc_events: quiz.events
   consumer-group:
-    quiz: quiz_read
     cdc_events: quiz_cdc_events
 ---
 spring:
@@ -35,7 +34,13 @@ spring:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
         bucket: ${BUCKET_NAME}
-
+  kafka:
+    producer:
+      properties:
+        num.partitions: 3
+    admin:
+      properties:
+        num.partitions: 3
 shedlock:
   name: like_sync_lock
 
@@ -79,9 +84,9 @@ kafka-consumer-config:
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
   type-mappings:
-    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
-    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
-    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Created
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Updated
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Deleted
 
 redis:
   host: localhost

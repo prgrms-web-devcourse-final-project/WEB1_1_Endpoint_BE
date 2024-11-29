@@ -33,9 +33,9 @@ class QuizDTOFactory {
                     quiz,
                     author,
                     count,
-                    answered.value,
                     isLiked,
-                    optionImages
+                    optionImages,
+                    answered.choiceNumber
                 )
             } ?: NotAnsweredQuizWithoutAnswer.from(quiz, author, count, isLiked, optionImages)
 
@@ -51,7 +51,7 @@ class QuizDTOFactory {
                         quiz,
                         author,
                         count,
-                        answered.value,
+                        answered.choiceNumber,
                         isLiked,
                     )
                 } ?: NotAnsweredQuizWithAnswer.from(quiz, author, count, isLiked)

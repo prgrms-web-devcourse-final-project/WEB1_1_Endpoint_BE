@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.infra.quiz.repository
 
+import com.grepp.quizy.quiz.infra.quiz.entity.QuizEntity
 import jakarta.persistence.EntityManager
 import org.springframework.transaction.annotation.Transactional
 
@@ -8,7 +9,7 @@ class QuizJpaBatchRepositoryImpl(
         private val entityManager: EntityManager
 ) : QuizJpaBatchRepository {
 
-    override fun batchUpdate(updates: Map<Long, Long>) {
+    override fun likeCountBatchUpdate(updates: Map<Long, Long>) {
         if (updates.isEmpty()) return
 
         val batchSize = 1000
@@ -28,6 +29,27 @@ class QuizJpaBatchRepositoryImpl(
 
         entityManager.flush()
         entityManager.clear()
+    }
+
+    override fun selectionCountBatchUpdate(updates: Map<Long, Map<Int, Long>>) {
+        if (updates.isEmpty()) return
+
+        val quizzes = entityManager.createQuery(
+            """
+        SELECT q FROM QuizEntity q 
+        WHERE q.id IN :quizIds
+        """, QuizEntity::class.java
+        )
+            .setParameter("quizIds", updates.keys)
+            .resultList
+
+        quizzes.forEach { quiz ->
+            updates[quiz.quizId]?.forEach { (optionNumber, count) ->
+                quiz.updateOptionSelectionCount(optionNumber, count)
+            }
+        }
+
+        entityManager.flush()
     }
 
     private fun buildBatchUpdateQuery(

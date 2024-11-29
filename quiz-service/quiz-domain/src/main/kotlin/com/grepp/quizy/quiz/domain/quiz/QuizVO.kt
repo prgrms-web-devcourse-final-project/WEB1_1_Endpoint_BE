@@ -42,7 +42,7 @@ data class QuizTag(
 sealed class QuizOption(
     val optionNumber: Int,
     val content: String,
-    val selectionCount: Int,
+    val selectionCount: Long,
 ) {
 
     abstract fun update(newOption: QuizOption): QuizOption
@@ -52,7 +52,7 @@ sealed class QuizOption(
         optionNumber: Int,
         content: String,
         val imageId: QuizImageId?,
-        selectionCount: Int = 0
+        selectionCount: Long = 0
     ) : QuizOption(optionNumber, content, selectionCount) {
 
         override fun update(newOption: QuizOption): QuizOption {
@@ -70,7 +70,7 @@ sealed class QuizOption(
     class MultipleChoiceOption(
         optionNumber: Int,
         content: String,
-        selectionCount: Int = 0
+        selectionCount: Long = 0
     ) : QuizOption(optionNumber, content, selectionCount) {
 
         override fun update(newOption: QuizOption): QuizOption {
@@ -82,7 +82,7 @@ sealed class QuizOption(
     class OXOption(
         optionNumber: Int,
         content: String,
-        selectionCount: Int = 0,
+        selectionCount: Long = 0,
     ) : QuizOption(optionNumber, content, selectionCount) {
 
         override fun update(newOption: QuizOption): QuizOption {
@@ -120,12 +120,12 @@ data class QuizContent(
 }
 
 @NoArg
-data class QuizAnswer(val value: String, val explanation: String) {
+data class QuizAnswer(val answerNumber: Int, val explanation: String) {
 
-    fun isCorrect(userAnswer: String): Boolean = value == userAnswer
+    fun isCorrect(userChoice: Int): Boolean = answerNumber == userChoice
 
     companion object {
-        val NONE: QuizAnswer = QuizAnswer("", "")
+        val NONE: QuizAnswer = QuizAnswer(0, "")
     }
 }
 

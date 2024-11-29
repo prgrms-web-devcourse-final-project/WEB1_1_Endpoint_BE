@@ -64,7 +64,7 @@ class QuizDomainFactory {
                         ),
                         id = QuizId(id),
                         dateTime = DateTime(createdAt, updatedAt),
-                        answer = QuizAnswer(answer!!.value, answer!!.explanation),
+                        answer = QuizAnswer(answer!!.answerNumber, answer!!.explanation),
                         commentCount = 0
                     )
                 }
@@ -89,7 +89,7 @@ class QuizDomainFactory {
                         ),
                         id = QuizId(id),
                         dateTime = DateTime(createdAt, updatedAt),
-                        answer = QuizAnswer(answer!!.value, answer!!.explanation),
+                        answer = QuizAnswer(answer!!.answerNumber, answer!!.explanation),
                         commentCount = 0
                     )
                 }

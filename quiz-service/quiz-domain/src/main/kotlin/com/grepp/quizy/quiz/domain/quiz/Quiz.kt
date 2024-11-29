@@ -33,7 +33,7 @@ sealed class Quiz(
         }
     }
 
-    fun getTotalAnsweredCount(): Int {
+    fun getTotalAnsweredCount(): Long {
         return content.options.sumOf { it.selectionCount }
     }
 

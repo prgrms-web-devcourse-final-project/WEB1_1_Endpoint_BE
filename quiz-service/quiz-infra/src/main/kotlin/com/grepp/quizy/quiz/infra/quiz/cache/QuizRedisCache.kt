@@ -16,12 +16,13 @@ class QuizRedisCache(private val redisTemplate: StringRedisTemplate) :
 
     companion object {
         const val QUIZ_LIKE_KEY = "quiz:like:"
+        const val QUIZ_SELECTION_KEY = "quiz:selection:"
         private const val EXPIRE_DAYS = 7L
     }
 
-    override fun increaseLikeCount(quizId: QuizId): Long {
+    override fun increaseLikeCount(quizId: QuizId) {
         val countKey = "$QUIZ_LIKE_KEY${quizId.value}:count"
-        return redisTemplate.opsForValue().increment(countKey)?.also {
+        redisTemplate.opsForValue().increment(countKey)?.also {
             redisTemplate.expire(
                     countKey,
                     Duration.ofDays(EXPIRE_DAYS),
@@ -29,31 +30,47 @@ class QuizRedisCache(private val redisTemplate: StringRedisTemplate) :
         } ?: throw IllegalStateException("좋아요 수 증가 실패")
     }
 
-    override fun decreaseLikeCount(quizId: QuizId): Long {
+    override fun decreaseLikeCount(quizId: QuizId) {
         val countKey = "$QUIZ_LIKE_KEY${quizId.value}:count"
-        return redisTemplate.opsForValue().decrement(countKey)
+        redisTemplate.opsForValue().decrement(countKey)
                 ?: throw IllegalStateException("좋아요 수 감소 실패")
     }
 
     override fun cacheLike(like: Like) {
-        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
+        val key = "$QUIZ_LIKE_KEY${like.quizId.value}"
         redisTemplate
                 .opsForSet()
-                .add(setKey, like.likerId.value.toString())
-        redisTemplate.expire(setKey, Duration.ofDays(EXPIRE_DAYS))
+                .add(key, like.likerId.value.toString())
+        redisTemplate.expire(key, Duration.ofDays(EXPIRE_DAYS))
     }
 
     override fun deleteLike(like: Like) {
-        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
+        val key = "$QUIZ_LIKE_KEY${like.quizId.value}"
         redisTemplate
                 .opsForSet()
-                .remove(setKey, like.likerId.value.toString())
+                .remove(key, like.likerId.value.toString())
     }
 
     override fun isLikeCached(like: Like): Boolean? {
-        val setKey = "$QUIZ_LIKE_KEY${like.quizId.value}"
+        val key = "$QUIZ_LIKE_KEY${like.quizId.value}"
         return redisTemplate
                 .opsForSet()
-                .isMember(setKey, like.likerId.value.toString())
+                .isMember(key, like.likerId.value.toString())
+    }
+
+    override fun increaseSelectionCount(quizId: QuizId, optionNumber: Int) {
+        val countKey = "$QUIZ_SELECTION_KEY${quizId.value}:$optionNumber:count"
+        redisTemplate.opsForValue().increment(countKey)?.also {
+            redisTemplate.expire(
+                    countKey,
+                    Duration.ofDays(EXPIRE_DAYS),
+            )
+        } ?: throw IllegalStateException("옵션 선택 수 증가 실패")
+    }
+
+    override fun decreaseSelectionCount(quizId: QuizId, optionNumber: Int) {
+        val countKey = "$QUIZ_SELECTION_KEY${quizId.value}:$optionNumber:count"
+        redisTemplate.opsForValue().decrement(countKey)
+                ?: throw IllegalStateException("옵션 선택 수 감소 실패")
     }
 }

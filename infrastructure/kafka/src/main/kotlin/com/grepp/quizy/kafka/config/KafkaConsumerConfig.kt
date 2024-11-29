@@ -50,8 +50,8 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
             props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = it.toString()
         }
 
-        kafkaConsumerConfigData.typeMappings?.let {
-            props[JsonDeserializer.TYPE_MAPPINGS] = it
+        kafkaConsumerConfigData.typeMappings?.let { mappings ->
+            props[JsonDeserializer.TYPE_MAPPINGS] = mappings.joinToString(separator = ",")
         }
 
         kafkaConsumerConfigData.defaultType?.let {

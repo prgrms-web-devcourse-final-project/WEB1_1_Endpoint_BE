@@ -60,7 +60,7 @@ data class AnsweredQuizWithoutAnswer(
     val content: String,
     val type: String,
     val options: List<QuizDetailOption>,
-    val answeredOption: String,
+    val answeredOption: Int,
     val count: QuizDetailCount,
     val isLiked: Boolean,
 ) : QuizWithDetail, NotAnswerableQuizDetail {
@@ -70,9 +70,9 @@ data class AnsweredQuizWithoutAnswer(
             quiz: Quiz,
             author: QuizAuthor?,
             count: QuizCount,
-            answeredOption: String,
             isLiked: Boolean,
-            optionImages: Map<QuizImageId, String>
+            optionImages: Map<QuizImageId, String>,
+            answeredOption: Int,
         ): AnsweredQuizWithoutAnswer =
             with(quiz) {
                 val totalSelection =
@@ -150,7 +150,7 @@ data class AnsweredQuizWithAnswer(
     val type: String,
     val options: List<QuizDetailOption>,
     val answer: QuizDetailAnswer,
-    val answeredOption: String,
+    val answeredOption: Int,
     val count: QuizDetailCount,
     val isLiked: Boolean,
 ) : QuizWithDetail, AnswerableQuizDetail {
@@ -160,7 +160,7 @@ data class AnsweredQuizWithAnswer(
                 quiz: T,
                 author: QuizAuthor?,
                 count: QuizCount,
-                answeredOption: String,
+                answeredOption: Int,
                 isLiked: Boolean,
         ): AnsweredQuizWithAnswer where T : Quiz, T : Answerable =
                 with(quiz) {
@@ -211,7 +211,7 @@ data class QuizDetailOption(
 ) {
 
     companion object {
-        fun from(option: QuizOption, total: Int, imagePath: String? = null) =
+        fun from(option: QuizOption, total: Long, imagePath: String? = null) =
                 QuizDetailOption(
                         option.optionNumber,
                         option.content,
@@ -228,6 +228,6 @@ data class QuizDetailOption(
 }
 
 data class QuizDetailAnswer(
-        val content: String,
-        val explanation: String,
+    val answerNumber: Int,
+    val explanation: String,
 )

@@ -11,6 +11,7 @@ data class QuizOptionVO(
         val optionNumber: Int,
         val content: String,
         val imageId: Long? = null,
+        var selectionCount: Long = 0,
 ) {
 
     fun toDomain(quizType: QuizType): QuizOption {
@@ -19,16 +20,23 @@ data class QuizOptionVO(
                     optionNumber = optionNumber,
                     content = content,
                     imageId = imageId?.let { QuizImageId.from(it) },
+                    selectionCount = selectionCount,
             )
             QuizType.MULTIPLE_CHOICE -> QuizOption.MultipleChoiceOption(
                     optionNumber = optionNumber,
                     content = content,
+                    selectionCount = selectionCount,
             )
             QuizType.OX -> QuizOption.OXOption(
                     optionNumber = optionNumber,
                     content = content,
+                    selectionCount = selectionCount,
             )
         }
+    }
+
+    fun increaseSelectionCount(count: Long) {
+        this.selectionCount += count
     }
 
     companion object {
@@ -38,14 +46,17 @@ data class QuizOptionVO(
                         optionNumber = option.optionNumber,
                         content = option.content,
                         imageId = option.imageId?.value,
+                        selectionCount = option.selectionCount,
                 )
                 is QuizOption.MultipleChoiceOption -> QuizOptionVO(
                         optionNumber = option.optionNumber,
                         content = option.content,
+                        selectionCount = option.selectionCount,
                 )
                 is QuizOption.OXOption -> QuizOptionVO(
                         optionNumber = option.optionNumber,
                         content = option.content,
+                        selectionCount = option.selectionCount,
                 )
             }
         }
@@ -53,16 +64,19 @@ data class QuizOptionVO(
 }
 
 @Embeddable
-data class QuizAnswerVO(val answer: String, val explanation: String) {
+data class QuizAnswerVO(
+    val answerNumber: Int,
+    val explanation: String
+) {
 
     fun toDomain(): QuizAnswer {
-        return QuizAnswer(value = answer, explanation = explanation)
+        return QuizAnswer(answerNumber = answerNumber, explanation = explanation)
     }
 
     companion object {
         fun from(answer: QuizAnswer): QuizAnswerVO {
             return QuizAnswerVO(
-                    answer = answer.value,
+                    answerNumber = answer.answerNumber,
                     explanation = answer.explanation,
             )
         }

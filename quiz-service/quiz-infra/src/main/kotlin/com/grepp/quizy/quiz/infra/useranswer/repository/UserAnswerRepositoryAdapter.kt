@@ -25,13 +25,11 @@ class UserAnswerRepositoryAdapter(
         val userAnswers = userAnswerJpaRepository
             .findAllById(userAnswerIds.map { UserAnswerEntityId.from(it) })
             .associate { entity ->
-                QuizId(entity.id.quizId) to when (entity.quizType) {
-                    QuizType.AB_TEST -> Choice.create(entity.quizType, entity.choice)
-                    QuizType.OX, QuizType.MULTIPLE_CHOICE ->
-                        Choice.create(entity.quizType, entity.choice, entity.isCorrect!!)
+                QuizId(entity.id.quizId) to when (entity.isCorrect) {
+                    null -> Choice.create(entity.choice)
+                    else -> Choice.create(entity.choice, entity.isCorrect)
                 }
         }
-
         return UserAnswerPackage(userAnswers)
     }
 

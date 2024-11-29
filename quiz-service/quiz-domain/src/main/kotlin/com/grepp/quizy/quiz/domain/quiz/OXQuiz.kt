@@ -22,7 +22,7 @@ private constructor(
 
     init {
         validateOptions(2)
-        validateAnswer()
+        validateAnswer(2)
     }
 
     companion object {
@@ -59,24 +59,18 @@ private constructor(
         return answer
     }
 
-    override fun validateAnswer() {
-        require(answer.value in listOf("O", "X")) {
-            "OX 퀴즈의 답은 O 또는 X 여야 합니다"
-        }
-    }
-
     override fun updateAnswer(newAnswer: QuizAnswer): Answerable {
         _answer = newAnswer
         return this
     }
 
     override fun getCorrectRate(): Double {
-        val correctOption = content.options.first { it.content == answer.value }
+        val correctOption = content.options.first { it.optionNumber == answer.answerNumber }
         return correctOption.selectionCount.toDouble() / content.options.sumOf { it.selectionCount }
     }
 
     override fun getDifficulty(): QuizDifficulty {
-        if (getTotalAnsweredCount() == 0) {
+        if (getTotalAnsweredCount() == 0L) {
             return QuizDifficulty.NONE
         }
         return when (getCorrectRate()) {

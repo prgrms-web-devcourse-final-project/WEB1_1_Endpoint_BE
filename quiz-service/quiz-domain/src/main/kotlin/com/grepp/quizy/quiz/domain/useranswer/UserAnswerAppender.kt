@@ -10,24 +10,22 @@ class UserAnswerAppender(
 ) {
 
     fun append(
-            quiz: Quiz,
-            id: UserAnswerId,
-            choice: String,
+        quiz: Quiz,
+        id: UserAnswerId,
+        userChoice: Int,
     ): UserAnswer {
         val userAnswer =
                 when (quiz) {
                     is Answerable ->
-                            UserAnswer.createAnswerable(
-                                    quiz.type,
+                            UserAnswer.create(
                                     id,
-                                    choice,
-                                    quiz.isCorrect(choice),
+                                    userChoice,
+                                    quiz.isCorrect(userChoice),
                             )
                     else ->
-                            UserAnswer.createNonAnswerable(
-                                    quiz.type,
+                            UserAnswer.create(
                                     id,
-                                    choice,
+                                    userChoice,
                             )
                 }
         return userAnswerRepository.save(userAnswer)
