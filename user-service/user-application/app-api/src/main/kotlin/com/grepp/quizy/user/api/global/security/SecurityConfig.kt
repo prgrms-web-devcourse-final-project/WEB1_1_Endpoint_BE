@@ -35,6 +35,7 @@ class SecurityConfig(
             .csrf { it.disable() }
             .formLogin { it.disable() }
             .httpBasic { it.disable() }
+            .cors { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it.anyRequest().permitAll() // gateway 에서 검증
@@ -46,7 +47,6 @@ class SecurityConfig(
                     .successHandler(customOAuth2LoginSuccessHandler)
                     .failureHandler(customOAuth2LoginFailureHandler)
             }
-            //TODO: exception handling 구현 entry point
             .build()
     }
 }

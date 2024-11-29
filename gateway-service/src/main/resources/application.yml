@@ -27,7 +27,18 @@ spring:
               - PATCH
               - OPTIONS
             allowedHeaders:
-              - "*"
+              - "Access-Control-Allow-Headers"
+              - "Access-Control-Allow-Origin"
+              - "Access-Control-Request-Method"
+              - "Access-Control-Request-Headers"
+              - "Origin"
+              - "Cache-Control"
+              - "Content-Type"
+              - "Authorization"
+              - "X-Requested-With"
+              - "credentials"
+              - "If-None-Match"
+              - "Accept"
             allowCredentials: true
 
 ---

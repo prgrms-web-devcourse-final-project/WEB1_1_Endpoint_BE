@@ -34,7 +34,15 @@ class AuthGlobalFilter(
         chain: GatewayFilterChain,
     ): Mono<Void> {
         val request = exchange.request
-        log.info("Incoming request: ${request.method} ${request.uri}")
+        log.info(
+            """
+            Incoming request details:
+            - Method: ${request.method}
+            - URI: ${request.uri}
+            - Referer: ${request.headers["referer"]}
+            - Origin: ${request.headers["origin"]}
+            """.trimIndent()
+        )
 
         // JWT 토큰 추출 시도
         val token = extractToken(request)

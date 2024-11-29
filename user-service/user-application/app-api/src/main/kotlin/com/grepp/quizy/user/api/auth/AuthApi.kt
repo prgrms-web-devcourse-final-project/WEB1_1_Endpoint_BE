@@ -10,7 +10,10 @@ import com.grepp.quizy.web.annotation.AuthUser
 import com.grepp.quizy.web.dto.UserPrincipal
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,7 +22,7 @@ class AuthApi(
     private val userReissueUseCase: UserReissueUseCase
 ) {
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     fun logout(
         @RequestHeader("Authorization") accessToken: String = "1234567",
         @AuthUser principal: UserPrincipal,
