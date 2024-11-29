@@ -7,6 +7,11 @@ redis:
   host: localhost
   port: 6379
 
+feign:
+  client:
+    url:
+      game-service: http://localhost:8081
+
 ---
 
 spring:
@@ -17,3 +22,8 @@ spring:
 redis:
   host: ${REDIS_HOST}
   port: 6379
+
+feign:
+  client:
+    url:
+      game-service: http://dev-game-service:8080

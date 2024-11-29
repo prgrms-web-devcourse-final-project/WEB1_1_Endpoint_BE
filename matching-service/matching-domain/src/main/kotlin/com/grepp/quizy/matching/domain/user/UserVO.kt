@@ -42,7 +42,7 @@ enum class InterestCategory(val index: Int) {
         const val VECTOR_START_INDEX = 6
 
         fun commonInterest(indexes: List<Int>) =
-            if (indexes.isEmpty()) entries.random() else InterestCategory.of(indexes.random())
+            if (indexes.isEmpty()) entries.random() else InterestCategory.of(indexes.random() - VECTOR_START_INDEX)
 
         fun of(index: Int) = entries.first { it.index == index }
     }
