@@ -34,13 +34,6 @@ spring:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
         bucket: ${BUCKET_NAME}
-  kafka:
-    producer:
-      properties:
-        num.partitions: 3
-    admin:
-      properties:
-        num.partitions: 3
 shedlock:
   name: like_sync_lock
 
@@ -73,7 +66,7 @@ kafka-consumer-config:
   auto-offset-reset: earliest
   batch-listener: true
   auto-startup: true
-  concurrency-level: 1
+  concurrency-level: 3
   session-timeout-ms: 10000
   heartbeat-interval-ms: 3000
   max-poll-interval-ms: 300000
@@ -187,9 +180,9 @@ kafka-consumer-config:
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
   type-mappings:
-    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.UserCreatedEvent
-    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.UserUpdatedEvent
-    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.UserDeletedEvent
+    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Created
+    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Updated
+    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Deleted
 
 
 redis:
