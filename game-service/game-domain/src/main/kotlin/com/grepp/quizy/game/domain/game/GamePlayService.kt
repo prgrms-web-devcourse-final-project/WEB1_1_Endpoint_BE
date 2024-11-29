@@ -6,6 +6,8 @@ import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.QuizAppender
 import com.grepp.quizy.game.domain.quiz.QuizFetcher
 import com.grepp.quizy.game.domain.quiz.QuizReader
+import com.grepp.quizy.game.domain.useranswer.UserAnswer
+import com.grepp.quizy.game.domain.useranswer.UserAnswerAppender
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import kotlin.math.roundToInt
@@ -18,6 +20,7 @@ class GamePlayService(
     private val gameQuizAppender: GameQuizAppender,
     private val gameQuizReader: GameQuizReader,
     private val quizReader: QuizReader,
+    private val userAnswerAppender: UserAnswerAppender,
     private val gameLeaderboardManager: GameLeaderboardManager,
     private val messagePublisher: GameMessagePublisher,
     private val messageSender: GameMessageSender
@@ -62,30 +65,33 @@ class GamePlayService(
         )
     }
 
-    fun submitAnswer(
+    fun submitChoice(
         gameId: Long,
         userId: Long,
         quizId: Long,
-        answer: String,
+        choice: String,
         submissionTimestamp: Long
     ) {
         val quiz =
             quizReader.read(quizId)
         val (isCorrect, score: Int) =
-            gradeAnswer(quiz, answer, submissionTimestamp)
+            gradeChoice(quiz, choice, submissionTimestamp)
 
         sendResultToUser(userId, gameId, quiz, score, isCorrect)
+        userAnswerAppender.append(
+            UserAnswer.from(userId, gameId, quiz.content, choice, quiz.answer, isCorrect)
+        )
 
         reflectScoreToLeaderboard(gameId, userId, score)
         publishLeaderboard(gameId)
     }
 
-    private fun gradeAnswer(
+    private fun gradeChoice(
         quiz: GameQuiz,
-        answer: String,
+        choice: String,
         submissionTimestamp: Long
     ): Pair<Boolean, Int> {
-        val isCorrect = quiz.answer.content == answer
+        val isCorrect = quiz.answer.content == choice
         val timeTakenMillis = (System.currentTimeMillis() - submissionTimestamp)
 
         val score = if (isCorrect) {

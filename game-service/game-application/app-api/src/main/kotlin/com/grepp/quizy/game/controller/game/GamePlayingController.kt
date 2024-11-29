@@ -19,7 +19,7 @@ class GamePlayingController(
         principal: Principal,
         @Payload request: SubmitAnswerRequest
     ) {
-        gamePlayService.submitAnswer(
+        gamePlayService.submitChoice(
             gameId,
             principal.name.toLong(),
             request.quizId,
