@@ -11,16 +11,16 @@ class GameAppender(
 
     fun append(
         user: User,
-        subject: GameSubject,
-        level: GameLevel,
+        subject: String,
+        level: String,
         quizCount: Int,
     ): Game {
         val game =
             Game.create(
                 id = idGenerator.generate("game"),
-                subject = subject,
+                subject = GameSubject.fromString(subject),
                 quizCount = quizCount,
-                level = level,
+                level = GameLevel.fromString(level),
                 user = user,
             )
         return gameRepository.save(game)

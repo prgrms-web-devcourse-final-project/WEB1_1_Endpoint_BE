@@ -19,8 +19,8 @@ class GamePrivateService(
 
     fun create(
         userId: Long,
-        subject: GameSubject,
-        level: GameLevel,
+        subject: String,
+        level: String,
         quizCount: Int,
     ): Game {
         val user = userReader.read(userId)
@@ -47,8 +47,7 @@ class GamePrivateService(
 
     fun quit(userId: Long, gameId: Long) {
         val game = gameReader.read(gameId)
-        val user = userReader.read(userId)
-        val currentGame = gamePlayerManager.quit(game, user)
+        val currentGame = gamePlayerManager.quit(game, userId)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -60,15 +59,14 @@ class GamePrivateService(
     fun updateSubject(
         userId: Long,
         gameId: Long,
-        subject: GameSubject,
+        subject: String,
     ) {
         val game = gameReader.read(gameId)
-        val user = userReader.read(userId)
         val currentGame =
             gameSettingManager.updateSubject(
                 game,
                 subject,
-                user,
+                userId,
             )
         messagePublisher.publish(
             GameMessage.room(
@@ -78,11 +76,10 @@ class GamePrivateService(
         )
     }
 
-    fun updateLevel(userId: Long, gameId: Long, level: GameLevel) {
+    fun updateLevel(userId: Long, gameId: Long, level: String) {
         val game = gameReader.read(gameId)
-        val user = userReader.read(userId)
         val currentGame =
-            gameSettingManager.updateLevel(game, level, user)
+            gameSettingManager.updateLevel(game, level, userId)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -93,8 +90,7 @@ class GamePrivateService(
 
     fun updateQuizCount(userId: Long, gameId: Long, quizCount: Int) {
         val game = gameReader.read(gameId)
-        val user = userReader.read(userId)
-        val currentGame = gameSettingManager.updateQuizCount(game, quizCount, user)
+        val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,
@@ -105,10 +101,8 @@ class GamePrivateService(
 
     fun kickUser(userId: Long, gameId: Long, targetUserId: Long) {
         val game = gameReader.read(gameId)
-        val user = userReader.read(userId)
-        val targetUser = userReader.read(targetUserId)
         val currentGame =
-            gamePlayerManager.kick(game, user, targetUser)
+            gamePlayerManager.kick(game, userId, targetUserId)
         messagePublisher.publish(
             GameMessage.room(
                 currentGame.id,

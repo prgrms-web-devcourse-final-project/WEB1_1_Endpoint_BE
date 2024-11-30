@@ -40,7 +40,7 @@ class GamePrivateController(
         gamePrivateService.updateSubject(
             principal.name.toLong(),
             gameId,
-            GameSubject.fromString(request.subject)
+            request.subject
         )
     }
 
@@ -53,7 +53,7 @@ class GamePrivateController(
         gamePrivateService.updateLevel(
             principal.name.toLong(),
             gameId,
-            GameLevel.fromString(request.level)
+            request.level
         )
     }
 

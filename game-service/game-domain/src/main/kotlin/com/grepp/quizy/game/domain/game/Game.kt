@@ -78,18 +78,18 @@ class Game(
         this._players = _players.joinRandomGame(user)
     }
 
-    fun quit(user: User) {
-        val player = _players.findPlayer(user)
+    fun quit(userId: Long) {
+        val player = _players.findPlayer(userId)
         this._players = _players.remove(player)
         if (_players.isEmpty()) {
             _status = DELETED
         }
     }
 
-    fun kick(user: User, targetUser: User) {
+    fun kick(userId: Long, targetUserId: Long) {
         validateGameNotStarted()
-        validateHostPermission(user)
-        this._players = _players.remove(Player(targetUser))
+        validateHostPermission(userId)
+        this._players = _players.remove(_players.findPlayer(targetUserId))
     }
 
     fun start(userId: Long) {
@@ -97,29 +97,22 @@ class Game(
         this._status = GameStatus.PLAYING
     }
 
-    fun updateSubject(user: User, subject: GameSubject) {
+    fun updateSubject(userId: Long, subject: GameSubject) {
         validateGameNotStarted()
-        validateHostPermission(user)
+        validateHostPermission(userId)
         this._setting = _setting.updateSubject(subject)
     }
 
-    fun updateLevel(user: User, level: GameLevel) {
+    fun updateLevel(userId: Long, level: GameLevel) {
         validateGameNotStarted()
-        validateHostPermission(user)
+        validateHostPermission(userId)
         this._setting = _setting.updateLevel(level)
     }
 
-    fun updateQuizCount(user: User, quizCount: Int) {
+    fun updateQuizCount(userId: Long, quizCount: Int) {
         validateGameNotStarted()
-        validateHostPermission(user)
+        validateHostPermission(userId)
         this._setting = _setting.updateQuizCount(quizCount)
-    }
-
-    private fun validateHostPermission(user: User) {
-        val player = players.findPlayer(user)
-        if (player.isGuest()) {
-            throw GameHostPermissionException
-        }
     }
 
     private fun validateGameNotStarted() {
@@ -133,6 +126,7 @@ class Game(
             throw GameException.GameMisMatchNumberOfPlayersException
         }
     }
+
     private fun validateHostPermission(userId: Long) {
         val player = players.findPlayer(userId)
         if (player.isGuest()) {
