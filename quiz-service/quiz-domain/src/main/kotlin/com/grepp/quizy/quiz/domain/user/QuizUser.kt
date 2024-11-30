@@ -5,17 +5,16 @@ import com.grepp.quizy.quiz.domain.useranswer.events.UserAnsweredEvent
 
 class QuizUser(
     val id: UserId = UserId(),
-    private var _name: String,
-    private var _imgPath: String,
+    private var profile: UserProfile,
     private val _interests: MutableList<QuizCategory> = mutableListOf(),
     private val _achievements: MutableList<QuizUserAchievement> = mutableListOf(),
     private var _stats: UserStats = UserStats(id)
 ) {
     val name: String
-        get() = _name
+        get() = profile.name
 
     val imgPath: String
-        get() = _imgPath
+        get() = profile.imgPath
 
     val interests: List<QuizCategory>
         get() = _interests
@@ -40,9 +39,8 @@ class QuizUser(
         _interests.addAll(interests)
     }
 
-    fun update(name: String, imgPath: String) {
-        _name = name
-        _imgPath = imgPath
+    fun update(profile: UserProfile) {
+        this.profile = profile
     }
 
     private fun hasAchievement(achievementId: String): Boolean {
@@ -53,3 +51,8 @@ class QuizUser(
         this._achievements.add(achievement)
     }
 }
+
+data class UserProfile(
+    val name: String,
+    val imgPath: String
+)

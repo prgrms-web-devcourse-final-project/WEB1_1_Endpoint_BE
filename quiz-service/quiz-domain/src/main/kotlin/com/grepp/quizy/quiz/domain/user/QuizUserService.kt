@@ -12,6 +12,11 @@ class QuizUserService(
     private val quizUserManager: QuizUserManager,
     private val quizUserCache: QuizUserCache
 ) {
+
+    fun createUser(profile: UserProfile) {
+        quizUserManager.createUser(profile)
+    }
+
     fun getUser(id: UserId): QuizUser {
         return quizUserReader.read(id)
     }
@@ -25,9 +30,17 @@ class QuizUserService(
         quizUserManager.initInterests(quizUser, interests)
     }
 
+    fun updateUser(id: UserId, profile: UserProfile) {
+        quizUserManager.update(id, profile)
+    }
+
     fun updateInterests(id: UserId, interests: List<QuizCategory>) {
         val quizUser = quizUserReader.read(id)
         quizUserManager.updateInterests(quizUser, interests)
+    }
+
+    fun deleteUser(id: UserId) {
+        quizUserManager.remove(id)
     }
 
     @Transactional

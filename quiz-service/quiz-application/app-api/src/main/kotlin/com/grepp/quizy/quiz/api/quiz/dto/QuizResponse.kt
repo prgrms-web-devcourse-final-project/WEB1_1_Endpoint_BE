@@ -37,6 +37,7 @@ sealed class QuizResponse {
         override val modifiedAt: LocalDateTime,
         val answerNumber: Int,
         val explanation: String,
+        val correctRate: Double,
     ) : QuizResponse()
 
     data class MultipleChoiceQuizResponse(
@@ -50,6 +51,7 @@ sealed class QuizResponse {
             override val modifiedAt: LocalDateTime,
             val answerNumber: Int,
             val explanation: String,
+            val correctRate: Double,
     ) : QuizResponse()
 
     companion object {
@@ -86,6 +88,7 @@ sealed class QuizResponse {
                                         quiz.getAnswerExplanation(),
                                 createdAt = quiz.dateTime.createdAt,
                                 modifiedAt = quiz.dateTime.updatedAt,
+                                correctRate = quiz.getCorrectRate(),
                         )
 
                 is MultipleChoiceQuiz ->
@@ -102,8 +105,9 @@ sealed class QuizResponse {
                                 answerNumber = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),
-                                createdAt = quiz.dateTime.createdAt!!,
-                                modifiedAt = quiz.dateTime.updatedAt!!,
+                                createdAt = quiz.dateTime.createdAt,
+                                modifiedAt = quiz.dateTime.updatedAt,
+                                correctRate = quiz.getCorrectRate(),
                         )
 
                 else ->

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class EventHandlerFactory(
+class CDCEventHandlerFactory(
     private val quizCDCEventHandler: QuizCDCEventHandler,
     private val quizOptionCDCEventHandler: QuizOptionCDCEventHandler,
     private val quizTagMappingCDCEventHandler: QuizTagMappingCDCEventHandler,

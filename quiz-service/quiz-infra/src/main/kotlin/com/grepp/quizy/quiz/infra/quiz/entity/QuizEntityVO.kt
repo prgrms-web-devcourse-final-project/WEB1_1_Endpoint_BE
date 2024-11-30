@@ -4,6 +4,7 @@ import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.quiz.QuizAnswer
 import com.grepp.quizy.quiz.domain.quiz.QuizOption
 import com.grepp.quizy.quiz.domain.quiz.QuizType
+import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 
 @Embeddable
@@ -66,6 +67,7 @@ data class QuizOptionVO(
 @Embeddable
 data class QuizAnswerVO(
     val answerNumber: Int,
+    @Column(length = 500)
     val explanation: String
 ) {
 

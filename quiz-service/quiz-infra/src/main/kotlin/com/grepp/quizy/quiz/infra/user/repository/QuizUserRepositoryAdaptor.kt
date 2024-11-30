@@ -25,4 +25,7 @@ class QuizUserRepositoryAdaptor(
         quizUserJpaRepository.findAllById(userIds.map { it.value })
             .map { it.toDomain() }
 
+    override fun deleteById(id: UserId) {
+        quizUserJpaRepository.deleteById(id.value)
+    }
 }

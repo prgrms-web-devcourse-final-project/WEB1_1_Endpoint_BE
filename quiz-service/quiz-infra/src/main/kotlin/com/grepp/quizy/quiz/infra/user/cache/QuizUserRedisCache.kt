@@ -24,6 +24,10 @@ class QuizUserRedisCache(
         return quizUserRedisRepository.findByIdOrNull(userId.value)?.toDomain()
     }
 
+    override fun evict(id: UserId) {
+        quizUserRedisRepository.deleteById(id.value)
+    }
+
     fun findAllKeys(): List<UserId> {
         val keys = mutableListOf<UserId>()
 

@@ -14,6 +14,7 @@ abstract class QuizEntity(
     val userId: Long,
     @Enumerated(EnumType.STRING) var category: QuizCategory,
     @Enumerated(EnumType.STRING) val type: QuizType,
+    @Column(length = 500)
     var content: String,
     @BatchSize(size = 100)
     @ManyToMany(
