@@ -1,38 +1,25 @@
 package com.grepp.quizy.quiz.infra.user.messaging.listener
 
-import com.grepp.quizy.quiz.infra.user.repository.QuizUserJpaRepository
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.support.Acknowledgment
 import org.springframework.stereotype.Component
 
+private val log = KotlinLogging.logger {}
+
 @Component
 class UserEventKafkaListener(
-    private val quizUserJpaRepository: QuizUserJpaRepository
+    private val eventHandlerFactory: EventHandlerFactory,
 ) {
 
-    //TODO: Outbox 패턴에 맞게 리팩토링
-    @KafkaListener(topics = ["user"], groupId = "quiz-group")
-    fun receive(records: List<ConsumerRecord<String, UserEvent>>, acknowledgment: Acknowledgment) {
+    @KafkaListener(topics = ["\${kafka.topic.user-outbox}"], groupId = "\${kafka.consumer-group.quiz}")
+    fun receive(records: List<ConsumerRecord<String, Event>>, ack: Acknowledgment) {
         records.forEach { record ->
-            handleUserEvent(record.value())
+            val appEvent = record.value()
+            log.info { "User Outbox 이벤트를 받았습니다. $appEvent" }
+            eventHandlerFactory.getEventHandler(appEvent.origin).process(appEvent)
         }
-        acknowledgment.acknowledge()
-    }
-
-    private fun handleUserEvent(event: UserEvent) {
-        when (event) {
-            is UserEvent.Created -> quizUserJpaRepository.save(event.toEntity())
-            is UserEvent.Updated -> handleUserUpdated(event)
-            is UserEvent.Deleted -> quizUserJpaRepository.deleteById(event.userId)
-        }
-    }
-
-    private fun handleUserUpdated(event: UserEvent.Updated) {
-        quizUserJpaRepository.findByIdOrNull(event.userId)?.let { entity ->
-            entity.update(event.name, event.profileImageUrl)
-            quizUserJpaRepository.save(entity)
-        }
+        ack.acknowledge()
     }
 }

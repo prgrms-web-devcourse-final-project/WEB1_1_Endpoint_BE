@@ -1,7 +1,5 @@
-package com.grepp.quizy.game.infra.game.messaging.listener
+package com.grepp.quizy.game.infra.user.messaging.listener
 
-import com.grepp.quizy.game.infra.user.messaging.listener.Event
-import com.grepp.quizy.game.infra.user.messaging.listener.EventHandlerFactory
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.springframework.kafka.annotation.KafkaListener
@@ -26,5 +24,4 @@ class UserKafkaListener(
         }
         ack.acknowledge()
     }
-
 }

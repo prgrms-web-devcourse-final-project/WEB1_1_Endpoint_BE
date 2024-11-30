@@ -9,6 +9,7 @@ class QuizOptionResponse(
         val optionNumber: Int,
         val content: String,
         val imageId: Long?,
+        val selectionCount: Long
 ) {
     companion object {
         fun from(option: QuizOption): QuizOptionResponse {
@@ -18,7 +19,8 @@ class QuizOptionResponse(
                     imageId = when (option) {
                         is QuizOption.ABTestOption -> option.imageId?.value
                         else -> null
-                    }
+                    },
+                    selectionCount = option.selectionCount
             )
         }
     }

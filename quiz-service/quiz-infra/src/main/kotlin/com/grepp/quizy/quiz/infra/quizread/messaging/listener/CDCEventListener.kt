@@ -11,7 +11,7 @@ private val log = KotlinLogging.logger {}
 
 @Component
 class CDCEventListener(
-    private val eventHandlerFactory: EventHandlerFactory
+    private val CDCEventHandlerFactory: CDCEventHandlerFactory
 ) {
 
     @KafkaListener(topics = ["\${kafka.topic.cdc_events}"] , groupId = "\${kafka.consumer-group.cdc_events}")
@@ -28,7 +28,7 @@ class CDCEventListener(
             log.info {
                 "${record.value().payload.operation} 이벤트를 ${record.topic()} 토픽에 처리 요청"
             }
-            eventHandlerFactory.getHandler(getTableName(record)).process(record.value())
+            CDCEventHandlerFactory.getHandler(getTableName(record)).process(record.value())
         }
         acknowledgment.acknowledge()
     }

@@ -5,7 +5,7 @@ import com.grepp.quizy.quiz.domain.useranswer.QuizWithUserAnswer
 
 data class QuizWithUserAnswerResponse(
     val quiz: QuizResponse,
-    val userAnswerResponse: UserAnswerResponse
+    val userAnswer: UserAnswerResponse
 ) {
     companion object {
         fun from(quizWithUserAnswer: QuizWithUserAnswer): QuizWithUserAnswerResponse {

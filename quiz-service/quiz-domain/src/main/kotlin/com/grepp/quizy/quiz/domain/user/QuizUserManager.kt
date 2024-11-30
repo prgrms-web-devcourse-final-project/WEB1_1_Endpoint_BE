@@ -8,9 +8,17 @@ import org.springframework.stereotype.Component
 @Component
 class QuizUserManager(
     private val quizUserRepository: QuizUserRepository,
+    private val quizUserReader: QuizUserReader,
     private val quizEventPublisher: EventPublisher,
     private val quizUserCache: QuizUserCache
 ) {
+
+    fun createUser(profile: UserProfile) {
+        val user = QuizUser(profile = profile)
+        quizUserRepository.save(user)
+        quizUserCache.cache(user)
+    }
+
     fun initInterests(user: QuizUser, interests: List<QuizCategory>) {
         user.addInterests(interests)
         quizUserRepository.save(user)
@@ -24,8 +32,16 @@ class QuizUserManager(
         quizUserRepository.save(user)
     }
 
-    fun update(user: QuizUser) {
+    fun update(id: UserId, profile: UserProfile) {
+        val user = quizUserReader.read(id)
         quizUserRepository.save(user)
         quizUserCache.cache(user)
     }
+
+    fun remove(id: UserId) {
+        quizUserRepository.deleteById(id)
+        quizUserCache.evict(id)
+    }
+
+
 }

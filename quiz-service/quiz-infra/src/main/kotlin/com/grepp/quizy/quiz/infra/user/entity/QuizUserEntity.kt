@@ -2,6 +2,7 @@ package com.grepp.quizy.quiz.infra.user.entity
 
 import com.grepp.quizy.quiz.domain.user.QuizUser
 import com.grepp.quizy.quiz.domain.user.UserId
+import com.grepp.quizy.quiz.domain.user.UserProfile
 import com.grepp.quizy.quiz.domain.user.UserStats
 import jakarta.persistence.*
 
@@ -45,16 +46,10 @@ class QuizUserEntity(
     fun toDomain(): QuizUser {
         return QuizUser(
             id = UserId(id),
-            _name = name,
-            _imgPath = imgPath,
+            profile = UserProfile(name, imgPath),
             _interests = interests.map { it.interest }.toMutableList(),
             _achievements = achievements.map { it.toDomain() }.toMutableList(),
             _stats = stats.toDomain()
         )
-    }
-
-    fun update(name: String, imgPath: String) {
-        this.name = name
-        this.imgPath = imgPath
     }
 }

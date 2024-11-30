@@ -1,10 +1,7 @@
 package com.grepp.quizy.quiz.infra.user.cache
 
 import com.grepp.quizy.quiz.domain.quiz.QuizCategory
-import com.grepp.quizy.quiz.domain.user.QuizUser
-import com.grepp.quizy.quiz.domain.user.QuizUserAchievement
-import com.grepp.quizy.quiz.domain.user.UserId
-import com.grepp.quizy.quiz.domain.user.UserStats
+import com.grepp.quizy.quiz.domain.user.*
 import jakarta.persistence.Id
 import org.springframework.data.redis.core.RedisHash
 import org.springframework.data.redis.core.TimeToLive
@@ -40,8 +37,7 @@ class QuizUserRedisEntity(
     fun toDomain(): QuizUser {
         return QuizUser(
             id = UserId(id),
-            _name = name,
-            _imgPath = imgPath,
+            profile = UserProfile(name, imgPath),
             _interests = interests.toMutableList(),
             _achievements = achievements.toMutableList(),
             _stats = stats

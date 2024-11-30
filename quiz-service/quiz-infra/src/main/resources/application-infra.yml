@@ -2,8 +2,10 @@ kafka:
   topic:
     quiz: quiz
     cdc_events: quiz.events
+    user-outbox: outbox.event.UserCreatedEvent,outbox.event.UserUpdatedEvent,outbox.event.UserDeletedEvent
   consumer-group:
     cdc_events: quiz_cdc_events
+    quiz: quiz-service
 ---
 spring:
   config:
@@ -70,9 +72,7 @@ kafka-consumer-config:
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
   type-mappings:
-    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Created
-    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Updated
-    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Deleted
+    - OutboxEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.Event
 
 redis:
   host: localhost
@@ -173,9 +173,7 @@ kafka-consumer-config:
   default-type: com.grepp.quizy.quiz.infra.debezium.DebeziumEvent
   ack-mode: MANUAL
   type-mappings:
-    - com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Created
-    - com.grepp.quizy.user.domain.user.UpdateUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Updated
-    - com.grepp.quizy.user.domain.user.DeleteUserEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.UserEvent$Deleted
+    - OutboxEvent:com.grepp.quizy.quiz.infra.user.messaging.listener.Event
 
 
 redis:

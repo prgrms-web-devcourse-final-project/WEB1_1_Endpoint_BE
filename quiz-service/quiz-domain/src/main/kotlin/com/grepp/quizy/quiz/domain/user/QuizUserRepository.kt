@@ -8,4 +8,6 @@ interface QuizUserRepository {
 
     fun save(quizUser: QuizUser)
 
+    fun deleteById(id: UserId)
+
 }
