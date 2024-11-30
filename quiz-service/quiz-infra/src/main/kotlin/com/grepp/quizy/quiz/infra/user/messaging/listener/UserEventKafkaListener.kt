@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component
 class UserEventKafkaListener(
     private val userJpaRepository: UserJpaRepository
 ) {
+
+    //TODO: Outbox 패턴에 맞게 리팩토링
     @KafkaListener(topics = ["user"], groupId = "quiz-group")
     fun receive(records: List<ConsumerRecord<String, UserEvent>>, acknowledgment: Acknowledgment) {
         records.forEach { record ->

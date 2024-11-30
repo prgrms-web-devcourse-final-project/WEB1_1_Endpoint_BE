@@ -12,33 +12,75 @@ Content-Type: application/json
     "database.user": "mysqluser",
     "database.password": "mysqlpw",
     "database.include.list": "quiz",
-    "table.include.list": "quiz.quizzes, quiz.user_answers, quiz.quiz_tags_mapping, quiz.quiz_options",
+    "table.include.list": "quiz.quizzes, quiz.quiz_tags_mapping, quiz.quiz_options",
     "database.server.id": "184054",
     "database.server.name": "mysqlcdc",
     "topic.prefix": "quizy",
     "database.history.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092",
     "database.history.kafka.topic": "dbhistory.mysqlcdc",
-    "include.schema.changes": "true",
+    "include.schema.changes": "false",
     "database.ssl.mode": "disabled",
     "database.allowPublicKeyRetrieval": "true",
     "tombstones.on.delete": "false",
     "key.converter": "org.apache.kafka.connect.storage.StringConverter",
     "key.converter.schemas.enable": "false",
     "message.key.columns": "quiz.quizzes:quiz_id;quiz.quiz_options:quiz_id;quiz.quiz_tags_mapping:quiz_id",
-    "transforms": "route,extractKeyField",
+    "transforms": "route",
     "transforms.route.type": "org.apache.kafka.connect.transforms.RegexRouter",
     "transforms.route.regex": ".*",
     "transforms.route.replacement": "quiz.events",
-    "transforms.extractKeyField.type": "org.apache.kafka.connect.transforms.ExtractField$Key",
-    "transforms.extractKeyField.field": "quiz_id",
     "schema.history.internal.kafka.topic": "schemahistory.fullfillment",
     "schema.history.internal.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092"
   }
 }
+###
+POST http://localhost:8090/connectors
+Content-Type: application/json
 
+{
+ "name": "outbox-connector-mysql",
+ "config": {
+   "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+   "database.hostname": "host.docker.internal",
+   "database.port": "3306",
+   "database.user": "mysqluser",
+   "database.password": "mysqlpw",
+   "database.include.list": "quiz",
+   "table.include.list": "quiz.outbox_events",
+   "database.server.id": "184055",
+   "database.server.name": "outboxcdc",
+   "topic.prefix": "outbox",
+   "database.history.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092",
+   "database.history.kafka.topic": "dbhistory.outboxcdc",
+   "include.schema.changes": "false",
+   "database.ssl.mode": "disabled",
+   "database.allowPublicKeyRetrieval": "true",
+   "tombstones.on.delete": "false",
+   "key.converter.schemas.enable": "false",
+   "transforms": "outbox,addTypeHeader",
+   "transforms.outbox.type": "io.debezium.transforms.outbox.EventRouter",
+   "transforms.outbox.table.field.event.key": "aggregate_id",
+   "transforms.outbox.table.field.event.type": "event_type",
+   "transforms.outbox.route.by.field": "event_type",
+   "transforms.outbox.table.field.event.payload": "payload",
+   "transforms.outbox.table.expand.json.payload": "true",
+   "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+   "value.converter.schemas.enable": "false",
+   "transforms.outbox.table.fields.additional.placement": "event_type:envelope,_origin:envelope,origin:envelope",
+   "transforms.outbox.table.field.event.payload.id": "aggregate_id",
+   "transforms.addTypeHeader.type": "org.apache.kafka.connect.transforms.InsertHeader",
+   "transforms.addTypeHeader.header": "__TypeId__",
+   "transforms.addTypeHeader.value.literal": "OutboxEvent",
+   "schema.history.internal.kafka.topic": "schemahistory.outboxcdc",
+   "schema.history.internal.kafka.bootstrap.servers": "kafka-broker-1:9092,kafka-broker-2:9092,kafka-broker-3:9092"
+ }
+}
 
 ###
-# 설정 삭제 API
+# quiz cdc 설정 삭제 API
 DELETE http://localhost:8090/connectors/debezium-connector-mysql
 
-
+###
+###
+# Debezium 설정 삭제 API
+DELETE http://localhost:8090/connectors/outbox-connector-mysql

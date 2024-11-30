@@ -7,6 +7,4 @@ class UserRepositoryAdapter(
     private val userJpaRepository: UserJpaRepository
 ) {
 
-
-
 }

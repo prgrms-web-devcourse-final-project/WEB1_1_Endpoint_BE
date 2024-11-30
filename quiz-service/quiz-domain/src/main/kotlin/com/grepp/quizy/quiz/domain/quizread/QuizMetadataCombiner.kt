@@ -9,7 +9,7 @@ import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerPackage
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswerReader
 import com.grepp.quizy.quiz.domain.user.UserId
-import com.grepp.quizy.quiz.domain.user.UserReader
+import com.grepp.quizy.quiz.domain.user.QuizUserReader
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,7 +17,7 @@ class QuizMetadataCombiner(
     private val quizReader: QuizReader,
     private val quizImageManager: QuizImageManager,
     private val likeManager: LikeManager,
-    private val userReader: UserReader,
+    private val userReader: QuizUserReader,
     private val userAnswerReader: UserAnswerReader,
 ) {
 

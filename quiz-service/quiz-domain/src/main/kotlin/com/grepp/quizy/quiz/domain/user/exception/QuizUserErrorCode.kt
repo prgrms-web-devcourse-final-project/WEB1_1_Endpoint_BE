@@ -3,7 +3,7 @@ package com.grepp.quizy.quiz.domain.user.exception
 import com.grepp.quizy.common.exception.BaseErrorCode
 import com.grepp.quizy.common.exception.ErrorReason
 
-enum class UserErrorCode(
+enum class QuizUserErrorCode(
     private val status: Int,
     private val errorCode: String,
     private val message: String,

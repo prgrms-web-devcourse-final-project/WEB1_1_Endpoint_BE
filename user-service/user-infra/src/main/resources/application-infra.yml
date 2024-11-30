@@ -34,15 +34,16 @@ feign:
       game-service: http://localhost:8081
       quiz-service: http://localhost:8083
 
-
 kafka:
   topic:
     user: user
     game: game
     quiz: quiz
     onboarding: onboarding
+    quiz-outbox: outbox.event.UserInterestsInitializedEvent
   consumer-group:
     user: user
+    quiz-outbox: quiz-outbox
     game: game
     quiz: quiz
     onboarding: onboarding
@@ -64,7 +65,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true
@@ -77,6 +78,10 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.user.infra.user.messaging.listener.Event
+  ack-mode: MANUAL
+
 
 ---
 spring:

@@ -16,6 +16,7 @@ class UserAnswerService(
             userChoice: Int,
     ): UserAnswer {
         val quiz = quizReader.read(id.quizId)
+        quiz.validateChoice(userChoice)
         quizCounter.increaseSelectionCount(id.quizId, userChoice)
         return userAnswerAppender.append(quiz, id, userChoice)
     }

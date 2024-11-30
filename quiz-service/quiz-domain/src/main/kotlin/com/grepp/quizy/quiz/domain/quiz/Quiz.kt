@@ -33,6 +33,12 @@ sealed class Quiz(
         }
     }
 
+    fun validateChoice(userChoice: Int) {
+        require(userChoice in 1 until content.options.size + 1) {
+            "선택지의 범위를 벗어났습니다. 선택지의 범위는 1부터 ${content.options.size}까지 입니다."
+        }
+    }
+
     fun getTotalAnsweredCount(): Long {
         return content.options.sumOf { it.selectionCount }
     }
@@ -50,4 +56,6 @@ sealed class Quiz(
     fun increaseCommentCount() {
         this._commentCount++
     }
+
+
 }

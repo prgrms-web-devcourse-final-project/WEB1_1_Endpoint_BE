@@ -1,8 +1,7 @@
 package com.grepp.quizy.quiz.infra.user.messaging.listener
 
 import com.grepp.quizy.common.NoArg
-import com.grepp.quizy.quiz.infra.user.entity.UserEntity
-import java.io.Serializable
+import com.grepp.quizy.quiz.infra.user.entity.QuizUserEntity
 
 sealed class UserEvent {
 
@@ -12,7 +11,7 @@ sealed class UserEvent {
         val name: String,
         val profileImageUrl: String
     ) : UserEvent() {
-        fun toEntity() = UserEntity(userId, name, profileImageUrl)
+        fun toEntity() = QuizUserEntity(userId, name, profileImageUrl)
     }
 
     @NoArg
