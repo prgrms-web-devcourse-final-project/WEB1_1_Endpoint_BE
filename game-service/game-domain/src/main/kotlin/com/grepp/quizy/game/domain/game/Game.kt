@@ -74,8 +74,8 @@ class Game(
         this._players = _players.add(Player(user))
     }
 
-    fun joinRandomGame(user: User) {
-        this._players = _players.joinRandomGame(user)
+    fun joinRandomGame(userId: Long) {
+        this._players = _players.joinRandomGame(userId)
     }
 
     fun quit(userId: Long) {
