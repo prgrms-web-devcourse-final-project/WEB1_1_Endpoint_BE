@@ -92,6 +92,11 @@ class Game(
         this._players = _players.remove(Player(targetUser))
     }
 
+    fun start(userId: Long) {
+        validateHostPermission(userId)
+        this._status = GameStatus.PLAYING
+    }
+
     fun updateSubject(user: User, subject: GameSubject) {
         validateGameNotStarted()
         validateHostPermission(user)
@@ -126,6 +131,12 @@ class Game(
     private fun validatePlayerCount(users: List<User>) {
         if (users.size != 5) {
             throw GameException.GameMisMatchNumberOfPlayersException
+        }
+    }
+    private fun validateHostPermission(userId: Long) {
+        val player = players.findPlayer(userId)
+        if (player.isGuest()) {
+            throw GameHostPermissionException
         }
     }
 

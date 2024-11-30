@@ -83,4 +83,15 @@ class GamePrivateController(
         )
     }
 
+    @MessageMapping("/start/{gameId}")
+    fun start(
+        @DestinationVariable gameId: Long,
+        principal: Principal
+    ) {
+        gamePrivateService.start(
+            principal.name.toLong(),
+            gameId
+        )
+    }
+
 }

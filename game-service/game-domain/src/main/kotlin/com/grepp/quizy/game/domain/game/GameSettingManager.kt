@@ -32,4 +32,12 @@ class GameSettingManager(private val gameRepository: GameRepository) {
         game.updateQuizCount(user = user, quizCount = quizCount)
         return gameRepository.save(game)
     }
+
+    fun gameStart(
+        game: Game,
+        userId: Long
+    ): Game {
+        game.start(userId)
+        return gameRepository.save(game)
+    }
 }

@@ -3,6 +3,7 @@ package com.grepp.quizy.game.domain.game
 import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.RoomPayload
 import com.grepp.quizy.game.domain.user.UserReader
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,6 +13,7 @@ class GamePrivateService(
     private val gamePlayerManager: GamePlayerManager,
     private val gameSettingManager: GameSettingManager,
     private val userReader: UserReader,
+    private val eventPublisher: ApplicationEventPublisher,
     private val messagePublisher: GameMessagePublisher,
 ) {
 
@@ -113,5 +115,11 @@ class GamePrivateService(
                 RoomPayload.from(currentGame),
             )
         )
+    }
+
+    fun start(userId: Long, gameId: Long) {
+        val game = gameReader.read(gameId)
+        val startedGame = gameSettingManager.gameStart(game, userId)
+        eventPublisher.publishEvent(GameStartEvent(startedGame))
     }
 }

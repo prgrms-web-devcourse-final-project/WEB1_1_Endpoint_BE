@@ -187,6 +187,11 @@ data class Players(
             ?: throw GameException.GameNotParticipatedException
     }
 
+    fun findPlayer(userId: Long): Player {
+        return players.find { it.user.id == userId }
+            ?: throw GameException.GameNotParticipatedException
+    }
+
     fun joinRandomGame(user: User): Players =
         findPlayer(user)
             .takeIf {
