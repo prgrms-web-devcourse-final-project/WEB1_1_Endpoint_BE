@@ -23,7 +23,7 @@ class GameRedisEntity(
 
     val players: Players,
 
-    val inviteCode: InviteCode?
+    val inviteCode: String?
 ) {
     companion object {
         fun from(game: Game): GameRedisEntity {
@@ -33,7 +33,7 @@ class GameRedisEntity(
                 setting = game.setting,
                 status = game.status,
                 players = game.players,
-                inviteCode = game.inviteCode
+                inviteCode = game.inviteCode?.value
             )
         }
 
@@ -46,7 +46,7 @@ class GameRedisEntity(
             _setting = setting,
             _status = status,
             _players = players,
-            inviteCode = inviteCode
+            inviteCode = inviteCode?.let { InviteCode(it) }
         )
     }
 
