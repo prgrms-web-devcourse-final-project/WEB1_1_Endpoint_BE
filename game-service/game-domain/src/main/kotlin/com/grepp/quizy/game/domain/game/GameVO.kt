@@ -164,7 +164,7 @@ data class Players(
         if (players.size >= 5) {
             throw GameException.GameAlreadyFullException
         }
-        if (players.contains(player)) {
+        if (players.any { it.user.id == player.user.id }) {
             throw GameException.GameAlreadyParticipatedException
         }
         return Players(players + player)
