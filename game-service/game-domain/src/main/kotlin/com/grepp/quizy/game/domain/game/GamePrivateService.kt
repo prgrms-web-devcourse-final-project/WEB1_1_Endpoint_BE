@@ -36,24 +36,14 @@ class GamePrivateService(
         val game = gameReader.readByInviteCode(code)
         val user = userReader.read(userId)
         val currentGame = gamePlayerManager.join(game, user)
-        messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame),
-            )
-        )
+        messagePublisher.publish(GameMessage.room(game))
         return currentGame
     }
 
     fun quit(userId: Long, gameId: Long) {
         val game = gameReader.read(gameId)
         val currentGame = gamePlayerManager.quit(game, userId)
-        messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame),
-            )
-        )
+        messagePublisher.publish(GameMessage.room(currentGame))
     }
 
     fun updateSubject(
@@ -69,22 +59,15 @@ class GamePrivateService(
                 userId,
             )
         messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame),
-            )
+            GameMessage.room(currentGame)
         )
     }
 
     fun updateLevel(userId: Long, gameId: Long, level: String) {
         val game = gameReader.read(gameId)
-        val currentGame =
-            gameSettingManager.updateLevel(game, level, userId)
+        val currentGame = gameSettingManager.updateLevel(game, level, userId)
         messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame),
-            )
+            GameMessage.room(currentGame)
         )
     }
 
@@ -92,22 +75,15 @@ class GamePrivateService(
         val game = gameReader.read(gameId)
         val currentGame = gameSettingManager.updateQuizCount(game, quizCount, userId)
         messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame)
-            )
+            GameMessage.room(currentGame)
         )
     }
 
     fun kickUser(userId: Long, gameId: Long, targetUserId: Long) {
         val game = gameReader.read(gameId)
-        val currentGame =
-            gamePlayerManager.kick(game, userId, targetUserId)
+        val currentGame = gamePlayerManager.kick(game, userId, targetUserId)
         messagePublisher.publish(
-            GameMessage.room(
-                currentGame.id,
-                RoomPayload.from(currentGame),
-            )
+            GameMessage.room(currentGame)
         )
     }
 

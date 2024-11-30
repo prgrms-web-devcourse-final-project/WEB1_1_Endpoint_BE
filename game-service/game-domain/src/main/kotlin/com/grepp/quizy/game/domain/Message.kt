@@ -23,52 +23,54 @@ data class GameMessage(
     val payload: MessagePayload,
 ) {
     companion object {
-        fun room(gameId: Long, payload: MessagePayload): GameMessage {
+        fun room(game: Game): GameMessage {
             return GameMessage(
-                gameId = gameId,
+                gameId = game.id,
                 type = MessageType.GAME_ROOM,
-                payload = payload,
+                payload = RoomPayload.from(game),
             )
         }
 
-        fun chat(gameId: Long, payload: MessagePayload): GameMessage {
+        fun chat(gameId: Long, userId: Long, message: String): GameMessage {
             return GameMessage(
                 gameId = gameId,
                 type = MessageType.CHAT,
-                payload = payload,
+                payload = ChatPayload.from(userId, message),
             )
         }
 
         fun quiz(
             gameId: Long,
-            payload: MessagePayload
+            quizzes: List<GameQuiz>
         ): GameMessage {
             return GameMessage(
                 gameId = gameId,
                 type = MessageType.QUIZ_TRANSMITTED,
-                payload = payload,
+                payload = QuizPayload.from(quizzes),
             )
         }
 
         fun quizAnswer(
             gameId: Long,
-            payload: MessagePayload
+            gameQuiz: GameQuiz,
+            score: Double,
+            correct: Boolean
         ): GameMessage {
             return GameMessage(
                 gameId = gameId,
                 type = MessageType.ANSWER_SUBMITTED,
-                payload = payload,
+                payload = QuizAnswerPayload.of(gameQuiz, score, correct),
             )
         }
 
         fun leaderboard(
             gameId: Long,
-            payload: MessagePayload
+            leaderboard: List<LeaderboardInfo>
         ): GameMessage {
             return GameMessage(
                 gameId = gameId,
                 type = MessageType.SCORE_BOARD,
-                payload = payload,
+                payload = LeaderboardPayload.from(leaderboard),
             )
         }
 

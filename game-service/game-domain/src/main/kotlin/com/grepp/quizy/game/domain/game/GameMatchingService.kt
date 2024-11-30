@@ -29,10 +29,7 @@ class GameMatchingService(
         val user = userReader.read(userId)
         game.joinRandomGame(user)
         messagePublisher.publish(
-            GameMessage.room(
-                game.id,
-                RoomPayload.from(game),
-            )
+            GameMessage.room(game)
         )
         if (game.isReady()) {
             eventPublisher.publishEvent(GameStartEvent(game))
