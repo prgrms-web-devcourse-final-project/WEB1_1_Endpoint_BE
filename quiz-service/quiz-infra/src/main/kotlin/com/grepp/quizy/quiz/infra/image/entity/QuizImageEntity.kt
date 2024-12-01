@@ -5,7 +5,7 @@ import com.grepp.quizy.quiz.domain.image.QuizImageId
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "quiz_image")
+@Table(name = "quiz_images")
 class QuizImageEntity(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,

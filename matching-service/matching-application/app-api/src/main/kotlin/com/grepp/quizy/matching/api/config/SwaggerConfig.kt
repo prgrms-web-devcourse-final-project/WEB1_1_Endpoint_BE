@@ -64,13 +64,9 @@ class SwaggerConfig {
 
 @Component
 class CustomOperationCustomizer : OperationCustomizer {
-
     override fun customize(operation: Operation, handlerMethod: HandlerMethod): Operation {
-        // @AuthUser 애노테이션이 적용된 파라미터 제거
         operation.parameters?.removeIf { parameter ->
-            handlerMethod.methodParameters.any { methodParam ->
-                methodParam.parameterAnnotations.any { it is AuthUser }
-            }
+            parameter.name == "userPrincipal" || parameter.name == "principal"
         }
         return operation
     }

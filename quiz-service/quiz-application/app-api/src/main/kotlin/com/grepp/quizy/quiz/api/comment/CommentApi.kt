@@ -6,6 +6,8 @@ import com.grepp.quizy.quiz.api.comment.dto.CreateCommentRequest
 import com.grepp.quizy.quiz.domain.comment.*
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.user.UserId
+import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -58,8 +60,8 @@ class CommentApi(
 
     @DeleteMapping("/{id}")
     fun deleteComment(
-            @PathVariable id: Long,
-            userId: Long,
+        @PathVariable id: Long,
+        userId: Long,
     ): ApiResponse<Unit> =
             ApiResponse.success(
                     commentDeleteUseCase.deleteComment(

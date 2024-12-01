@@ -1,6 +1,5 @@
 package com.grepp.quizy.quiz.api.global.config
 
-import com.grepp.quizy.web.annotation.AuthUser
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.models.Components
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
+
 
 @Configuration
 @OpenAPIDefinition(info = Info(title = "Quiz API", version = "v1"))
@@ -59,13 +59,9 @@ class SwaggerConfig {
 
 @Component
 class CustomOperationCustomizer : OperationCustomizer {
-
     override fun customize(operation: Operation, handlerMethod: HandlerMethod): Operation {
-        // @AuthUser 애노테이션이 적용된 파라미터 제거
         operation.parameters?.removeIf { parameter ->
-            handlerMethod.methodParameters.any { methodParam ->
-                methodParam.parameterAnnotations.any { it is AuthUser }
-            }
+            parameter.name == "userPrincipal" || parameter.name == "principal"
         }
         return operation
     }
