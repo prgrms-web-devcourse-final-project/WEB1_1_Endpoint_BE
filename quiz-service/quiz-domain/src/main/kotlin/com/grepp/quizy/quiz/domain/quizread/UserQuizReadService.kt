@@ -15,7 +15,7 @@ class UserQuizReadService(
 
     override fun searchRecommendedFeed(userId: UserId, page: Page): Slice<QuizWithDetail> {
         val interests = quizUserReader.read(userId).interests
-        val searchedQuizzes = quizSearcher.searchByCategory(userId, FeedSearchCondition(page, interests))
+        val searchedQuizzes = quizSearcher.searchByCategory(userId, FeedSearchCondition(page, interests.random()))
         val content = quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
         return Slice(content, searchedQuizzes.hasNext)
     }
