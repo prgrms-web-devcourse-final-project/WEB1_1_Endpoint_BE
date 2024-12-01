@@ -25,6 +25,8 @@ interface CustomQuizSearchRepository {
         quizIds: List<Long>
     ): Slice<QuizDocument>
 
+    fun searchByCategory(category: String, pageable: Pageable): Slice<QuizDocument>
+
     fun searchAnswerableQuiz(
         category: String,
         difficulty: QuizDifficulty,

@@ -18,5 +18,7 @@ interface QuizSearchRepository {
 
     fun searchNotIn(answeredQuizIds: List<QuizId>, condition: FeedSearchCondition): Slice<Quiz>
 
+    fun searchNotIn(condition: FeedSearchCondition): Slice<Quiz>
+
     fun search(condition: GameQuizSearchCondition): List<Quiz>
 }

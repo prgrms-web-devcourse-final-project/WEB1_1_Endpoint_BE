@@ -1,9 +1,11 @@
 package com.grepp.quizy.quiz.domain.quizread
 
 import com.grepp.quizy.quiz.domain.global.dto.Slice
+import com.grepp.quizy.quiz.domain.quiz.QuizCategory
 import com.grepp.quizy.quiz.domain.user.QuizUserReader
 import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Service
+
 
 @Service
 class UserQuizReadService(
@@ -12,14 +14,29 @@ class UserQuizReadService(
     private val quizMetadataCombiner: QuizMetadataCombiner
 ) : UserQuizReadUseCase {
 
-    override fun searchRecommendedFeed(userId: UserId, condition: FeedSearchCondition): Slice<QuizWithDetail> {
-        val searchedQuizzes = condition.interest?.let {
-            quizSearcher.searchByCategory(userId, condition)
-        } ?: quizSearcher.searchByCategory(userId, FeedSearchCondition(condition.page, findUserInterest(userId)))
-        val content = quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
-        return Slice(content, searchedQuizzes.hasNext)
+    override fun searchRecommendedFeed(userId: UserId?, condition: FeedSearchCondition): QuizFeed {
+        return userId?.let { id ->
+            searchUserPersonalFeed(id, condition)
+        } ?: searchRandomFeed(condition)
     }
 
-    private fun findUserInterest(userId: UserId) =
-        quizUserReader.read(userId).interests.random()
+    private fun searchUserPersonalFeed(userId: UserId, condition: FeedSearchCondition): QuizFeed {
+        val feedCondition = condition.interest?.let { condition }
+            ?: FeedSearchCondition(condition.page, findUserInterest(userId))
+        val searchedQuizzes = quizSearcher.searchByCategoryUnanswered(userId, condition)
+        val content = quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
+
+        return QuizFeed(feedCondition.interest!!, Slice(content, searchedQuizzes.hasNext))
+    }
+
+    private fun searchRandomFeed(condition: FeedSearchCondition): QuizFeed {
+        val feedCondition = condition.interest?.let { condition }
+            ?: FeedSearchCondition(condition.page, QuizCategory.entries.random())
+        val searchedQuizzes = quizSearcher.searchByCategory(condition)
+        val content = quizMetadataCombiner.combine(null, searchedQuizzes)
+
+        return QuizFeed(feedCondition.interest!!, Slice(content, searchedQuizzes.hasNext))
+    }
+
+    private fun findUserInterest(userId: UserId) = quizUserReader.read(userId).interests.random()
 }

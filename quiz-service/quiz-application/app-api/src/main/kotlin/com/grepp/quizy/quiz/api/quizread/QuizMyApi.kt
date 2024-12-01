@@ -2,12 +2,11 @@ package com.grepp.quizy.quiz.api.quizread
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quizread.dto.FeedSearchParams
-import com.grepp.quizy.quiz.api.quizread.dto.QuizSliceResponse
+import com.grepp.quizy.quiz.api.quizread.dto.QuizFeedResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizReadUseCase
 import com.grepp.quizy.quiz.domain.user.UserId
-import com.grepp.quizy.web.annotation.AuthUser
-import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -18,11 +17,11 @@ class QuizMyApi(
 ) {
 
     @GetMapping("/feed")
-    fun getQuizPersonalFeed(@AuthUser principal: UserPrincipal, params: FeedSearchParams) =
+    fun getQuizPersonalFeed(@RequestHeader("X-Auth-Id") userId: UserId?, params: FeedSearchParams) =
         ApiResponse.success(
-            QuizSliceResponse.from(
+            QuizFeedResponse.from(
                 userQuizReadUseCase.searchRecommendedFeed(
-                    userId = UserId(principal.value),
+                    userId = userId,
                     condition = params.FeedSearchCondition()
                 )
             )

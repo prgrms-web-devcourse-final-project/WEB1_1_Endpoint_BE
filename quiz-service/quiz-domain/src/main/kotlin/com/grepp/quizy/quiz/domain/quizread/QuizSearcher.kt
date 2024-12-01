@@ -23,8 +23,12 @@ class QuizSearcher(
         return quizSearchRepository.searchNotIn(answeredQuizIds, condition)
     }
 
-    fun searchByCategory(userId: UserId, condition: FeedSearchCondition): Slice<Quiz> {
+    fun searchByCategoryUnanswered(userId: UserId, condition: FeedSearchCondition): Slice<Quiz> {
         val answeredQuizIds = userAnswerReader.readAnswered(userId)
         return quizSearchRepository.searchNotIn(answeredQuizIds, condition)
+    }
+
+    fun searchByCategory(condition: FeedSearchCondition): Slice<Quiz> {
+        return quizSearchRepository.searchNotIn(condition)
     }
 }

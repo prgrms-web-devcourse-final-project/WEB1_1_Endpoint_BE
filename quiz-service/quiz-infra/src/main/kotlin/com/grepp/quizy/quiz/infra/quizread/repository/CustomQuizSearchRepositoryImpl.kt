@@ -96,6 +96,22 @@ class CustomQuizSearchRepositoryImpl(
         return convertToSlice(query, pageable)
     }
 
+    override fun searchByCategory(category: String, pageable: Pageable): Slice<QuizDocument> {
+        val query = NativeQueryBuilder()
+            .withQuery(
+                QueryBuilders.bool()
+                    .must(
+                        QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery()
+                    )
+                    .build()
+                    ._toQuery()
+            )
+            .withPageable(pageable)
+            .build()
+
+        return convertToSlice(query, pageable)
+    }
+
     override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficulty, pageable: Pageable): List<QuizDocument> {
         val mustQueries = mutableListOf(QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery())
 
