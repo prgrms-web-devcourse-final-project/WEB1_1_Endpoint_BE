@@ -22,4 +22,9 @@ class QuizSearcher(
         val answeredQuizIds = userAnswerReader.readAnswered(userId)
         return quizSearchRepository.searchNotIn(answeredQuizIds, condition)
     }
+
+    fun searchByCategory(userId: UserId, condition: FeedSearchCondition): Slice<Quiz> {
+        val answeredQuizIds = userAnswerReader.readAnswered(userId)
+        return quizSearchRepository.searchNotIn(answeredQuizIds, condition)
+    }
 }

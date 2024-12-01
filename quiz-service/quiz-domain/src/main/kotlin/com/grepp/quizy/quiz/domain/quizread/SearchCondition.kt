@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.domain.quizread
 
 import com.grepp.quizy.common.dto.Page
+import com.grepp.quizy.quiz.domain.quiz.QuizCategory
 import com.grepp.quizy.quiz.domain.quiz.QuizDifficulty
 
 sealed interface SearchCondition {
@@ -17,9 +18,9 @@ enum class QuizSortType {
 }
 
 data class UserSearchCondition(
-        val field: String,
-        private val page: Page,
-        val sort: QuizSortType,
+    val field: String,
+    private val page: Page,
+    val sort: QuizSortType,
 ) : SearchCondition {
     override fun page() = page.page
 
@@ -40,4 +41,7 @@ data class GameQuizSearchCondition(
     override fun sort() = null
 }
 
-
+data class FeedSearchCondition(
+    val page: Page,
+    val interests: List<QuizCategory>
+)
