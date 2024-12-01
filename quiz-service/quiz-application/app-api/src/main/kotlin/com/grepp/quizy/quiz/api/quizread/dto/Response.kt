@@ -18,7 +18,7 @@ data class QuizSliceResponse(
 
 data class QuizFeedResponse(
     val category: QuizCategory,
-    val content: QuizSliceResponse
+    val slice: QuizSliceResponse
 ) {
     companion object {
         fun from(feed: QuizFeed) =
