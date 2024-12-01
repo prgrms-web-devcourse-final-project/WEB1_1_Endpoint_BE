@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.api.quizread
 
 import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.common.dto.Page
+import com.grepp.quizy.quiz.api.quizread.dto.FeedSearchParams
 import com.grepp.quizy.quiz.api.quizread.dto.QuizSliceResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizReadUseCase
 import com.grepp.quizy.quiz.domain.user.UserId
@@ -18,12 +18,12 @@ class QuizMyApi(
 ) {
 
     @GetMapping("/feed")
-    fun getQuizPersonalFeed(@AuthUser principal: UserPrincipal, page: Page) =
+    fun getQuizPersonalFeed(@AuthUser principal: UserPrincipal, params: FeedSearchParams) =
         ApiResponse.success(
             QuizSliceResponse.from(
                 userQuizReadUseCase.searchRecommendedFeed(
                     userId = UserId(principal.value),
-                    page = page
+                    condition = params.FeedSearchCondition()
                 )
             )
         )

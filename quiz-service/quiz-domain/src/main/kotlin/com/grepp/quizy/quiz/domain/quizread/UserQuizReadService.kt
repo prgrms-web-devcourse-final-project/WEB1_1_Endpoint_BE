@@ -1,6 +1,5 @@
 package com.grepp.quizy.quiz.domain.quizread
 
-import com.grepp.quizy.common.dto.Page
 import com.grepp.quizy.quiz.domain.global.dto.Slice
 import com.grepp.quizy.quiz.domain.user.QuizUserReader
 import com.grepp.quizy.quiz.domain.user.UserId
@@ -13,10 +12,14 @@ class UserQuizReadService(
     private val quizMetadataCombiner: QuizMetadataCombiner
 ) : UserQuizReadUseCase {
 
-    override fun searchRecommendedFeed(userId: UserId, page: Page): Slice<QuizWithDetail> {
-        val interests = quizUserReader.read(userId).interests
-        val searchedQuizzes = quizSearcher.searchByCategory(userId, FeedSearchCondition(page, interests.random()))
+    override fun searchRecommendedFeed(userId: UserId, condition: FeedSearchCondition): Slice<QuizWithDetail> {
+        val searchedQuizzes = condition.interest?.let {
+            quizSearcher.searchByCategory(userId, condition)
+        } ?: quizSearcher.searchByCategory(userId, FeedSearchCondition(condition.page, findUserInterest(userId)))
         val content = quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
         return Slice(content, searchedQuizzes.hasNext)
     }
+
+    private fun findUserInterest(userId: UserId) =
+        quizUserReader.read(userId).interests.random()
 }

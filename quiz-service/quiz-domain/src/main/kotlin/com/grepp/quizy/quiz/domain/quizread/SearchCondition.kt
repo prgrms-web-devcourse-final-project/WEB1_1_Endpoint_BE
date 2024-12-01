@@ -43,7 +43,7 @@ data class GameQuizSearchCondition(
 
 data class FeedSearchCondition(
     val page: Page,
-    val interest: QuizCategory
+    val interest: QuizCategory?
 ) : SearchCondition {
     override fun page() = page.page
 
