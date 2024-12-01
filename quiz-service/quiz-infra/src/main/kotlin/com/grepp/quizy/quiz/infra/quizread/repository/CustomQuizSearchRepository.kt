@@ -12,16 +12,15 @@ interface CustomQuizSearchRepository {
             pageable: Pageable,
     ): Slice<QuizDocument>
 
-    fun searchNotIn(keyword: String, pageable: Pageable, quizIds: List<Long>): Slice<QuizDocument>
+    fun searchNotIn(
+        keyword: String,
+        pageable: Pageable,
+        quizIds: List<Long>
+    ): Slice<QuizDocument>
 
     fun searchAnswerableQuiz(
         category: String,
         difficulty: QuizDifficulty,
         pageable: Pageable,
     ): List<QuizDocument>
-
-    fun searchUserAnswer(
-            userId: Long,
-            quizIds: List<Long>,
-    ): Map<Long, Int>
 }

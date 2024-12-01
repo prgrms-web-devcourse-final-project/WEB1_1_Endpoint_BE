@@ -108,13 +108,6 @@ class CustomQuizSearchRepositoryImpl(
             .toList()
     }
 
-    override fun searchUserAnswer(
-            userId: Long,
-            quizIds: List<Long>,
-    ): Map<Long, Int> {
-        TODO("Not yet implemented")
-    }
-
     private fun convertToSlice(nativeQuery: NativeQuery, pageable: Pageable): Slice<QuizDocument> {
         val searchHits =
             elasticSearchOperations.search(
