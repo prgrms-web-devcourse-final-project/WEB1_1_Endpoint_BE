@@ -2,7 +2,7 @@ package com.grepp.quizy.quiz.api.quizread
 
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.quizread.dto.UserSearchParams
-import com.grepp.quizy.quiz.api.quizread.dto.SearchedQuizResponse
+import com.grepp.quizy.quiz.api.quizread.dto.QuizSliceResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizSearchUseCase
 import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.web.bind.annotation.GetMapping
@@ -20,9 +20,9 @@ class QuizSearchApi(
     fun searchByKeyword(
         @RequestHeader("X-Auth-Id") userId: UserId?,
         params: UserSearchParams,
-    ): ApiResponse<SearchedQuizResponse> =
+    ): ApiResponse<QuizSliceResponse> =
             ApiResponse.success(
-                    SearchedQuizResponse.from(
+                    QuizSliceResponse.from(
                             userQuizSearchUseCase.searchByKeyword(
                                     userId,
                                     params.UserSearchCondition(),
@@ -34,9 +34,9 @@ class QuizSearchApi(
     fun searchUnansweredByKeyword(
         @RequestHeader("X-Auth-Id") userId: UserId,
         params: UserSearchParams,
-    ): ApiResponse<SearchedQuizResponse> =
+    ): ApiResponse<QuizSliceResponse> =
         ApiResponse.success(
-            SearchedQuizResponse.from(
+            QuizSliceResponse.from(
                 userQuizSearchUseCase.searchUnansweredByKeyword(
                     userId,
                     params.UserSearchCondition(),
