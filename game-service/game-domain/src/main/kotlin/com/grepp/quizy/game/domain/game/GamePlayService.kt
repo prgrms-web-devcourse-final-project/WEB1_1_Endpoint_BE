@@ -50,9 +50,7 @@ class GamePlayService(
         messagePublisher.publish(
             GameMessage.quiz(
                 game.id,
-                QuizPayload.from(
-                    quizzes
-                )
+                quizzes
             )
         )
     }
@@ -114,11 +112,9 @@ class GamePlayService(
             userId = userId.toString(),
             message = GameMessage.quizAnswer(
                 gameId,
-                QuizAnswerPayload.of(
-                    quiz,
-                    score,
-                    isCorrect
-                )
+                quiz,
+                score,
+                isCorrect
             )
         )
     }
@@ -135,9 +131,7 @@ class GamePlayService(
         messagePublisher.publish(
             GameMessage.leaderboard(
                 gameId,
-                LeaderboardPayload.from(
-                    leaderboardInfos
-                )
+                leaderboardInfos
             )
         )
     }

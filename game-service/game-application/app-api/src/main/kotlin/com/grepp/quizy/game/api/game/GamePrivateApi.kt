@@ -25,8 +25,8 @@ class GamePrivateApi(
             GameResponse.from(
                 gamePrivateService.create(
                     userPrincipal.value,
-                    GameSubject.fromString(request.subject),
-                    GameLevel.fromString(request.level),
+                    request.subject,
+                    request.level,
                     request.quizCount
                 )
             )

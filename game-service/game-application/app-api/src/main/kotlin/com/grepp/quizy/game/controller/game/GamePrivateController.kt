@@ -40,7 +40,7 @@ class GamePrivateController(
         gamePrivateService.updateSubject(
             principal.name.toLong(),
             gameId,
-            GameSubject.fromString(request.subject)
+            request.subject
         )
     }
 
@@ -53,7 +53,7 @@ class GamePrivateController(
         gamePrivateService.updateLevel(
             principal.name.toLong(),
             gameId,
-            GameLevel.fromString(request.level)
+            request.level
         )
     }
 
@@ -80,6 +80,17 @@ class GamePrivateController(
             principal.name.toLong(),
             gameId,
             request.targetUserId
+        )
+    }
+
+    @MessageMapping("/start/{gameId}")
+    fun start(
+        @DestinationVariable gameId: Long,
+        principal: Principal
+    ) {
+        gamePrivateService.start(
+            principal.name.toLong(),
+            gameId
         )
     }
 

@@ -13,10 +13,8 @@ class GameChatService(
         messagePublisher.publish(
             GameMessage.chat(
                 gameId,
-                ChatPayload.from(
-                    userId,
-                    message
-                )
+                userId,
+                message
             )
         )
     }

@@ -187,33 +187,38 @@ data class Players(
             ?: throw GameException.GameNotParticipatedException
     }
 
-    fun joinRandomGame(user: User): Players =
-        findPlayer(user)
+    fun findPlayer(userId: Long): Player {
+        return players.find { it.user.id == userId }
+            ?: throw GameException.GameNotParticipatedException
+    }
+
+    fun joinRandomGame(userId: Long): Players =
+        findPlayer(userId)
             .takeIf {
                 it.isWaiting()
             }
             ?.let {
-                Players(updatePlayerStatus(user))
+                Players(updatePlayerStatus(it))
             }
             ?: throw GameException.GameAlreadyParticipatedException
 
-    private fun updatePlayerStatus(user: User): List<Player> =
-        players.map { player ->
-            when (player.user) {
-                user -> player.apply { join() }
-                else -> player
+
+    private fun updatePlayerStatus(player: Player): List<Player> =
+        players.map { p ->
+            when (p.user) {
+                player.user -> player.join().let { player }
+                else -> p
             }
         }
-
 
     fun isEmpty(): Boolean {
         return players.isEmpty()
     }
 
     fun isAllParticipated(): Boolean {
-        return players.map {
-            it.isWaiting()
-        }.all { !it }
+        // 임시로 2명 이상이면 게임 시작 가능하도록 수정
+        return players.size >= 2 && players.none { it.isWaiting() }
+//        return players.none() { it.isWaiting() }
     }
 
 
