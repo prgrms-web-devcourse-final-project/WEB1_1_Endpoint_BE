@@ -125,8 +125,10 @@ kafka:
     game: game
     quiz: quiz
     onboarding: onboarding
+    quiz-outbox: outbox.event.UserInterestsInitializedEvent
   consumer-group:
     user: user
+    quiz-outbox: quiz-outbox
     game: game
     quiz: quiz
     onboarding: onboarding
@@ -161,6 +163,9 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.user.infra.user.messaging.listener.Event
+  ack-mode: MANUAL
 ---
 spring:
   config:
