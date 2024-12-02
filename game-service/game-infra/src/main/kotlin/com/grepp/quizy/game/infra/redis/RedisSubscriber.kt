@@ -18,7 +18,7 @@ class RedisSubscriber(
         val gameId = objectMapper.readTree(publishMessage).get("gameId").asText()
 
         messagingTemplate.convertAndSend(
-            "$MULTIPLE_PREFIX/game/${gameId}",
+            "${MULTIPLE_PREFIX.destination}/game/${gameId}",
             publishMessage,
         )
     }
