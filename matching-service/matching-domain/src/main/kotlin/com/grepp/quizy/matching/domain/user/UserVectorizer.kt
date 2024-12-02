@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component
 @Component
 class UserVectorizer(
     private val gameFetcher: GameFetcher,
-    private val userFetcher: UserFetcher
+    private val userReader: MatchingUserReader
 ) {
 
     fun vectorizeUser(userId: UserId): UserVector {
         val rating = gameFetcher.requestGameRating(userId)
-        val interests = userFetcher.requestUserInterests(userId)
+        val interests = userReader.read(userId).interests
         val vectorSize = GameRating.entries.size + InterestCategory.entries.size
 
         return UserVector(

@@ -4,7 +4,6 @@ package com.grepp.quizy.matching.domain.user
 
 @JvmInline value class UserVector(val value: FloatArray)
 
-
 enum class InterestCategory(val index: Int) {
     ALGORITHM(0),
     PROGRAMMING_LANGUAGE(1),
@@ -22,6 +21,6 @@ enum class InterestCategory(val index: Int) {
         fun commonInterest(indexes: List<Int>) =
             if (indexes.isEmpty()) entries.random() else InterestCategory.of(indexes.random() - VECTOR_START_INDEX)
 
-        fun of(index: Int) = entries.first { it.index == index }
+        private fun of(index: Int) = entries.first { it.index == index }
     }
 }
