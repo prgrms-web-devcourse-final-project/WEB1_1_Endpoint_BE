@@ -11,5 +11,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebCommonAutoConfig : WebMvcConfigurer {
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
         resolvers.add(UserPrincipalArgumentResolver())
+        resolvers.add(CursorArgumentResolver())
     }
 }

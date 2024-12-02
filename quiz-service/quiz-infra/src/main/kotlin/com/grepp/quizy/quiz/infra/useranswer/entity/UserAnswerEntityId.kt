@@ -1,7 +1,7 @@
 package com.grepp.quizy.quiz.infra.useranswer.entity
 
 import com.grepp.quizy.quiz.domain.quiz.QuizId
-import com.grepp.quizy.quiz.domain.useranswer.UserAnswerId
+import com.grepp.quizy.quiz.domain.useranswer.UserAnswerKey
 import com.grepp.quizy.quiz.domain.user.UserId
 import jakarta.persistence.Embeddable
 import java.io.Serializable
@@ -23,15 +23,15 @@ data class UserAnswerEntityId(
         return Objects.hash(userId, quizId)
     }
 
-    fun toDomain(): UserAnswerId {
-        return UserAnswerId(
+    fun toDomain(): UserAnswerKey {
+        return UserAnswerKey(
                 userId = UserId(userId),
                 quizId = QuizId(quizId),
         )
     }
 
     companion object {
-        fun from(domain: UserAnswerId): UserAnswerEntityId {
+        fun from(domain: UserAnswerKey): UserAnswerEntityId {
             return UserAnswerEntityId(
                     userId = domain.userId.value,
                     quizId = domain.quizId.value,
