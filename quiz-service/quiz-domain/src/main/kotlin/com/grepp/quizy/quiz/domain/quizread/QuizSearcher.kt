@@ -33,5 +33,5 @@ class QuizSearcher(
     }
 
     fun searchTrendingKeyword(): List<String> =
-        quizSearchRepository.searchTrendingKeyword()
+        quizSearchRepository.searchTrendingKeyword().map { "#$it" }
 }

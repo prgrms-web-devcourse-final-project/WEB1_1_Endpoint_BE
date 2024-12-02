@@ -4,6 +4,7 @@ import com.grepp.quizy.quiz.domain.global.dto.Slice
 import com.grepp.quizy.quiz.domain.quiz.Quiz
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quizread.*
+import com.grepp.quizy.quiz.infra.log.repository.LogElasticRepository
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDomainFactory
 import com.grepp.quizy.quiz.infra.quizread.document.SortField
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Repository
 @Repository
 class QuizSearchRepositoryAdapter(
         private val quizElasticRepository: QuizElasticRepository,
+    private val logElasticRepository: LogElasticRepository
 ) : QuizSearchRepository {
 
     override fun save(quiz: Quiz) {
@@ -95,6 +97,10 @@ class QuizSearchRepositoryAdapter(
                     slice.hasNext(),
                 )
             }
+    }
+
+    override fun searchTrendingKeyword(): List<String> {
+        return logElasticRepository.topKKeyword(10)
     }
 
     private fun convertPageable(condition: SearchCondition) =
