@@ -24,10 +24,9 @@ class WebSocketBrokerConfig : WebSocketMessageBrokerConfigurer {
 
     override fun configureWebSocketTransport(registry: WebSocketTransportRegistration) {
         registry
-            .setTimeToFirstMessage(0)
-            .setSendTimeLimit(0)
-            .setMessageSizeLimit(0)
-            .setSendBufferSizeLimit(0)
+            .setTimeToFirstMessage(Int.MAX_VALUE)
+            .setSendTimeLimit(Int.MAX_VALUE)
+            .setMessageSizeLimit(Int.MAX_VALUE)
     }
 
     override fun configureMessageBroker(
