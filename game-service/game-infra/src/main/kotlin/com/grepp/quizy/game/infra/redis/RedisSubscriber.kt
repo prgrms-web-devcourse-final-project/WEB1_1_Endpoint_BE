@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.infra.redis
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.infra.websocket.WebSocketDestination.MULTIPLE_PREFIX
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener
@@ -14,13 +15,13 @@ class RedisSubscriber(
 ) : MessageListener {
 
     override fun onMessage(message: Message, pattern: ByteArray?) {
-        val publishMessage = message.toString()
+        val publishMessage = String(message.body)
         val gameId = objectMapper.readTree(publishMessage).get("gameId").asText()
-
+        val gameMessage = objectMapper.readValue(publishMessage, GameMessage::class.java)
 
         messagingTemplate.convertAndSend(
             "${MULTIPLE_PREFIX.destination}/game/${gameId}",
-            publishMessage,
+            gameMessage,
         )
     }
 }
