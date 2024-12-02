@@ -11,5 +11,6 @@ allOpen {
 
 dependencies {
     // JPA
+    implementation(project(":common"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 }

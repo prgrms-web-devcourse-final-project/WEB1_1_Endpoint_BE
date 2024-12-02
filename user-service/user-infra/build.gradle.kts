@@ -1,12 +1,18 @@
 plugins {
     id("io.kotest.multiplatform") version "5.0.2"
     kotlin("plugin.jpa") version "1.8.22"
+    kotlin("plugin.noarg") version "2.0.21"
 }
 
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("com.grepp.quizy.common.NoArg")
 }
 
 dependencies {

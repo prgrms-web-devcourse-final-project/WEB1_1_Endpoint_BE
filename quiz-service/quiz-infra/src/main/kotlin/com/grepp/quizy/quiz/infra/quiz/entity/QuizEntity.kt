@@ -15,28 +15,28 @@ abstract class QuizEntity(
     @Enumerated(EnumType.STRING) val type: QuizType,
     var content: String,
     @BatchSize(size = 100)
-        @ManyToMany(
-                fetch = FetchType.EAGER,
-                cascade = [CascadeType.MERGE],
-        )
-        @JoinTable(
-                name = "quiz_tags_mapping",
-                joinColumns = [JoinColumn(name = "quiz_id")],
-                inverseJoinColumns = [JoinColumn(name = "tag_id")],
-        )
-        val tags: MutableSet<QuizTagEntity> = mutableSetOf(),
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = [CascadeType.MERGE],
+    )
+    @JoinTable(
+            name = "quiz_tags_mapping",
+            joinColumns = [JoinColumn(name = "quiz_id")],
+            inverseJoinColumns = [JoinColumn(name = "tag_id")],
+    )
+    val tags: MutableSet<QuizTagEntity> = mutableSetOf(),
     @ElementCollection(fetch = FetchType.EAGER)
-        @CollectionTable(
-                name = "quiz_options",
-                joinColumns =
-                        [
-                                JoinColumn(
-                                        name = "quiz_id",
-                                        nullable = false,
-                                )
-                        ],
-        )
-        val options: MutableList<QuizOptionVO>,
+    @CollectionTable(
+            name = "quiz_options",
+            joinColumns =
+                    [
+                            JoinColumn(
+                                    name = "quiz_id",
+                                    nullable = false,
+                            )
+                    ],
+    )
+    val options: MutableList<QuizOptionVO>,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val quizId: Long = 0L,

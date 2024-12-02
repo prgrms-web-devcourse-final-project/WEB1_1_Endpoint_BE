@@ -63,4 +63,8 @@ class UserService(
     override fun isValidUser(userId: UserId): Boolean {
         return userValidator.isValid(userId)
     }
+
+    fun changeRole(userId: UserId) {
+        userUpdater.updateRole(userId)
+    }
 }

@@ -13,14 +13,11 @@ data class DebeziumEvent(
     val payload: DebeziumEventPayload
 ) : Serializable {
 
-
-
     enum class DebeziumEventPayloadOperation(
         @JsonValue
         val value: String
     ) {
         CREATE("c"), UPDATE("u"), DELETE("d"), READ("r");
-
     }
 
     data class DebeziumEventPayload(

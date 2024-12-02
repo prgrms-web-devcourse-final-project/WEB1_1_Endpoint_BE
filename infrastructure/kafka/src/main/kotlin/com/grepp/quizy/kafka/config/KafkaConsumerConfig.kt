@@ -45,6 +45,7 @@ class KafkaConsumerConfig<K : Serializable, V : Serializable>(
                 kafkaConsumerConfigData.maxPollRecords
         props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = "true"
         props[JsonDeserializer.TRUSTED_PACKAGES] = "*"
+
         // 옵셔널 설정들 조건부 추가
         kafkaConsumerConfigData.useTypeInfoHeaders?.let {
             props[JsonDeserializer.USE_TYPE_INFO_HEADERS] = it.toString()
