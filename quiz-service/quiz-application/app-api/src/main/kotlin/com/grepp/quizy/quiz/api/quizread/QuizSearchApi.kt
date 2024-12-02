@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.api.quizread
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.quiz.api.global.log.LogApi
 import com.grepp.quizy.quiz.api.quizread.dto.UserSearchParams
+import com.grepp.quizy.quiz.api.quizread.dto.TrendingKeywordResponse
 import com.grepp.quizy.quiz.api.quizread.dto.QuizSliceResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizSearchUseCase
 import com.grepp.quizy.quiz.domain.user.UserId
@@ -46,6 +47,14 @@ class QuizSearchApi(
                     UserId(principal.value),
                     params.UserSearchCondition(),
                 )
+            )
+        )
+
+    @GetMapping("/trending")
+    fun searchTrendingKeyword(): ApiResponse<TrendingKeywordResponse> =
+        ApiResponse.success(
+            TrendingKeywordResponse(
+                keywords = userQuizSearchUseCase.searchTrendingKeyword()
             )
         )
 }

@@ -21,4 +21,6 @@ interface QuizSearchRepository {
     fun searchNotIn(condition: FeedSearchCondition): Slice<Quiz>
 
     fun search(condition: GameQuizSearchCondition): List<Quiz>
+
+    fun searchTrendingKeyword(): List<String>
 }

@@ -26,6 +26,6 @@ data class QuizFeedResponse(
     }
 }
 
-data class GameSetResponse(
-    val quizzes: List<GameQuizDetail>
-)
+data class TrendingKeywordResponse(val keywords: List<String>)
+
+data class GameSetResponse(val quizzes: List<GameQuizDetail>)
