@@ -9,9 +9,12 @@ interface UserAnswerRepository {
 
     fun save(userAnswer: UserAnswer): UserAnswer
 
+    fun findById(key: UserAnswerKey): UserAnswer?
+
     fun findAllByUserAnswerId(userAnswerKeys: List<UserAnswerKey>): UserAnswerPackage
 
     fun findAllByUserId(userId: UserId): List<QuizId>
 
-    fun findAllByUserIdAndIsCorrect(userId: UserId, isCorrect: Boolean, cursor: Cursor): SliceResult<UserAnswer>
+    fun findAllByUserIdAndIsCorrect(userId: UserId, isCorrect: Boolean, reviewStatus: ReviewStatus, cursor: Cursor): SliceResult<UserAnswer>
+
 }

@@ -43,6 +43,16 @@ class QuizApi(
                     )
             )
 
+    @GetMapping("/{id}")
+    fun getQuiz(
+            @PathVariable id: Long
+    ): ApiResponse<QuizResponse> =
+            ApiResponse.success(
+                    QuizResponse.from(
+                            quizReadUseCase.getQuiz(QuizId(id))
+                    )
+            )
+
     @GetMapping("/tags")
     fun getQuizTag(
             @RequestBody ids: List<Long>
@@ -53,7 +63,8 @@ class QuizApi(
                     )
             )
 
-    //TODO: 퀴즈 이미지 수정 반영
+
+
     @PutMapping("/{id}")
     fun updateQuiz(
             @PathVariable id: Long,

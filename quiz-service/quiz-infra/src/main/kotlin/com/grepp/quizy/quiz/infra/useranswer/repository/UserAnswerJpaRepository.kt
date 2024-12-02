@@ -1,5 +1,6 @@
 package com.grepp.quizy.quiz.infra.useranswer.repository
 
+import com.grepp.quizy.quiz.domain.useranswer.ReviewStatus
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntity
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntityId
 import org.springframework.data.domain.Pageable
@@ -12,6 +13,6 @@ interface UserAnswerJpaRepository : JpaRepository<UserAnswerEntity, UserAnswerEn
         fun findAllQuizIdByUserId(userId: Long): List<Long>
 
 
-        @Query("SELECT ua FROM UserAnswerEntity ua WHERE ua.id.userId = :userId AND ua.isCorrect = :correct")
-        fun findAllByUserIdAndIsCorrect(userId: Long, correct: Boolean, pageable: Pageable): Slice<UserAnswerEntity>
+        @Query("SELECT ua FROM UserAnswerEntity ua WHERE ua.id.userId = :userId AND ua.isCorrect = :correct AND ua.reviewStatus = :reviewStatus")
+        fun findAllByUserIdAndIsCorrectAndReviewStatus(userId: Long, correct: Boolean, reviewStatus: ReviewStatus, pageable: Pageable): Slice<UserAnswerEntity>
 }

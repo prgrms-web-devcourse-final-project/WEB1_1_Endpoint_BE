@@ -5,6 +5,7 @@ import com.grepp.quizy.common.dto.SliceResult
 import com.grepp.quizy.quiz.domain.quiz.QuizCounter
 import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.user.UserId
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,7 +15,7 @@ class UserAnswerService(
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
     private val userAnswerCombiner: UserAnswerCombiner
-) : UserAnswerCreateUseCase, UserAnswerReadService {
+) : UserAnswerCreateUseCase, UserAnswerReadService, UserAnswerUpdateUseCase {
 
     override fun createUserAnswer(
         key: UserAnswerKey,
@@ -29,5 +30,11 @@ class UserAnswerService(
     override fun getIncorrectQuizzes(userId: UserId, cursor: Cursor): SliceResult<QuizWithUserAnswer> {
         val incorrectAnswers = userAnswerReader.readIncorrect(userId, cursor)
         return userAnswerCombiner.combineWithQuiz(incorrectAnswers)
+    }
+
+    override fun reviewUserAnswer(key: UserAnswerKey, reviewStatus: ReviewStatus) {
+        val userAnswer = userAnswerReader.read(key)
+        userAnswer.review(reviewStatus)
+
     }
 }

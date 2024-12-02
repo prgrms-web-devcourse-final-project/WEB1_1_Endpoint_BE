@@ -8,6 +8,7 @@ import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.quiz.domain.useranswer.*
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntity
 import com.grepp.quizy.quiz.infra.useranswer.entity.UserAnswerEntityId
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
@@ -21,6 +22,12 @@ class UserAnswerRepositoryAdapter(
         return userAnswerJpaRepository
                 .save(UserAnswerEntity.from(userAnswer))
                 .toDomain()
+    }
+
+    override fun findById(key: UserAnswerKey): UserAnswer? {
+        return userAnswerJpaRepository
+                .findByIdOrNull(UserAnswerEntityId.from(key))
+                ?.toDomain()
     }
 
     override fun findAllByUserAnswerId(userAnswerKeys: List<UserAnswerKey>): UserAnswerPackage {
@@ -38,9 +45,9 @@ class UserAnswerRepositoryAdapter(
     override fun findAllByUserId(userId: UserId): List<QuizId> =
         userAnswerJpaRepository.findAllQuizIdByUserId(userId.value).map { QuizId(it) }
 
-    override fun findAllByUserIdAndIsCorrect(userId: UserId, isCorrect: Boolean, cursor: Cursor): SliceResult<UserAnswer> {
+    override fun findAllByUserIdAndIsCorrect(userId: UserId, isCorrect: Boolean, reviewStatus: ReviewStatus, cursor: Cursor): SliceResult<UserAnswer> {
         val userAnswers = userAnswerJpaRepository
-            .findAllByUserIdAndIsCorrect(userId.value, isCorrect, PagingUtil.toPageRequest(cursor))
+            .findAllByUserIdAndIsCorrectAndReviewStatus(userId.value, isCorrect, reviewStatus, PagingUtil.toPageRequest(cursor))
             .map { it.toDomain() }
         return SliceResult.of(userAnswers.toList(), userAnswers.hasNext())
     }

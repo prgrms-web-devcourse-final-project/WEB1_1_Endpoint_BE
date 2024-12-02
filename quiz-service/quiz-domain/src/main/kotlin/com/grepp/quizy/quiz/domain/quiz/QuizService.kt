@@ -35,6 +35,10 @@ class QuizService(
         )
     }
 
+    override fun getQuiz(quizId: QuizId): Quiz {
+        return quizReader.read(quizId)
+    }
+
     override fun getQuizTags(ids: List<QuizTagId>): List<QuizTag> {
         return quizReader.readTags(ids)
     }
