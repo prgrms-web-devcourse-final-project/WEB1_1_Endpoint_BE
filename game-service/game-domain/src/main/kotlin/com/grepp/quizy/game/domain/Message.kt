@@ -1,5 +1,7 @@
 package com.grepp.quizy.game.domain
 
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.grepp.quizy.game.domain.game.Game
 import com.grepp.quizy.game.domain.game.Player
 import com.grepp.quizy.game.domain.quiz.GameQuiz
@@ -15,7 +17,20 @@ enum class MessageType {
     KICKED,
     ERROR,
 }
-
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type",
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(value = RoomPayload::class, name = "GAME_ROOM"),
+    JsonSubTypes.Type(value = ChatPayload::class, name = "CHAT"),
+    JsonSubTypes.Type(value = QuizPayload::class, name = "QUIZ_TRANSMITTED"),
+    JsonSubTypes.Type(value = QuizAnswerPayload::class, name = "ANSWER_SUBMITTED"),
+    JsonSubTypes.Type(value = LeaderboardPayload::class, name = "SCORE_BOARD"),
+    JsonSubTypes.Type(value = KickedPayload::class, name = "KICKED"),
+    JsonSubTypes.Type(value = ErrorPayload::class, name = "ERROR"),
+)
 sealed interface MessagePayload
 
 data class GameMessage(
