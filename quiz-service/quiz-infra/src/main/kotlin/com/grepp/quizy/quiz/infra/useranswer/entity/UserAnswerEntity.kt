@@ -50,6 +50,7 @@ class UserAnswerEntity(
                     )
             }.also {
                 it.createdAt = domain.answeredAt
+                it.updatedAt = domain.answeredAt
             }
         }
     }

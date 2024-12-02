@@ -5,7 +5,6 @@ import com.grepp.quizy.common.dto.SliceResult
 import com.grepp.quizy.quiz.domain.quiz.QuizCounter
 import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.user.UserId
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,7 +13,8 @@ class UserAnswerService(
     private val quizCounter: QuizCounter,
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
-    private val userAnswerCombiner: UserAnswerCombiner
+    private val userAnswerCombiner: UserAnswerCombiner,
+    private val userAnswerUpdater: UserAnswerUpdater
 ) : UserAnswerCreateUseCase, UserAnswerReadService, UserAnswerUpdateUseCase {
 
     override fun createUserAnswer(
@@ -35,6 +35,6 @@ class UserAnswerService(
     override fun reviewUserAnswer(key: UserAnswerKey, reviewStatus: ReviewStatus) {
         val userAnswer = userAnswerReader.read(key)
         userAnswer.review(reviewStatus)
-
+        userAnswerUpdater.update(userAnswer)
     }
 }

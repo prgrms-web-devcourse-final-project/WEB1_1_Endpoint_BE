@@ -1,6 +1,9 @@
 package com.grepp.quizy.quiz.domain.quiz
 
+import com.grepp.quizy.common.dto.Cursor
+import com.grepp.quizy.common.dto.SliceResult
 import com.grepp.quizy.quiz.domain.quiz.exception.QuizException
+import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
 @Component
@@ -8,6 +11,10 @@ class QuizReader(private val quizRepository: QuizRepository) {
     fun read(id: QuizId): Quiz {
         return quizRepository.findById(id)
                 ?: throw QuizException.NotFound
+    }
+
+    fun readAll(creatorId: UserId, cursor: Cursor): SliceResult<Quiz> {
+        return quizRepository.findAllByCreatorId(creatorId, cursor)
     }
 
     fun readIn(ids: List<QuizId>): List<Quiz> {
@@ -25,4 +32,5 @@ class QuizReader(private val quizRepository: QuizRepository) {
 
 
     fun readCounts(ids: List<QuizId>) = quizRepository.findCountsByInId(ids)
+
 }

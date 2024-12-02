@@ -2,12 +2,15 @@ package com.grepp.quizy.quiz.api.quiz
 
 import QuizResponse
 import com.grepp.quizy.common.api.ApiResponse
+import com.grepp.quizy.common.dto.Cursor
+import com.grepp.quizy.common.dto.SliceResult
 import com.grepp.quizy.quiz.api.quiz.dto.CreateQuizRequest
 import com.grepp.quizy.quiz.api.quiz.dto.UpdateQuizRequest
 import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.web.annotation.AuthUser
+import com.grepp.quizy.web.annotation.CursorDefault
 import com.grepp.quizy.web.dto.UserPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -51,6 +54,16 @@ class QuizApi(
                     QuizResponse.from(
                             quizReadUseCase.getQuiz(QuizId(id))
                     )
+            )
+
+    @GetMapping("/my-quizzes")
+    fun getMyQuizzes(
+            @AuthUser userPrincipal: UserPrincipal,
+            @CursorDefault cursor: Cursor
+    ): ApiResponse<SliceResult<QuizResponse>> =
+            ApiResponse.success(
+                    quizReadUseCase.getMyQuizzes(UserId(userPrincipal.value), cursor)
+                            .map { QuizResponse.from(it) }
             )
 
     @GetMapping("/tags")
