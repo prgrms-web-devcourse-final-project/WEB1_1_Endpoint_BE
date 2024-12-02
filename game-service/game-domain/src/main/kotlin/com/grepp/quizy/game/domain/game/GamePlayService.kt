@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.domain.game
 
-import com.grepp.quizy.game.domain.*
+import com.grepp.quizy.game.domain.GameMessage
+import com.grepp.quizy.game.domain.LeaderboardInfo
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.QuizAppender
 import com.grepp.quizy.game.domain.quiz.QuizFetcher
@@ -28,7 +29,7 @@ class GamePlayService(
         val fetchQuizzes =
             quizFetcher.fetchQuiz(event.game.setting.subject, event.game.setting.quizCount, event.game.setting.level)
 
-        val quizzes = quizAppender.appendAll(fetchQuizzes)
+        val quizzes = quizAppender.appendAll(fetchQuizzes.quizzes)
         quizzes.map { quiz ->
             gameQuizAppender.appendQuiz(event.game.id, quiz.id)
         }
@@ -38,7 +39,13 @@ class GamePlayService(
             event.game.players.players.map { it.user.id }
         )
         // 게임에서 사용할 퀴즈 전송
-        publishQuiz(event.game.id)
+        messagePublisher.publish(
+            GameMessage.quiz(
+                event.game.id,
+                quizzes
+            )
+        )
+//        publishQuiz(event.game.id)
     }
 
     fun publishQuiz(gameId: Long) {
