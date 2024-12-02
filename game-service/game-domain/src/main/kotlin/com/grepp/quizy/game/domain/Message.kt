@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.domain
 
-import com.grepp.quizy.game.domain.game.*
+import com.grepp.quizy.game.domain.game.Game
+import com.grepp.quizy.game.domain.game.Player
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.GameQuizOption
 
@@ -53,7 +54,7 @@ data class GameMessage(
         fun quizAnswer(
             gameId: Long,
             gameQuiz: GameQuiz,
-            score: Double,
+            score: Int,
             correct: Boolean
         ): GameMessage {
             return GameMessage(
@@ -92,8 +93,8 @@ data class RoomPayload(
     val level: String,
     val quizCount: Int,
     val status: String,
-    val players: Players,
     val inviteCode: String?,
+    val players: List<UserInfoMessage>
 ) : MessagePayload {
     companion object {
         fun from(game: Game): RoomPayload {
@@ -102,8 +103,31 @@ data class RoomPayload(
                 level = game.setting.level.description,
                 quizCount = game.setting.quizCount,
                 status = game.status.description,
-                players = game.players,
                 inviteCode = game.inviteCode?.value,
+                players = game.players.players.map { UserInfoMessage.from(it) }
+            )
+        }
+    }
+}
+
+data class UserInfoMessage(
+    val id: Long,
+    val name: String,
+    val imgPath: String,
+    val rating: Int,
+    val role: String,
+    val host: Boolean,
+    val score: Int = 0
+) {
+    companion object {
+        fun from(player: Player): UserInfoMessage {
+            return UserInfoMessage(
+                id = player.user.id,
+                name = player.user.name,
+                imgPath = player.user.imgPath,
+                rating = player.user.rating,
+                host = player.isHost(),
+                role = player.role.name
             )
         }
     }
@@ -152,13 +176,13 @@ data class QuizInfo(
 }
 
 data class QuizAnswerPayload(
-    val score: Double,
+    val score: Int,
     val correct: Boolean,
     val answer: String,
     val explanation: String,
 ) : MessagePayload {
     companion object {
-        fun of(gameQuiz: GameQuiz, score: Double, correct: Boolean): QuizAnswerPayload {
+        fun of(gameQuiz: GameQuiz, score: Int, correct: Boolean): QuizAnswerPayload {
             return QuizAnswerPayload(
                 score = score,
                 correct = correct,
@@ -184,10 +208,10 @@ data class LeaderboardPayload(
 
 data class LeaderboardInfo(
     val userId: Long,
-    val score: Double
+    val score: Int
 ) {
     companion object {
-        fun of(userId: Long, score: Double): LeaderboardInfo {
+        fun of(userId: Long, score: Int): LeaderboardInfo {
             return LeaderboardInfo(
                 userId = userId,
                 score = score

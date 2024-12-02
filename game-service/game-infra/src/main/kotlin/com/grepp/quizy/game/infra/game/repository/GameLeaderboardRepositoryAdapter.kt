@@ -28,20 +28,20 @@ class GameLeaderboardRepositoryAdapter(
         redisTemplate.opsForZSet().add(leaderboardKey, users)
     }
 
-    override fun increaseScore(gameId: Long, userId: Long, score: Double) {
+    override fun increaseScore(gameId: Long, userId: Long, score: Int) {
         val leaderboardKey = String.format(LEADERBOARD_KEY, gameId)
 
-        redisTemplate.opsForZSet().incrementScore(leaderboardKey, userId.toString(), score)
+        redisTemplate.opsForZSet().incrementScore(leaderboardKey, userId.toString(), score.toDouble())
     }
 
-    override fun findAll(gameId: Long): Map<Long, Double> {
+    override fun findAll(gameId: Long): Map<Long, Int> {
         val leaderboardKey = String.format(LEADERBOARD_KEY, gameId)
 
         return redisTemplate.opsForZSet().reverseRangeWithScores(leaderboardKey, 0, -1)
             ?.mapNotNull {
                 it.value?.toLong()?.let { value ->
                     it.score?.let { score ->
-                        value to score
+                        value to score.toInt()
                     }
                 }
             }

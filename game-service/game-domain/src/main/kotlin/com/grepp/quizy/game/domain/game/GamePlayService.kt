@@ -64,7 +64,7 @@ class GamePlayService(
     ) {
         val quiz =
             quizReader.read(quizId)
-        val (isCorrect, score: Double) =
+        val (isCorrect, score: Int) =
             gradeAnswer(quiz, answer, submissionTimestamp)
 
         sendResultToUser(userId, gameId, quiz, score, isCorrect)
@@ -77,26 +77,20 @@ class GamePlayService(
         quiz: GameQuiz,
         answer: String,
         submissionTimestamp: Long
-    ): Pair<Boolean, Double> {
+    ): Pair<Boolean, Int> {
         val isCorrect = quiz.answer.content == answer
-        val timeTakenMillis = (System.currentTimeMillis() - submissionTimestamp).toDouble()
-
-        /*
-        * 기본 점수 10점
-        * 1밀리초당 0.0005점 감점 (1초당 0.5점)
-        * 아주 늦게라도 맞춘다면 5점
-        * */
+        val timeTakenMillis = (System.currentTimeMillis() - submissionTimestamp)
 
         val score = if (isCorrect) {
-            val baseScore = 10.0
-            val deductionPerMillis = 0.0005
+            val baseScore = 100.0
+            val deductionPerMillis = 0.01  // 1초당 10점 감점
             val calculatedScore = baseScore - (timeTakenMillis * deductionPerMillis)
 
-            val finalScore = maxOf(calculatedScore, 5.0)
+            val finalScore = maxOf(calculatedScore, 50.0)  // 최소 50점
 
-            (finalScore * 1000).roundToInt().toDouble() / 1000
+            finalScore.roundToInt()
         } else {
-            0.0
+            0
         }
         return Pair(isCorrect, score)
     }
@@ -105,7 +99,7 @@ class GamePlayService(
         userId: Long,
         gameId: Long,
         quiz: GameQuiz,
-        score: Double,
+        score: Int,
         isCorrect: Boolean
     ) {
         messageSender.send(
@@ -119,7 +113,7 @@ class GamePlayService(
         )
     }
 
-    private fun reflectScoreToLeaderboard(gameId: Long, userId: Long, score: Double) {
+    private fun reflectScoreToLeaderboard(gameId: Long, userId: Long, score: Int) {
         gameLeaderboardManager.incrementScore(gameId, userId, score)
     }
 
