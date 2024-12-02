@@ -14,7 +14,7 @@ class RedisSubscriber(
 ) : MessageListener {
 
     override fun onMessage(message: Message, pattern: ByteArray?) {
-        val publishMessage = message.toString()
+        val publishMessage = String(message.body)
         val gameId = objectMapper.readTree(publishMessage).get("gameId").asText()
 
         messagingTemplate.convertAndSend(
