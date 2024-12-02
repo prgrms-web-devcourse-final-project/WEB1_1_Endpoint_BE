@@ -14,4 +14,6 @@ data class SearchedQuizResponse(
     }
 }
 
-data class GameSetResponse(val quizzes: List<GameQuizDetail>)
+data class GameSetResponse(
+    val quizzes: List<GameQuizDetail>
+)
