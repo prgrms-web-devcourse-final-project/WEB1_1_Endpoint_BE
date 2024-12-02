@@ -17,11 +17,10 @@ class RedisSubscriber(
     override fun onMessage(message: Message, pattern: ByteArray?) {
         val publishMessage = String(message.body)
         val gameId = objectMapper.readTree(publishMessage).get("gameId").asText()
-        val gameMessage = objectMapper.readValue(publishMessage, GameMessage::class.java)
 
         messagingTemplate.convertAndSend(
             "${MULTIPLE_PREFIX.destination}/game/${gameId}",
-            gameMessage,
+            publishMessage,
         )
     }
 }
