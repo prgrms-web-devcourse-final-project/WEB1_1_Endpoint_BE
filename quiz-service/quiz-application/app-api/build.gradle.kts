@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":quiz-service:quiz-infra"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     //swagger

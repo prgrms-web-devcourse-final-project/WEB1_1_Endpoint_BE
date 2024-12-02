@@ -1,6 +1,7 @@
 package com.grepp.quizy.quiz.api.quizread
 
 import com.grepp.quizy.common.api.ApiResponse
+import com.grepp.quizy.quiz.api.global.log.LogApi
 import com.grepp.quizy.quiz.api.quizread.dto.UserSearchParams
 import com.grepp.quizy.quiz.api.quizread.dto.QuizSliceResponse
 import com.grepp.quizy.quiz.domain.quizread.UserQuizSearchUseCase
@@ -18,6 +19,7 @@ class QuizSearchApi(
         private val userQuizSearchUseCase: UserQuizSearchUseCase
 ) {
 
+    @LogApi
     @GetMapping
     fun searchByKeyword(
         @RequestHeader("X-Auth-Id") userId: UserId?,
@@ -32,6 +34,7 @@ class QuizSearchApi(
                     )
             )
 
+    @LogApi
     @GetMapping("/unanswered")
     fun searchUnansweredByKeyword(
         @AuthUser principal: UserPrincipal,
