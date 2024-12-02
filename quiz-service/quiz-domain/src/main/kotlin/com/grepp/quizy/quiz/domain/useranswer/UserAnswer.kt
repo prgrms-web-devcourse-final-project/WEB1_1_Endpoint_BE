@@ -1,17 +1,20 @@
 package com.grepp.quizy.quiz.domain.useranswer
 
+import java.time.LocalDateTime
+
 data class UserAnswer(
-    val id: UserAnswerId,
-    val choice: Choice
+    val key: UserAnswerKey,
+    val choice: Choice,
+    val answeredAt: LocalDateTime? = null,
 ) {
     companion object {
         fun create(
-                userAnswerId: UserAnswerId,
-                choice: Int,
-                isCorrect: Boolean? = null,
+            userAnswerKey: UserAnswerKey,
+            choice: Int,
+            isCorrect: Boolean? = null,
         ): UserAnswer {
             return UserAnswer(
-                    userAnswerId,
+                    userAnswerKey,
                     Choice.create(choice, isCorrect),
             )
         }

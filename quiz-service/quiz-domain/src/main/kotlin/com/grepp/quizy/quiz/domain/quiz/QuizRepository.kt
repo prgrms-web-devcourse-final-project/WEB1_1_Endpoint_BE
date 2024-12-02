@@ -5,6 +5,8 @@ interface QuizRepository {
 
     fun findById(id: QuizId): Quiz?
 
+    fun findByIdIn(ids: List<QuizId>): List<Quiz>
+
     fun findByIdWithLock(id: QuizId): Quiz?
 
     fun findTagsByNameIn(names: List<String>): List<QuizTag>

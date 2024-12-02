@@ -24,6 +24,12 @@ class QuizRepositoryAdapter(
                 .orElse(null)
     }
 
+    override fun findByIdIn(ids: List<QuizId>): List<Quiz> {
+        return quizJpaRepository
+                .findAllById(ids.map { it.value })
+                .map { it.toDomain() }
+    }
+
     override fun findByIdWithLock(id: QuizId): Quiz? {
         return quizJpaRepository
                 .findByIdWithLock(id.value)
