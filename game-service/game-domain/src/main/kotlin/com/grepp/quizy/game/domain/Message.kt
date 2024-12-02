@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.domain
 
-import com.grepp.quizy.game.domain.game.*
+import com.grepp.quizy.game.domain.game.Game
+import com.grepp.quizy.game.domain.game.Player
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.GameQuizOption
 
@@ -92,8 +93,8 @@ data class RoomPayload(
     val level: String,
     val quizCount: Int,
     val status: String,
-    val players: Players,
     val inviteCode: String?,
+    val players: List<UserInfoMessage>
 ) : MessagePayload {
     companion object {
         fun from(game: Game): RoomPayload {
@@ -102,8 +103,31 @@ data class RoomPayload(
                 level = game.setting.level.description,
                 quizCount = game.setting.quizCount,
                 status = game.status.description,
-                players = game.players,
                 inviteCode = game.inviteCode?.value,
+                players = game.players.players.map { UserInfoMessage.from(it) }
+            )
+        }
+    }
+}
+
+data class UserInfoMessage(
+    val id: Long,
+    val name: String,
+    val imgPath: String,
+    val rating: Int,
+    val role: String,
+    val host: Boolean,
+    val score: Int = 0
+) {
+    companion object {
+        fun from(player: Player): UserInfoMessage {
+            return UserInfoMessage(
+                id = player.user.id,
+                name = player.user.name,
+                imgPath = player.user.imgPath,
+                rating = player.user.rating,
+                host = player.isHost(),
+                role = player.role.name
             )
         }
     }
