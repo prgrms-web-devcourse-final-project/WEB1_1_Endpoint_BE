@@ -38,7 +38,7 @@ class QuizSearchRepositoryAdapter(
         val pageable = convertPageable(condition)
 
         return quizElasticRepository
-                .search(condition.field, pageable)
+                .search(condition.fields, pageable)
                 .let { slice ->
                     Slice(
                             slice.content.map {
@@ -60,7 +60,7 @@ class QuizSearchRepositoryAdapter(
     override fun searchNotIn(answeredQuizIds: List<QuizId>, condition: UserSearchCondition): Slice<Quiz> {
         val pageable = convertPageable(condition)
 
-        return quizElasticRepository.searchNotIn(condition.field, pageable, answeredQuizIds.map { it.value })
+        return quizElasticRepository.searchNotIn(condition.fields, pageable, answeredQuizIds.map { it.value })
             .let { slice ->
                 Slice(
                     slice.content.map {
