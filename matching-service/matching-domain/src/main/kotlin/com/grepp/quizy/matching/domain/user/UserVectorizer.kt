@@ -1,20 +1,25 @@
 package com.grepp.quizy.matching.domain.user
 
+import com.grepp.quizy.matching.domain.game.GameFetcher
+import com.grepp.quizy.matching.domain.game.GameRating
 import org.springframework.stereotype.Component
 
 @Component
-class UserVectorizer(private val userFetcher: com.grepp.quizy.matching.domain.user.UserFetcher) {
+class UserVectorizer(
+    private val gameFetcher: GameFetcher,
+    private val userFetcher: UserFetcher
+) {
 
-    fun vectorizeUser(userId: com.grepp.quizy.matching.domain.user.UserId): com.grepp.quizy.matching.domain.user.UserVector {
-        val rating = userFetcher.requestUserRating(userId)
+    fun vectorizeUser(userId: UserId): UserVector {
+        val rating = gameFetcher.requestGameRating(userId)
         val interests = userFetcher.requestUserInterests(userId)
-        val vectorSize = com.grepp.quizy.matching.domain.user.GameRating.entries.size + com.grepp.quizy.matching.domain.user.InterestCategory.entries.size
+        val vectorSize = GameRating.entries.size + InterestCategory.entries.size
 
-        return com.grepp.quizy.matching.domain.user.UserVector(
+        return UserVector(
             FloatArray(vectorSize).apply {
                 this[rating.index] = 1.0f
                 interests.forEach {
-                    this[it.index + com.grepp.quizy.matching.domain.user.InterestCategory.Companion.VECTOR_START_INDEX] =
+                    this[it.index + InterestCategory.VECTOR_START_INDEX] =
                         1.0f
                 }
             }
