@@ -15,6 +15,7 @@ class GamePrivateService(
     private val userReader: UserReader,
     private val eventPublisher: ApplicationEventPublisher,
     private val messagePublisher: GameMessagePublisher,
+    private val messageSender: GameMessageSender
 ) {
 
     fun create(
@@ -84,6 +85,13 @@ class GamePrivateService(
         val currentGame = gamePlayerManager.kick(game, userId, targetUserId)
         messagePublisher.publish(
             GameMessage.room(currentGame)
+        )
+        messageSender.send(
+            targetUserId.toString(),
+            GameMessage.kick(
+                gameId,
+                targetUserId
+            )
         )
     }
 

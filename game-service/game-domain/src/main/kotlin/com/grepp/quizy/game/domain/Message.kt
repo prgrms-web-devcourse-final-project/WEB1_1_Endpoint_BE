@@ -12,6 +12,7 @@ enum class MessageType {
     QUIZ_TRANSMITTED,
     SCORE_BOARD,
     GAME_END,
+    KICKED,
     ERROR,
 }
 
@@ -72,6 +73,17 @@ data class GameMessage(
                 gameId = gameId,
                 type = MessageType.SCORE_BOARD,
                 payload = LeaderboardPayload.from(leaderboard),
+            )
+        }
+
+        fun kick(
+            gameId: Long,
+            targetUserId: Long
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.KICKED,
+                payload = KickedPayload.from(targetUserId),
             )
         }
 
@@ -220,6 +232,18 @@ data class LeaderboardInfo(
     }
 }
 
+data class KickedPayload(
+    val userId: Long,
+) : MessagePayload {
+    companion object {
+        fun from(userId: Long): KickedPayload {
+            return KickedPayload(
+                userId = userId,
+            )
+        }
+    }
+}
+
 data class ErrorPayload(
     val errorCode: String,
     val message: String,
@@ -232,6 +256,7 @@ data class ErrorPayload(
             )
         }
     }
+
 }
 
 // TODO: Implement other message payloads
