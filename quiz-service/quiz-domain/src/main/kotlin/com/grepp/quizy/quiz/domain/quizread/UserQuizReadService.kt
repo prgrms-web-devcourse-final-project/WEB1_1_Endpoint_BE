@@ -23,7 +23,7 @@ class UserQuizReadService(
     private fun searchUserPersonalFeed(userId: UserId, condition: FeedSearchCondition): QuizFeed {
         val feedCondition = condition.interest?.let { condition }
             ?: FeedSearchCondition(condition.page, findUserInterest(userId))
-        val searchedQuizzes = quizSearcher.searchByCategoryUnanswered(userId, condition)
+        val searchedQuizzes = quizSearcher.searchByCategoryUnanswered(userId, feedCondition)
         val content = quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
 
         return QuizFeed(feedCondition.interest!!, Slice(content, searchedQuizzes.hasNext))
@@ -32,7 +32,7 @@ class UserQuizReadService(
     private fun searchRandomFeed(condition: FeedSearchCondition): QuizFeed {
         val feedCondition = condition.interest?.let { condition }
             ?: FeedSearchCondition(condition.page, QuizCategory.entries.random())
-        val searchedQuizzes = quizSearcher.searchByCategory(condition)
+        val searchedQuizzes = quizSearcher.searchByCategory(feedCondition)
         val content = quizMetadataCombiner.combine(null, searchedQuizzes)
 
         return QuizFeed(feedCondition.interest!!, Slice(content, searchedQuizzes.hasNext))
