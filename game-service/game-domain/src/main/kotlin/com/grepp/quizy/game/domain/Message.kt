@@ -54,7 +54,7 @@ data class GameMessage(
         fun quizAnswer(
             gameId: Long,
             gameQuiz: GameQuiz,
-            score: Double,
+            score: Int,
             correct: Boolean
         ): GameMessage {
             return GameMessage(
@@ -176,13 +176,13 @@ data class QuizInfo(
 }
 
 data class QuizAnswerPayload(
-    val score: Double,
+    val score: Int,
     val correct: Boolean,
     val answer: String,
     val explanation: String,
 ) : MessagePayload {
     companion object {
-        fun of(gameQuiz: GameQuiz, score: Double, correct: Boolean): QuizAnswerPayload {
+        fun of(gameQuiz: GameQuiz, score: Int, correct: Boolean): QuizAnswerPayload {
             return QuizAnswerPayload(
                 score = score,
                 correct = correct,
@@ -208,10 +208,10 @@ data class LeaderboardPayload(
 
 data class LeaderboardInfo(
     val userId: Long,
-    val score: Double
+    val score: Int
 ) {
     companion object {
-        fun of(userId: Long, score: Double): LeaderboardInfo {
+        fun of(userId: Long, score: Int): LeaderboardInfo {
             return LeaderboardInfo(
                 userId = userId,
                 score = score
