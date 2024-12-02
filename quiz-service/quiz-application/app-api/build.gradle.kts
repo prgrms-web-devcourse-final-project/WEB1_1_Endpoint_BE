@@ -19,6 +19,9 @@ dependencies {
 
     //swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+    // logback
+    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 }
 
 tasks.named<BootJar>("bootJar") {

@@ -25,6 +25,10 @@ spring:
 server:
   port: 8083
 
+logstash:
+  host: localhost
+  port: 5044
+
 springdoc:
   api-docs:
     version: openapi_3_1
@@ -36,6 +40,11 @@ spring:
   config:
     activate:
       on-profile: dev
+
+logstash:
+  host: ${LOGSTASH_HOST}
+  port: ${LOGSTASH_PORT}
+
 springdoc:
   api-docs:
     version: openapi_3_1
