@@ -12,7 +12,7 @@ class QuizAppender(
     fun appendAll(
         quizzes: List<GameQuiz>
     ): List<GameQuiz> {
-        quizzes.map {
+        val newQuizzes = quizzes.map {
             // 실제 외부에서 준 ID는 내가 사용 할 이유가 없음(어차피 1회성 id임 다른 서비스와 정합성 필요x)
             GameQuiz(
                 id = idGenerator.generate("quiz"),
@@ -21,7 +21,7 @@ class QuizAppender(
                 options = it.options
             )
         }
-        return quizRepository.saveAll(quizzes)
+        return quizRepository.saveAll(newQuizzes)
     }
 
 }
