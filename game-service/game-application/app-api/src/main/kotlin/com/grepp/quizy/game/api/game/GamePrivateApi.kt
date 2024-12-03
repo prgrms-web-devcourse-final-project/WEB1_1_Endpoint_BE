@@ -46,4 +46,13 @@ class GamePrivateApi(
             )
         )
 
+    @PostMapping("/start")
+    fun start(
+        @AuthUser userPrincipal: UserPrincipal,
+        @RequestParam gameId: Long
+    ): Unit =
+        gamePrivateService.start(
+            userPrincipal.value,
+            gameId
+        )
 }

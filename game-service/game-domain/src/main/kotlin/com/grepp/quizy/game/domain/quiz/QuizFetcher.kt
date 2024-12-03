@@ -6,9 +6,9 @@ import com.grepp.quizy.game.domain.game.GameSubject
 interface QuizFetcher {
 
     fun fetchQuiz(
-        subject: GameSubject,
-        quizCount: Int,
-        level: GameLevel
+        category: GameSubject,
+        size: Int,
+        difficulty: GameLevel
     ): Quizzes
 
 }

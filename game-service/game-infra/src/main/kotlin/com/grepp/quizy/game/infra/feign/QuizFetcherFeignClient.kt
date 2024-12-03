@@ -13,9 +13,9 @@ interface QuizFetcherFeignClient : QuizFetcher {
 
     @GetMapping("/api/quiz/internal/game-set")
     override fun fetchQuiz(
-        @RequestParam subject: GameSubject,
-        @RequestParam quizCount: Int,
-        @RequestParam level: GameLevel
+       @RequestParam category: GameSubject,
+       @RequestParam size: Int,
+       @RequestParam difficulty: GameLevel
     ): Quizzes
 
 }
