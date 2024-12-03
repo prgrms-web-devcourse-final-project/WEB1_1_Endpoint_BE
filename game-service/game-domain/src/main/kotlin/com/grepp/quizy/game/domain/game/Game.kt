@@ -93,7 +93,7 @@ class Game(
     }
 
     fun start(userId: Long) {
-        validateHostPermission(userId)
+//        validateHostPermission(userId)
         this._status = GameStatus.PLAYING
     }
 
