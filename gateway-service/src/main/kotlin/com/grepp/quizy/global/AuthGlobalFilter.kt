@@ -129,7 +129,7 @@ class AuthGlobalFilter(
 class RouteValidator {
     private val openApiEndpoints = listOf(
         "/oauth2",
-        "/api/quiz/feed",
+        "/api/quiz/my/feed",
         "/api/quiz/search",
         "/api/user/info/",
         "/login/oauth2/code",
