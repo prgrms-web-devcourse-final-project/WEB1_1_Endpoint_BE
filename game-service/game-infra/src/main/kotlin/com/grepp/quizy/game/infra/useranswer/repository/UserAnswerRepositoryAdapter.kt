@@ -12,9 +12,18 @@ class UserAnswerRepositoryAdapter(
     private val redisTemplate: RedisTemplate<String, String>,
     private val objectMapper: ObjectMapper
 ) : UserAnswerRepository {
+
     override fun save(userAnswer: UserAnswer): Long? {
         val userAnswerKey = "game:${userAnswer.gameId}:userAnswer:${userAnswer.userId}"
         val userAnswerRedis = UserAnswerRedis.from(userAnswer)
         return redisTemplate.opsForList().rightPush(userAnswerKey, objectMapper.writeValueAsString(userAnswerRedis))
     }
+
+    override fun findAllByGameIdAndUserId(gameId: Long, userId: Long): List<UserAnswer> {
+        val userAnswerKey = "game:$gameId:userAnswer:$userId"
+        return redisTemplate.opsForList().range(userAnswerKey, 0, -1)
+            ?.map { objectMapper.readValue(it, UserAnswerRedis::class.java).toDomain(gameId, userId) }
+            ?: emptyList()
+    }
+
 }

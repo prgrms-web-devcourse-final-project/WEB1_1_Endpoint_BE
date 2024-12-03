@@ -18,4 +18,14 @@ class UserAnswerRedis(
             isCorrect = userAnswer.isCorrect
         )
     }
+
+    fun toDomain(gameId: Long, userId: Long) = UserAnswer(
+        quizContent = quizContent,
+        choice = choice,
+        answer = answer,
+        explanation = explanation,
+        isCorrect = isCorrect,
+        gameId = gameId,
+        userId = userId
+    )
 }
