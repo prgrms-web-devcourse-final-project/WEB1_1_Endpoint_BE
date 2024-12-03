@@ -15,10 +15,14 @@ dependencies {
     implementation(project(":quiz-service:quiz-infra"))
 
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     //swagger
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+
+    // logback
+    implementation("net.logstash.logback:logstash-logback-encoder:8.0")
 }
 
 tasks.named<BootJar>("bootJar") {

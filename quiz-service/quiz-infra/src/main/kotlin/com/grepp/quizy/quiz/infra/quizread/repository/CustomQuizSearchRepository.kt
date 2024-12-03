@@ -9,12 +9,12 @@ import org.springframework.data.domain.Slice
 interface CustomQuizSearchRepository {
 
     fun search(
-            keyword: String,
+            keywords: List<String>,
             pageable: Pageable,
     ): Slice<QuizDocument>
 
     fun searchNotIn(
-        keyword: String,
+        keyword: List<String>,
         pageable: Pageable,
         quizIds: List<Long>
     ): Slice<QuizDocument>

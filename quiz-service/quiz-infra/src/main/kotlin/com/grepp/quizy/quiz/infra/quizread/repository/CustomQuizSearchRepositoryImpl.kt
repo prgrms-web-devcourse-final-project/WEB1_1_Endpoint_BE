@@ -34,12 +34,12 @@ class CustomQuizSearchRepositoryImpl(
             )
 
     override fun search(
-            keyword: String,
-            pageable: Pageable,
+        keywords: List<String>,
+        pageable: Pageable,
     ): Slice<QuizDocument> {
         val query =
                 QueryBuilders.multiMatch()
-                        .query(keyword)
+                        .query(keywords.joinToString(" "))
                         .fields(keywordSearchFields)
                         .build()
                         ._toQuery()
@@ -53,11 +53,11 @@ class CustomQuizSearchRepositoryImpl(
         return convertToSlice(nativeQuery, pageable)
     }
 
-    override fun searchNotIn(keyword: String, pageable: Pageable, quizIds: List<Long>): Slice<QuizDocument> {
+    override fun searchNotIn(keywords: List<String>, pageable: Pageable, quizIds: List<Long>): Slice<QuizDocument> {
         val query = QueryBuilders.bool()
             .must(
                 QueryBuilders.multiMatch()
-                    .query(keyword)
+                    .query(keywords.joinToString(" "))
                     .fields(keywordSearchFields)
                     .build()
                     ._toQuery()

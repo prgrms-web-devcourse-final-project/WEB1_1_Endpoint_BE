@@ -31,4 +31,7 @@ class QuizSearcher(
     fun searchByCategory(condition: FeedSearchCondition): Slice<Quiz> {
         return quizSearchRepository.searchNotIn(condition)
     }
+
+    fun searchTrendingKeyword(): List<String> =
+        quizSearchRepository.searchTrendingKeyword().map { "#$it" }
 }

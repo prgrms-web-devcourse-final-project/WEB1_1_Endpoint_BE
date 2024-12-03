@@ -26,4 +26,7 @@ class UserQuizSearchService(
             quizMetadataCombiner.combineWithoutUserAnswer(userId, searchedQuizzes)
         return Slice(content, searchedQuizzes.hasNext)
     }
+
+    override fun searchTrendingKeyword(): List<String> =
+        quizSearcher.searchTrendingKeyword()
 }

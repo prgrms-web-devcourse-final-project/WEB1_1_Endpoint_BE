@@ -18,7 +18,7 @@ enum class QuizSortType {
 }
 
 data class UserSearchCondition(
-    val field: String,
+    val fields: List<String>,
     private val page: Page,
     val sort: QuizSortType,
 ) : SearchCondition {

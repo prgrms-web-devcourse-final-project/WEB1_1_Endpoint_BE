@@ -9,14 +9,14 @@ import com.grepp.quizy.quiz.domain.quizread.QuizSortType
 import com.grepp.quizy.quiz.domain.quizread.UserSearchCondition
 
 data class UserSearchParams(
-        val keyword: String,
+        val keyword: List<String>,
         val page: Int = 0,
         val size: Int = 0,
         val sort: QuizSortType = QuizSortType.TRENDING,
 ) {
     fun UserSearchCondition() =
             UserSearchCondition(
-                    field = keyword,
+                    fields = keyword,
                     page = Page(page, size),
                     sort = sort,
             )

@@ -1,86 +1,16 @@
 {
   "index_patterns": ["logstash-*"],
+  "priority": 200,
   "template": {
     "settings": {
-      "number_of_shards": 1,
-      "analysis": {
-        "tokenizer": {
-          "my_nori_tokenizer": {
-            "type": "nori_tokenizer",
-            "decompound_mode": "mixed",
-            "discard_punctuation": false
-          },
-          "my_ngram_tokenizer": {
-            "type": "ngram",
-            "min_gram": 1,
-            "max_gram": 3,
-            "token_chars": [
-              "letter",
-              "digit"
-            ]
-          }
-        },
-        "filter": {
-          "stopwords": {
-            "type": "stop",
-            "stopwords": "_english_"
-          }
-        },
-        "analyzer": {
-          "my_nori_analyzer": {
-            "type": "custom",
-            "tokenizer": "my_nori_tokenizer",
-            "filter": [
-              "lowercase",
-              "stop",
-              "trim",
-              "stopwords",
-              "nori_part_of_speech"
-            ],
-            "char_filter": [
-              "html_strip"
-            ]
-          },
-          "my_ngram_analyzer": {
-            "type": "custom",
-            "tokenizer": "my_ngram_tokenizer",
-            "filter": [
-              "lowercase",
-              "stop",
-              "trim",
-              "stopwords",
-              "nori_part_of_speech"
-            ],
-            "char_filter": [
-              "html_strip"
-            ]
-          }
-        }
-      }
+      "number_of_shards": 1
     },
     "mappings": {
       "properties": {
         "keyword": {
-          "type": "text",
-          "analyzer": "my_nori_analyzer",
-          "fields": {
-            "keyword": {
-              "type": "keyword"
-
-            },
-            "nori": {
-              "type": "text",
-              "analyzer": "my_nori_analyzer"
-            },
-            "ngram": {
-              "type": "text",
-              "analyzer": "my_ngram_analyzer"
-            }
-          }
+          "type": "keyword"
         }
       }
     }
-  },
-  "priority": 200,
-  "version": 1
+  }
 }
