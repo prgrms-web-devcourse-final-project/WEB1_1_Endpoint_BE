@@ -14,6 +14,7 @@ class UserRemover(
         val user = userRepository.findById(userId.value) ?: throw CustomUserException.UserNotFoundException
         userRepository.delete(user)
         redisTokenRepository.removeUser(user.id)
+        redisTokenRepository.deleteRefreshToken(userId)
         eventPublisher.publish(UserDeletedEvent.from(user))
     }
 }
