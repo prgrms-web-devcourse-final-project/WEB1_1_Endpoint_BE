@@ -11,12 +11,12 @@ class GameLeaderboardManager(
         gameLeaderboardRepository.saveAll(gameId, userIds)
     }
 
-    fun incrementScore(gameId: Long, userId: Long, score: Double) {
+    fun incrementScore(gameId: Long, userId: Long, score: Int) {
         gameLeaderboardRepository.increaseScore(gameId, userId, score)
     }
 
-    fun getLeaderboard(gameId: Long): Map<Long, Double> {
-        return gameLeaderboardRepository.findAll(gameId) ?: emptyMap()
+    fun getLeaderboard(gameId: Long): Map<Long, Int> {
+        return gameLeaderboardRepository.findAll(gameId)
     }
 
 }

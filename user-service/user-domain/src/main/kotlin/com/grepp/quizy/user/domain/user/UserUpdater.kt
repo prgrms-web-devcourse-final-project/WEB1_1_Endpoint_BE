@@ -25,7 +25,7 @@ class UserUpdater(
             )
         )
         userRepository.save(user)
-        userMessageSender.send(UpdateUserEvent.from(user))
+//        userMessageSender.send(UpdateUserEvent.from(user))
     }
 
     fun updateRole(userId: UserId) {

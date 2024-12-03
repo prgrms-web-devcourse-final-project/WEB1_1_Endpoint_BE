@@ -1,5 +1,10 @@
 package com.grepp.quizy.game.domain.quiz
 
+class Quizzes(
+    val quizzes: List<GameQuiz>
+) {
+}
+
 class GameQuiz(
     val id: Long,
     val content: String, // 퀴즈 질문

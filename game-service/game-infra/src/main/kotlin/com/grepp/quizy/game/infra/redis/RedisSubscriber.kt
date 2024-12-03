@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.infra.redis
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.infra.websocket.WebSocketDestination.MULTIPLE_PREFIX
 import org.springframework.data.redis.connection.Message
 import org.springframework.data.redis.connection.MessageListener

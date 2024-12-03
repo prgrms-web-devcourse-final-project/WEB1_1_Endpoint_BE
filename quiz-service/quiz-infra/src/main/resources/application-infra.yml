@@ -37,13 +37,6 @@ spring:
 shedlock:
   name: like_sync_lock
 
-kafka:
-  topic:
-    user: user
-    quiz: quiz
-  consumer-group:
-    user: user
-
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
   num-of-partitions: 3
@@ -164,7 +157,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true

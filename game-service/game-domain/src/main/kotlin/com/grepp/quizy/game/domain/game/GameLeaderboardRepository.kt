@@ -4,8 +4,8 @@ interface GameLeaderboardRepository {
 
     fun saveAll(gameId: Long, ids: List<Long>)
 
-    fun increaseScore(gameId: Long, userId: Long, score: Double)
+    fun increaseScore(gameId: Long, userId: Long, score: Int)
 
-    fun findAll(gameId: Long): Map<Long, Double>
+    fun findAll(gameId: Long): Map<Long, Int>
 
 }
