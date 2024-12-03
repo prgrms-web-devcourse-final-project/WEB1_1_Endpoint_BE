@@ -8,9 +8,13 @@ import com.grepp.quizy.game.domain.quiz.QuizFetcher
 import com.grepp.quizy.game.domain.quiz.QuizReader
 import com.grepp.quizy.game.domain.useranswer.UserAnswer
 import com.grepp.quizy.game.domain.useranswer.UserAnswerAppender
+import com.grepp.quizy.game.domain.useranswer.UserAnswerReader
 import org.springframework.context.event.EventListener
+import org.springframework.scheduling.TaskScheduler
 import org.springframework.stereotype.Service
+import java.time.Instant
 import kotlin.math.roundToInt
+
 
 @Service
 class GamePlayService(
@@ -21,9 +25,12 @@ class GamePlayService(
     private val gameQuizReader: GameQuizReader,
     private val quizReader: QuizReader,
     private val userAnswerAppender: UserAnswerAppender,
+    private val userAnswerReader: UserAnswerReader,
     private val gameLeaderboardManager: GameLeaderboardManager,
     private val messagePublisher: GameMessagePublisher,
-    private val messageSender: GameMessageSender
+    private val messageSender: GameMessageSender,
+    private val ratingCalculator: RatingCalculator,
+    private val taskScheduler: TaskScheduler
 ) {
 
     // 게임 로딩..? 비동기 추가(코루틴?)
@@ -40,6 +47,10 @@ class GamePlayService(
         gameLeaderboardManager.initializeLeaderboard(
             event.game.id,
             event.game.players.players.map { it.user.id }
+        )
+        taskScheduler.schedule(
+            { endGame(event.game.id) },
+            Instant.now().plusSeconds(event.game.setting.quizCount * 10L + 1L)
         )
         // 게임에서 사용할 퀴즈 전송
         messagePublisher.publish(
@@ -143,11 +154,38 @@ class GamePlayService(
         )
     }
 
-    // TODO: 게임 종료
-    fun endGame() {
-        // 개인에게 결과 전송..?
-        // 레디스에 있는 게임 정보 Mysql에 저장
-        // 레디스에 있는 게임 정보 삭제
+    fun endGame(gameId: Long) {
+        val game = gameReader.read(gameId)
+
+        val leaderboard = gameLeaderboardManager.getLeaderboard(gameId)
+        val ratings = game.players.players.associate { it.user.id to it.user.rating }
+
+        val newRatings = if (game.type == GameType.RANDOM) {
+            ratingCalculator.calculateElo(leaderboard, ratings)
+        } else {
+            ratings
+        }
+
+        game.players.players.map {
+            val ratingDiff = newRatings[it.user.id]!! - ratings[it.user.id]!!
+
+            messageSender.send(
+                it.user.id.toString(),
+                GameMessage.result(
+                    gameId,
+                    leaderboard[it.user.id]!!,
+                    newRatings[it.user.id]!!,
+                    ratingDiff,
+                    userAnswerReader.readAll(
+                        it.user.id, gameId
+                    )
+                )
+            )
+        }
+        // 게임 정보 MySQL 저장
+
+
+        // 게임 정보 삭제
     }
 
 }
