@@ -26,8 +26,6 @@ class QuizSearchRepositoryAdapter(
         quizElasticRepository.saveAll(map)
     }
 
-
-
     override fun findById(quizId: QuizId): Quiz? {
         return quizElasticRepository.findByIdOrNull(quizId.value)?.let {
             QuizDomainFactory.toQuiz(it)
@@ -61,6 +59,34 @@ class QuizSearchRepositoryAdapter(
         val pageable = convertPageable(condition)
 
         return quizElasticRepository.searchNotIn(condition.field, pageable, answeredQuizIds.map { it.value })
+            .let { slice ->
+                Slice(
+                    slice.content.map {
+                        QuizDomainFactory.toQuiz(it)
+                    },
+                    slice.hasNext(),
+                )
+            }
+    }
+
+    override fun searchNotIn(answeredQuizIds: List<QuizId>, condition: FeedSearchCondition): Slice<Quiz> {
+        val pageable = convertPageable(condition)
+
+        return quizElasticRepository.searchByCategoryNotIn(condition.interest!!.name, pageable, answeredQuizIds.map { it.value })
+            .let { slice ->
+                Slice(
+                    slice.content.map {
+                        QuizDomainFactory.toQuiz(it)
+                    },
+                    slice.hasNext(),
+                )
+            }
+    }
+
+    override fun searchNotIn(condition: FeedSearchCondition): Slice<Quiz> {
+        val pageable = convertPageable(condition)
+
+        return quizElasticRepository.searchByCategory(condition.interest!!.name, pageable)
             .let { slice ->
                 Slice(
                     slice.content.map {
