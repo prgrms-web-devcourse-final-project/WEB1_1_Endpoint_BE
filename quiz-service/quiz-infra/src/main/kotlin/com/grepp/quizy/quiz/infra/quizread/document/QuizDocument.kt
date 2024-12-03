@@ -20,7 +20,7 @@ class QuizDocument(
         @Field(type = FieldType.Text) var content: String,
         @Field(type = FieldType.Text) var tags: List<String>,
         @Field(type = FieldType.Nested) var options: List<QuizOptionVO>,
-        @Field(type = FieldType.Integer) val totalAnsweredUsers: Long,
+        @Field(type = FieldType.Integer) var totalAnsweredUsers: Long,
         @Field(type = FieldType.Object) var answer: QuizAnswerVO?,
         @Field(type = FieldType.Keyword) val difficulty: QuizDifficulty?,
         @Field(
@@ -115,10 +115,12 @@ class QuizDocument(
 
         fun addQuizOption(option: QuizOptionVO) {
                 this.options += option
+                totalAnsweredUsers = options.sumOf { it.selectionCount }
         }
 
         fun removeQuizOption(number: Int) {
                 options = options.filterNot { it.optionNumber == number }
+                totalAnsweredUsers = options.sumOf { it.selectionCount }
         }
 
         fun addQuizTag(name: String) {
