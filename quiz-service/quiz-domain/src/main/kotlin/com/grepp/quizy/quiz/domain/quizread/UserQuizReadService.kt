@@ -38,5 +38,8 @@ class UserQuizReadService(
         return QuizFeed(feedCondition.interest!!, Slice(content, searchedQuizzes.hasNext))
     }
 
-    private fun findUserInterest(userId: UserId) = quizUserReader.read(userId).interests.random()
+    private fun findUserInterest(userId: UserId): QuizCategory {
+        val user = quizUserReader.read(userId)
+        return if (user.interests.isEmpty()) QuizCategory.entries.random() else user.interests.random()
+    }
 }

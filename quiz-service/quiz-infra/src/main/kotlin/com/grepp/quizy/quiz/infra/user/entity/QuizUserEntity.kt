@@ -31,7 +31,7 @@ class QuizUserEntity(
     }
 
     fun toDomain(): QuizUser {
-        return QuizUser(UserId(id), name, imgPath)
+        return QuizUser(UserId(id), name, imgPath, interests.map { it.interest }.toMutableList())
     }
 
     fun update(name: String, imgPath: String) {
