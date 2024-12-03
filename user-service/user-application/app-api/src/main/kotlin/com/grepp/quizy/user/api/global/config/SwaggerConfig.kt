@@ -1,6 +1,5 @@
 package com.grepp.quizy.user.api.global.config
 
-import com.grepp.quizy.web.annotation.AuthUser
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI

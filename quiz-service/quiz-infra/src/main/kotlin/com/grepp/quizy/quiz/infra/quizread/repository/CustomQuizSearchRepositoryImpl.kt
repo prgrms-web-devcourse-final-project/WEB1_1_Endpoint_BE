@@ -62,13 +62,7 @@ class CustomQuizSearchRepositoryImpl(
                     .build()
                     ._toQuery()
             )
-            .mustNot(
-                QueryBuilders.terms().field(ID_FIELD).terms(TermsQueryField.of { tqf ->
-                    tqf.value(quizIds.map { FieldValue.of(it) })
-                })
-                    .build()
-                    ._toQuery()
-            )
+            .mustNot(mustNotIdsInQuery(quizIds))
             .build()
             ._toQuery()
 
@@ -79,6 +73,43 @@ class CustomQuizSearchRepositoryImpl(
                 .build()
 
         return convertToSlice(nativeQuery, pageable)
+    }
+
+    override fun searchByCategoryNotIn(
+        category: String,
+        pageable: Pageable,
+        quizIds: List<Long>
+    ): Slice<QuizDocument> {
+        val query = NativeQueryBuilder()
+            .withQuery(
+                QueryBuilders.bool()
+                    .must(
+                        QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery()
+                    )
+                    .mustNot(mustNotIdsInQuery(quizIds))
+                    .build()
+                    ._toQuery()
+            )
+            .withPageable(pageable)
+            .build()
+
+        return convertToSlice(query, pageable)
+    }
+
+    override fun searchByCategory(category: String, pageable: Pageable): Slice<QuizDocument> {
+        val query = NativeQueryBuilder()
+            .withQuery(
+                QueryBuilders.bool()
+                    .must(
+                        QueryBuilders.term().field(CATEGORY_FIELD).value(category).build()._toQuery()
+                    )
+                    .build()
+                    ._toQuery()
+            )
+            .withPageable(pageable)
+            .build()
+
+        return convertToSlice(query, pageable)
     }
 
     override fun searchAnswerableQuiz(category: String, difficulty: QuizDifficulty, pageable: Pageable): List<QuizDocument> {
@@ -108,12 +139,16 @@ class CustomQuizSearchRepositoryImpl(
             .toList()
     }
 
-    override fun searchUserAnswer(
-            userId: Long,
-            quizIds: List<Long>,
-    ): Map<Long, Int> {
-        TODO("Not yet implemented")
-    }
+    private fun mustNotIdsInQuery(ids: List<Long>) =
+        QueryBuilders.terms()
+            .field(ID_FIELD)
+            .terms(
+                TermsQueryField.of { tqf ->
+                    tqf.value(ids.map { FieldValue.of(it) })
+                })
+            .build()
+            ._toQuery()
+
 
     private fun convertToSlice(nativeQuery: NativeQuery, pageable: Pageable): Slice<QuizDocument> {
         val searchHits =

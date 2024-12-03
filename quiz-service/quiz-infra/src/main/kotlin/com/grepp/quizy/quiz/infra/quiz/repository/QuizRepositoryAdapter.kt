@@ -1,6 +1,10 @@
 package com.grepp.quizy.quiz.infra.quiz.repository
 
+import com.grepp.quizy.common.dto.Cursor
+import com.grepp.quizy.common.dto.SliceResult
+import com.grepp.quizy.jpa.utils.PagingUtil
 import com.grepp.quizy.quiz.domain.quiz.*
+import com.grepp.quizy.quiz.domain.user.UserId
 import com.grepp.quizy.quiz.infra.quiz.entity.*
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -22,6 +26,19 @@ class QuizRepositoryAdapter(
                 .findById(id.value)
                 .map { it.toDomain() }
                 .orElse(null)
+    }
+
+    override fun findAllByCreatorId(creatorId: UserId, cursor: Cursor): SliceResult<Quiz> {
+        val quizzes = quizJpaRepository
+                .findAllByUserId(creatorId.value, PagingUtil.toPageRequest(cursor))
+                .map { it.toDomain() }
+        return SliceResult.of(quizzes.toList(), quizzes.hasNext())
+    }
+
+    override fun findByIdIn(ids: List<QuizId>): List<Quiz> {
+        return quizJpaRepository
+                .findAllById(ids.map { it.value })
+                .map { it.toDomain() }
     }
 
     override fun findByIdWithLock(id: QuizId): Quiz? {

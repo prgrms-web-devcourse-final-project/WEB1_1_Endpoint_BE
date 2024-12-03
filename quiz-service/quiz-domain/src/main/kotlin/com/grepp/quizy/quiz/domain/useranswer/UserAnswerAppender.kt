@@ -11,20 +11,20 @@ class UserAnswerAppender(
 
     fun append(
         quiz: Quiz,
-        id: UserAnswerId,
+        key: UserAnswerKey,
         userChoice: Int,
     ): UserAnswer {
         val userAnswer =
                 when (quiz) {
                     is Answerable ->
                             UserAnswer.create(
-                                    id,
+                                    key,
                                     userChoice,
                                     quiz.isCorrect(userChoice),
                             )
                     else ->
                             UserAnswer.create(
-                                    id,
+                                    key,
                                     userChoice,
                             )
                 }
