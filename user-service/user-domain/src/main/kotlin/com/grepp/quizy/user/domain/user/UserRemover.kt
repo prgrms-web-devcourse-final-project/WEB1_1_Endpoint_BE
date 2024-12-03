@@ -1,5 +1,6 @@
 package com.grepp.quizy.user.domain.user
 
+import com.grepp.quizy.common.event.EventPublisher
 import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import org.springframework.stereotype.Component
 
@@ -7,12 +8,13 @@ import org.springframework.stereotype.Component
 class UserRemover(
     private val userRepository: UserRepository,
     private val redisTokenRepository: RedisTokenRepository,
-    private val userMessageSender: UserMessageSender
+    private val eventPublisher: EventPublisher,
 ) {
     fun remove(userId: UserId) {
         val user = userRepository.findById(userId.value) ?: throw CustomUserException.UserNotFoundException
         userRepository.delete(user)
         redisTokenRepository.removeUser(user.id)
-//        userMessageSender.send(DeleteUserEvent.from(user))
+        redisTokenRepository.deleteRefreshToken(userId)
+        eventPublisher.publish(UserDeletedEvent.from(user))
     }
 }

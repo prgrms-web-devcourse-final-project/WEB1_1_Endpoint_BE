@@ -3,10 +3,12 @@ package com.grepp.quizy.user.infra.user.repository
 import com.grepp.quizy.user.domain.user.User
 import com.grepp.quizy.user.domain.user.UserRepository
 import com.grepp.quizy.user.infra.user.entity.UserEntity
+import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
 
 @Repository
+@Transactional
 class UserRepositoryAdaptor(
     private val userJPARepository: UserJPARepository
 ) : UserRepository {

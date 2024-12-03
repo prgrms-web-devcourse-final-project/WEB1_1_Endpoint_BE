@@ -13,8 +13,8 @@ class FakeUserRepository : UserRepository {
         val savedUser = if (user.id == 0L) {
             User(
                 id = sequence.incrementAndGet(),
-                name = user.name,
-                imgPath = user.imgPath,
+                _name = user.name,
+                _imgPath = user.imgPath,
             )
         } else {
             user

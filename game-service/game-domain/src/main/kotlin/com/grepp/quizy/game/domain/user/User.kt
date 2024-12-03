@@ -2,17 +2,19 @@ package com.grepp.quizy.game.domain.user
 
 class User(
     val id: Long = 0,
-    val name: String,
-    val imgPath: String,
+    private var _name: String,
+    private var _imgPath: String,
     val rating: Int = 1500,
 ) {
-    companion object {
-        fun from(event: UserCreatedEvent): User {
-            return User(
-                id = event.userId,
-                name = event.name,
-                imgPath = event.profileImageUrl
-            )
-        }
+    val name: String
+        get() = _name
+
+    val imgPath: String
+        get() = _imgPath
+
+    fun updateUserInfo(name: String, imgPath: String) {
+        this._name = name
+        this._imgPath = imgPath
     }
+
 }

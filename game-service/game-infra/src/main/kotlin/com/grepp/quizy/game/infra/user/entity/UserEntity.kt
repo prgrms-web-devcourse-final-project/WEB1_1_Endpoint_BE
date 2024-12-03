@@ -28,8 +28,8 @@ class UserEntity(
     fun toDomain(): User {
         return User(
             id = id,
-            name = name,
-            imgPath = imgPath,
+            _name = name,
+            _imgPath = imgPath,
             rating = rating
         )
     }

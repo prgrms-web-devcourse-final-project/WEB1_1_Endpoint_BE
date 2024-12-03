@@ -5,6 +5,7 @@ import com.grepp.quizy.user.domain.quiz.QuizScoreReader
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(
@@ -20,6 +21,8 @@ class UserService(
 
     ) : UserCreateUseCase, UserReadUseCase, UserDeleteUseCase, UserLogoutUseCase, UserReissueUseCase, UserValidUseCase,
     UserUpdateUseCase {
+
+    @Transactional
     override fun appendUser(user: User): User {
         return userAppender.append(user)
     }
@@ -44,6 +47,7 @@ class UserService(
         )
     }
 
+    @Transactional
     override fun removeUser(userId: UserId) {
         userRemover.remove(userId)
     }
@@ -56,6 +60,7 @@ class UserService(
         return userReissueManager.reissue(userId)
     }
 
+    @Transactional
     override fun updateProfile(userId: UserId, name: String?, imageFile: ImageFile?) {
         userUpdater.updateProfile(userId, name, imageFile)
     }

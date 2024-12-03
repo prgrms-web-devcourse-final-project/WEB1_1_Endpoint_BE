@@ -1,12 +1,13 @@
 package com.grepp.quizy.user.domain.user
 
+import com.grepp.quizy.common.event.EventPublisher
 import com.grepp.quizy.user.domain.user.exception.CustomUserException
 import org.springframework.stereotype.Component
 
 @Component
 class UserUpdater(
     private val userRepository: UserRepository,
-    private val userMessageSender: UserMessageSender,
+    private val eventPublisher: EventPublisher,
     private val profileImageUploader: ProfileImageUploader,
 ) {
     fun updateProfile(userId: UserId, name: String?, imageFile: ImageFile?) {
@@ -25,7 +26,7 @@ class UserUpdater(
             )
         )
         userRepository.save(user)
-//        userMessageSender.send(UpdateUserEvent.from(user))
+        eventPublisher.publish(UserUpdatedEvent.from(user))
     }
 
     fun updateRole(userId: UserId) {

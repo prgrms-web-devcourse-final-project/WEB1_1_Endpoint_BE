@@ -28,4 +28,8 @@ class UserRepositoryAdaptor(
         return userJpaRepository.findRatingById(id)
     }
 
+    override fun deleteById(id: Long) =
+        userJpaRepository.deleteById(id)
+
+
 }

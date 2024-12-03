@@ -10,4 +10,5 @@ interface UserRepository {
 
     fun findRatingById(id: Long): Int?
 
+    fun deleteById(id: Long)
 }

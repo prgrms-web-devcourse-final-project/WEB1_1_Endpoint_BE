@@ -36,17 +36,10 @@ feign:
 
 kafka:
   topic:
-    user: user
-    game: game
-    quiz: quiz
-    onboarding: onboarding
     quiz-outbox: outbox.event.UserInterestsInitializedEvent
   consumer-group:
     user: user
     quiz-outbox: quiz-outbox
-    game: game
-    quiz: quiz
-    onboarding: onboarding
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
@@ -121,17 +114,10 @@ feign:
 
 kafka:
   topic:
-    user: user
-    game: game
-    quiz: quiz
-    onboarding: onboarding
     quiz-outbox: outbox.event.UserInterestsInitializedEvent
   consumer-group:
     user: user
     quiz-outbox: quiz-outbox
-    game: game
-    quiz: quiz
-    onboarding: onboarding
 
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

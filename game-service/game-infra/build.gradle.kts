@@ -1,11 +1,17 @@
 plugins {
     kotlin("plugin.jpa") version "1.8.22"
+    kotlin("plugin.noarg") version "2.0.21"
 }
 
 allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
+}
+
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("com.grepp.quizy.common.NoArg")
 }
 
 dependencies {
@@ -15,7 +21,7 @@ dependencies {
     implementation(project(":game-service:game-domain"))
     //open feign
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3")
-    implementation ("org.springframework.cloud:spring-cloud-commons:4.1.4")
+    implementation("org.springframework.cloud:spring-cloud-commons:4.1.4")
     // H2 Database
     runtimeOnly("com.h2database:h2")
     // MySQL
