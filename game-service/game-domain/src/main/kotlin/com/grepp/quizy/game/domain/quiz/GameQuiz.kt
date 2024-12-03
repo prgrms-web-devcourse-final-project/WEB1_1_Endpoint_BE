@@ -8,7 +8,7 @@ class Quizzes(
 class GameQuiz(
     val id: Long,
     val content: String, // 퀴즈 질문
-    val option: List<GameQuizOption>,
+    val options: List<GameQuizOption>,
     val answer: GameQuizAnswer
 ) {
 }

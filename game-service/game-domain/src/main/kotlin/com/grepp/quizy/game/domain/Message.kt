@@ -176,14 +176,14 @@ data class QuizPayload(
 data class QuizInfo(
     val id: Long,
     val content: String,
-    val option: List<GameQuizOption>,
+    val options: List<GameQuizOption>,
 ) {
     companion object {
         fun from(quiz: GameQuiz): QuizInfo {
             return QuizInfo(
                 id = quiz.id,
                 content = quiz.content,
-                option = quiz.option,
+                options = quiz.options,
             )
         }
     }

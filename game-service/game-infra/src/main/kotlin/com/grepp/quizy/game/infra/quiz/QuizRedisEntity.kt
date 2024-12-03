@@ -19,7 +19,7 @@ class QuizRedisEntity(
     private val ttl: Long = HOURS_IN_SECOND,
 
     val content: String,
-    val option: List<GameQuizOption>,
+    val options: List<GameQuizOption>,
     val answer: GameQuizAnswer
 
 ) {
@@ -30,7 +30,7 @@ class QuizRedisEntity(
             QuizRedisEntity(
                 id = gameQuiz.id,
                 content = gameQuiz.content,
-                option = gameQuiz.option,
+                options = gameQuiz.options,
                 answer = gameQuiz.answer
             )
     }
@@ -39,7 +39,7 @@ class QuizRedisEntity(
         return GameQuiz(
             id = id,
             content = content,
-            option = option,
+            options = options,
             answer = answer
         )
     }
