@@ -1,21 +1,21 @@
-package com.grepp.quizy.user.infra.user.messaging.listener
+package com.grepp.quizy.game.infra.user.messaging.listener
 
-import com.grepp.quizy.user.infra.user.messaging.listener.quiz.QuizEventHandler
+import com.grepp.quizy.game.infra.user.messaging.listener.user.UserEventHandler
 import org.springframework.stereotype.Component
 import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class EventHandlerFactory(
-    private val quizEventHandler: QuizEventHandler,
+    private val userEventHandler: UserEventHandler,
     private val handlers: MutableMap<String, EventHandler> = ConcurrentHashMap()
 ) {
 
     companion object {
-        private const val QUIZ = "quiz-service"
+        private const val USER = "user-service"
     }
 
     init {
-        handlers[QUIZ] = quizEventHandler
+        handlers[USER] = userEventHandler
     }
 
     fun getEventHandler(originService: String): EventHandler {

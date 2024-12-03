@@ -21,8 +21,8 @@ class UserReaderTest : DescribeSpec({
     describe("UserReader") {
         context("id를 통해 조회하면") {
             it("유저를 조회한다.") {
-                val user1 = User(name = "민혁", imgPath = "imgPath")
-                val user2 = User(name = "minhyeok", imgPath = "imgPath123")
+                val user1 = User(_name = "민혁", _imgPath = "imgPath")
+                val user2 = User(_name = "minhyeok", _imgPath = "imgPath123")
                 val savedUsers = userRepository.saveAll(listOf(user1, user2))
 
                 val foundUser = userReader.read(savedUsers[0].id)
@@ -35,8 +35,8 @@ class UserReaderTest : DescribeSpec({
             }
             context("유저가 없다면") {
                 it("예외를 반환한다.") {
-                    val user1 = User(name = "민혁", imgPath = "imgPath")
-                    val user2 = User(name = "minhyeok", imgPath = "imgPath123")
+                    val user1 = User(_name = "민혁", _imgPath = "imgPath")
+                    val user2 = User(_name = "minhyeok", _imgPath = "imgPath123")
                     val savedUsers = userRepository.saveAll(listOf(user1, user2))
 
                     shouldThrow<UserException.UserNotFoundException> {
@@ -47,8 +47,8 @@ class UserReaderTest : DescribeSpec({
         }
         context("id 목록을 통해 조회하면") {
             it("유저 목록을 조회한다.") {
-                val user1 = User(name = "민혁", imgPath = "imgPath")
-                val user2 = User(name = "minhyeok", imgPath = "imgPath123")
+                val user1 = User(_name = "민혁", _imgPath = "imgPath")
+                val user2 = User(_name = "minhyeok", _imgPath = "imgPath123")
 
                 val savedUsers = userRepository.saveAll(listOf(user1, user2))
 
@@ -67,8 +67,8 @@ class UserReaderTest : DescribeSpec({
             context("해당 유저가 없다면") {
                 it("예외를 반환한다.") {
 
-                    val user1 = User(name = "민혁", imgPath = "imgPath")
-                    val user2 = User(name = "minhyeok", imgPath = "imgPath123")
+                    val user1 = User(_name = "민혁", _imgPath = "imgPath")
+                    val user2 = User(_name = "minhyeok", _imgPath = "imgPath123")
 
                     val savedUsers = userRepository.saveAll(listOf(user1, user2))
 

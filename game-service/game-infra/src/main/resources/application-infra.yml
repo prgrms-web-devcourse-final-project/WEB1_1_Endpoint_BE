@@ -28,7 +28,9 @@ feign:
 
 kafka:
   topic:
-    user: user
+    user-create: outbox.event.UserCreatedEvent
+    user-update: outbox.event.UserUpdatedEvent
+    user-delete: outbox.event.UserDeletedEvent
   consumer-group:
     game: game
 
@@ -49,7 +51,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true
@@ -62,7 +64,9 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
-  type-mappings: com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.game.domain.user.UserCreatedEvent
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.game.infra.user.messaging.listener.Event
+  ack-mode: MANUAL
 
 ---
 spring:
@@ -88,7 +92,9 @@ spring:
 
 kafka:
   topic:
-    user: user
+    user-create: outbox.event.UserCreatedEvent
+    user-update: outbox.event.UserUpdatedEvent
+    user-delete: outbox.event.UserDeletedEvent
   consumer-group:
     game: game
 
@@ -109,7 +115,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true
@@ -122,7 +128,9 @@ kafka-consumer-config:
   max-partition-fetch-bytes-default: 1048576
   max-partition-fetch-bytes-boost-factor: 1
   poll-timeout-ms: 150
-  type-mappings: com.grepp.quizy.user.domain.user.CreateUserEvent:com.grepp.quizy.game.domain.user.UserCreatedEvent
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.game.infra.user.messaging.listener.Event
+  ack-mode: MANUAL
 
 feign:
   client:
