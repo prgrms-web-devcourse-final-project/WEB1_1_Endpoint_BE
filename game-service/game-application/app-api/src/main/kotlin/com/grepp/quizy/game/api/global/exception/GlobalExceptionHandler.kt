@@ -3,9 +3,12 @@ package com.grepp.quizy.game.api.global.exception
 import com.grepp.quizy.common.api.ApiResponse
 import com.grepp.quizy.common.exception.CustomException
 import com.grepp.quizy.common.exception.ErrorReason
+import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+
+private val log = KotlinLogging.logger {}
 
 @RestControllerAdvice
 class GlobalExceptionHandler {
@@ -27,6 +30,16 @@ class GlobalExceptionHandler {
         e: Exception,
         request: HttpServletRequest,
     ): ApiResponse<Unit> {
+        log.error(
+            """
+            [Exception] URI: ${request.requestURI}
+            Exception Type: ${e.javaClass.simpleName}
+            Message: ${e.message}
+            StackTrace:
+            ${e.stackTraceToString()}
+            """.trimIndent()
+        )
+
         return ApiResponse.error(
             ErrorReason.of(
                 500,

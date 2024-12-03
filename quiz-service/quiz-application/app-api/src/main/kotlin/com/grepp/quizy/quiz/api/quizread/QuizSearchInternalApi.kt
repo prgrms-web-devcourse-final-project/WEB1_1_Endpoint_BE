@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 class QuizSearchInternalApi(private val gameQuizSearchUseCase: GameQuizReadUseCase) {
 
     @GetMapping("/game-set")
-    fun searchGameQuizSet(params: GameQuizSearchParams): ApiResponse<GameSetResponse> =
-        ApiResponse.success(
+    fun searchGameQuizSet(params: GameQuizSearchParams) =
             GameSetResponse(
                 gameQuizSearchUseCase.searchForPrivateGame(params.GameQuizSearchCondition())
             )
-        )
 }

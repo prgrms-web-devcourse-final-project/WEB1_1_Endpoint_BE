@@ -50,7 +50,7 @@ enum class GameSubject(
     NETWORK("네트워크"),
     OPERATING_SYSTEM("운영체제"),
     WEB_DEVELOPMENT("웹 개발"),
-    MOBILE_DEVELOPMENT("모바일 개발"),
+    MOBILE("모바일 개발"),
     DEV_OPS("데브옵스/인프라"),
     DATABASE("데이터베이스"),
     SOFTWARE_ENGINEERING("소프트웨어 공학"),
