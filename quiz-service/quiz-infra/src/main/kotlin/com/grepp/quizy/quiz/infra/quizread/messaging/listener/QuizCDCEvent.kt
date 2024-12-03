@@ -13,7 +13,7 @@ data class QuizCDCEvent(
     @JsonProperty("type") val type: QuizType,
     @JsonProperty("category") val category: QuizCategory,
     @JsonProperty("content") val content: String,
-    @JsonProperty("answer") val answerNumber: Int?,
+    @JsonProperty("answer_number") val answerNumber: Int?,
     @JsonProperty("explanation") val explanation: String?,
     @JsonProperty("comment_count") val commentCount: Int,
     @JsonProperty("like_count") val likeCount: Int,
