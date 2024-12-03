@@ -3,6 +3,7 @@ package com.grepp.quizy.game.infra.game.repository
 import com.grepp.quizy.game.domain.game.Game
 import com.grepp.quizy.game.domain.game.GameRepository
 import com.grepp.quizy.game.infra.game.entity.GameRedisEntity
+import org.springframework.data.redis.connection.DataType
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ScanOptions
 import org.springframework.data.repository.findByIdOrNull
@@ -29,12 +30,17 @@ class GameRepositoryAdapter(
             .connection
             .scan(
                 ScanOptions.scanOptions()
-                .match("game:*")
+                .match("game:[0-9]*")
                 .count(100)
                 .build())
 
         while(scanner.hasNext()) {
             val key = String(scanner.next())
+
+            val type = redisTemplate.type(key)
+            if(type != DataType.HASH) {
+                continue
+            }
             val inviteCode = redisTemplate.opsForHash<String, String>()
                 .get(key, "inviteCode")
 
