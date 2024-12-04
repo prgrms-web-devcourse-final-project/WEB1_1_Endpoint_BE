@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody
 )
 interface GameRoomClient {
 
-    @PostMapping("/api/game/matching")
+    @PostMapping("/api/game/internal/matching")
     fun getGameRoomId(@RequestBody request: GameRoomIdRequest): Long
 
     @GetMapping("/api/internal/user/rating/{userId}")
