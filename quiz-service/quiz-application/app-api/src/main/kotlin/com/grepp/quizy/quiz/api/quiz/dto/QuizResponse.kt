@@ -66,8 +66,8 @@ sealed class QuizResponse {
                                             it.name
                                         },
                                 options = quiz.content.options.map { QuizOptionResponse.from(it) },
-                                createdAt = quiz.dateTime.createdAt!!,
-                                modifiedAt = quiz.dateTime.updatedAt!!,
+                                createdAt = quiz.dateTime.createdAt,
+                                modifiedAt = quiz.dateTime.updatedAt,
                         )
 
                 is OXQuiz ->
@@ -84,8 +84,8 @@ sealed class QuizResponse {
                                 answerNumber = quiz.getCorrectAnswer(),
                                 explanation =
                                         quiz.getAnswerExplanation(),
-                                createdAt = quiz.dateTime.createdAt!!,
-                                modifiedAt = quiz.dateTime.updatedAt!!,
+                                createdAt = quiz.dateTime.createdAt,
+                                modifiedAt = quiz.dateTime.updatedAt,
                         )
 
                 is MultipleChoiceQuiz ->

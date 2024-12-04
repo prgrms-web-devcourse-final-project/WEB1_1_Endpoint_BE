@@ -3,12 +3,12 @@ package com.grepp.quizy.common.dto
 import java.time.LocalDateTime
 
 data class DateTime(
-        val createdAt: LocalDateTime?,
-        val updatedAt: LocalDateTime?,
+        val createdAt: LocalDateTime = LocalDateTime.now(),
+        val updatedAt: LocalDateTime = LocalDateTime.now(),
 ) {
     companion object {
         fun init(): DateTime {
-            return DateTime(null, null)
+            return DateTime()
         }
     }
 }
