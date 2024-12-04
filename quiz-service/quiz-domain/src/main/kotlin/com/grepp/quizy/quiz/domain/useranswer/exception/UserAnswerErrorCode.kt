@@ -13,6 +13,18 @@ enum class UserAnswerErrorCode(
         404,
         "Q-UA001",
         "사용자 답변을 찾을 수 없습니다."
+    ),
+
+    USER_ANSWER_ALREADY_EXISTS(
+        400,
+        "Q-UA002",
+        "이미 사용자 답변이 존재합니다."
+    ),
+
+    INVALID_USER_CHOICE(
+        400,
+        "Q-UA003",
+        "사용자 응답이 유효하지 않습니다."
     );
 
     override val errorReason: ErrorReason

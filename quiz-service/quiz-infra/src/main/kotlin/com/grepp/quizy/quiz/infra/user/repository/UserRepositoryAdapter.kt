@@ -4,7 +4,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class UserRepositoryAdapter(
-    private val userJpaRepository: UserJpaRepository
+    private val quizUserJpaRepository: QuizUserJpaRepository
 ) {
 
 }

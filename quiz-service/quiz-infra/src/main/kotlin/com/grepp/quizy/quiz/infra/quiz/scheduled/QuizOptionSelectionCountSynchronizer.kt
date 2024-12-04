@@ -2,6 +2,7 @@ package com.grepp.quizy.quiz.infra.quiz.scheduled
 
 import com.grepp.quizy.quiz.infra.quiz.cache.QuizRedisCache.Companion.QUIZ_SELECTION_KEY
 import com.grepp.quizy.quiz.infra.quiz.repository.QuizJpaRepository
+import com.grepp.quizy.quiz.infra.quiz.scheduled.CountSynchronizer.Companion.SCHEDULED_FIXED_RATE
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock
 import org.springframework.data.redis.core.ScanOptions
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -12,14 +13,8 @@ import org.springframework.stereotype.Component
 class QuizOptionSelectionCountSynchronizer(
     private val stringRedisTemplate: StringRedisTemplate,
     private val quizJpaRepository: QuizJpaRepository
-) : AbstractCountSynchronizer() {
+) : CountSynchronizer {
 
-    @SchedulerLock(
-        name = "option_selection_sync_lock",
-        lockAtMostFor = "PT9S",
-        lockAtLeastFor = "PT3S",
-    )
-    @Scheduled(fixedRate = SCHEDULED_FIXED_RATE)
     override fun synchronize() {
         val scanOptions = ScanOptions.scanOptions()
             .match("$QUIZ_SELECTION_KEY*:*:count")

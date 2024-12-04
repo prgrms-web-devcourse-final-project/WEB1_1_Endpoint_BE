@@ -17,4 +17,5 @@ interface UserAnswerRepository {
 
     fun findAllByUserIdAndIsCorrect(userId: UserId, isCorrect: Boolean, reviewStatus: ReviewStatus, cursor: Cursor): SliceResult<UserAnswer>
 
+    fun existsById(key: UserAnswerKey): Boolean
 }

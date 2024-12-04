@@ -34,8 +34,8 @@ class QuizCreatedEvent(
                                 quiz.content.tags,
                                 quiz.content.options,
                                 quiz.getQuizAnswer(),
-                                quiz.dateTime.createdAt!!,
-                                quiz.dateTime.updatedAt!!,
+                                quiz.dateTime.createdAt,
+                                quiz.dateTime.updatedAt,
                         )
 
                 else ->
@@ -48,8 +48,8 @@ class QuizCreatedEvent(
                                 quiz.content.tags,
                                 quiz.content.options,
                                 null,
-                                quiz.dateTime.createdAt!!,
-                                quiz.dateTime.updatedAt!!,
+                                quiz.dateTime.createdAt,
+                                quiz.dateTime.updatedAt,
                         )
             }
         }

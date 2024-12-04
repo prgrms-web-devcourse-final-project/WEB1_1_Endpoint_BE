@@ -5,19 +5,22 @@ import com.grepp.quizy.quiz.domain.quiz.*
 import com.grepp.quizy.quiz.domain.user.UserId
 import jakarta.persistence.DiscriminatorValue
 import jakarta.persistence.Entity
+import java.time.LocalDateTime
 
 @Entity
 @DiscriminatorValue("MULTIPLE_CHOICE")
 class MultipleChoiceQuizEntity(
-        userId: Long,
-        category: QuizCategory,
-        content: String,
-        tags: MutableSet<QuizTagEntity>,
-        options: MutableList<QuizOptionVO>,
-        var answer: QuizAnswerVO,
-        type: QuizType = QuizType.MULTIPLE_CHOICE,
-        id: Long = 0L,
-) : QuizEntity(userId, category, type, content, tags, options, id) {
+    userId: Long,
+    category: QuizCategory,
+    content: String,
+    tags: MutableSet<QuizTagEntity>,
+    options: MutableList<QuizOptionVO>,
+    var answer: QuizAnswerVO,
+    type: QuizType = QuizType.MULTIPLE_CHOICE,
+    id: Long = 0L,
+    createdAt: LocalDateTime,
+    updatedAt: LocalDateTime,
+) : QuizEntity(userId, category, type, content, tags, options, id, createdAt, updatedAt) {
 
     override fun toDomain(): Quiz {
         return MultipleChoiceQuiz.of(
@@ -70,10 +73,10 @@ class MultipleChoiceQuizEntity(
                                             .toMutableList(),
                             answer = QuizAnswerVO.from(quiz.answer),
                             id = quiz.id.value,
+                            createdAt = quiz.dateTime.createdAt,
+                            updatedAt = quiz.dateTime.updatedAt,
                     )
                     .apply {
-                        this.createdAt = quiz.dateTime.createdAt
-                        this.updatedAt = quiz.dateTime.updatedAt
                         this.commentCount = quiz.commentCount
                     }
         }

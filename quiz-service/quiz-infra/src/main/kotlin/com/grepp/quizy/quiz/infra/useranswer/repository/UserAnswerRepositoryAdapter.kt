@@ -51,4 +51,8 @@ class UserAnswerRepositoryAdapter(
             .map { it.toDomain() }
         return SliceResult.of(userAnswers.toList(), userAnswers.hasNext())
     }
+
+    override fun existsById(key: UserAnswerKey): Boolean {
+        return userAnswerJpaRepository.existsById(UserAnswerEntityId.from(key))
+    }
 }

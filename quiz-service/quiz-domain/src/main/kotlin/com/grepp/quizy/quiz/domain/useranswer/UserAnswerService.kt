@@ -14,7 +14,8 @@ class UserAnswerService(
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
     private val userAnswerCombiner: UserAnswerCombiner,
-    private val userAnswerUpdater: UserAnswerUpdater
+    private val userAnswerUpdater: UserAnswerUpdater,
+    private val userAnswerValidator: UserAnswerValidator,
 ) : UserAnswerCreateUseCase, UserAnswerReadService, UserAnswerUpdateUseCase {
 
     override fun createUserAnswer(
@@ -22,7 +23,7 @@ class UserAnswerService(
         userChoice: Int,
     ): UserAnswer {
         val quiz = quizReader.read(key.quizId)
-        quiz.validateChoice(userChoice)
+        userAnswerValidator.validate(key)
         quizCounter.increaseSelectionCount(key.quizId, userChoice)
         return userAnswerAppender.append(quiz, key, userChoice)
     }
