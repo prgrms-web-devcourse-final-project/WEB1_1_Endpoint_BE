@@ -5,7 +5,9 @@ import com.grepp.quizy.common.exception.CustomException
 import com.grepp.quizy.common.exception.ErrorReason
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.http.HttpServletRequest
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
 private val log = KotlinLogging.logger {}
@@ -13,6 +15,7 @@ private val log = KotlinLogging.logger {}
 @RestControllerAdvice
 class GlobalExceptionHandler {
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(CustomException::class)
     protected fun handleCustomException(
         e: CustomException,
@@ -25,6 +28,7 @@ class GlobalExceptionHandler {
         )
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception::class)
     protected fun handleException(
         e: Exception,
