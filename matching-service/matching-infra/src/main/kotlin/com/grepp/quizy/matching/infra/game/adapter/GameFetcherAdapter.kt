@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component
 
 @Component
 class GameFetcherAdapter(private val gameRoomClient: GameRoomClient) : GameFetcher {
-    override fun requestGameRoomId(userIds: List<UserId>, subject: InterestCategory): GameRoomId {
-        val response = gameRoomClient.getGameRoomId(
-            GameRoomIdRequest(userIds.map { it.value }, subject.name)
+    override fun requestGameRoomId(userIds: List<UserId>, subject: InterestCategory) =
+        GameRoomId(
+            gameRoomClient.getGameRoomId(
+                GameRoomIdRequest(userIds.map { it.value }, subject.name)
+            )
         )
-        return GameRoomId(response.id)
-    }
 }
