@@ -9,19 +9,20 @@ import org.springframework.stereotype.Repository
 
 @Repository
 class QuizUserRepositoryAdaptor(
-    private val userJpaRepository: UserJpaRepository
+    private val quizUserJpaRepository: QuizUserJpaRepository
 ) : QuizUserRepository {
 
     override fun save(quizUser: QuizUser) {
-        userJpaRepository.save(QuizUserEntity.from(quizUser))
+        quizUserJpaRepository.save(QuizUserEntity.from(quizUser))
     }
 
     override fun findById(id: UserId): QuizUser? {
-        return userJpaRepository.findByIdOrNull(id.value)
+        return quizUserJpaRepository.findByIdOrNull(id.value)
             ?.toDomain()
     }
 
     override fun findByIdIn(userIds: List<UserId>) =
-        userJpaRepository.findAllById(userIds.map { it.value })
+        quizUserJpaRepository.findAllById(userIds.map { it.value })
             .map { it.toDomain() }
+
 }

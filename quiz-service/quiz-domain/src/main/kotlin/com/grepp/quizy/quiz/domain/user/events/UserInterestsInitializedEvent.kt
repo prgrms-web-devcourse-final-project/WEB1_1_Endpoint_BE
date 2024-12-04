@@ -1,6 +1,8 @@
-package com.grepp.quizy.quiz.domain.user
+package com.grepp.quizy.quiz.domain.user.events
 
+import com.grepp.quizy.quiz.domain.global.event.QuizServiceEvent
 import com.grepp.quizy.quiz.domain.quiz.QuizCategory
+import com.grepp.quizy.quiz.domain.user.QuizUser
 import java.time.LocalDateTime
 
 data class UserInterestsInitializedEvent(

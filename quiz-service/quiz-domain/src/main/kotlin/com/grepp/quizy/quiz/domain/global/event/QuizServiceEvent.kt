@@ -1,4 +1,4 @@
-package com.grepp.quizy.quiz.domain.user
+package com.grepp.quizy.quiz.domain.global.event
 
 import com.grepp.quizy.common.event.ServiceEvent
 import java.time.LocalDateTime

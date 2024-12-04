@@ -1,6 +1,5 @@
 package com.grepp.quizy.quiz.infra.like.entity
 
-import com.grepp.quizy.jpa.BaseTimeEntity
 import com.grepp.quizy.quiz.domain.like.Like
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.user.UserId
@@ -10,8 +9,7 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "likes")
-class LikeEntity(@EmbeddedId var id: LikeEntityId) :
-        BaseTimeEntity() {
+class LikeEntity(@EmbeddedId var id: LikeEntityId) {
 
     fun toDomain() =
             Like(

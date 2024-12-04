@@ -6,7 +6,7 @@ data class UserAnswer(
     val key: UserAnswerKey,
     val choice: Choice,
     private var _reviewStatus: ReviewStatus = ReviewStatus.NOT_REVIEWED,
-    val answeredAt: LocalDateTime? = null,
+    val answeredAt: LocalDateTime = LocalDateTime.now(),
 ) {
 
     val reviewStatus: ReviewStatus

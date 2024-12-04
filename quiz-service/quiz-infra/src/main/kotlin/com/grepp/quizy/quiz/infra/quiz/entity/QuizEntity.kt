@@ -4,6 +4,7 @@ import com.grepp.quizy.jpa.BaseTimeEntity
 import com.grepp.quizy.quiz.domain.quiz.*
 import jakarta.persistence.*
 import org.hibernate.annotations.BatchSize
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "quizzes")
@@ -40,9 +41,11 @@ abstract class QuizEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val quizId: Long = 0L,
+    createdAt: LocalDateTime,
+    updatedAt: LocalDateTime,
     val likeCount: Long = 0,
-    var commentCount: Long = 0,
-) : BaseTimeEntity() {
+    var commentCount: Long = 0
+) : BaseTimeEntity(createdAt, updatedAt) {
 
     abstract fun toDomain(): Quiz
 

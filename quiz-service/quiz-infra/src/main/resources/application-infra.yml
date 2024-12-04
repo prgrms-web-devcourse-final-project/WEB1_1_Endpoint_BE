@@ -35,7 +35,7 @@ spring:
         project-id: ${GCP_PROJECT_ID}
         bucket: ${BUCKET_NAME}
 shedlock:
-  name: like_sync_lock
+  name: count_sync_lock
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092

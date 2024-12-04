@@ -5,16 +5,18 @@ import com.grepp.quizy.quiz.domain.useranswer.Choice
 import com.grepp.quizy.quiz.domain.useranswer.ReviewStatus
 import com.grepp.quizy.quiz.domain.useranswer.UserAnswer
 import jakarta.persistence.*
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "user_answers")
 class UserAnswerEntity(
-        @EmbeddedId val id: UserAnswerEntityId,
-        val choice: Int,
-        @Enumerated(EnumType.STRING)
-        val reviewStatus: ReviewStatus = ReviewStatus.NOT_REVIEWED,
-        val isCorrect: Boolean? = null,
-) : BaseTimeEntity() {
+    @EmbeddedId val id: UserAnswerEntityId,
+    val choice: Int,
+    @Enumerated(EnumType.STRING)
+    val reviewStatus: ReviewStatus = ReviewStatus.NOT_REVIEWED,
+    val isCorrect: Boolean? = null,
+    answeredAt: LocalDateTime
+) : BaseTimeEntity(answeredAt, answeredAt) {
 
     fun toDomain(): UserAnswer {
         val domainChoice =
@@ -40,6 +42,7 @@ class UserAnswerEntity(
                         choice = choice.choiceNumber,
                         reviewStatus = domain.reviewStatus,
                         isCorrect = choice.isCorrect,
+                        answeredAt = domain.answeredAt
                     )
 
                 is Choice.NonAnswerableChoice ->
@@ -47,10 +50,8 @@ class UserAnswerEntity(
                         id = UserAnswerEntityId.from(domain.key),
                         choice = choice.choiceNumber,
                         reviewStatus = domain.reviewStatus,
+                        answeredAt = domain.answeredAt
                     )
-            }.also {
-                it.createdAt = domain.answeredAt
-                it.updatedAt = domain.answeredAt
             }
         }
     }

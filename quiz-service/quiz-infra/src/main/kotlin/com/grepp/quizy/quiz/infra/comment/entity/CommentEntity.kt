@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "comments")
@@ -23,7 +24,9 @@ class CommentEntity(
         val writerId: Long,
         val parentCommentId: Long,
         val content: String,
-) : BaseTimeEntity() {
+        createdAt: LocalDateTime,
+        updatedAt: LocalDateTime,
+) : BaseTimeEntity(createdAt, updatedAt) {
     fun toDomain() =
             Comment(
                     id = CommentId(id),
@@ -43,10 +46,8 @@ class CommentEntity(
                                 parentCommentId =
                                         comment.parentCommentId.value,
                                 content = comment.content.value,
+                                createdAt = comment.dateTime.createdAt,
+                                updatedAt = comment.dateTime.updatedAt,
                         )
-                        .apply {
-                            createdAt = comment.dateTime.createdAt
-                            updatedAt = comment.dateTime.updatedAt
-                        }
     }
 }
