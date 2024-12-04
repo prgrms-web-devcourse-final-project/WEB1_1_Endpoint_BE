@@ -17,7 +17,6 @@ noArg {
 
 dependencies {
     api(project(":infrastructure:kafka"))
-    implementation(project(":common"))
     implementation(project(":common:common-jpa"))
 
     implementation(project(":matching-service:matching-domain"))

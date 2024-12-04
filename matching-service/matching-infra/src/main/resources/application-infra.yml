@@ -1,3 +1,10 @@
+kafka:
+  topic:
+    quiz-outbox: outbox.event.UserInterestsInitializedEvent
+  consumer-group:
+    user: user
+    quiz-outbox: quiz-outbox
+---
 spring:
   config:
     activate:
@@ -23,12 +30,6 @@ feign:
   client:
     url:
       game-service: http://localhost:8081
-
-kafka:
-  topic:
-    quiz-outbox: outbox.event.UserInterestsInitializedEvent
-  consumer-group:
-    quiz-outbox: quiz-outbox
 
 kafka-config:
   bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
@@ -91,12 +92,6 @@ feign:
   client:
     url:
       game-service: http://dev-game-service:8080
-
-kafka:
-  topic:
-    quiz-outbox: outbox.event.UserInterestsInitializedEvent
-  consumer-group:
-    quiz-outbox: quiz-outbox
 
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}

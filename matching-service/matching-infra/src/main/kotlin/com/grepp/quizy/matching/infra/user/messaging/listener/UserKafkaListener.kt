@@ -13,7 +13,7 @@ class UserKafkaListener(
     private val eventHandlerFactory: EventHandlerFactory
 ) {
     @KafkaListener(
-        groupId = "\${kafka.consumer-group.quiz-outbox}",
+        groupId = "\${kafka.consumer-group.user}",
         topics = ["\${kafka.topic.quiz-outbox}"]
     )
     fun receive(records: List<ConsumerRecord<String, Event>>, ack: Acknowledgment) {
