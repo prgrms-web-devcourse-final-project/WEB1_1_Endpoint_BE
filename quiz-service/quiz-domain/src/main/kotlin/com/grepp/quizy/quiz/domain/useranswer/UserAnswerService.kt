@@ -14,16 +14,16 @@ class UserAnswerService(
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
     private val userAnswerCombiner: UserAnswerCombiner,
-    private val userAnswerUpdater: UserAnswerUpdater
+    private val userAnswerUpdater: UserAnswerUpdater,
+    private val userAnswerValidator: UserAnswerValidator,
 ) : UserAnswerCreateUseCase, UserAnswerReadService, UserAnswerUpdateUseCase {
 
-    //TODO: 같은 퀴즈에 대한 중복 답안 제출 방지
     override fun createUserAnswer(
         key: UserAnswerKey,
         userChoice: Int,
     ): UserAnswer {
         val quiz = quizReader.read(key.quizId)
-        quiz.validateChoice(userChoice)
+        userAnswerValidator.validate(key)
         quizCounter.increaseSelectionCount(key.quizId, userChoice)
         return userAnswerAppender.append(quiz, key, userChoice)
     }
