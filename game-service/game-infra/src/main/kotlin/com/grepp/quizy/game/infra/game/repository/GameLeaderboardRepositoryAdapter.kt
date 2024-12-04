@@ -48,4 +48,10 @@ class GameLeaderboardRepositoryAdapter(
             ?.toMap()
             ?: emptyMap()
     }
+
+    override fun findRank(gameId: Long, userId: Long): Long? {
+        val leaderboardKey = String.format(LEADERBOARD_KEY, gameId)
+
+        return redisTemplate.opsForZSet().reverseRank(leaderboardKey, userId.toString())
+    }
 }

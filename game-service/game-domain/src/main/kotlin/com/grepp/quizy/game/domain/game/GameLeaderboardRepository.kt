@@ -8,4 +8,6 @@ interface GameLeaderboardRepository {
 
     fun findAll(gameId: Long): Map<Long, Int>
 
+    fun findRank(gameId: Long, userId: Long): Long?
+
 }

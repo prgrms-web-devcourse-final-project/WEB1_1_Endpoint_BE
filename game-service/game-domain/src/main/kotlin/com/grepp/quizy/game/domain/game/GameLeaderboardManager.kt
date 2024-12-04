@@ -19,4 +19,9 @@ class GameLeaderboardManager(
         return gameLeaderboardRepository.findAll(gameId)
     }
 
+    fun getRank(gameId: Long, userId: Long): Int {
+        val rank = gameLeaderboardRepository.findRank(gameId, userId)
+        return rank?.toInt()?.plus(1) ?: 0
+    }
+
 }

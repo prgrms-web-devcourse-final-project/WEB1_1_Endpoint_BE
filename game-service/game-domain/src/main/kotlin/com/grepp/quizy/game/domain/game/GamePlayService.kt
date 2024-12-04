@@ -176,7 +176,7 @@ class GamePlayService(
                 it.user.id.toString(),
                 GameMessage.result(
                     gameId,
-                    leaderboard[it.user.id]!!,
+                    gameLeaderboardManager.getRank(gameId, it.user.id),
                     newRatings[it.user.id]!!,
                     ratingDiff,
                     userAnswerReader.readAll(
