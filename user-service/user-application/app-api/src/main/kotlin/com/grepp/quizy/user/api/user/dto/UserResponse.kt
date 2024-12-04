@@ -1,6 +1,7 @@
 package com.grepp.quizy.user.api.user.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.grepp.quizy.user.domain.quiz.Achievement
 import com.grepp.quizy.user.domain.user.AuthProvider
 import com.grepp.quizy.user.domain.user.UserInfo
 
@@ -13,9 +14,9 @@ data class UserResponse(
     val provider: AuthProvider,
     val role: String,
     val rating: Int?,
-    val solvedProblems: Int?,
-    val correctAnswerRate: Double?,
-    val achievements: List<String>?
+    val totalAnswered: Int?,
+    val correctRate: Double?,
+    val achievements: List<Achievement>?
 ) {
     companion object {
         fun from(userInfo: UserInfo): UserResponse {
@@ -27,8 +28,8 @@ data class UserResponse(
                 provider = userInfo.provider,
                 role = userInfo.role,
                 rating = userInfo.rating,
-                solvedProblems = userInfo.solvedProblems,
-                correctAnswerRate = userInfo.correctAnswerRate,
+                totalAnswered = userInfo.totalAnswered,
+                correctRate = userInfo.correctRate,
                 achievements = userInfo.achievements
             )
         }

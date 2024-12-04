@@ -1,7 +1,8 @@
 package com.grepp.quizy.user.domain.quiz
 
 data class UserQuizScore(
-    val solvedProblems: Int = 0,
-    val correctAnswerRate: Double = 0.0,
-    val achievements: List<String> = emptyList()
+    val userId: Long = 0,
+    val achievements: List<Achievement> = emptyList(),
+    val totalAnswered: Int = 0,
+    val correctRate: Double = 0.0
 )
