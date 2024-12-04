@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable
 
 @FeignClient(name = "quiz-service", url = "\${feign.client.url.quiz-service}")
 interface QuizServiceClient : QuizClient {
-    @GetMapping("/api/internal/user/score/{userId}")
+    @GetMapping("/api/quiz/internal/users/{userId}")
     override fun getUserQuizScore(@PathVariable userId: Long): UserQuizScore
 }
 

@@ -1,6 +1,7 @@
 package com.grepp.quizy.user.domain.user
 
 import com.grepp.quizy.user.domain.game.UserRating
+import com.grepp.quizy.user.domain.quiz.Achievement
 import com.grepp.quizy.user.domain.quiz.UserQuizScore
 
 data class UserInfo(
@@ -11,9 +12,9 @@ data class UserInfo(
     val provider: AuthProvider,
     val role: String,
     val rating: Int?,
-    val solvedProblems: Int?,
-    val correctAnswerRate: Double?,
-    val achievements: List<String>?
+    val totalAnswered: Int?,
+    val correctRate: Double?,
+    val achievements: List<Achievement>?
 ) {
     companion object {
         fun from(
@@ -27,8 +28,8 @@ data class UserInfo(
                 provider = user.provider.provider,
                 role = user.role.name,
                 rating = userRating?.rating,
-                solvedProblems = userQuizScore?.solvedProblems,
-                correctAnswerRate = userQuizScore?.correctAnswerRate,
+                totalAnswered = userQuizScore?.totalAnswered,
+                correctRate = userQuizScore?.correctRate,
                 achievements = userQuizScore?.achievements
             )
         }
