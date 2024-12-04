@@ -1,20 +1,15 @@
 package com.grepp.quizy.game.api.game
 
-import com.grepp.quizy.common.api.ApiResponse
-import com.grepp.quizy.game.api.game.dto.GameResponse
 import com.grepp.quizy.game.api.game.dto.MatchingRequest
 import com.grepp.quizy.game.domain.game.GameMatchingService
-import org.springframework.messaging.handler.annotation.DestinationVariable
-import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.security.Principal
 
 @RestController
-@RequestMapping("/api/game/matching")
-class GameMatchingApi(
+@RequestMapping("/api/game/internal/matching")
+class InternalGameMatchingApi(
     private val gameMatchingService: GameMatchingService,
 ) {
 
@@ -22,13 +17,9 @@ class GameMatchingApi(
     @PostMapping
     fun createRandomGame(
         @RequestBody request: MatchingRequest
-    ) = ApiResponse.success(
-        GameResponse.from(
-            gameMatchingService.create(
-                userIds = request.userIds,
-                subject = request.subject
-            )
-        )
-    )
+    ) = gameMatchingService.create(
+            userIds = request.userIds,
+            subject = request.subject
+        ).id
 
 }
