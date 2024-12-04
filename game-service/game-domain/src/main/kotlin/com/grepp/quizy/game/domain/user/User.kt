@@ -4,7 +4,7 @@ class User(
     val id: Long = 0,
     private var _name: String,
     private var _imgPath: String,
-    val rating: Int = 1500,
+    private var _rating: Int = 1500,
 ) {
     val name: String
         get() = _name
@@ -12,9 +12,16 @@ class User(
     val imgPath: String
         get() = _imgPath
 
+    val rating: Int
+        get() = _rating
+
     fun updateUserInfo(name: String, imgPath: String) {
         this._name = name
         this._imgPath = imgPath
+    }
+
+    fun updateRating(rating: Int) {
+        this._rating = rating
     }
 
 }

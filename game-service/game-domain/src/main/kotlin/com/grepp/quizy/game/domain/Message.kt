@@ -1,11 +1,10 @@
 package com.grepp.quizy.game.domain
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.grepp.quizy.game.domain.game.Game
 import com.grepp.quizy.game.domain.game.Player
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.GameQuizOption
+import com.grepp.quizy.game.domain.useranswer.UserAnswer
 
 enum class MessageType {
     GAME_ROOM,
@@ -15,6 +14,7 @@ enum class MessageType {
     SCORE_BOARD,
     GAME_END,
     KICKED,
+    GAME_RESULT,
     ERROR,
 }
 
@@ -75,6 +75,20 @@ data class GameMessage(
                 gameId = gameId,
                 type = MessageType.SCORE_BOARD,
                 payload = LeaderboardPayload.from(leaderboard),
+            )
+        }
+
+        fun result(
+            gameId: Long,
+            rank: Int,
+            rating: Int,
+            ratingDiff: Int,
+            userAnswers: List<UserAnswer>
+        ): GameMessage {
+            return GameMessage(
+                gameId = gameId,
+                type = MessageType.GAME_RESULT,
+                payload = GameResults.from(rank, rating, ratingDiff, userAnswers.map { GameResultPayload.from(it) }),
             )
         }
 
@@ -241,6 +255,46 @@ data class KickedPayload(
         fun from(userId: Long): KickedPayload {
             return KickedPayload(
                 userId = userId,
+            )
+        }
+    }
+}
+
+data class GameResults(
+    val rank: Int,
+    val rating: Int,
+    val ratingDiff: Int,
+    val results: List<GameResultPayload>
+) : MessagePayload {
+    companion object {
+        fun from(rank: Int, rating: Int, ratingDiff: Int, results: List<GameResultPayload>): GameResults {
+            return GameResults(
+                rank = rank,
+                rating = rating,
+                ratingDiff = ratingDiff,
+                results = results,
+            )
+        }
+    }
+}
+
+data class GameResultPayload(
+    val quizContent: String,
+    val choice: String,
+    val answer: String,
+    val explanation: String,
+    val isCorrect: Boolean
+) : MessagePayload {
+    companion object {
+        fun from(
+            userAnswer: UserAnswer
+        ): GameResultPayload {
+            return GameResultPayload(
+                quizContent = userAnswer.quizContent,
+                choice = userAnswer.choice,
+                answer = userAnswer.answer,
+                explanation = userAnswer.explanation,
+                isCorrect = userAnswer.isCorrect
             )
         }
     }

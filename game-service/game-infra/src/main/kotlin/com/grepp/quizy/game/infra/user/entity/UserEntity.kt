@@ -30,7 +30,7 @@ class UserEntity(
             id = id,
             _name = name,
             _imgPath = imgPath,
-            rating = rating
+            _rating = rating
         )
     }
 }

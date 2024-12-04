@@ -8,4 +8,6 @@ interface GameRepository {
 
     fun findByInviteCode(code: String): Game?
 
+    fun delete(game: Game)
+
 }

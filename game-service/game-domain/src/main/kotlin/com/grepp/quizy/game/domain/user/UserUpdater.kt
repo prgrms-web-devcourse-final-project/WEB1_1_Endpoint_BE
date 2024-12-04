@@ -13,4 +13,10 @@ class UserUpdater(
         oldUser.updateUserInfo(user.name, user.imgPath)
         return userRepository.save(oldUser)
     }
+
+    fun updateRating(user: User, rating: Int) {
+        user.updateRating(rating)
+        userRepository.save(user)
+    }
+
 }
