@@ -1,7 +1,26 @@
+kafka:
+  topic:
+    quiz-outbox: outbox.event.UserInterestsInitializedEvent
+  consumer-group:
+    user: user
+    quiz-outbox: quiz-outbox
+---
 spring:
   config:
     activate:
       on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/${DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show-sql: true
+        format_sql: true
 
 redis:
   host: localhost
@@ -12,12 +31,58 @@ feign:
     url:
       game-service: http://localhost:8081
 
+kafka-config:
+  bootstrap-servers: localhost:19092, localhost:29092, localhost:39092
+  num-of-partitions: 3
+  replication-factor: 3
+
+kafka-producer-config:
+  key-serializer-class: org.springframework.kafka.support.serializer.JsonSerializer
+  value-serializer-class: org.springframework.kafka.support.serializer.JsonSerializer
+  compression-type: none
+  acks: all
+  batch-size: 16384
+  batch-size-boost-factor: 100
+  linger-ms: 5
+  request-timeout-ms: 60000
+  retry-count: 5
+
+kafka-consumer-config:
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  auto-offset-reset: earliest
+  batch-listener: true
+  auto-startup: true
+  concurrency-level: 3
+  session-timeout-ms: 10000
+  heartbeat-interval-ms: 3000
+  max-poll-interval-ms: 300000
+  max-poll-records: 500
+  max-partition-fetch-bytes-default: 1048576
+  max-partition-fetch-bytes-boost-factor: 1
+  poll-timeout-ms: 150
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.matching.infra.user.messaging.listener.Event
+  ack-mode: MANUAL
+
 ---
 
 spring:
   config:
     activate:
       on-profile: dev
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:3306/${DATABASE_NAME}?useSSL=false&allowPublicKeyRetrieval=true
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO}
+    properties:
+      hibernate:
+        show-sql: false
+        format_sql: false
 
 redis:
   host: ${REDIS_HOST}
@@ -27,3 +92,37 @@ feign:
   client:
     url:
       game-service: http://dev-game-service:8080
+
+kafka-config:
+  bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  num-of-partitions: 3
+  replication-factor: 3
+
+kafka-producer-config:
+  key-serializer-class: org.springframework.kafka.support.serializer.JsonSerializer
+  value-serializer-class: org.springframework.kafka.support.serializer.JsonSerializer
+  compression-type: none
+  acks: all
+  batch-size: 16384
+  batch-size-boost-factor: 100
+  linger-ms: 5
+  request-timeout-ms: 60000
+  retry-count: 5
+
+kafka-consumer-config:
+  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  auto-offset-reset: earliest
+  batch-listener: true
+  auto-startup: true
+  concurrency-level: 3
+  session-timeout-ms: 10000
+  heartbeat-interval-ms: 3000
+  max-poll-interval-ms: 300000
+  max-poll-records: 500
+  max-partition-fetch-bytes-default: 1048576
+  max-partition-fetch-bytes-boost-factor: 1
+  poll-timeout-ms: 150
+  type-mappings:
+    - OutboxEvent:com.grepp.quizy.matching.infra.user.messaging.listener.Event
+  ack-mode: MANUAL

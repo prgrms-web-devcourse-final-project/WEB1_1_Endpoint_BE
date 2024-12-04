@@ -33,6 +33,7 @@ class SseSender(
     }
 
     private fun closeEmitter(userId: Long) {
+        emitterRepository.findById(userId)?.complete()
         emitterRepository.remove(userId)
         matchingPoolManager.remove(UserId(userId))
     }
