@@ -13,8 +13,8 @@ class QuizUserService(
     private val quizUserCache: QuizUserCache
 ) {
 
-    fun createUser(profile: UserProfile) {
-        quizUserManager.createUser(profile)
+    fun createUser(id: UserId, profile: UserProfile) {
+        quizUserManager.createUser(id, profile)
     }
 
     fun getUser(id: UserId): QuizUser {
