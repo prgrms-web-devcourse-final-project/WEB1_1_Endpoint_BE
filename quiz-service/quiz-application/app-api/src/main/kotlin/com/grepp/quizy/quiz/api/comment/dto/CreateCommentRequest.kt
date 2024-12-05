@@ -5,9 +5,8 @@ import com.grepp.quizy.quiz.domain.comment.CommentId
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.user.UserId
 
-class CreateCommentRequest(
+data class CreateCommentRequest(
         val quizId: Long,
-        val writerId: Long,
         val parentCommentId: Long?,
         val content: String,
 ) {
@@ -18,6 +17,4 @@ class CreateCommentRequest(
             parentCommentId?.let { CommentId(it) } ?: CommentId(0)
 
     fun toQuizId(): QuizId = QuizId(quizId)
-
-    fun toWriterId(): UserId = UserId(writerId)
 }

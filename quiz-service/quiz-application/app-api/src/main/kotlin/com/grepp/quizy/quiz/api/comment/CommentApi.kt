@@ -21,13 +21,14 @@ class CommentApi(
 
     @PostMapping
     fun createComment(
-            @RequestBody request: CreateCommentRequest
+            @RequestBody request: CreateCommentRequest,
+            @AuthUser userPrincipal: UserPrincipal,
     ): ApiResponse<CommentId> =
             ApiResponse.success(
                     commentCreateUseCase
                             .createComment(
                                     request.toQuizId(),
-                                    request.toWriterId(),
+                                    UserId(userPrincipal.value),
                                     request.toParentCommentId(),
                                     request.toContent(),
                             )
@@ -47,13 +48,13 @@ class CommentApi(
     @PutMapping("/{id}")
     fun updateComment(
             @PathVariable id: Long,
-            userId: Long,
+            @AuthUser userPrincipal: UserPrincipal,
             updateContent: String,
     ): ApiResponse<Comment> =
             ApiResponse.success(
                     commentUpdateUseCase.updateComment(
                             CommentId(id),
-                            UserId(userId),
+                            UserId(userPrincipal.value),
                             CommentContent(updateContent),
                     )
             )
@@ -61,12 +62,12 @@ class CommentApi(
     @DeleteMapping("/{id}")
     fun deleteComment(
         @PathVariable id: Long,
-        userId: Long,
-    ): ApiResponse<Unit> =
-            ApiResponse.success(
-                    commentDeleteUseCase.deleteComment(
-                            CommentId(id),
-                            UserId(userId),
-                    )
-            )
+        @AuthUser userPrincipal: UserPrincipal,
+    ): ApiResponse<Unit> {
+        commentDeleteUseCase.deleteComment(
+            CommentId(id),
+            UserId(userPrincipal.value),
+        )
+        return ApiResponse.success()
+    }
 }
