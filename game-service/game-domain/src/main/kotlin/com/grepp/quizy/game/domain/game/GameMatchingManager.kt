@@ -7,9 +7,9 @@ class GameMatchingManager(
     private val gameRepository: GameRepository
 ) {
 
-    fun join(userId: Long, game: Game) {
+    fun join(userId: Long, game: Game): Game {
         game.joinRandomGame(userId)
-        gameRepository.save(game)
+        return gameRepository.save(game)
     }
 
 }

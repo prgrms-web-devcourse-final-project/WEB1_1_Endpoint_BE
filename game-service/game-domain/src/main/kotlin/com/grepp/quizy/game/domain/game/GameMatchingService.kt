@@ -27,12 +27,12 @@ class GameMatchingService(
 
     fun join(userId: Long, gameId: Long) {
         val game = gameReader.read(gameId)
-        gameMatchingManager.join(userId, game)
+        val updatedGame = gameMatchingManager.join(userId, game)
         messagePublisher.publish(
-            GameMessage.room(game)
+            GameMessage.room(updatedGame)
         )
-        if (game.isReady()) {
-            eventPublisher.publishEvent(GameStartEvent(game))
+        if (updatedGame.isReady()) {
+            eventPublisher.publishEvent(GameStartEvent(updatedGame))
         }
     }
 
