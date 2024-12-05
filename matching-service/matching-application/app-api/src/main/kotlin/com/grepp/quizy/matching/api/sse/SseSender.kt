@@ -26,6 +26,7 @@ class SseSender(
                     .name("MATCHING")
                     .data(objectMapper.writeValueAsString(MatchingSucceed(event.gameRoomId)))
             )
+            emitter.complete()
         } catch (e: IOException) {
             closeEmitter(event.userId)
             emitter.completeWithError(e)
