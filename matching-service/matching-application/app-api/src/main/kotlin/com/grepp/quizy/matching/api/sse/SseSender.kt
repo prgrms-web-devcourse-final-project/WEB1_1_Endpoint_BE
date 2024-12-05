@@ -34,7 +34,7 @@ class SseSender(
             emitter.complete()
         } catch (e: IOException) {
             closeEmitter(event.userId)
-            emitter.complete()
+            emitter.completeWithError(e)
         }
     }
 

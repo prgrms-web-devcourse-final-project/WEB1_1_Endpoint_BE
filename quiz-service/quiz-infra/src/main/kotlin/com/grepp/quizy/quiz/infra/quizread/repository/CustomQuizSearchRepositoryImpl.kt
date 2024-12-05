@@ -126,7 +126,7 @@ class CustomQuizSearchRepositoryImpl(
                 QueryBuilders.bool()
                     .must(mustQueries)
                     .mustNot(
-                        QueryBuilders.term().field(TYPE_FIELD).value("AB").build()._toQuery()
+                        QueryBuilders.term().field(TYPE_FIELD).value("AB_TEST").build()._toQuery()
                     )
                     .build()
                     ._toQuery()
