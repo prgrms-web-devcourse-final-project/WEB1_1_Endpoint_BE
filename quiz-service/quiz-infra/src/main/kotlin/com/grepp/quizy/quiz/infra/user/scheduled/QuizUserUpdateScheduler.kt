@@ -23,7 +23,6 @@ class QuizUserUpdateScheduler(
     @Scheduled(fixedRate = 30000L)
     fun synchronize() {
         val usersToUpdate = quizUserRedisCache.findAll()
-        log.info { "|[QuizUserUpdateScheduler] Synchronizing ${usersToUpdate.map { it.id.value }}" }
         quizUserJpaRepository.saveAll(usersToUpdate.map { QuizUserEntity.from(it) })
     }
 }
