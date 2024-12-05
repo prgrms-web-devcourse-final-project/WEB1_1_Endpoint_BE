@@ -71,4 +71,21 @@ class GameRepositoryAdapter(
         }
     }
 
+    override fun deleteById(id: Long) {
+        val key = "game:$id"
+
+        redisTemplate.connectionFactory?.connection.use { connection ->
+            val scanner = connection?.scan(
+                ScanOptions.scanOptions()
+                    .match(key)
+                    .count(100)
+                    .build()
+            )
+
+            while (scanner!!.hasNext()) {
+                val candidateKey = String(scanner.next())
+                redisTemplate.delete(candidateKey)
+            }
+        }
+    }
 }

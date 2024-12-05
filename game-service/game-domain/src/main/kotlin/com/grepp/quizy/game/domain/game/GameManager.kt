@@ -9,4 +9,8 @@ class GameManager(
     fun destroy(game: Game) {
         gameRepository.delete(game)
     }
+
+    fun destroy(gameId: Long) {
+        gameRepository.deleteById(gameId)
+    }
 }

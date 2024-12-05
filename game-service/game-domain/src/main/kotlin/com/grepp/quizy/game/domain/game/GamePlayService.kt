@@ -203,8 +203,13 @@ class GamePlayService(
                 )
             )
         }
-        // 게임 정보 삭제
-        gameManager.destroy(game)
+        messagePublisher.publish(
+            StreamMessage.gameDestroy(
+                mapOf(
+                    "gameId" to gameId.toString()
+                )
+            )
+        )
     }
 
 }

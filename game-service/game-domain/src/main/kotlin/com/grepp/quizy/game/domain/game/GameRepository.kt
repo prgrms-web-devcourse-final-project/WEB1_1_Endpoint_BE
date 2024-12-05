@@ -10,4 +10,6 @@ interface GameRepository {
 
     fun delete(game: Game)
 
+    fun deleteById(id: Long)
+
 }
