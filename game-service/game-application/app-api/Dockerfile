@@ -15,6 +15,9 @@ RUN mkdir -p ${MODULE_PATH}/build/extracted && (java -Djarmode=layertools -jar $
 FROM eclipse-temurin:17-jdk
 VOLUME /tmp
 
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+ENV TZ=Asia/Seoul
+
 RUN apt-get update && apt-get install -y curl
 
 ARG MODULE_PATH=game-service/game-application/app-api
