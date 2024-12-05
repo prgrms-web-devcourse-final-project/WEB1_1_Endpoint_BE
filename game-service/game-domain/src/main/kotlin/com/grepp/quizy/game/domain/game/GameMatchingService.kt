@@ -11,6 +11,7 @@ class GameMatchingService(
     private val gameAppender: GameAppender,
     private val gameReader: GameReader,
     private val userReader: UserReader,
+    private val gameMatchingManager: GameMatchingManager,
     private val messagePublisher: GameMessagePublisher,
     private val eventPublisher: ApplicationEventPublisher
 ) {
@@ -26,7 +27,7 @@ class GameMatchingService(
 
     fun join(userId: Long, gameId: Long) {
         val game = gameReader.read(gameId)
-        game.joinRandomGame(userId)
+        gameMatchingManager.join(userId, game)
         messagePublisher.publish(
             GameMessage.room(game)
         )
