@@ -18,7 +18,7 @@ spring:
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
@@ -96,7 +96,7 @@ spring:
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}

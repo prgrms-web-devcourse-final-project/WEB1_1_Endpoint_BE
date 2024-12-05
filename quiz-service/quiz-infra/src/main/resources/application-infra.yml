@@ -23,15 +23,15 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
-#logging:
-#  level:
-#    org.hibernate.SQL: debug
-#    org.hibernate.type.descriptor.sql: trace
+  #logging:
+  #  level:
+  #    org.hibernate.SQL: debug
+  #    org.hibernate.type.descriptor.sql: trace
 
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
@@ -124,7 +124,7 @@ spring:
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
