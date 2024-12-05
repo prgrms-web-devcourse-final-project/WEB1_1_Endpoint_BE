@@ -27,6 +27,7 @@ class SseSender(
                     .data(objectMapper.writeValueAsString(MatchingSucceed(event.gameRoomId)))
             )
             emitter.complete()
+            closeEmitter(event.userId)
         } catch (e: IOException) {
             closeEmitter(event.userId)
             emitter.completeWithError(e)
@@ -34,7 +35,6 @@ class SseSender(
     }
 
     private fun closeEmitter(userId: Long) {
-        emitterRepository.findById(userId)?.complete()
         emitterRepository.remove(userId)
         matchingPoolManager.remove(UserId(userId))
     }

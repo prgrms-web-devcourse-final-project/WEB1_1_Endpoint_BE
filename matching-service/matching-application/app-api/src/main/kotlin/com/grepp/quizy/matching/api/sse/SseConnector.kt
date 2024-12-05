@@ -34,7 +34,6 @@ class SseConnector(
     }
 
     fun disconnect(userId: UserId) {
-        emitterRepository.findById(userId.value)?.complete()
         emitterRepository.remove(userId.value)
         matchingPoolManager.remove(userId)
     }
