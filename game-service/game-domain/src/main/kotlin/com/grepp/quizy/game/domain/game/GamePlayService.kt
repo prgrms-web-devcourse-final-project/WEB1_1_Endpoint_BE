@@ -2,6 +2,8 @@ package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.LeaderboardInfo
+import com.grepp.quizy.game.domain.message.MessagePublisher
+import com.grepp.quizy.game.domain.message.StreamMessage
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.QuizAppender
 import com.grepp.quizy.game.domain.quiz.QuizFetcher
@@ -29,11 +31,12 @@ class GamePlayService(
     private val userAnswerReader: UserAnswerReader,
     private val userUpdater: UserUpdater,
     private val gameLeaderboardManager: GameLeaderboardManager,
-    private val messagePublisher: GameMessagePublisher,
+    private val gameMessagePublisher: GameMessagePublisher,
     private val messageSender: GameMessageSender,
     private val gameManager: GameManager,
     private val ratingCalculator: RatingCalculator,
-    private val taskScheduler: TaskScheduler
+    private val taskScheduler: TaskScheduler,
+    private val messagePublisher: MessagePublisher
 ) {
 
     // 게임 로딩..? 비동기 추가(코루틴?)
@@ -56,7 +59,7 @@ class GamePlayService(
             Instant.now().plusSeconds(event.game.setting.quizCount * 10L + 1L)
         )
         // 게임에서 사용할 퀴즈 전송
-        messagePublisher.publish(
+        gameMessagePublisher.publish(
             GameMessage.quiz(
                 event.game.id,
                 quizzes
@@ -71,7 +74,7 @@ class GamePlayService(
         val quizzes = quizIds.map { quizId ->
             quizReader.read(quizId)
         }
-        messagePublisher.publish(
+        gameMessagePublisher.publish(
             GameMessage.quiz(
                 game.id,
                 quizzes
@@ -149,7 +152,7 @@ class GamePlayService(
         val leaderboardInfos = candidateLeaderboard.map {
             LeaderboardInfo.of(it.key, it.value)
         }
-        messagePublisher.publish(
+        gameMessagePublisher.publish(
             GameMessage.leaderboard(
                 gameId,
                 leaderboardInfos
@@ -184,11 +187,21 @@ class GamePlayService(
                     )
                 )
             )
-        }
-        // 게임 정보 MySQL 저장
-        game.players.players.map {
-            it.user
-            userUpdater.updateRating(it.user, newRatings[it.user.id]!!)
+            messagePublisher.publish(
+                StreamMessage.rating(
+                    mapOf(
+                        "userId" to it.user.id.toString(),
+                        "rating" to newRatings[it.user.id].toString()
+                    )
+                )
+            )
+            messagePublisher.publish(
+                StreamMessage.gameDestroy(
+                    mapOf(
+                        "gameId" to gameId.toString()
+                    )
+                )
+            )
         }
         // 게임 정보 삭제
         gameManager.destroy(game)
