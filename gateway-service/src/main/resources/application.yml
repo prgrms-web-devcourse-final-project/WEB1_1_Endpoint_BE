@@ -57,7 +57,15 @@ spring:
         - id: game
           uri: http://localhost:8081
           predicates:
-            - Path=/api/game/**
+            - Path=/api/game/**, /ws/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
         - id: matching
           uri: http://localhost:8082
           predicates:
@@ -65,30 +73,37 @@ spring:
           metadata:
             response-timeout: 300000
             connect-timeout: 300000
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
         - id: quiz
           uri: http://localhost:8083
           predicates:
             - Path=/api/quiz/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
         - id: user
           uri: http://localhost:8085
           predicates:
-            - Path=/api/user/**
-        - id: oauth2
-          uri: http://localhost:8085
-          predicates:
-            - Path=/oauth2/**
-        - id: auth
-          uri: http://localhost:8085
-          predicates:
-            - Path=/api/auth/**
-        - id: login
-          uri: http://localhost:8085
-          predicates:
-            - Path=/login/**
-        - id: sockjs
-          uri: http://localhost:8081
-          predicates:
-            - Path=/ws/**
+            - Path=/api/user/**, /oauth2/**, /api/auth/**, /login/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
 
   data:
     redis:
@@ -133,18 +148,18 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: quiz
-          uri: http://dev-quiz-service:8080
-          predicates:
-            - Path=/api/quiz/**
         - id: game
           uri: http://dev-game-service:8080
           predicates:
-            - Path=/api/game/**
-        - id: user
-          uri: http://dev-user-service:8080
-          predicates:
-            - Path=/api/user/**
+            - Path=/api/game/**, /ws/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
         - id: matching
           uri: http://dev-matching-service:8080
           predicates:
@@ -152,22 +167,37 @@ spring:
           metadata:
             response-timeout: 300000
             connect-timeout: 300000
-        - id: oauth2
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
+        - id: quiz
+          uri: http://dev-quiz-service:8080
+          predicates:
+            - Path=/api/quiz/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+
+        - id: user
           uri: http://dev-user-service:8080
           predicates:
-            - Path=/oauth2/**
-        - id: auth
-          uri: http://dev-user-service:8080
-          predicates:
-            - Path=/api/auth/**
-        - id: login
-          uri: http://dev-user-service:8080
-          predicates:
-            - Path=/login/**
-        - id: sockjs
-          uri: http://dev-game-service:8080
-          predicates:
-            - Path=/ws/**
+            - Path=/api/user/**, /oauth2/**, /api/auth/**, /login/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
 
     kubernetes:
       discovery:
