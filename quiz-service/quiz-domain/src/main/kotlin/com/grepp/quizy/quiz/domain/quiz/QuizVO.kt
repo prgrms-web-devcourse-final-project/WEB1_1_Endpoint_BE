@@ -151,5 +151,14 @@ enum class QuizCategory(val description: String) {
 }
 
 enum class QuizDifficulty {
-    EASY, MEDIUM, HARD, RANDOM, NONE
+    EASY, MEDIUM, HARD, RANDOM, NONE;
+
+    companion object {
+        fun of(score: Double) =
+            when {
+                score >= 0.7 -> EASY
+                score >= 0.4 -> MEDIUM
+                else -> HARD
+            }
+    }
 }

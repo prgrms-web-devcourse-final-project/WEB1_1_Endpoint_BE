@@ -22,7 +22,7 @@ class QuizDocument(
         @Field(type = FieldType.Nested) var options: List<QuizOptionVO>,
         @Field(type = FieldType.Integer) var totalAnsweredUsers: Long,
         @Field(type = FieldType.Object) var answer: QuizAnswerVO?,
-        @Field(type = FieldType.Keyword) val difficulty: QuizDifficulty?,
+        @Field(type = FieldType.Keyword) var difficulty: QuizDifficulty?,
         @Field(
                 type = FieldType.Date,
                 format =
@@ -116,6 +116,7 @@ class QuizDocument(
         fun addQuizOption(option: QuizOptionVO) {
                 this.options += option
                 totalAnsweredUsers = options.sumOf { it.selectionCount }
+                difficulty = QuizDifficultyUtil.calculateDifficulty(this)
         }
 
         fun removeQuizOption(number: Int) {
@@ -129,6 +130,11 @@ class QuizDocument(
 
         fun removeQuizTag(name: String) {
                 tags = tags.filterNot { it == name }
+        }
+
+        fun calculateCorrectionRatio(): Double {
+                val answer = options.first { it.optionNumber == answer!!.answerNumber }
+                return answer.selectionCount.toDouble() / totalAnsweredUsers.toDouble()
         }
 
         private fun toLocalDateTime(epochMillis: Long): LocalDateTime {
