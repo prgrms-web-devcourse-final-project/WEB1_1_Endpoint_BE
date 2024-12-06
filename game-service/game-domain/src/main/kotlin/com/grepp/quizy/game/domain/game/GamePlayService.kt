@@ -36,9 +36,13 @@ class GamePlayService(
 
     fun startGame(gameId: Long) {
         val game = gameReader.read(gameId)
+        val currentTimeMillis = System.currentTimeMillis()
         val fetchQuizzes =
             quizFetcher.fetchQuiz(game.setting.subject, game.setting.quizCount, game.setting.level)
 
+        fetchQuizzes.quizzes.forEachIndexed { index, quiz ->
+            quiz.submitTimestamp = currentTimeMillis + index * 10000
+        }
         val quizzes = quizAppender.appendAll(fetchQuizzes.quizzes)
         quizzes.map { quiz ->
             gameQuizAppender.appendQuiz(game.id, quiz.id)
@@ -63,13 +67,12 @@ class GamePlayService(
         gameId: Long,
         userId: Long,
         quizId: Long,
-        choice: String,
-        submissionTimestamp: Long
+        choice: String
     ) {
         val quiz =
             quizReader.read(quizId)
         val (isCorrect, score: Int) =
-            gradeChoice(quiz, choice, submissionTimestamp)
+            gradeChoice(quiz, choice)
 
         sendResultToUser(userId, gameId, quiz, score, isCorrect)
         userAnswerAppender.append(
@@ -83,10 +86,9 @@ class GamePlayService(
     private fun gradeChoice(
         quiz: GameQuiz,
         choice: String,
-        submissionTimestamp: Long
     ): Pair<Boolean, Int> {
         val isCorrect = quiz.answer.content == choice
-        val timeTakenMillis = (System.currentTimeMillis() - submissionTimestamp)
+        val timeTakenMillis = (System.currentTimeMillis() - quiz.submitTimestamp)
 
         val score = if (isCorrect) {
             val baseScore = 100.0
@@ -152,7 +154,7 @@ class GamePlayService(
             val ratingDiff = newRatings[userId]!! - ratings[userId]!!
             val newRating = newRatings[userId]!!
 
-            sendGameResult(userId, gameId,newRating, ratingDiff)
+            sendGameResult(userId, gameId, newRating, ratingDiff)
 
             publishRatingUpdate(userId, newRating)
         }

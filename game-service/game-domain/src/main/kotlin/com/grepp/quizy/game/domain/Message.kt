@@ -314,5 +314,3 @@ data class ErrorPayload(
     }
 
 }
-
-// TODO: Implement other message payloads
