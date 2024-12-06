@@ -26,7 +26,7 @@ enum class GameStatus(
 data class GameSetting(
     val subject: GameSubject,
     val level: GameLevel = GameLevel.RANDOM,
-    val quizCount: Int = 10,
+    val quizCount: Int = 5,
 ) {
     fun updateSubject(subject: GameSubject): GameSetting {
         return copy(subject = subject)

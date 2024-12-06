@@ -34,14 +34,23 @@ class AuthGlobalFilter(
         chain: GatewayFilterChain,
     ): Mono<Void> {
         val request = exchange.request
+        val protocol = request.headers["x-forwarded-proto"]?.firstOrNull() ?: "unknown"
+        val httpVersion = request.headers["x-forwarded-proto-version"]?.firstOrNull()
+            ?: "unknown"
+
         log.info(
             """
-            Incoming request details:
-            - Method: ${request.method}
-            - URI: ${request.uri}
-            - Referer: ${request.headers["referer"]}
-            - Origin: ${request.headers["origin"]}
-            """.trimIndent()
+        Incoming request details:
+        - Protocol: $protocol
+        - HTTP Version: $httpVersion
+        - Remote address: ${request.remoteAddress?.address}
+        - Method: ${request.method}
+        - URI: ${request.uri}
+        - Referer: ${request.headers["referer"]}
+        - Origin: ${request.headers["origin"]}
+        - User-Agent: ${request.headers["user-agent"]}
+        - Connection: ${request.headers["connection"]}
+        """.trimIndent()
         )
 
         // JWT 토큰 추출 시도

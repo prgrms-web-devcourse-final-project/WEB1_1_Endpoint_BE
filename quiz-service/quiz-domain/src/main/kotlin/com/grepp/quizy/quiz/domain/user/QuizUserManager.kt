@@ -13,8 +13,8 @@ class QuizUserManager(
     private val quizUserCache: QuizUserCache
 ) {
 
-    fun createUser(profile: UserProfile) {
-        val user = QuizUser(profile = profile)
+    fun createUser(id: UserId, profile: UserProfile) {
+        val user = QuizUser(id = id, profile = profile)
         quizUserRepository.save(user)
         quizUserCache.cache(user)
     }

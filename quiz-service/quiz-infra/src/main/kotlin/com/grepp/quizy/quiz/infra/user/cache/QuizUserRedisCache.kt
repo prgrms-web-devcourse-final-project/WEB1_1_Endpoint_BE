@@ -28,6 +28,10 @@ class QuizUserRedisCache(
         quizUserRedisRepository.deleteById(id.value)
     }
 
+    fun findAll(): List<QuizUser> {
+        return quizUserRedisRepository.findAll().map { it.toDomain() }
+    }
+
     fun findAllKeys(): List<UserId> {
         val keys = mutableListOf<UserId>()
 

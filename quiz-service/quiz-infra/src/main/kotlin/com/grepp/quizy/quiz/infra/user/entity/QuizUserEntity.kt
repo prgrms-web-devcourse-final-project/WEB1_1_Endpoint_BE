@@ -26,7 +26,7 @@ class QuizUserEntity(
     )
     val achievements: MutableList<QuizUserAchievementVO> = mutableListOf(),
     @OneToOne(cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "id")
     val stats: UserStatsEntity = UserStatsEntity(id)
 ) {
 

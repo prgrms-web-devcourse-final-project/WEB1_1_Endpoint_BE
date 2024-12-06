@@ -6,6 +6,7 @@ import com.grepp.quizy.quiz.domain.image.QuizImageId
 import com.grepp.quizy.quiz.domain.image.QuizImageService
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestPart
@@ -24,6 +25,6 @@ class QuizImageApi(
 
 
     @GetMapping("/{id}")
-    fun getImage(id: Long): ApiResponse<QuizImage> =
+    fun getImage(@PathVariable id: Long): ApiResponse<QuizImage> =
         ApiResponse.success(quizImageService.getImage(QuizImageId.from(id)))
 }

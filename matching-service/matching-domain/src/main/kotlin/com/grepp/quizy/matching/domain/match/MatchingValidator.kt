@@ -14,7 +14,7 @@ class MatchingValidator(
             if (matchingQueueRepository.isValid(it.userId)) final.add(it)
         }
 
-        if (final.size < candidates.size || candidates.size == 1) {
+        if (final.size < candidates.size || candidates.size < 2) {
             matchingQueueRepository.enqueue(pivot)
             return true
         }

@@ -62,6 +62,9 @@ spring:
           uri: http://localhost:8082
           predicates:
             - Path=/api/matching/**
+          metadata:
+            response-timeout: 300000
+            connect-timeout: 300000
         - id: quiz
           uri: http://localhost:8083
           predicates:
@@ -146,6 +149,9 @@ spring:
           uri: http://dev-matching-service:8080
           predicates:
             - Path=/api/matching/**
+          metadata:
+            response-timeout: 300000
+            connect-timeout: 300000
         - id: oauth2
           uri: http://dev-user-service:8080
           predicates:

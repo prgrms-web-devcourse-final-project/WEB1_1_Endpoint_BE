@@ -20,7 +20,7 @@ class UserEventHandler(
     final override fun initActions() {
         actions.put(UserEvent.UserEventType.USER_CREATED) { event ->
             val userCreatedEvent = event.getPayloadAs<UserCreatedEvent>()
-            quizUserService.createUser(userCreatedEvent.toProfile())
+            quizUserService.createUser(UserId(userCreatedEvent.userId), userCreatedEvent.toProfile())
         }
         actions.put(UserEvent.UserEventType.USER_UPDATED) { event ->
             val userUpdatedEvent = event.getPayloadAs<UserUpdatedEvent>()

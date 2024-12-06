@@ -5,6 +5,7 @@ import com.grepp.quizy.matching.domain.match.MatchingEventSender
 import com.grepp.quizy.matching.domain.match.MatchingPoolManager
 import com.grepp.quizy.matching.domain.match.PersonalMatchingSucceedEvent
 import com.grepp.quizy.matching.domain.user.UserId
+import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter
 import java.io.IOException
@@ -16,6 +17,8 @@ class SseSender(
     private val objectMapper: ObjectMapper
 ) : MatchingEventSender {
 
+    private val log = KotlinLogging.logger {}
+
     override fun send(event: PersonalMatchingSucceedEvent) {
         val emitter = emitterRepository.findById(event.userId) ?: return
 
@@ -26,6 +29,9 @@ class SseSender(
                     .name("MATCHING")
                     .data(objectMapper.writeValueAsString(MatchingSucceed(event.gameRoomId)))
             )
+            log.info { "SSE event sent to ${event.userId}" }
+            closeEmitter(event.userId)
+            emitter.complete()
         } catch (e: IOException) {
             closeEmitter(event.userId)
             emitter.completeWithError(e)

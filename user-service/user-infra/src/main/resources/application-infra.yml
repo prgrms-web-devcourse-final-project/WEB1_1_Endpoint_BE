@@ -18,7 +18,7 @@ spring:
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
@@ -96,7 +96,7 @@ spring:
   cloud:
     gcp:
       storage:
-        url: https://storage.googleapis.com/${BUCKET_NAME}/
+        url: https://${GCP_CDN_DOMAIN}/
         credentials:
           encoded-key: ${GCS_KEY}
         project-id: ${GCP_PROJECT_ID}
@@ -136,7 +136,7 @@ kafka-producer-config:
   retry-count: 5
 
 kafka-consumer-config:
-  key-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
   batch-listener: true

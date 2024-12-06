@@ -4,7 +4,7 @@ import com.grepp.quizy.quiz.domain.quiz.QuizCategory
 import com.grepp.quizy.quiz.domain.useranswer.events.UserAnsweredEvent
 
 class QuizUser(
-    val id: UserId = UserId(),
+    val id: UserId,
     private var profile: UserProfile,
     private val _interests: MutableList<QuizCategory> = mutableListOf(),
     private val _achievements: MutableList<QuizUserAchievement> = mutableListOf(),
