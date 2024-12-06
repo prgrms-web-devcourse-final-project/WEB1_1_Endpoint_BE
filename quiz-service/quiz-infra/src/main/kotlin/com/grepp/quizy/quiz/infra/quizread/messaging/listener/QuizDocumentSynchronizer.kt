@@ -5,6 +5,8 @@ import com.grepp.quizy.quiz.infra.quiz.repository.QuizTagJpaRepository
 import com.grepp.quizy.quiz.infra.quizread.document.QuizDocument
 import com.grepp.quizy.quiz.infra.quizread.document.QuizOptionVO
 import com.grepp.quizy.quiz.infra.quizread.repository.QuizElasticRepository
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
@@ -17,7 +19,6 @@ class QuizDocumentSynchronizer(
     fun createQuiz(quizCDCEvent: QuizCDCEvent) {
         val quizDoc = QuizDocument.from(quizCDCEvent)
         quizElasticRepository.save(quizDoc)
-
     }
 
     fun updateQuiz(updateQuiz: QuizCDCEvent) {
@@ -32,9 +33,11 @@ class QuizDocumentSynchronizer(
     }
 
     fun addQuizOption(quizOptionCDCEvent: QuizOptionCDCEvent) {
-        quizElasticRepository.findById(quizOptionCDCEvent.quizId).ifPresent {
+        quizElasticRepository.findById(quizOptionCDCEvent.quizId).ifPresentOrElse({
             it.addQuizOption(QuizOptionVO.from(quizOptionCDCEvent))
             quizElasticRepository.save(it)
+        }) {
+            throw QuizException.NotFound
         }
     }
 
@@ -46,11 +49,13 @@ class QuizDocumentSynchronizer(
     }
 
     fun addQuizTag(quizTagMappingCDCEvent: QuizTagMappingCDCEvent) {
-        quizElasticRepository.findById(quizTagMappingCDCEvent.quizId).ifPresent {
+        quizElasticRepository.findById(quizTagMappingCDCEvent.quizId).ifPresentOrElse({
             quizTagJpaRepository.findById(quizTagMappingCDCEvent.tagId).ifPresent { tag ->
                 it.addQuizTag(tag.name)
                 quizElasticRepository.save(it)
             }
+        }) {
+            throw QuizException.NotFound
         }
     }
 
