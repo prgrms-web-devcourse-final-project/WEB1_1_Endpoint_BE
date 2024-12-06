@@ -153,7 +153,7 @@ kafka-consumer-config:
   key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
   auto-offset-reset: earliest
-  batch-listener: true
+  batch-listener: false
   auto-startup: true
   concurrency-level: 3
   session-timeout-ms: 10000
