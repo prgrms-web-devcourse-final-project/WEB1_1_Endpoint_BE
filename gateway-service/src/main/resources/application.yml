@@ -4,7 +4,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health, info
+        include: health, info, circuitbreakers
 springdoc:
   swagger-ui:
     use-root-path: true
@@ -46,6 +46,46 @@ spring:
               - "*"
             allowCredentials: true
 
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 60000
+        permittedNumberOfCallsInHalfOpenState: 3
+        record-exceptions:
+          - java.io.IOException
+          - java.util.concurrent.TimeoutException
+    instances:
+      userServiceCircuitBreaker:
+        baseConfig: default
+      gameServiceCircuitBreaker:
+        baseConfig: default
+      matchingServiceCircuitBreaker:
+        baseConfig: default
+      quizServiceCircuitBreaker:
+        baseConfig: default
+      wsCircuitBreaker:
+        baseConfig: default
+  timelimiter:
+    configs:
+      default:
+        timeoutDuration: 4s
+      SSE:
+        timeoutDuration: 86400s  # 24시간 또는 적절한 값으로 설정
+    instances:
+      userServiceCircuitBreaker:
+        baseConfig: default
+      gameServiceCircuitBreaker:
+        baseConfig: default
+      matchingServiceCircuitBreaker:
+        baseConfig: SSE
+      quizServiceCircuitBreaker:
+        baseConfig: default
+      wsCircuitBreaker:
+        baseConfig: SSE
+
 ---
 spring:
   config:
@@ -57,7 +97,7 @@ spring:
         - id: game
           uri: http://localhost:8081
           predicates:
-            - Path=/api/game/**, /ws/**
+            - Path=/api/game/**
           filters:
             - name: RequestRateLimiter
               args:
@@ -65,14 +105,34 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: gameServiceCircuitBreaker
+                fallbackUri: forward:/fallback/game
+
+        - id: webSocket
+          uri: http://localhost:8081
+          predicates:
+            - Path=/ws/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: wsCircuitBreaker
+                fallbackUri: forward:/fallback/ws
 
         - id: matching
           uri: http://localhost:8082
           predicates:
             - Path=/api/matching/**
           metadata:
-            response-timeout: 300000
-            connect-timeout: 300000
+            response-timeout: 330000
+            connect-timeout: 330000
           filters:
             - name: RequestRateLimiter
               args:
@@ -80,6 +140,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: matchingServiceCircuitBreaker
+                fallbackUri: forward:/fallback/matching
 
         - id: quiz
           uri: http://localhost:8083
@@ -92,6 +156,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: quizServiceCircuitBreaker
+                fallbackUri: forward:/fallback/quiz
 
         - id: user
           uri: http://localhost:8085
@@ -104,6 +172,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: userServiceCircuitBreaker
+                fallbackUri: forward:/fallback/user
 
   data:
     redis:
@@ -151,7 +223,7 @@ spring:
         - id: game
           uri: http://dev-game-service:8080
           predicates:
-            - Path=/api/game/**, /ws/**
+            - Path=/api/game/**
           filters:
             - name: RequestRateLimiter
               args:
@@ -159,14 +231,34 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: gameServiceCircuitBreaker
+                fallbackUri: forward:/fallback/game
+
+        - id: webSocket
+          uri: http://dev-game-service:8080
+          predicates:
+            - Path=/ws/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestedTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: wsCircuitBreaker
+                fallbackUri: forward:/fallback/ws
 
         - id: matching
           uri: http://dev-matching-service:8080
           predicates:
             - Path=/api/matching/**
           metadata:
-            response-timeout: 300000
-            connect-timeout: 300000
+            response-timeout: 330000
+            connect-timeout: 330000
           filters:
             - name: RequestRateLimiter
               args:
@@ -174,6 +266,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: matchingServiceCircuitBreaker
+                fallbackUri: forward:/fallback/matching
 
         - id: quiz
           uri: http://dev-quiz-service:8080
@@ -186,6 +282,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: quizServiceCircuitBreaker
+                fallbackUri: forward:/fallback/quiz
 
         - id: user
           uri: http://dev-user-service:8080
@@ -198,6 +298,10 @@ spring:
                 redis-rate-limiter.burstCapacity: 20
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
+            - name: CircuitBreaker
+              args:
+                name: userServiceCircuitBreaker
+                fallbackUri: forward:/fallback/user
 
     kubernetes:
       discovery:
