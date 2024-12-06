@@ -1,8 +1,9 @@
 services:
   redis:
     container_name: redis
-    image: redis:latest
+    image: redis/redis-stack:latest
     ports:
       - "6379:6379"
     networks:
       - ${GLOBAL_NETWORK:-app-tier}
+    command: ["redis-stack-server"]
