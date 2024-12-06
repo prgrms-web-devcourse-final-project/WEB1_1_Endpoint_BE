@@ -216,10 +216,7 @@ data class Players(
     }
 
     fun isAllParticipated(): Boolean {
-        // 임시로 2명 이상이면 게임 시작 가능하도록 수정
-        return players.size >= 2 && players.none { it.isWaiting() }
-//        return players.none() { it.isWaiting() }
+        return players.none() { it.isWaiting() }
     }
-
 
 }

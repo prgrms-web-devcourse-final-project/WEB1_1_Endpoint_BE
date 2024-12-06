@@ -35,7 +35,7 @@ class Game(
         _players = Players(users.map { Player(user = it, _status = PlayerStatus.WAITING) }.toList()),
         inviteCode = null
     ) {
-//        validatePlayerCount(users)
+        validatePlayerCount(users)
     }
 
     companion object {
@@ -93,7 +93,7 @@ class Game(
     }
 
     fun start(userId: Long) {
-//        validateHostPermission(userId)
+        validateHostPermission(userId)
         this._status = GameStatus.PLAYING
     }
 
