@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component
 @Component
 class QuizTagMappingCDCEventHandler(
     mapper: ObjectMapper,
-    private val quizSynchronizer: QuizSynchronizer
+    private val quizDocumentSynchronizer: QuizDocumentSynchronizer
 ) : AbstractSimpleEventHandler<QuizTagMappingCDCEvent>(mapper), EventHandler {
 
     init {
@@ -18,11 +18,11 @@ class QuizTagMappingCDCEventHandler(
 
     override fun initActions() {
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.CREATE) { _, after ->
-            after?.let { quizSynchronizer.addQuizTag(it) }
+            after?.let { quizDocumentSynchronizer.addQuizTag(it) }
         }
 
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.DELETE) { before, _ ->
-            before?.let { quizSynchronizer.removeQuizTag(it.quizId, it.tagId) }
+            before?.let { quizDocumentSynchronizer.removeQuizTag(it.quizId, it.tagId) }
         }
     }
 }

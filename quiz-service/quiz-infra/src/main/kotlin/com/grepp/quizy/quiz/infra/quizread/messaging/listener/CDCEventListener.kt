@@ -11,31 +11,32 @@ private val log = KotlinLogging.logger {}
 
 @Component
 class CDCEventListener(
-    private val CDCEventHandlerFactory: CDCEventHandlerFactory
+    private val cdcEventHandlerFactory: CDCEventHandlerFactory
 ) {
 
-    @KafkaListener(topics = ["\${kafka.topic.cdc_events}"] , groupId = "\${kafka.consumer-group.cdc_events}")
-    fun receive(records: List<ConsumerRecord<String, DebeziumEvent>>, acknowledgment: Acknowledgment) {
-        val sortedRecords: List<ConsumerRecord<String, DebeziumEvent>> = records.stream()
-            .filter { shouldProcessEvent(it.value().payload) }
-            .sorted(Comparator.comparing { r -> r.value().payload.date })
-            .toList()
+    @KafkaListener(topics = ["\${kafka.topic.cdc_events}"], groupId = "\${kafka.consumer-group.cdc_events}")
+    fun receive(record: ConsumerRecord<String, DebeziumEvent>, acknowledgment: Acknowledgment) {
+        val payload = record.value().payload
 
-        log.info { "${sortedRecords.size} 개의 이벤트를 처리 요청" }
-
-
-        sortedRecords.forEach { record ->
-            log.info {
-                "${record.value().payload.operation} 이벤트를 ${record.topic()} 토픽에 처리 요청"
-            }
-            CDCEventHandlerFactory.getHandler(getTableName(record)).process(record.value())
+        if (isReadOperation(payload)) {
+            log.info { "처리하지 않는 이벤트: ${payload.operation}" }
+            acknowledgment.acknowledge()
+            return
         }
-        acknowledgment.acknowledge()
+
+        log.info { "${payload.source["table"]} - ${payload.operation} 이벤트를 ${record.topic()} 토픽에서 처리 요청" }
+
+        try {
+            val tableName = getTableName(record)
+            cdcEventHandlerFactory.getHandler(tableName).process(record.value())
+            acknowledgment.acknowledge()
+        } catch (ex: Exception) {
+            log.error(ex) { "이벤트 처리 중 오류 발생: ${record.value()}" }
+        }
     }
 
-    private fun shouldProcessEvent(payload: DebeziumEvent.DebeziumEventPayload): Boolean {
-        // READ 이벤트 처리하지 않음
-        return payload.operation != DebeziumEvent.DebeziumEventPayloadOperation.READ
+    private fun isReadOperation(payload: DebeziumEvent.DebeziumEventPayload): Boolean {
+        return payload.operation == DebeziumEvent.DebeziumEventPayloadOperation.READ
     }
 
     private fun getTableName(record: ConsumerRecord<String, DebeziumEvent>): String {

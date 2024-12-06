@@ -9,7 +9,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 
 @Component
-class QuizSynchronizer(
+class QuizDocumentSynchronizer(
     private val quizElasticRepository: QuizElasticRepository,
     private val quizTagJpaRepository: QuizTagJpaRepository
 ) {
