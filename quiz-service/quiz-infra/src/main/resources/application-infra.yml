@@ -131,14 +131,7 @@ spring:
         bucket: ${BUCKET_NAME}
 
 shedlock:
-  name: like_sync_lock
-
-kafka:
-  topic:
-    user: user
-    quiz: quiz
-  consumer-group:
-    user: user
+  name: count_sync_lock
 
 kafka-config:
   bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
