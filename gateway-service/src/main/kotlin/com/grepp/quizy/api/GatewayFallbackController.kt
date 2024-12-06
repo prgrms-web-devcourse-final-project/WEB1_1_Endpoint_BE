@@ -1,8 +1,6 @@
 package com.grepp.quizy.api
 
-import com.grepp.quizy.common.api.ApiResponse
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import com.grepp.quizy.exception.CustomCircuitBreakerException
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -11,42 +9,27 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/fallback")
 class GatewayFallbackController {
     @GetMapping("/user")
-    fun userServiceFallback(): ResponseEntity<ApiResponse<Unit>> {
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(ApiResponse.error(HttpStatus.SERVICE_UNAVAILABLE.name, "User service is temporarily unavailable"))
+    fun userServiceFallback() {
+        throw CustomCircuitBreakerException.UserServiceUnavailableException
     }
 
     @GetMapping("/quiz")
-    fun quizServiceFallback(): ResponseEntity<ApiResponse<Unit>> {
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(ApiResponse.error(HttpStatus.SERVICE_UNAVAILABLE.name, "Quiz service is temporarily unavailable"))
+    fun quizServiceFallback() {
+        throw CustomCircuitBreakerException.QuizServiceUnavailableException
     }
 
     @GetMapping("/game")
-    fun gameServiceFallback(): ResponseEntity<ApiResponse<Unit>> {
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(ApiResponse.error(HttpStatus.SERVICE_UNAVAILABLE.name, "Game service is temporarily unavailable"))
+    fun gameServiceFallback() {
+        throw CustomCircuitBreakerException.GameServiceUnavailableException
     }
 
     @GetMapping("/ws")
-    fun webSocketServiceFallback(): ResponseEntity<ApiResponse<Unit>> {
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(
-                ApiResponse.error(
-                    HttpStatus.SERVICE_UNAVAILABLE.name,
-                    "Game webSocket service is temporarily unavailable"
-                )
-            )
+    fun webSocketServiceFallback() {
+        throw CustomCircuitBreakerException.WsUnavailableException
     }
 
     @GetMapping("/matching")
-    fun matchingServiceFallback(): ResponseEntity<ApiResponse<Unit>> {
-        return ResponseEntity
-            .status(HttpStatus.SERVICE_UNAVAILABLE)
-            .body(ApiResponse.error(HttpStatus.SERVICE_UNAVAILABLE.name, "Matching service is temporarily unavailable"))
+    fun matchingServiceFallback() {
+        throw CustomCircuitBreakerException.MatchingServiceUnavailableException
     }
 }
