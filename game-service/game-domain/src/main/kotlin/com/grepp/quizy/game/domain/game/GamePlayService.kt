@@ -139,47 +139,55 @@ class GamePlayService(
 
     fun endGame(gameId: Long) {
         val game = gameReader.read(gameId)
-
         val leaderboard = gameLeaderboardManager.getLeaderboard(gameId)
         val ratings = game.players.players.associate { it.user.id to it.user.rating }
-
         val newRatings = if (game.type == GameType.RANDOM) {
             ratingCalculator.calculateElo(leaderboard, ratings)
         } else {
             ratings
         }
 
-        game.players.players.map {
-            val ratingDiff = newRatings[it.user.id]!! - ratings[it.user.id]!!
+        game.players.players.forEach { player ->
+            val userId = player.user.id
+            val ratingDiff = newRatings[userId]!! - ratings[userId]!!
+            val newRating = newRatings[userId]!!
 
-            messageSender.send(
-                it.user.id.toString(),
-                GameMessage.result(
-                    gameId,
-                    gameLeaderboardManager.getRank(gameId, it.user.id),
-                    newRatings[it.user.id]!!,
-                    ratingDiff,
-                    userAnswerReader.readAll(
-                        it.user.id, gameId
-                    )
-                )
-            )
-            messagePublisher.publish(
-                StreamMessage.rating(
-                    mapOf(
-                        "userId" to it.user.id.toString(),
-                        "rating" to newRatings[it.user.id].toString()
-                    )
-                )
-            )
+            sendGameResult(userId, gameId,newRating, ratingDiff)
+
+            publishRatingUpdate(userId, newRating)
         }
+
         messagePublisher.publish(
-            StreamMessage.gameDestroy(
-                mapOf(
-                    "gameId" to gameId.toString()
-                )
+            StreamMessage.gameDestroy(mapOf("gameId" to gameId.toString()))
+        )
+    }
+
+    private fun sendGameResult(
+        userId: Long,
+        gameId: Long,
+        newRating: Int,
+        ratingDiff: Int
+    ) {
+        messageSender.send(
+            userId.toString(),
+            GameMessage.result(
+                gameId = gameId,
+                rank = gameLeaderboardManager.getRank(gameId, userId),
+                rating = newRating,
+                ratingDiff = ratingDiff,
+                userAnswers = userAnswerReader.readAll(userId, gameId)
             )
         )
     }
 
+    private fun publishRatingUpdate(userId: Long, rating: Int) {
+        messagePublisher.publish(
+            StreamMessage.rating(
+                mapOf(
+                    "userId" to userId.toString(),
+                    "rating" to rating.toString()
+                )
+            )
+        )
+    }
 }
