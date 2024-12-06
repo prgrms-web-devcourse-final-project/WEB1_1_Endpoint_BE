@@ -8,11 +8,9 @@ import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.QuizAppender
 import com.grepp.quizy.game.domain.quiz.QuizFetcher
 import com.grepp.quizy.game.domain.quiz.QuizReader
-import com.grepp.quizy.game.domain.user.UserUpdater
 import com.grepp.quizy.game.domain.useranswer.UserAnswer
 import com.grepp.quizy.game.domain.useranswer.UserAnswerAppender
 import com.grepp.quizy.game.domain.useranswer.UserAnswerReader
-import org.springframework.context.event.EventListener
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -25,55 +23,34 @@ class GamePlayService(
     private val quizAppender: QuizAppender,
     private val quizFetcher: QuizFetcher,
     private val gameQuizAppender: GameQuizAppender,
-    private val gameQuizReader: GameQuizReader,
     private val quizReader: QuizReader,
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
-    private val userUpdater: UserUpdater,
     private val gameLeaderboardManager: GameLeaderboardManager,
     private val gameMessagePublisher: GameMessagePublisher,
     private val messageSender: GameMessageSender,
-    private val gameManager: GameManager,
     private val ratingCalculator: RatingCalculator,
     private val taskScheduler: TaskScheduler,
     private val messagePublisher: MessagePublisher
 ) {
 
-    // 게임 로딩..? 비동기 추가(코루틴?)
-    @EventListener
-    fun handleGameStartedEvent(event: GameStartEvent) {
+    fun startGame(gameId: Long) {
+        val game = gameReader.read(gameId)
         val fetchQuizzes =
-            quizFetcher.fetchQuiz(event.game.setting.subject, event.game.setting.quizCount, event.game.setting.level)
+            quizFetcher.fetchQuiz(game.setting.subject, game.setting.quizCount, game.setting.level)
 
         val quizzes = quizAppender.appendAll(fetchQuizzes.quizzes)
         quizzes.map { quiz ->
-            gameQuizAppender.appendQuiz(event.game.id, quiz.id)
+            gameQuizAppender.appendQuiz(game.id, quiz.id)
         }
-        // 랭킹 리더보드 초기화
         gameLeaderboardManager.initializeLeaderboard(
-            event.game.id,
-            event.game.players.players.map { it.user.id }
+            game.id,
+            game.players.players.map { it.user.id }
         )
         taskScheduler.schedule(
-            { endGame(event.game.id) },
-            Instant.now().plusSeconds(event.game.setting.quizCount * 10L + 1L)
+            { endGame(game.id) },
+            Instant.now().plusSeconds(game.setting.quizCount * 10L + 1L)
         )
-        // 게임에서 사용할 퀴즈 전송
-        gameMessagePublisher.publish(
-            GameMessage.quiz(
-                event.game.id,
-                quizzes
-            )
-        )
-//        publishQuiz(event.game.id)
-    }
-
-    fun publishQuiz(gameId: Long) {
-        val game = gameReader.read(gameId)
-        val quizIds = gameQuizReader.read(gameId)
-        val quizzes = quizIds.map { quizId ->
-            quizReader.read(quizId)
-        }
         gameMessagePublisher.publish(
             GameMessage.quiz(
                 game.id,
@@ -192,13 +169,6 @@ class GamePlayService(
                     mapOf(
                         "userId" to it.user.id.toString(),
                         "rating" to newRatings[it.user.id].toString()
-                    )
-                )
-            )
-            messagePublisher.publish(
-                StreamMessage.gameDestroy(
-                    mapOf(
-                        "gameId" to gameId.toString()
                     )
                 )
             )

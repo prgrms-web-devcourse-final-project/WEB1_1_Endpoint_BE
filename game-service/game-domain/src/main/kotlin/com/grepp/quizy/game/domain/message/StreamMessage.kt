@@ -13,8 +13,15 @@ interface StreamMessage {
                 value = message
             )
         }
+
         fun gameDestroy(message: Map<String, String>): StreamMessage {
             return GameDestroyMessage(
+                value = message
+            )
+        }
+
+        fun gameStart(message: Map<String, String>): StreamMessage {
+            return GameStartMessage(
                 value = message
             )
         }
@@ -29,6 +36,12 @@ private data class RatingMessage(
 
 private data class GameDestroyMessage(
     override val streamKey: String = "game-destroy",
+    override val value: Map<String, String>,
+    override val timestamp: LocalDateTime = LocalDateTime.now()
+) : StreamMessage
+
+private data class GameStartMessage(
+    override val streamKey: String = "game-start",
     override val value: Map<String, String>,
     override val timestamp: LocalDateTime = LocalDateTime.now()
 ) : StreamMessage
