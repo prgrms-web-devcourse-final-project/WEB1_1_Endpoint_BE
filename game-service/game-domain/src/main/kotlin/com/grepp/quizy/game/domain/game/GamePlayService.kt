@@ -2,15 +2,15 @@ package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.GameMessage
 import com.grepp.quizy.game.domain.LeaderboardInfo
+import com.grepp.quizy.game.domain.message.MessagePublisher
+import com.grepp.quizy.game.domain.message.StreamMessage
 import com.grepp.quizy.game.domain.quiz.GameQuiz
 import com.grepp.quizy.game.domain.quiz.QuizAppender
 import com.grepp.quizy.game.domain.quiz.QuizFetcher
 import com.grepp.quizy.game.domain.quiz.QuizReader
-import com.grepp.quizy.game.domain.user.UserUpdater
 import com.grepp.quizy.game.domain.useranswer.UserAnswer
 import com.grepp.quizy.game.domain.useranswer.UserAnswerAppender
 import com.grepp.quizy.game.domain.useranswer.UserAnswerReader
-import org.springframework.context.event.EventListener
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.stereotype.Service
 import java.time.Instant
@@ -23,55 +23,35 @@ class GamePlayService(
     private val quizAppender: QuizAppender,
     private val quizFetcher: QuizFetcher,
     private val gameQuizAppender: GameQuizAppender,
-    private val gameQuizReader: GameQuizReader,
     private val quizReader: QuizReader,
     private val userAnswerAppender: UserAnswerAppender,
     private val userAnswerReader: UserAnswerReader,
-    private val userUpdater: UserUpdater,
     private val gameLeaderboardManager: GameLeaderboardManager,
-    private val messagePublisher: GameMessagePublisher,
+    private val gameMessagePublisher: GameMessagePublisher,
     private val messageSender: GameMessageSender,
-    private val gameManager: GameManager,
     private val ratingCalculator: RatingCalculator,
-    private val taskScheduler: TaskScheduler
+    private val taskScheduler: TaskScheduler,
+    private val messagePublisher: MessagePublisher
 ) {
 
-    // 게임 로딩..? 비동기 추가(코루틴?)
-    @EventListener
-    fun handleGameStartedEvent(event: GameStartEvent) {
+    fun startGame(gameId: Long) {
+        val game = gameReader.read(gameId)
         val fetchQuizzes =
-            quizFetcher.fetchQuiz(event.game.setting.subject, event.game.setting.quizCount, event.game.setting.level)
+            quizFetcher.fetchQuiz(game.setting.subject, game.setting.quizCount, game.setting.level)
 
         val quizzes = quizAppender.appendAll(fetchQuizzes.quizzes)
         quizzes.map { quiz ->
-            gameQuizAppender.appendQuiz(event.game.id, quiz.id)
+            gameQuizAppender.appendQuiz(game.id, quiz.id)
         }
-        // 랭킹 리더보드 초기화
         gameLeaderboardManager.initializeLeaderboard(
-            event.game.id,
-            event.game.players.players.map { it.user.id }
+            game.id,
+            game.players.players.map { it.user.id }
         )
         taskScheduler.schedule(
-            { endGame(event.game.id) },
-            Instant.now().plusSeconds(event.game.setting.quizCount * 10L + 1L)
+            { endGame(game.id) },
+            Instant.now().plusSeconds(game.setting.quizCount * 10L + 1L)
         )
-        // 게임에서 사용할 퀴즈 전송
-        messagePublisher.publish(
-            GameMessage.quiz(
-                event.game.id,
-                quizzes
-            )
-        )
-//        publishQuiz(event.game.id)
-    }
-
-    fun publishQuiz(gameId: Long) {
-        val game = gameReader.read(gameId)
-        val quizIds = gameQuizReader.read(gameId)
-        val quizzes = quizIds.map { quizId ->
-            quizReader.read(quizId)
-        }
-        messagePublisher.publish(
+        gameMessagePublisher.publish(
             GameMessage.quiz(
                 game.id,
                 quizzes
@@ -149,7 +129,7 @@ class GamePlayService(
         val leaderboardInfos = candidateLeaderboard.map {
             LeaderboardInfo.of(it.key, it.value)
         }
-        messagePublisher.publish(
+        gameMessagePublisher.publish(
             GameMessage.leaderboard(
                 gameId,
                 leaderboardInfos
@@ -159,39 +139,55 @@ class GamePlayService(
 
     fun endGame(gameId: Long) {
         val game = gameReader.read(gameId)
-
         val leaderboard = gameLeaderboardManager.getLeaderboard(gameId)
         val ratings = game.players.players.associate { it.user.id to it.user.rating }
-
         val newRatings = if (game.type == GameType.RANDOM) {
             ratingCalculator.calculateElo(leaderboard, ratings)
         } else {
             ratings
         }
 
-        game.players.players.map {
-            val ratingDiff = newRatings[it.user.id]!! - ratings[it.user.id]!!
+        game.players.players.forEach { player ->
+            val userId = player.user.id
+            val ratingDiff = newRatings[userId]!! - ratings[userId]!!
+            val newRating = newRatings[userId]!!
 
-            messageSender.send(
-                it.user.id.toString(),
-                GameMessage.result(
-                    gameId,
-                    gameLeaderboardManager.getRank(gameId, it.user.id),
-                    newRatings[it.user.id]!!,
-                    ratingDiff,
-                    userAnswerReader.readAll(
-                        it.user.id, gameId
-                    )
-                )
-            )
+            sendGameResult(userId, gameId,newRating, ratingDiff)
+
+            publishRatingUpdate(userId, newRating)
         }
-        // 게임 정보 MySQL 저장
-        game.players.players.map {
-            it.user
-            userUpdater.updateRating(it.user, newRatings[it.user.id]!!)
-        }
-        // 게임 정보 삭제
-        gameManager.destroy(game)
+
+        messagePublisher.publish(
+            StreamMessage.gameDestroy(mapOf("gameId" to gameId.toString()))
+        )
     }
 
+    private fun sendGameResult(
+        userId: Long,
+        gameId: Long,
+        newRating: Int,
+        ratingDiff: Int
+    ) {
+        messageSender.send(
+            userId.toString(),
+            GameMessage.result(
+                gameId = gameId,
+                rank = gameLeaderboardManager.getRank(gameId, userId),
+                rating = newRating,
+                ratingDiff = ratingDiff,
+                userAnswers = userAnswerReader.readAll(userId, gameId)
+            )
+        )
+    }
+
+    private fun publishRatingUpdate(userId: Long, rating: Int) {
+        messagePublisher.publish(
+            StreamMessage.rating(
+                mapOf(
+                    "userId" to userId.toString(),
+                    "rating" to rating.toString()
+                )
+            )
+        )
+    }
 }
