@@ -18,7 +18,8 @@ class QuizAppender(
                 id = idGenerator.generate("quiz"),
                 content = it.content,
                 answer = it.answer,
-                options = it.options
+                options = it.options,
+                submitTimestamp = it.submitTimestamp
             )
         }
         return quizRepository.saveAll(newQuizzes)

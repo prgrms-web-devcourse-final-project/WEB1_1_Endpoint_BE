@@ -24,7 +24,6 @@ class GamePlayingController(
             principal.name.toLong(),
             request.quizId,
             request.answer,
-            request.submissionTimestamp
         )
     }
 
