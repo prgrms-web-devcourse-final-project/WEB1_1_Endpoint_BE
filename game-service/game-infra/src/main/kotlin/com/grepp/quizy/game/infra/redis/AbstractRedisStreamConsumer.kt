@@ -11,13 +11,25 @@ import org.springframework.data.redis.stream.StreamListener
 import org.springframework.data.redis.stream.StreamMessageListenerContainer
 import org.springframework.data.redis.stream.Subscription
 
+// 기본 스트림 리스너 인터페이스
+interface RedisMessageProcessor {
+    fun processMessage(message: MapRecord<String?, Any?, Any?>?)
+}
+
+// Pending 메시지 처리를 위한 인터페이스
+interface PendingMessageProcessor {
+    fun processPendingMessages()
+}
+
+// 기본 스트림 리스너 구현체
 abstract class AbstractRedisStreamConsumer protected constructor(
     val redisOperator: RedisOperator,
     var streamKey: String,
     var consumerGroupName: String,
     var consumerName: String
 ) : StreamListener<String, MapRecord<String?, Any?, Any?>>, InitializingBean,
-    DisposableBean {
+    DisposableBean, RedisMessageProcessor {
+
     private var listenerContainer: StreamMessageListenerContainer<String, MapRecord<String?, Any?, Any?>>? = null
     private var subscription: Subscription? = null
 
@@ -29,8 +41,6 @@ abstract class AbstractRedisStreamConsumer protected constructor(
             handleError(message, e)
         }
     }
-
-    protected abstract fun processMessage(message: MapRecord<String?, Any?, Any?>?)
 
     private fun handleError(message: MapRecord<String?, Any?, Any?>, e: Exception?) {
         throw RuntimeException("Failed to process message: $message", e)
@@ -50,27 +60,21 @@ abstract class AbstractRedisStreamConsumer protected constructor(
     }
 
     protected fun initializeStreamConsumer() {
-        // Stream 기본 설정
         redisOperator.createStreamConsumerGroup(streamKey, consumerGroupName)
-
-        // StreamMessageListenerContainer 설정
         this.listenerContainer =
             redisOperator.createStreamMessageListenerContainer() as StreamMessageListenerContainer<String, MapRecord<String?, Any?, Any?>>?
 
-        // 구독 설정
         this.subscription = listenerContainer?.receive(
             Consumer.from(this.consumerGroupName, consumerName),
             StreamOffset.create(streamKey, readOffset),
             this
         )
 
-        // 레디스 listen 시작
         listenerContainer?.start()
     }
 
     protected val readOffset: ReadOffset
-        get() =
-            ReadOffset.lastConsumed()
+        get() = ReadOffset.lastConsumed()
 }
 
 
