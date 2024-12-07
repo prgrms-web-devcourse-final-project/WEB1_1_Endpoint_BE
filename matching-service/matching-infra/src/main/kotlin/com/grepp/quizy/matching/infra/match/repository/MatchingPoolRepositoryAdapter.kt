@@ -19,6 +19,9 @@ private const val MATCHING_INDEX_PREFIX = "MATCHING_VECTOR_POOL:"
 private const val MATCHING_INDEX = "MATCHING_INDEX"
 private const val MATCHING_K = 5
 
+private const val ID_FIELD = "id"
+private const val VECTOR_FIELD = "vector"
+
 @Repository
 class MatchingPoolRepositoryAdapter(
     private val jedis: JedisPooled
@@ -39,8 +42,8 @@ class MatchingPoolRepositoryAdapter(
             Pair("DISTANCE_METRIC", "COSINE"),
         )
         val schema = Schema()
-            .addNumericField("id")
-            .addHNSWVectorField("vector", vectorAttr)
+            .addNumericField(ID_FIELD)
+            .addHNSWVectorField(VECTOR_FIELD, vectorAttr)
 
         try {
             jedis.ftCreate(MATCHING_INDEX, IndexOptions.defaultOptions().setDefinition(definition), schema)
@@ -51,21 +54,21 @@ class MatchingPoolRepositoryAdapter(
 
     override fun saveVector(userStatus: UserStatus) {
         val key = "$MATCHING_INDEX_PREFIX${userStatus.userId.value}"
-        jedis.hset(key, "id", userStatus.userId.value.toString())
-        jedis.hset(key.toByteArray(), "vector".toByteArray(), userStatus.vector.value.toByteArray())
+        jedis.hset(key, ID_FIELD, userStatus.userId.value.toString())
+        jedis.hset(key.toByteArray(), VECTOR_FIELD.toByteArray(), userStatus.vector.value.toByteArray())
     }
 
     override fun findNearestUser(pivot: UserStatus): List<UserStatus> {
-        val query = Query("*=>[KNN ${'$'}K @vector ${'$'}query_vector]")
-            .returnFields("id")
+        val query = Query("*=>[KNN ${'$'}K @$VECTOR_FIELD ${'$'}query_vector]")
+            .returnFields(ID_FIELD)
             .addParam("K", MATCHING_K)
             .addParam("query_vector", pivot.vector.value.toByteArray())
             .dialect(2)
         val docs = jedis.ftSearch(MATCHING_INDEX, query).documents
 
         return docs.map { doc ->
-            val id = doc.get("id") as String
-            val vector = jedis.hget(doc.id.toByteArray(), "vector".toByteArray())
+            val id = doc.get(ID_FIELD) as String
+            val vector = jedis.hget(doc.id.toByteArray(), VECTOR_FIELD.toByteArray())
             UserStatus(
                 userId = UserId(id.toLong()),
                 vector = UserVector(vector.toFloatArray())
