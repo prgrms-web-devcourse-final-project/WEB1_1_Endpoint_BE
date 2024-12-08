@@ -51,4 +51,7 @@ sealed class Quiz(
         this._commentCount++
     }
 
+    fun decreaseCommentCount() {
+        this._commentCount--
+    }
 }

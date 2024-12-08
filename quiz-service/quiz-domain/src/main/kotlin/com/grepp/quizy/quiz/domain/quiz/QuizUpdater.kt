@@ -28,4 +28,8 @@ class QuizUpdater(
         quizRepository.save(quiz)
     }
 
+    fun decreaseCommentCount(quiz: Quiz) {
+        quiz.decreaseCommentCount()
+        quizRepository.save(quiz)
+    }
 }
