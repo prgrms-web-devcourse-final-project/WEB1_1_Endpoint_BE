@@ -42,25 +42,36 @@ class GameRepositoryAdapter(
         return gameId?.let { gameRedisRepository.findByIdOrNull(it)?.toDomain() }
     }
 
-    override fun delete(game: Game) {
-        val key = "game:${game.id}:*"
+    override fun deleteById(id: Long) {
+        val inviteCode = gameRedisRepository.findByIdOrNull(id)?.inviteCode
+        inviteCode?.let { code ->
+            redisTemplate.delete("invite:$code")
+        }
 
+        redisTemplate.delete(listOf(
+            "game:$id:leaderboard",
+            "game:$id:quizzes"
+        ))
+
+        val userAnswerPattern = "game:$id:userAnswer:*"
         redisTemplate.connectionFactory?.connection.use { connection ->
             val scanner = connection?.scan(
                 ScanOptions.scanOptions()
-                    .match(key)
+                    .match(userAnswerPattern)
                     .count(100)
                     .build()
             )
 
+            val keysToDelete = mutableListOf<String>()
             while (scanner!!.hasNext()) {
-                val candidateKey = String(scanner.next())
-                redisTemplate.delete(candidateKey)
+                keysToDelete.add(String(scanner.next()))
+            }
+
+            if (keysToDelete.isNotEmpty()) {
+                redisTemplate.delete(keysToDelete)
             }
         }
-    }
 
-    override fun deleteById(id: Long) {
         gameRedisRepository.deleteById(id)
     }
 }
