@@ -8,6 +8,8 @@ import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.ScanOptions
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Repository
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 @Repository
 class GameRepositoryAdapter(
@@ -16,9 +18,19 @@ class GameRepositoryAdapter(
 ) : GameRepository {
 
     override fun save(game: Game): Game {
-        return gameRedisRepository
+        val savedGame = gameRedisRepository
             .save(GameRedisEntity.from(game))
             .toDomain()
+
+        savedGame.inviteCode?.let { inviteCode ->
+            redisTemplate.opsForValue()
+                .set(
+                    "invite:${inviteCode.value}",
+                    game.id.toString(),
+                    Duration.ofHours(1),
+                )
+        }
+        return savedGame
     }
 
     override fun findById(id: Long): Game? {
@@ -26,35 +38,12 @@ class GameRepositoryAdapter(
     }
 
     override fun findByInviteCode(code: String): Game? {
-        return redisTemplate.connectionFactory?.connection.use { connection ->
-            val scanner = connection?.scan(
-                ScanOptions.scanOptions()
-                    .match("game:[0-9]*")
-                    .count(100)
-                    .build()
-            )
-
-            while (scanner!!.hasNext()) {
-                val key = String(scanner.next())
-
-                val type = redisTemplate.type(key)
-                if (type != DataType.HASH) {
-                    continue
-                }
-                val inviteCode = redisTemplate.opsForHash<String, String>()
-                    .get(key, "inviteCode")
-
-                if (inviteCode == code) {
-                    return@use gameRedisRepository.findByIdOrNull(key.split(":")[1].toLong())
-                        ?.toDomain()
-                }
-            }
-            null
-        }
+        val gameId = redisTemplate.opsForValue().get("invite:$code")?.toLong()
+        return gameId?.let { gameRedisRepository.findByIdOrNull(it)?.toDomain() }
     }
 
     override fun delete(game: Game) {
-        val key = "game:${game.id}*"
+        val key = "game:${game.id}:*"
 
         redisTemplate.connectionFactory?.connection.use { connection ->
             val scanner = connection?.scan(
@@ -72,20 +61,6 @@ class GameRepositoryAdapter(
     }
 
     override fun deleteById(id: Long) {
-        val key = "game:$id"
-
-        redisTemplate.connectionFactory?.connection.use { connection ->
-            val scanner = connection?.scan(
-                ScanOptions.scanOptions()
-                    .match(key)
-                    .count(100)
-                    .build()
-            )
-
-            while (scanner!!.hasNext()) {
-                val candidateKey = String(scanner.next())
-                redisTemplate.delete(candidateKey)
-            }
-        }
+        gameRedisRepository.deleteById(id)
     }
 }
