@@ -35,4 +35,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket")
     // Jackson
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    // Spring Configuration
+    implementation("org.springframework.boot:spring-boot-configuration-processor")
 }
