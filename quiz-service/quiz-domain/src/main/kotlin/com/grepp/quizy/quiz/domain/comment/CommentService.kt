@@ -23,13 +23,13 @@ class CommentService(
             writerId: UserId,
             parentCommentId: CommentId,
             content: CommentContent,
-    ): Comment {
+    ): CommentId {
         return commentAppender.append(
                 quizId,
                 writerId,
                 parentCommentId,
                 content,
-        )
+        ).id
     }
 
     override fun getComments(quizId: QuizId): List<Comment> {

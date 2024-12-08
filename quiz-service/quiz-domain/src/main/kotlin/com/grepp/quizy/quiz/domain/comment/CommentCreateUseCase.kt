@@ -9,5 +9,5 @@ interface CommentCreateUseCase {
             writerId: UserId,
             parentCommentId: CommentId,
             content: CommentContent,
-    ): Comment
+    ): CommentId
 }

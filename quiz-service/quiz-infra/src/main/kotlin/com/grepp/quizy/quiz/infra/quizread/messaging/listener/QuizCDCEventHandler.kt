@@ -16,7 +16,6 @@ class QuizCDCEventHandler(
         initActions()
     }
 
-
     final override fun initActions() {
         actions.put(DebeziumEvent.DebeziumEventPayloadOperation.CREATE) { _, after ->
             after?.let { quizDocumentSynchronizer.createQuiz(it) }

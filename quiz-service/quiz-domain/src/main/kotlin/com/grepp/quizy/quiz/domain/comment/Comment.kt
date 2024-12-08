@@ -3,11 +3,12 @@ package com.grepp.quizy.quiz.domain.comment
 import com.grepp.quizy.common.dto.DateTime
 import com.grepp.quizy.quiz.domain.comment.exception.CommentException
 import com.grepp.quizy.quiz.domain.quiz.QuizId
+import com.grepp.quizy.quiz.domain.user.QuizUser
 import com.grepp.quizy.quiz.domain.user.UserId
 
 class Comment(
         val quizId: QuizId,
-        val writerId: UserId,
+        val writer: Writer,
         val parentCommentId: CommentId,
         private var _content: CommentContent,
         val id: CommentId = CommentId(0),
@@ -37,8 +38,24 @@ class Comment(
     }
 
     fun validateOwner(userId: UserId) {
-        if (writerId != userId) {
+        if (writer.id != userId) {
             throw CommentException.NoPermission
+        }
+    }
+}
+
+data class Writer(
+        val id: UserId,
+        val name: String = "",
+        val profileImageUrl: String = ""
+) {
+    companion object {
+        fun from(writer: QuizUser): Writer {
+            return Writer(
+                    id = writer.id,
+                    name = writer.name,
+                    profileImageUrl = writer.imgPath
+            )
         }
     }
 }

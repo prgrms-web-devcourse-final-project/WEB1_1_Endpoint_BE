@@ -3,6 +3,7 @@ package com.grepp.quizy.quiz.domain.comment
 import com.grepp.quizy.quiz.domain.quiz.QuizId
 import com.grepp.quizy.quiz.domain.quiz.QuizReader
 import com.grepp.quizy.quiz.domain.quiz.QuizUpdater
+import com.grepp.quizy.quiz.domain.user.QuizUser
 import com.grepp.quizy.quiz.domain.user.UserId
 import org.springframework.stereotype.Component
 
@@ -21,7 +22,7 @@ class CommentAppender(
         val comment =
                 Comment(
                         quizId = quizId,
-                        writerId = writerId,
+                        writer = Writer(writerId),
                         parentCommentId = parentCommentId,
                         _content = content,
                 )

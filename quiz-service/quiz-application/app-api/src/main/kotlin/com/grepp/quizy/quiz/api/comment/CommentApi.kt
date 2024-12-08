@@ -32,7 +32,6 @@ class CommentApi(
                                     request.toParentCommentId(),
                                     request.toContent(),
                             )
-                            .id
             )
 
     @GetMapping
