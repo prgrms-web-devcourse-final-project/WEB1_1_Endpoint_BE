@@ -6,7 +6,7 @@ import com.grepp.quizy.jwt.JwtValidator
 import com.grepp.quizy.user.RedisTokenRepository
 import com.grepp.quizy.user.UserId
 import com.grepp.quizy.user.api.global.util.CookieUtils
-import com.grepp.quizy.web.UserClient
+import com.grepp.quizy.webclient.UserClient
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter

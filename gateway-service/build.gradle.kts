@@ -19,8 +19,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     testImplementation("org.springframework.security:spring-security-test")
 
-    //redis
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    // Redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+
+    // Circuit Breaker
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-reactor-resilience4j:3.1.0")
+
 }
 
 tasks.named<BootJar>("bootJar") {
