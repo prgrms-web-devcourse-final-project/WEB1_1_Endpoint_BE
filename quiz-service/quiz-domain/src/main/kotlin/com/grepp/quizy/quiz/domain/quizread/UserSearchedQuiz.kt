@@ -215,15 +215,12 @@ data class QuizDetailOption(
                 QuizDetailOption(
                         option.optionNumber,
                         option.content,
-                        roundUp(
-                                option.selectionCount.toDouble() /
-                                        total.toDouble()
-                        ),
+                        calculateSelectionRatio(option.selectionCount.toDouble(), total.toDouble()),
                         imagePath = imagePath
                 )
 
-        private fun roundUp(value: Double) =
-                round(value * 100) / 100.0
+        private fun calculateSelectionRatio(value: Double, total: Double) =
+                if (total > 0.0) round(value / total * 100) / 100.0 else 0.0
     }
 }
 
