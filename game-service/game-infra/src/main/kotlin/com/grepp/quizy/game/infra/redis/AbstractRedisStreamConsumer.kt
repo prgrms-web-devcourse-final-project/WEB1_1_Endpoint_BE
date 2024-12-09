@@ -1,6 +1,7 @@
 package com.grepp.quizy.game.infra.redis
 
 import com.grepp.quizy.game.infra.redis.util.RedisOperator
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.DisposableBean
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.data.redis.connection.stream.Consumer
@@ -30,6 +31,8 @@ abstract class AbstractRedisStreamConsumer protected constructor(
 ) : StreamListener<String, MapRecord<String?, Any?, Any?>>, InitializingBean,
     DisposableBean, RedisMessageProcessor {
 
+    private val log = LoggerFactory.getLogger(this::class.java)
+
     private var listenerContainer: StreamMessageListenerContainer<String, MapRecord<String?, Any?, Any?>>? = null
     private var subscription: Subscription? = null
 
@@ -43,6 +46,9 @@ abstract class AbstractRedisStreamConsumer protected constructor(
     }
 
     private fun handleError(message: MapRecord<String?, Any?, Any?>, e: Exception?) {
+        log.error("Failed to process message: ${message.id}, error: ${e?.message}", e)
+        // 에러 카운트 증가 등 추가 처리
+        redisOperator.increaseRedisValue("errorCount", message.id.toString())
         throw RuntimeException("Failed to process message: $message", e)
     }
 
@@ -56,13 +62,27 @@ abstract class AbstractRedisStreamConsumer protected constructor(
     }
 
     override fun afterPropertiesSet() {
-        initializeStreamConsumer()
+        try {
+            initializeStreamConsumer()
+        } catch (e: Exception) {
+            // BUSYGROUP Consumer Group already exists 에러 처리
+            if (e.message?.contains("BUSYGROUP") == true) {
+                log.warn("Consumer group already exists for stream: $streamKey")
+                // 기존 그룹에 대해 리스너 설정 진행
+                setupListener()
+            } else {
+                throw e
+            }
+        }
     }
 
     protected fun initializeStreamConsumer() {
         redisOperator.createStreamConsumerGroup(streamKey, consumerGroupName)
-        this.listenerContainer =
-            redisOperator.createStreamMessageListenerContainer() as StreamMessageListenerContainer<String, MapRecord<String?, Any?, Any?>>?
+        setupListener()
+    }
+
+    private fun setupListener() {
+        this.listenerContainer = redisOperator.createStreamMessageListenerContainer() as StreamMessageListenerContainer<String, MapRecord<String?, Any?, Any?>>?
 
         this.subscription = listenerContainer?.receive(
             Consumer.from(this.consumerGroupName, consumerName),

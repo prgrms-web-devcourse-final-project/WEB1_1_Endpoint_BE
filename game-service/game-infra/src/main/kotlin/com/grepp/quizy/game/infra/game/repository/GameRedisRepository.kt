@@ -5,6 +5,4 @@ import org.springframework.data.repository.CrudRepository
 
 interface GameRedisRepository :
     CrudRepository<GameRedisEntity, Long> {
-
-    fun findTopByInviteCode(inviteCode: String): GameRedisEntity?
 }

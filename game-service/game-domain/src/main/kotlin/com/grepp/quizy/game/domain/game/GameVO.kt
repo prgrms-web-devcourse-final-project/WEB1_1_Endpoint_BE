@@ -182,11 +182,6 @@ data class Players(
         return Players(players - player)
     }
 
-    fun findPlayer(user: User): Player {
-        return players.find { it.user == user }
-            ?: throw GameException.GameNotParticipatedException
-    }
-
     fun findPlayer(userId: Long): Player {
         return players.find { it.user.id == userId }
             ?: throw GameException.GameNotParticipatedException
@@ -203,6 +198,14 @@ data class Players(
             ?: throw GameException.GameAlreadyParticipatedException
 
 
+    fun isAllParticipated(): Boolean {
+        return players.none() { it.isWaiting() }
+    }
+
+    fun isEmpty(): Boolean {
+        return players.isEmpty()
+    }
+
     private fun updatePlayerStatus(player: Player): List<Player> =
         players.map { p ->
             when (p.user) {
@@ -210,13 +213,5 @@ data class Players(
                 else -> p
             }
         }
-
-    fun isEmpty(): Boolean {
-        return players.isEmpty()
-    }
-
-    fun isAllParticipated(): Boolean {
-        return players.none() { it.isWaiting() }
-    }
 
 }

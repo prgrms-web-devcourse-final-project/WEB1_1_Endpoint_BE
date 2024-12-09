@@ -1,66 +1,63 @@
 package com.grepp.quizy.game.domain.game
 
 import com.grepp.quizy.game.domain.user.User
-import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class PlayerTest() : DescribeSpec({
-    describe("Player") {
-        context("플레이어를 생성하면") {
-            it("기본값은 게스트로 생성한다.") {
-                val player = Player(user)
+class PlayerTest : BehaviorSpec({
 
-                player.user.id shouldBe 1
-                player.role shouldBe PlayerRole.GUEST
-            }
-            it("호스트로 생성한다.") {
-                val player = Player(user, PlayerRole.HOST)
+    given("플레이어가") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
 
-                player.user.id shouldBe 1
-                player.role shouldBe PlayerRole.HOST
-            }
-        }
-        context("플레이어의 역할을 변경하면") {
-            it("호스트 권한을 부여한다.") {
-                val player = Player(user)
-
-                player.grantHost()
-
-                player.role shouldBe PlayerRole.HOST
-            }
-        }
-        context("역할을 확인하면") {
-            it("호스트인지 확인 할 수 있다.") {
-                val player = Player(user, PlayerRole.HOST)
-
-                player.isHost() shouldBe true
-            }
-            it("게스트인지 확인 할 수 있다.") {
-                val player = Player(user, PlayerRole.GUEST)
-
-                player.isGuest() shouldBe true
-            }
-        }
-        context("플레이어의 정보가 같다면") {
-            it("같은 플레이어로 판단한다.") {
-                val player1 = Player(user, PlayerRole.HOST)
-                val player2 = Player(user, PlayerRole.GUEST)
-
-                player1 shouldBe player2
-            }
-        }
-        context("게임에 참여하면") {
-            it("참여 상태로 변경한다.") {
-                val player = Player(user)
-
-                player.join()
-
+        val player = Player(user, PlayerRole.GUEST, PlayerStatus.WAITING)
+        `when`("게임에 참여할 때") {
+            player.join()
+            then("플레이어의 상태가 참가상태로 변경되어야 한다.") {
                 player.status shouldBe PlayerStatus.JOINED
             }
         }
     }
-}) {
-    companion object {
-        val user = User(1, "프로게이머", "imgPath")
+
+    given("플레이어가") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+
+        val player = Player(user, PlayerRole.GUEST, PlayerStatus.WAITING)
+        `when`("방장 권한을 줄 때") {
+            player.grantHost()
+            then("플레이어는 방장이 되어야 한다.") {
+                player.role shouldBe PlayerRole.HOST
+            }
+        }
     }
-}
+
+    given("플레이어가") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+
+        val player = Player(user, PlayerRole.GUEST, PlayerStatus.WAITING)
+        `when`("방장인지 확인하면") {
+            player.isHost()
+            then("플레이어가 방장인지 확인해야 한다.") {
+                player.isHost() shouldBe false
+            }
+        }
+        `when`("게스트인지 확인하면") {
+            player.isGuest()
+            then("플레이어가 게스트인지 확인해야 한다.") {
+                player.isGuest() shouldBe true
+            }
+        }
+    }
+
+    given("플레이어가") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+
+        val player = Player(user, PlayerRole.GUEST, PlayerStatus.WAITING)
+        `when`("대기 상태인지 확인하면") {
+            player.isWaiting()
+            then("플레이어가 대기 상태인지 확인해야 한다.") {
+                player.isWaiting() shouldBe true
+            }
+        }
+    }
+
+})

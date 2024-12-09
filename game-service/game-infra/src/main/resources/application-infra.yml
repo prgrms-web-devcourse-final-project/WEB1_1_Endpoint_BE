@@ -68,6 +68,22 @@ kafka-consumer-config:
     - OutboxEvent:com.grepp.quizy.game.infra.user.messaging.listener.Event
   ack-mode: MANUAL
 
+redis:
+  stream:
+    consumers:
+      gameStart:
+        stream-key: "game-start"
+        group: "game-start-consumer-group"
+        name: "game-start-consumer"
+      rating:
+        stream-key: "rating-update"
+        group: "rating-consumer-group"
+        name: "rating-consumer"
+      destroy:
+        stream-key: "game-destroy"
+        group: "game-destroy-consumer-group"
+        name: "game-destroy-consumer"
+
 ---
 spring:
   config:
@@ -136,6 +152,23 @@ feign:
   client:
     url:
       quiz-service: http://dev-quiz-service:8080
+
+redis:
+  stream:
+    consumers:
+      gameStart:
+        stream-key: "game-start"
+        group: "game-start-consumer-group"
+        name: "game-start-consumer"
+      rating:
+        stream-key: "rating-update"
+        group: "rating-consumer-group"
+        name: "rating-consumer"
+      destroy:
+        stream-key: "game-destroy"
+        group: "game-destroy-consumer-group"
+        name: "game-destroy-consumer"
+
 ---
 spring:
   config:

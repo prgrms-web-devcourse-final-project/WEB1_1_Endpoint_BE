@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component
 class UserAnswerAppender(
     private val userAnswerRepository: UserAnswerRepository
 ) {
-    fun append(userAnswer: UserAnswer) {
-        userAnswerRepository.save(userAnswer)
+
+    fun append(userAnswer: UserAnswer): UserAnswer {
+        return userAnswerRepository.save(userAnswer)
     }
+
 }

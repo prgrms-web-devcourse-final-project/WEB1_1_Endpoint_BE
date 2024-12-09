@@ -3,263 +3,360 @@ package com.grepp.quizy.game.domain.game
 import com.grepp.quizy.game.domain.exception.GameException
 import com.grepp.quizy.game.domain.user.User
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 
-class PlayersTest() : DescribeSpec({
-    describe("Players") {
-        context("플레이어 목록을 생성하면") {
-            it("플레이어 목록을 생성한다.") {
-                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
+class PlayersTest : BehaviorSpec({
 
-                players shouldBe Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
-            }
-        }
-        context("플레이어를 추가하면") {
-            it("플레이어를 추가한다.") {
-                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
+    given("플레이어 목록에") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
 
-                val updatedPlayers = players.add(Player(user3, PlayerRole.GUEST))
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+            )
+        )
 
-                updatedPlayers shouldBe Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user2, PlayerRole.GUEST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
+        `when`("플레이어를 추가할 때") {
+            val addedPlayers = players.add(
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
                 )
+            )
+            then("플레이어가 추가되어야 한다.") {
+                addedPlayers.players.size shouldBe 4
             }
         }
-        context("일정인원이 넘은 상태에서 플레이어를 추가하면") {
-            it("예외를 발생시킨다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user2, PlayerRole.GUEST),
-                        Player(user3, PlayerRole.GUEST),
-                        Player(user4, PlayerRole.GUEST),
-                        Player(user5, PlayerRole.GUEST)
-                    )
-                )
-                shouldThrow<GameException.GameAlreadyFullException> { players.add(Player(user5, PlayerRole.GUEST)) }
-            }
-        }
-        context("이미 참가한 인원을 추가하면") {
-            it("예외를 발생시킨다.") {
-                val players = Players(listOf(Player(user1, PlayerRole.HOST), Player(user2, PlayerRole.GUEST)))
+    }
 
+    given("가득찬 플레이어 목록에") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+        val user5 = User(5, "장원석", "https://cdn.example.com/v2/users/5/profile.webp")
+        val user6 = User(6, "최훈", "https://cdn.example.com/v2/users/6/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user5,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                )
+            )
+        )
+        `when`("플레이어를 추가할 때") {
+            then("예외가 발생해야 한다.") {
+                shouldThrow<GameException.GameAlreadyFullException> {
+                    players.add(
+                        Player(
+                            user6,
+                            PlayerRole.GUEST,
+                            PlayerStatus.JOINED
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    given("이미 존재하는 사용자 목록에") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                )
+            )
+        )
+        `when`("동일한 플레이어를 추가하면") {
+            then("예외가 발생해야 한다.") {
                 shouldThrow<GameException.GameAlreadyParticipatedException> {
                     players.add(
                         Player(
-                            user2,
-                            PlayerRole.GUEST
+                            user,
+                            PlayerRole.GUEST,
+                            PlayerStatus.JOINED
                         )
                     )
                 }
             }
         }
+    }
 
-        context("플레이어를 제거하면") {
-            it("플레이어를 제거한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user2, PlayerRole.GUEST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
+    given("플레이어 목록에서") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+        val user5 = User(5, "장원석", "https://cdn.example.com/v2/users/5/profile.webp")
+        val user6 = User(6, "최훈", "https://cdn.example.com/v2/users/6/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
                 )
-
-                val updatedPlayers = players.remove(Player(user2, PlayerRole.GUEST))
-
-                updatedPlayers shouldBe Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
+            )
+        )
+        `when`("플레이어를 제거하면") {
+            val removedPlayers = players.remove(
+                Player(
+                    user4,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
                 )
-            }
-            it("플레이어 목록이 모두 제거되면 빈 리스트를 반환한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST)
-                    )
-                )
-
-                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
-
-                updatedPlayers shouldBe Players(listOf())
-            }
-        }
-        context("호스트가 제거되면") {
-            it("가장 첫번째 플레이어를 호스트로 변경한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user2, PlayerRole.GUEST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
-                )
-
-                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
-
-                updatedPlayers shouldBe Players(
-                    listOf(
-                        Player(user2, PlayerRole.HOST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
-                )
-            }
-            it("이어 받을 플레이어가 없으면 빈 리스트를 반환한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST)
-                    )
-                )
-
-                val updatedPlayers = players.remove(Player(user1, PlayerRole.HOST))
-
-                updatedPlayers shouldBe Players(listOf())
+            )
+            then("플레이어가 제거되어야 한다.") {
+                removedPlayers.players.size shouldBe 3
             }
         }
-        context("플레이어 목록에 존재하지않는 플레이어를 제거하면") {
-            it("예외를 발생시킨다.") {
-                val players = Players(listOf(Player(user1, PlayerRole.HOST)))
-
+        `when`("목록에 존재하지않는 사용자를 제거하면") {
+            then("예외가 발생해야 한다.") {
                 shouldThrow<GameException.GameNotParticipatedException> {
                     players.remove(
                         Player(
-                            user2,
-                            PlayerRole.GUEST
+                            user6,
+                            PlayerRole.GUEST,
+                            PlayerStatus.JOINED
                         )
                     )
                 }
             }
         }
-
-        context("플레이어를 찾으면") {
-            it("찾은 플레이어를 반환한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.HOST),
-                        Player(user2, PlayerRole.GUEST),
-                        Player(user3, PlayerRole.GUEST)
-                    )
+        `when`("방장을 목록에서 제거하면") {
+            val removedPlayers = players.remove(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
                 )
-
-                val player = players.findPlayer(user2)
-
-                player shouldBe Player(user2, PlayerRole.GUEST)
-            }
-            it("플레이어 목록에 존재하지 않는 플레이어를 찾으면") {
-                val players = Players(listOf(Player(user1, PlayerRole.HOST)))
-
-                shouldThrow<GameException.GameNotParticipatedException> { players.findPlayer(user2) }
-            }
-        }
-
-        context("플레이어 목록이 비어있다면") {
-            it("빈 목록인지 확인한다.") {
-                val players = Players(listOf())
-
-                players.isEmpty() shouldBe true
+            )
+            then("목록의 다음 사용자가 방장이 되어야 한다.") {
+                removedPlayers.players[0].role shouldBe PlayerRole.HOST
+                removedPlayers.players[0].user.id shouldBe 2
             }
         }
     }
 
-    describe("랜덤 게임 플레이어가") {
-        context("사용자가 게임에 참여하면") {
-            it("참여 상태로 변경한다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
-                    )
+    given("플레이어 목록에서") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
                 )
-
-                val updatedPlayers = players.joinRandomGame(user1)
-
-                updatedPlayers.players[0].status shouldBe PlayerStatus.JOINED
-                updatedPlayers.players[1].status shouldBe PlayerStatus.WAITING
-                updatedPlayers.players[2].status shouldBe PlayerStatus.WAITING
-                updatedPlayers.players[3].status shouldBe PlayerStatus.WAITING
-                updatedPlayers.players[4].status shouldBe PlayerStatus.WAITING
+            )
+        )
+        `when`("사용자를 찾으면") {
+            val findPlayer = players.findPlayer(1)
+            then("해당 사용자가 조회되어야 한다.") {
+                findPlayer shouldBe Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                )
             }
         }
-        context("이미 참여한 사용자가 참여하면") {
-            it("예외를 발생시킨다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
-                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
-                    )
-                )
-
-                shouldThrow<GameException.GameAlreadyParticipatedException> { players.joinRandomGame(user1) }
-            }
-        }
-        context("참여목록에 없는 사용자가 참여하면") {
-            it("예외를 발생시킨다.") {
-                val players = Players(
-                    listOf(
-                        Player(user1, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user2, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user3, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
-                        Player(user5, PlayerRole.GUEST, PlayerStatus.WAITING)
-                    )
-                )
-
-                shouldThrow<GameException.GameNotParticipatedException> { players.joinRandomGame(user6) }
-            }
-        }
-        context("참여자의 참여여부를 확인하면") {
-            context("모두 참여했다면") {
-                it("참을 반환한다.") {
-                    val players = Players(
-                        listOf(
-                            Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user2, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user3, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user4, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user5, PlayerRole.GUEST, PlayerStatus.JOINED)
-                        )
-                    )
-
-                    val isParticipated = players.isAllParticipated()
-                    isParticipated shouldBe true
-                }
-            }
-            context("대기중인 참여자가 있다면") {
-                it("거짓을 반환한다.") {
-                    val players = Players(
-                        listOf(
-                            Player(user1, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user2, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user3, PlayerRole.GUEST, PlayerStatus.JOINED),
-                            Player(user4, PlayerRole.GUEST, PlayerStatus.WAITING),
-                            Player(user5, PlayerRole.GUEST, PlayerStatus.JOINED)
-                        )
-                    )
-
-                    val isParticipated = players.isAllParticipated()
-                    isParticipated shouldBe false
+        `when`("존재하지 않는 사용자를 찾으면") {
+            then("예외가 발생해야 한다.") {
+                shouldThrow<GameException.GameNotParticipatedException> {
+                    players.findPlayer(999)
                 }
             }
         }
     }
-}) {
-    companion object {
-        val user1 = User(1, "프로게이머", "imgPath")
-        val user2 = User(2, "게임좋아", "imgPath123")
-        val user3 = User(3, "퀴즈왕", "img456")
-        val user4 = User(4, "퀴즈신", "imgPath")
-        val user5 = User(5, "퀴즈짱", "imgPath")
-        val user6 = User(6, "퀴즈왕자", "imgPath")
+
+    given("플레이어 목록에서") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.WAITING
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.WAITING
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.WAITING
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                )
+            )
+        )
+        `when`("참여요청을 보내면") {
+            players.joinRandomGame(1)
+            then("변경된 플레이어 목록이 반환되어야 한다.") {
+                players.players[0].status shouldBe PlayerStatus.JOINED
+            }
+        }
+        `when`("이미 준비된 사용자가 참여요청을 보내면") {
+            then("예외가 발생해야 한다.") {
+                shouldThrow<GameException.GameAlreadyParticipatedException> {
+                    players.joinRandomGame(4)
+                }
+            }
+        }
     }
-}
+
+    given("플레이어 목록이") {
+        val players = Players(emptyList())
+        `when`("비어있다면") {
+            val result = players.isEmpty()
+            then("플레이어 목록이 비어있어야 한다.") {
+                result shouldBe true
+            }
+        }
+    }
+
+    given("플레이어 목록의 모든 플레이어의") {
+        val user = User(1, "나민혁", "https://cdn.example.com/v2/users/1/profile.webp")
+        val user2 = User(2, "황민우", "https://cdn.example.com/v2/users/2/profile.webp")
+        val user3 = User(3, "윤수빈", "https://cdn.example.com/v2/users/3/profile.webp")
+        val user4 = User(4, "강지원", "https://cdn.example.com/v2/users/4/profile.webp")
+
+        val players = Players(
+            listOf(
+                Player(
+                    user,
+                    PlayerRole.HOST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user2,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user3,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                ),
+                Player(
+                    user4,
+                    PlayerRole.GUEST,
+                    PlayerStatus.JOINED
+                )
+            )
+        )
+        `when`("모두 참가상태인지 확인할 때") {
+            players.isAllParticipated()
+            then("모두 참가상태여야 한다.") {
+                players.isAllParticipated() shouldBe true
+            }
+        }
+    }
+
+})

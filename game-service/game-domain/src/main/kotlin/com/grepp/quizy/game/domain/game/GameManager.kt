@@ -6,11 +6,9 @@ import org.springframework.stereotype.Component
 class GameManager(
     private val gameRepository: GameRepository
 ) {
-    fun destroy(game: Game) {
-        gameRepository.delete(game)
-    }
 
     fun destroy(gameId: Long) {
         gameRepository.deleteById(gameId)
     }
+
 }

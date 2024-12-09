@@ -14,11 +14,6 @@ class UserUpdater(
         return userRepository.save(oldUser)
     }
 
-    fun updateRating(user: User, rating: Int) {
-        user.updateRating(rating)
-        userRepository.save(user)
-    }
-
     fun updateRating(id: Long, rating: Int) {
         val user = userRepository.findById(id)
             ?: throw UserException.UserNotFoundException
