@@ -2,7 +2,7 @@ kafka:
   topic:
     quiz-outbox: outbox.event.UserInterestsInitializedEvent
   consumer-group:
-    user: user
+    matching: matching
     quiz-outbox: quiz-outbox
 ---
 spring:
