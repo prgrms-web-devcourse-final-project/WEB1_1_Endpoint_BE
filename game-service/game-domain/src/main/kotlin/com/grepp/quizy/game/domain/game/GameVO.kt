@@ -69,7 +69,7 @@ enum class GameLevel(
 ) {
 
     EASY("하"),
-    NORMAL("중"),
+    MEDIUM("중"),
     HARD("상"),
     RANDOM("랜덤")
 
