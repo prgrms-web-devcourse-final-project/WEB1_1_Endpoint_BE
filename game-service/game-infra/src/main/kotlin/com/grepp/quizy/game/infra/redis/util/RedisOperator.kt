@@ -116,7 +116,7 @@ class RedisOperator(
                 .StreamMessageListenerContainerOptions.builder()
                 .hashKeySerializer<String, Any>(StringRedisSerializer())
                 .hashValueSerializer<Any, String>(StringRedisSerializer())
-                .pollTimeout(Duration.ofMillis(20))
+                .pollTimeout(Duration.ofSeconds(1))
                 .build()
         )
     }
