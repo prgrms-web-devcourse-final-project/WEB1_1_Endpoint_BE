@@ -24,9 +24,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("mysql:mysql-connector-java:8.0.28")
 
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("redis.clients:jedis:5.2.0")
 
     // Feign
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign:4.1.3")

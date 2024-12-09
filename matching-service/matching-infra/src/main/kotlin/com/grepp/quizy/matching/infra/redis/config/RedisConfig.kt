@@ -1,4 +1,4 @@
-package com.grepp.quizy.matching.infra.redis
+package com.grepp.quizy.matching.infra.redis.config
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean

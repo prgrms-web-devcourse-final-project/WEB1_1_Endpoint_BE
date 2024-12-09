@@ -13,9 +13,9 @@ class MatchingPoolManager(
 ) {
 
     fun save(userId: UserId) {
-        val vector = userVectorizer.vectorizeUser(userId)
-        poolRepository.saveVector(userId, vector)
-        queueRepository.enqueue(UserStatus(userId, vector))
+        val status = UserStatus(userId, userVectorizer.vectorizeUser(userId))
+        poolRepository.saveVector(status)
+        queueRepository.enqueue(status)
         queueRepository.saveSet(userId)
     }
 
