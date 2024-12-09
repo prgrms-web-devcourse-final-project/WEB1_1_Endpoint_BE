@@ -95,7 +95,7 @@ class GamePlayService(
             val deductionPerMillis = 0.01  // 1초당 10점 감점
             val calculatedScore = baseScore - (timeTakenMillis * deductionPerMillis)
 
-            val finalScore = maxOf(calculatedScore, 50.0)  // 최소 50점
+            val finalScore = maxOf(calculatedScore, 0.0)
 
             finalScore.roundToInt()
         } else {
