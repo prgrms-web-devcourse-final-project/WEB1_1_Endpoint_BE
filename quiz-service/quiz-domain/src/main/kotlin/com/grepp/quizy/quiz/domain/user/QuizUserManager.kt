@@ -34,6 +34,7 @@ class QuizUserManager(
 
     fun update(id: UserId, profile: UserProfile) {
         val user = quizUserReader.read(id)
+        user.update(profile)
         quizUserRepository.save(user)
         quizUserCache.cache(user)
     }
