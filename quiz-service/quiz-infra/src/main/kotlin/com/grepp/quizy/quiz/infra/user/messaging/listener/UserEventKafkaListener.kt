@@ -26,7 +26,6 @@ class UserEventKafkaListener(
             ack.acknowledge()
         } catch (ex: Exception) {
             log.error(ex) { "이벤트 처리 중 오류 발생: $appEvent" }
-            // ack.acknowledge()를 호출하지 않음으로써 메시지를 재처리 가능하도록 유지
         }
     }
 }
