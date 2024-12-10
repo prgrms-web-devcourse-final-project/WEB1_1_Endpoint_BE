@@ -17,19 +17,27 @@
 
 ### 프론트엔드
 
+<div align=center>
+
 | <img src="https://avatars.githubusercontent.com/u/50727457?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/95310496?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/122918159?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/82489078?v=4" width="80"> |
 |-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | [박덕인](https://github.com/kod0751)                                           | [유상훈](https://github.com/Yoos99)                                            | [장원석](https://github.com/Wonchang0314)                                       | [최훈](https://github.com/hoon-hoon)                                          |
 | 프로필 페이지                                                                     | 퀴즈 CRUD                                                                     | 게임, 공통 컴포넌트                                                                  | 메인, 검색 페이지                                                                  |
 |                                                                             |                                                                             | 팀장                                                                           |                                                                             |
 
+</div>
+
 ### 백엔드
+
+<div align=center>
 
 | <img src="https://avatars.githubusercontent.com/u/128073698?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/112960401?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/67736320?v=4" width="80"> | <img src="https://avatars.githubusercontent.com/u/97011190?v=4" width="80"> |
 |------------------------------------------------------------------------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------|-----------------------------------------------------------------------------|
 | [강지원](https://github.com/JiwonKKang)                                         | [나민혁](https://github.com/NaMinhyeok)                                         | [윤수빈](https://github.com/s0o0bn)                                            | [황민우](https://github.com/HMWG)                                              |
 | 인프라, CI/CD, 퀴즈                                                               | 게임                                                                           | 검색, 매칭                                                                      | 회원, 게이트웨이                                                                   |
 | PM                                                                           |                                                                              |                                                                             | 팀장                                                                          |
+
+</div>
 
 ## 개발 기간
 
@@ -52,7 +60,11 @@
 
 ## 기술 스택
 
+<div align=center>
+
 ![image](https://github.com/user-attachments/assets/d3a92bdd-aac2-4cd2-8737-66a8fcd7ead7)
+
+</div>
 
 # 와이어프레임
 
