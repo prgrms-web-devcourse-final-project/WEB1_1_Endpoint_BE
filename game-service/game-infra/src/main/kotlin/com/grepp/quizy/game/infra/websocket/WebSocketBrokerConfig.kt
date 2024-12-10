@@ -22,13 +22,6 @@ class WebSocketBrokerConfig : WebSocketMessageBrokerConfigurer {
             .withSockJS()
     }
 
-    override fun configureWebSocketTransport(registry: WebSocketTransportRegistration) {
-        registry
-            .setTimeToFirstMessage(Int.MAX_VALUE)
-            .setSendTimeLimit(Int.MAX_VALUE)
-            .setMessageSizeLimit(Int.MAX_VALUE)
-    }
-
     override fun configureMessageBroker(
         registry: MessageBrokerRegistry
     ) {
@@ -38,7 +31,7 @@ class WebSocketBrokerConfig : WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker(
             MULTIPLE_PREFIX.destination,
             SINGLE_PREFIX.destination,
-        ).setHeartbeatValue(longArrayOf(0,0))
+        )
         registry.setUserDestinationPrefix(USER_PREFIX.destination)
     }
 }

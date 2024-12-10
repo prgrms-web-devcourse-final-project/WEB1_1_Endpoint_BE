@@ -17,12 +17,20 @@ class GameMatchingService(
 ) {
 
     fun create(userIds: List<Long>, subject: GameSubject): Game {
-        userReader.readIn(userIds).let { users ->
-            return gameAppender.appendRandomGame(
+        val appendRandomGame = userReader.readIn(userIds).let { users ->
+            gameAppender.appendRandomGame(
                 users = users,
                 subject = subject
             )
         }
+        messagePublisher.publish(
+            StreamMessage.gameStart(
+                mapOf(
+                    "gameId" to appendRandomGame.id.toString()
+                )
+            )
+        )
+        return appendRandomGame
     }
 
     fun join(userId: Long, gameId: Long) {
@@ -31,15 +39,15 @@ class GameMatchingService(
         gameMessagePublisher.publish(
             GameMessage.room(updatedGame)
         )
-        if (updatedGame.isReady()) {
-            messagePublisher.publish(
-                StreamMessage.gameStart(
-                    mapOf(
-                        "gameId" to updatedGame.id.toString()
-                    )
-                )
-            )
-        }
+//        if (updatedGame.isReady()) {
+//            messagePublisher.publish(
+//                StreamMessage.gameStart(
+//                    mapOf(
+//                        "gameId" to updatedGame.id.toString()
+//                    )
+//                )
+//            )
+//        }
     }
 
 }
