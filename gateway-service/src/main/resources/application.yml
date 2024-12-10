@@ -99,33 +99,33 @@ spring:
           uri: http://localhost:8081
           predicates:
             - Path=/api/game/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-                key-resolver: "#{@userKeyResolver}"
-            - name: CircuitBreaker
-              args:
-                name: gameServiceCircuitBreaker
-                fallbackUri: forward:/fallback/game
+        #          filters:
+        #            - name: RequestRateLimiter
+        #              args:
+        #                redis-rate-limiter.replenishRate: 20
+        #                redis-rate-limiter.burstCapacity: 30
+        #                redis-rate-limiter.requestedTokens: 1
+        #                key-resolver: "#{@userKeyResolver}"
+        #            - name: CircuitBreaker
+        #              args:
+        #                name: gameServiceCircuitBreaker
+        #                fallbackUri: forward:/fallback/game
 
         - id: webSocket
           uri: http://localhost:8081
           predicates:
             - Path=/ws/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestedTokens: 1
-                key-resolver: "#{@userKeyResolver}"
-            - name: CircuitBreaker
-              args:
-                name: wsCircuitBreaker
-                fallbackUri: forward:/fallback/ws
+        #          filters:
+        #            - name: RequestRateLimiter
+        #              args:
+        #                redis-rate-limiter.replenishRate: 10
+        #                redis-rate-limiter.burstCapacity: 20
+        #                redis-rate-limiter.requestedTokens: 1
+        #                key-resolver: "#{@userKeyResolver}"
+        #            - name: CircuitBreaker
+        #              args:
+        #                name: wsCircuitBreaker
+        #                fallbackUri: forward:/fallback/ws
 
         - id: matching
           uri: http://localhost:8082
