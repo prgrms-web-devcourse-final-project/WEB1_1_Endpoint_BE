@@ -30,15 +30,15 @@ class SseSender(
                     .data(objectMapper.writeValueAsString(MatchingSucceed(event.gameRoomId)))
             )
             log.info { "SSE event sent to ${event.userId}" }
-            closeEmitter(event.userId)
+            removeFromPool(event.userId)
             emitter.complete()
         } catch (e: IOException) {
-            closeEmitter(event.userId)
+            removeFromPool(event.userId)
             emitter.completeWithError(e)
         }
     }
 
-    private fun closeEmitter(userId: Long) {
+    private fun removeFromPool(userId: Long) {
         emitterRepository.remove(userId)
         matchingPoolManager.remove(UserId(userId))
     }

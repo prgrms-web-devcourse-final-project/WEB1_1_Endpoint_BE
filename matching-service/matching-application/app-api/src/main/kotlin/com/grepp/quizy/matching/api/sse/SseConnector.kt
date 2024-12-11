@@ -11,12 +11,12 @@ class SseConnector(
     private val matchingPoolManager: MatchingPoolManager,
     private val emitterRepository: SseEmitterRepository
 ) {
-    
+
     fun connect(userId: UserId): SseEmitter {
         val emitter = SseEmitter(TIME_OUT)
         emitterRepository.save(userId.value, emitter)
-        emitter.onTimeout { disconnect(userId) }
-        emitter.onCompletion { disconnect(userId) }
+        emitter.onTimeout { removeFromPool(userId) }
+        emitter.onCompletion { removeFromPool(userId) }
         
         try {
             emitter.send(
@@ -34,12 +34,17 @@ class SseConnector(
     }
 
     fun disconnect(userId: UserId) {
+        emitterRepository.findById(userId.value)?.complete()
+        removeFromPool(userId)
+    }
+
+    private fun removeFromPool(userId: UserId) {
         emitterRepository.remove(userId.value)
         matchingPoolManager.remove(userId)
     }
     
     companion object {
         const val CONNECTION_NAME = "CONNECT"
-        const val TIME_OUT = 5 * 60 * 1000L
+        const val TIME_OUT = 45 * 1000L
     }
 }
