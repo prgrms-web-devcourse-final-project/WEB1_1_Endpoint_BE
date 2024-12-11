@@ -88,7 +88,7 @@
 
 Quizy 코드의 결합도와 의존도를 줄이고자 멀티 모듈 구조로 설계되었습니다
 
-```
+```shell
 📁 common-api, common-jpa, common # 공통
 📁 infrastructure/kafka # Kakfa 모듈
 📁 (service)-application # Runnable
