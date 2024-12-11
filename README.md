@@ -77,3 +77,21 @@
 # CICD
 
 ![Quizy CICD](https://github.com/user-attachments/assets/33c6a245-bbf5-4197-a996-62b8dccb40c1)
+
+# 아키텍쳐
+
+![image](https://github.com/COS-project/cos-backend/assets/128073698/de0f406e-4b73-477f-bba3-f6caaaead435)
+
+[지속성장가능한 소프트웨어 개발하는 방법](https://geminikims.medium.com/%EC%A7%80%EC%86%8D-%EC%84%B1%EC%9E%A5-%EA%B0%80%EB%8A%A5%ED%95%9C-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4%EB%A5%BC-%EB%A7%8C%EB%93%A4%EC%96%B4%EA%B0%80%EB%8A%94-%EB%B0%A9%EB%B2%95-97844c5dab63)
+
+# 멀티모듈 구조
+
+Quizy 코드의 결합도와 의존도를 줄이고자 멀티 모듈 구조로 설계되었습니다
+
+```
+📁 common-api, common-jpa, common # 공통
+📁 infrastructure/kafka # Kakfa 모듈
+📁 (service)-application # Runnable
+📁 (service)-domain # Business-Layer, Implementation-Layer
+📁 (service)-infra # Data-Access-Layer, GCS, Kafka, Redis
+```
