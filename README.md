@@ -87,7 +87,7 @@
 
 <div align=center>
 
-![image](https://github.com/user-attachments/assets/d3a92bdd-aac2-4cd2-8737-66a8fcd7ead7)
+![image](https://github.com/user-attachments/assets/6bac3c73-8e6b-4a3e-af0f-5355850ed39a)
 
 </div>
 
