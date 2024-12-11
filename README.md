@@ -2,18 +2,43 @@
 
 ![TEAM 4 END - POINT](https://github.com/user-attachments/assets/0262f3d9-ab9e-44ec-8a86-5c7dd703a66f)
 
-# 프로젝트 소개
+## 🚀 프로젝트 소개
 
-- Quizy는 개발자들을 위한 소셜 퀴즈 플랫폼으로, 지식과 재미를 모두 담은 혁신적인 학습 경험을 제공합니다.
-- 숏폼 콘텐츠처럼 간편하게 즐기는 O/X 퀴즈, 객관식 문제, A/B 선택 테스트를 통해 IT/개발 지식을 재미있게 쌓을 수 있습니다.
-- 학습한 내용을 바탕으로 다른 개발자들과 실시간 대결을 펼치며 순위를 높여보세요. 또한 팀원들과 함께 선정한 키워드로 AI로 생성되는 맞춤형 퀴즈 게임을 즐기며 협력적인 학습을 경험할 수 있습니다.
-- Quizy와 함께라면 개발 공부가 더 이상 지루하지 않습니다. 재미있게 배우고, 경쟁하고, 함께 성장하세요.
+<div align=center>
 
-## 프로젝트 소개 영상
+### 📢배포 링크
 
-[Quizy 소개 영상](https://www.youtube.com/watch?v=K8iRQxYGXew)
+<a href="https://quizy-fe.vercel.app/">
+  <img src="https://github.com/user-attachments/assets/7215cf49-1743-4765-94f2-218708e879e5" alt="그림2" width="300">
+</a><br />
+<a href="https://snapdragon-canary-315.notion.site/Team04-EndPoint-1584af60efb7809e99fedaa490f2cbc9?pvs=4">
+  <img src="https://github.com/user-attachments/assets/bb1eb154-071d-4acd-a83d-2e62f048d716" alt="그림1" width="300">
+</a><br />
+<a href="https://www.youtube.com/watch?v=K8iRQxYGXew">
+  <img src="https://github.com/user-attachments/assets/8a797cee-9587-44f8-a3ea-ed7f5e5e3534" alt="그림3" width="300">
+</a>
+<br><br>
 
-## 팀원 소개
+---
+
+### 🌟 **Quizy의 핵심 기능** 🌟
+
+<div align="center" style="text-align: left; display: inline-block;">
+
+**Quizy**는 개발자들을 위한 **소셜 퀴즈 플랫폼**입니다! 🍀<br>
+간단한 **O/X 퀴즈**와 **객관식 문제**로 IT 지식을 **재미있게** 쌓아보세요. 🎮<br>
+**실시간 대결**로 순위를 높이고, 다른 개발자들과 **경쟁**해보세요! 🏆<br>
+**AI가 생성한 맞춤형 퀴즈**로 팀원들과 **협력하며 학습**할 수 있습니다. 🤝<br>
+**Quizy와 함께라면**, 개발 공부가 더 이상 지루하지 않습니다! ✨
+
+</div>
+
+### 🚀 **배우고, 경쟁하고, 함께 성장하세요!** 🚀
+
+</div>
+
+
+## ✨ 팀원 소개
 
 ### 프론트엔드
 
