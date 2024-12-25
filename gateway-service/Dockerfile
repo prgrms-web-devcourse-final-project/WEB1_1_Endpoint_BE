@@ -1,7 +1,6 @@
 FROM eclipse-temurin:17-jdk as build
 WORKDIR /workspace/app
 
-# 환경변수 추가
 ARG MODULE_NAME=gateway-service
 ARG VERSION=0.0.1
 

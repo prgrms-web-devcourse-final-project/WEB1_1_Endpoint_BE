@@ -1,7 +1,6 @@
 FROM eclipse-temurin:17-jdk as build
 WORKDIR /workspace/app
 
-# 환경변수 추가
 ARG MODULE_PATH=matching-service/matching-application/app-api
 ARG MODULE_NAME=app-api
 ARG VERSION=0.0.1
