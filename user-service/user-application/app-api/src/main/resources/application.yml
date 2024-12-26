@@ -61,8 +61,8 @@ server:
   port: 8085
 
 frontend:
-  url: https://quizy-fe.vercel.app
-#  url: http://localhost:5173
+  #  url: https://quizy-fe.vercel.app
+  url: http://localhost:5173
 
 #logging:
 #  level:
@@ -116,8 +116,8 @@ springdoc:
   enable-spring-security: true
 
 frontend:
-  url: https://quizy-fe.vercel.app
-#  url: http://localhost:5173
+  #  url: https://quizy-fe.vercel.app
+  url: http://localhost:5173
 
 #logging:
 #  level:
